@@ -1,0 +1,12 @@
+node_modules
+dist
+.output
+.wxt
+coverage
+*.log
+.env
+.env.*
+!.env.example
+/data
+apps/server/data
+.DS_Store

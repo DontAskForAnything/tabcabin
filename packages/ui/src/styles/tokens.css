@@ -1,0 +1,104 @@
+/* Design tokens. Semantic colors switch with the `.dark` class on <html>. */
+:root {
+  --canvas: #eceff4;
+  --panel: #f6f7fa;
+  --card: #ffffff;
+  --raised: #ffffff;
+  --subtle: #f1f3f7;
+  --subtle-2: #e6e9ef;
+  --line: #e2e6ed;
+  --ink: #171a21;
+  --ink-2: #454c5a;
+  --ink-3: #687080;
+  --ink-4: #a2a9b5;
+  --accent: #5b4be0;
+  --accent-ink: #4a3bc8;
+  --accent-soft: rgb(91 75 224 / 0.12);
+  --accent-gradient: linear-gradient(145deg, #7f71f2 0%, #5b4be0 100%);
+  --success: #12a272;
+  --success-soft: rgb(18 162 114 / 0.1);
+  --danger: #d93d42;
+  --danger-soft: rgb(217 61 66 / 0.1);
+  --warning: #e7950f;
+  --focus: #8b7cf8;
+  --overlay: rgb(16 18 27 / 0.36);
+  --scrollbar: rgb(120 128 145 / 0.35);
+
+  --shadow-card: 0 1px 2px rgb(20 24 40 / 0.04), 0 10px 28px -8px rgb(20 24 40 / 0.1);
+  --shadow-pop:
+    0 0 0 1px rgb(20 24 40 / 0.05), 0 12px 28px -6px rgb(20 24 40 / 0.18),
+    0 32px 64px -16px rgb(20 24 40 / 0.22);
+  --shadow-tile: 0 1px 2px rgb(20 24 40 / 0.14), 0 0 0 1px rgb(20 24 40 / 0.05);
+  --shadow-glow: 0 8px 18px -6px rgb(91 75 224 / 0.55);
+  --shadow-lift: 0 22px 44px -12px rgb(20 24 40 / 0.32), 0 0 0 1px rgb(20 24 40 / 0.04);
+
+  --note-rose-bg: #ffdadd;
+  --note-rose-ink: #4a1b21;
+  --note-amber-bg: #ffe9ad;
+  --note-amber-ink: #4a3510;
+  --note-lime-bg: #d8f5c6;
+  --note-lime-ink: #1f3a12;
+  --note-peach-bg: #ffdeca;
+  --note-peach-ink: #4a2614;
+  --note-pink-bg: #fbd6f2;
+  --note-pink-ink: #45173d;
+  --note-lilac-bg: #e4dcff;
+  --note-lilac-ink: #2b1f57;
+  --note-sky-bg: #d2e8ff;
+  --note-sky-ink: #12304d;
+  --note-teal-bg: #ccf2ea;
+  --note-teal-ink: #0f3a33;
+  --note-sand-bg: #efe7da;
+  --note-sand-ink: #3c3222;
+}
+
+.dark {
+  --canvas: #0c0e11;
+  --panel: #111317;
+  --card: #191c21;
+  --raised: #20242a;
+  --subtle: #23282e;
+  --subtle-2: #2a2f36;
+  --line: #2a2f36;
+  --ink: #eceef2;
+  --ink-2: #bcc3cd;
+  --ink-3: #8e97a5;
+  --ink-4: #5b6370;
+  --accent: #7c6cf6;
+  --accent-ink: #b3a9ff;
+  --accent-soft: rgb(139 124 248 / 0.18);
+  --accent-gradient: linear-gradient(145deg, #9b8ffc 0%, #6d5cf0 100%);
+  --success: #34d399;
+  --success-soft: rgb(52 211 153 / 0.12);
+  --danger: #f87171;
+  --danger-soft: rgb(248 113 113 / 0.14);
+  --overlay: rgb(0 0 0 / 0.55);
+  --scrollbar: rgb(140 150 165 / 0.25);
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 30px -10px rgb(0 0 0 / 0.55);
+  --shadow-pop:
+    0 0 0 1px rgb(255 255 255 / 0.06), 0 16px 36px -8px rgb(0 0 0 / 0.6),
+    0 32px 64px -16px rgb(0 0 0 / 0.55);
+  --shadow-tile: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.06);
+  --shadow-glow: 0 8px 18px -6px rgb(124 108 246 / 0.5);
+  --shadow-lift: 0 22px 44px -10px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.07);
+
+  --note-rose-bg: #4a262b;
+  --note-rose-ink: #ffdadd;
+  --note-amber-bg: #4a3c19;
+  --note-amber-ink: #ffe9ad;
+  --note-lime-bg: #2b4023;
+  --note-lime-ink: #d8f5c6;
+  --note-peach-bg: #4a3022;
+  --note-peach-ink: #ffdeca;
+  --note-pink-bg: #462541;
+  --note-pink-ink: #fbd6f2;
+  --note-lilac-bg: #342c57;
+  --note-lilac-ink: #e4dcff;
+  --note-sky-bg: #213752;
+  --note-sky-ink: #d2e8ff;
+  --note-teal-bg: #1e3f3a;
+  --note-teal-ink: #ccf2ea;
+  --note-sand-bg: #3b342a;
+  --note-sand-ink: #efe7da;
+}

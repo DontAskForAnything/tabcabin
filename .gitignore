@@ -10,3 +10,5 @@ coverage
 /data
 apps/server/data
 .DS_Store
+test-results
+playwright-report

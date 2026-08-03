@@ -1,0 +1,7 @@
+{
+  "extName": { "message": "TabHangar" },
+  "extDescription": {
+    "message": "Boards for your tabs, links, notes and to-dos — right in your new tab. Optional self-hosted sync."
+  },
+  "cmdSaveCurrentPage": { "message": "Save the current page" }
+}

@@ -128,7 +128,7 @@ export function makeReminder(
 /** Returns a copy marked as changed now. */
 export function touch<T extends { updatedAt: number }>(
   row: T,
-  patch: Partial<T>,
+  patch: NoInfer<Partial<T>>,
   { now }: Clock,
 ): T {
   return { ...row, ...patch, updatedAt: now }

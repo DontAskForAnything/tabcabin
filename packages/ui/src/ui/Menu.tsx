@@ -1,5 +1,5 @@
 import { Check, ChevronRight } from 'lucide-react'
-import { DropdownMenu } from 'radix-ui'
+import { ContextMenu as RadixContextMenu, DropdownMenu } from 'radix-ui'
 import { type ComponentProps, type ReactNode } from 'react'
 import { cn } from '../lib/cn'
 
@@ -125,4 +125,56 @@ export function MenuLabel({ className, children }: { className?: string; childre
       {children}
     </DropdownMenu.Label>
   )
+}
+
+// ---------- context menu (right click) ----------
+
+export const ContextMenu = RadixContextMenu.Root
+export const ContextMenuTrigger = RadixContextMenu.Trigger
+
+export function ContextMenuContent({
+  className,
+  ...props
+}: ComponentProps<typeof RadixContextMenu.Content>) {
+  return (
+    <RadixContextMenu.Portal>
+      <RadixContextMenu.Content className={cn(panel, className)} {...props} />
+    </RadixContextMenu.Portal>
+  )
+}
+
+export function ContextMenuItem({
+  icon,
+  shortcut,
+  danger,
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof RadixContextMenu.Item> & {
+  icon?: ReactNode
+  shortcut?: string
+  danger?: boolean
+}) {
+  return (
+    <RadixContextMenu.Item
+      className={cn(
+        itemClass,
+        danger && 'text-danger data-[highlighted]:bg-danger-soft',
+        className,
+      )}
+      {...props}
+    >
+      {icon && (
+        <span className={cn('flex w-4 justify-center', danger ? 'text-danger' : 'text-ink-3')}>
+          {icon}
+        </span>
+      )}
+      <span className="flex-1 truncate">{children}</span>
+      {shortcut && <span className="text-[11.5px] text-ink-3">{shortcut}</span>}
+    </RadixContextMenu.Item>
+  )
+}
+
+export function ContextMenuSeparator({ className }: { className?: string }) {
+  return <RadixContextMenu.Separator className={cn('mx-1.5 my-1.5 h-px bg-line', className)} />
 }

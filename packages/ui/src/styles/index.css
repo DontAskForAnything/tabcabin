@@ -6,11 +6,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
+@theme static {
   --font-sans:
     'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
+}
 
+@theme inline {
   --color-canvas: var(--canvas);
   --color-panel: var(--panel);
   --color-card: var(--card);
@@ -105,4 +107,10 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Unlayered on purpose: Chrome injects a body font rule into extension pages, which beats layered styles. */
+html body {
+  font-family: var(--font-sans);
+  font-size: 14px;
 }

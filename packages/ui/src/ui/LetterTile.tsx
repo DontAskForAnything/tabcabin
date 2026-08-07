@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cn } from '../lib/cn'
+import { isDefaultFavicon } from './faviconDefault'
 
 const PALETTE = [
   ['#5b4be0', '#ffffff'],
@@ -97,9 +98,7 @@ export function Favicon({ src, seed, size = 'md', className }: FaviconProps) {
         className={cn('object-contain', imgSizes[size])}
         onError={() => setFailed(true)}
         onLoad={(event) => {
-          // The browser favicon service returns a 16px globe for unknown sites; treat tiny images as missing.
-          if (event.currentTarget.naturalWidth > 0 && event.currentTarget.naturalWidth < 8)
-            setFailed(true)
+          void isDefaultFavicon(event.currentTarget).then((generic) => generic && setFailed(true))
         }}
       />
     </span>

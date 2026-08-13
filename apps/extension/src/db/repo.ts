@@ -363,6 +363,16 @@ export async function updateItem(id: string, patch: ItemPatch) {
   return commit([put('item', touch(row, patch, clock()))])
 }
 
+/** Turns a note into a link or image (keeps its place in the group). */
+export async function convertNote(id: string, kind: 'link' | 'image', url: string, title: string) {
+  const row = await mustGet('item', id)
+  const patch =
+    kind === 'link'
+      ? { kind, url, title, text: '', todo: false, done: false }
+      : { kind, imageUrl: url, url: null, title, text: '', todo: false, done: false }
+  return commit([put('item', touch(row, patch, clock()))])
+}
+
 async function childrenOf(stackIds: readonly string[]): Promise<Item[]> {
   if (stackIds.length === 0) return []
   return live(

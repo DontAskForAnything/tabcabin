@@ -178,3 +178,39 @@ export function ContextMenuItem({
 export function ContextMenuSeparator({ className }: { className?: string }) {
   return <RadixContextMenu.Separator className={cn('mx-1.5 my-1.5 h-px bg-line', className)} />
 }
+
+export const ContextMenuSub = RadixContextMenu.Sub
+
+export function ContextMenuSubTrigger({
+  icon,
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof RadixContextMenu.SubTrigger> & { icon?: ReactNode }) {
+  return (
+    <RadixContextMenu.SubTrigger
+      className={cn(itemClass, 'data-[state=open]:bg-subtle', className)}
+      {...props}
+    >
+      {icon && <span className="flex w-4 justify-center text-ink-3">{icon}</span>}
+      <span className="flex-1 truncate">{children}</span>
+      <ChevronRight size={15} className="text-ink-3" />
+    </RadixContextMenu.SubTrigger>
+  )
+}
+
+export function ContextMenuSubContent({
+  className,
+  ...props
+}: ComponentProps<typeof RadixContextMenu.SubContent>) {
+  return (
+    <RadixContextMenu.Portal>
+      <RadixContextMenu.SubContent
+        sideOffset={6}
+        alignOffset={-6}
+        className={cn(panel, className)}
+        {...props}
+      />
+    </RadixContextMenu.Portal>
+  )
+}

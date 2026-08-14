@@ -155,7 +155,7 @@ export function GroupCard({
   )
 }
 
-function GroupTitle({ group }: { group: BoardGroup }) {
+export function GroupTitle({ group }: { group: BoardGroup }) {
   const t = useT()
   const focusId = useUi((s) => s.focusGroupTitleId)
   const setFocus = useUi((s) => s.setFocusGroupTitle)
@@ -218,7 +218,7 @@ function GroupTitle({ group }: { group: BoardGroup }) {
   )
 }
 
-function GroupMenu({
+export function GroupMenu({
   group,
   actions,
   active,

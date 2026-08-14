@@ -91,3 +91,19 @@ test('edits a note inline with Enter+Enter and the toolbar', async ({ context, e
   await expect(group.getByText('Second note')).toBeVisible()
   await expect(group.getByText('• last line →')).toBeVisible()
 })
+
+test('switches the category to the collections view and back', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('radio', { name: 'Collections' }).click()
+  const section = page.getByRole('region', { name: 'Quick links' })
+  await expect(section.getByRole('button', { name: 'Open all' })).toBeVisible()
+  await expect(section.getByRole('link', { name: /GitHub/ })).toBeVisible()
+  await page.reload()
+  await expect(page.getByRole('radio', { name: 'Collections' })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  )
+  await page.getByRole('radio', { name: 'Board' }).click()
+  await expect(page.getByRole('button', { name: 'Open all' })).toHaveCount(0)
+})

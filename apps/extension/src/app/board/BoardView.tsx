@@ -3,6 +3,7 @@ import { Button, cn } from '@tabhangar/ui'
 import { useBoard } from '@/db/hooks'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
+import { CollectionsView } from '../collections/CollectionsView'
 import { useBoardActions } from './actions'
 import { GroupCard, NewGroupColumn } from './GroupCard'
 
@@ -27,6 +28,10 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
         </Button>
       </div>
     )
+
+  const view = (active.category && active.settings?.viewModes[active.category.id]) || 'board'
+  if (view === 'collections')
+    return <CollectionsView groups={groups} actions={actions} active={active} compact={compact} />
 
   return (
     <div

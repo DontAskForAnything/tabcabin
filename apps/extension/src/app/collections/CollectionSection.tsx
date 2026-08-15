@@ -8,8 +8,10 @@ import { useT } from '@/i18n'
 import { emojiBaseUrl } from '@/lib/browser'
 import type { BoardActions } from '../board/actions'
 import { AddItem } from '../board/AddItem'
+import { ItemList } from '../board/ItemList'
 import { ItemView } from '../board/ItemView'
 import type { ActiveContext } from '../useActive'
+import { useGroupDnd } from '../dnd/hooks'
 import { LinkCard } from './LinkCard'
 
 export function CollectionSection({
@@ -19,15 +21,15 @@ export function CollectionSection({
   menu,
   title,
   children,
-  dropHighlight,
+  index,
 }: {
+  index: number
   group: BoardGroup
   actions: BoardActions
   active: ActiveContext
   menu?: ReactNode
   title?: ReactNode
   children?: ReactNode
-  dropHighlight?: boolean
 }) {
   const t = useT()
   const counts = countItems(group.allItems)
@@ -36,17 +38,30 @@ export function CollectionSection({
     counts.notes ? t('count.notes', { count: counts.notes }) : null,
     counts.tasks ? t('count.tasks', { count: counts.tasks }) : null,
   ].filter(Boolean)
+  const dnd = useGroupDnd(group.id, group.categoryId, index, {
+    kind: 'group',
+    title: group.title || t('group.untitled'),
+    subtitle: meta.join(' · '),
+    emoji: group.emoji,
+    count: 1,
+  })
 
   return (
     <section
+      ref={dnd.setNodeRef}
+      data-dnd-group={group.id}
       aria-label={group.title || t('group.untitled')}
       className={cn(
         'rounded-card transition-[background,box-shadow] duration-150',
         'bg-card p-5 shadow-card',
-        dropHighlight && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
+        dnd.dragging && 'opacity-40',
+        dnd.receiving && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
       )}
     >
-      <header className="mb-3.5 flex flex-wrap items-center gap-2.5">
+      <header
+        className="mb-3.5 flex cursor-grab flex-wrap items-center gap-2.5 active:cursor-grabbing"
+        {...dnd.handleProps}
+      >
         <IconButton
           label={group.collapsed ? t('group.expand') : t('group.collapse')}
           icon={
@@ -90,30 +105,23 @@ export function CollectionSection({
       </header>
       {!group.collapsed &&
         (children ?? (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
-            {group.items.map((item) =>
+          <ItemList
+            groupId={group.id}
+            items={group.items}
+            layout="grid"
+            renderItem={(item) =>
               item.kind === 'link' ? (
-                <LinkCard
-                  key={item.id}
-                  item={item}
-                  group={group}
-                  actions={actions}
-                  active={active}
-                />
+                <LinkCard item={item} group={group} actions={actions} active={active} />
               ) : (
-                <ItemView
-                  key={item.id}
-                  item={item}
-                  group={group}
-                  actions={actions}
-                  active={active}
-                />
-              ),
-            )}
-            <div className="[&>*]:mt-0 [&>button]:h-full [&>button]:min-h-[72px]">
-              <AddItem groupId={group.id} actions={actions} />
-            </div>
-          </div>
+                <ItemView item={item} group={group} actions={actions} active={active} />
+              )
+            }
+            extra={
+              <div className="[&>*]:mt-0 [&>button]:h-full [&>button]:min-h-[72px]">
+                <AddItem groupId={group.id} actions={actions} />
+              </div>
+            }
+          />
         ))}
     </section>
   )

@@ -1,16 +1,32 @@
 import { Plus } from 'lucide-react'
+import { Fragment, useMemo } from 'react'
 import { Button, cn } from '@tabhangar/ui'
 import { useBoard } from '@/db/hooks'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
 import { CollectionsView } from '../collections/CollectionsView'
+import { GroupDropLine } from '../dnd/DropMarkers'
+import { useGroupInsertIndex } from '../dnd/hooks'
 import { useBoardActions } from './actions'
+import { BoardContext } from './BoardContext'
 import { GroupCard, NewGroupColumn } from './GroupCard'
 
 export function BoardView({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()
   const groups = useBoard(active.category?.id)
   const actions = useBoardActions(active)
+  const insertAt = useGroupInsertIndex(active.category?.id ?? '')
+  const context = useMemo(
+    () => ({
+      actions,
+      groups: (groups ?? []).map((group) => ({
+        id: group.id,
+        title: group.title,
+        emoji: group.emoji,
+      })),
+    }),
+    [actions, groups],
+  )
   if (!groups) return null
 
   if (groups.length === 0)
@@ -31,29 +47,41 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
 
   const view = (active.category && active.settings?.viewModes[active.category.id]) || 'board'
   if (view === 'collections')
-    return <CollectionsView groups={groups} actions={actions} active={active} compact={compact} />
+    return (
+      <BoardContext.Provider value={context}>
+        <CollectionsView groups={groups} actions={actions} active={active} compact={compact} />
+      </BoardContext.Provider>
+    )
 
   return (
-    <div
-      className={cn(
-        'flex flex-1 gap-5 pb-7',
-        compact ? 'flex-col px-4' : 'items-start overflow-x-auto px-7 pt-1.5',
-      )}
-    >
-      {groups.map((group) => (
-        <GroupCard
-          key={group.id}
-          group={group}
-          actions={actions}
-          active={active}
-          compact={compact}
+    <BoardContext.Provider value={context}>
+      <div
+        className={cn(
+          'flex flex-1 gap-5 pb-7',
+          compact ? 'flex-col px-4' : 'items-start overflow-x-auto px-7 pt-1.5',
+        )}
+      >
+        {groups.map((group, index) => (
+          <Fragment key={group.id}>
+            {insertAt === index && <GroupDropLine axis={compact ? 'y' : 'x'} />}
+            <GroupCard
+              group={group}
+              index={index}
+              actions={actions}
+              active={active}
+              compact={compact}
+            />
+          </Fragment>
+        ))}
+        {insertAt !== null && insertAt >= groups.length && (
+          <GroupDropLine axis={compact ? 'y' : 'x'} />
+        )}
+        <NewGroupColumn
+          onCreate={() => void actions.createGroup()}
+          label={t('group.new')}
+          hint={t('group.newHint')}
         />
-      ))}
-      <NewGroupColumn
-        onCreate={() => void actions.createGroup()}
-        label={t('group.new')}
-        hint={t('group.newHint')}
-      />
-    </div>
+      </div>
+    </BoardContext.Provider>
   )
 }

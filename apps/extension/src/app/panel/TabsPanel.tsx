@@ -1,11 +1,11 @@
 import { Search } from 'lucide-react'
-import { displayHost, isSavableUrl } from '@tabhangar/core'
-import { cn, Favicon, Input } from '@tabhangar/ui'
+import { isSavableUrl } from '@tabhangar/core'
+import { Input } from '@tabhangar/ui'
 import { useMemo, useState } from 'react'
 import { useT } from '@/i18n'
-import { faviconUrl } from '@/lib/browser'
 import { HangarMark } from '../HangarMark'
 import type { ActiveContext } from '../useActive'
+import { DraggableTab } from './DraggableTab'
 import { useCurrentWindowId, useOpenTabs } from './useOpenTabs'
 
 export function TabsPanel({ active }: { active: ActiveContext }) {
@@ -46,22 +46,11 @@ export function TabsPanel({ active }: { active: ActiveContext }) {
       />
       <div className="-mx-1 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto px-1">
         {visible.map((tab) => (
-          <button
+          <DraggableTab
             key={tab.id}
-            type="button"
-            onClick={() => void browser.tabs.update(tab.id, { active: true })}
-            className={cn(
-              'flex items-center gap-[11px] rounded-[11px] px-2 py-1.5 text-left transition-colors hover:bg-card hover:shadow-card',
-              tab.active && 'bg-card shadow-tile',
-            )}
-          >
-            <Favicon
-              src={faviconUrl(tab.url) ?? tab.favIconUrl}
-              seed={displayHost(tab.url) || tab.title}
-              size="sm"
-            />
-            <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium">{tab.title}</span>
-          </button>
+            tab={tab}
+            onActivate={() => void browser.tabs.update(tab.id, { active: true })}
+          />
         ))}
       </div>
     </nav>

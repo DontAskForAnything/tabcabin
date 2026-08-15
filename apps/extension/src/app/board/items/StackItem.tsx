@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import type { ItemViewProps } from '../ItemView'
+import { ItemList } from '../ItemList'
 import { LinkRow } from './LinkRow'
 import { selectedRing, useSelectable } from './selection'
 
@@ -89,11 +90,13 @@ export function StackItem(props: ItemViewProps) {
         </Menu>
       </div>
       {open && (
-        <div className="flex flex-col gap-0.5 border-t border-dashed border-line px-1.5 py-1.5">
-          {item.children.map((child) => (
-            <LinkRow key={child.id} {...props} item={{ ...child, children: [] }} nested />
-          ))}
-        </div>
+        <ItemList
+          groupId={group.id}
+          parentId={item.id}
+          items={item.children.map((child) => ({ ...child, children: [] }))}
+          className="min-h-[36px] gap-0.5 border-t border-dashed border-line px-1.5 py-1.5"
+          renderItem={(child) => <LinkRow {...props} item={child} nested />}
+        />
       )}
     </div>
   )

@@ -1,5 +1,7 @@
 import { Skeleton } from '@tabhangar/ui'
 import { BoardView } from './board/BoardView'
+import { DndProvider } from './dnd/DndProvider'
+import { TrashZone } from './dnd/DropMarkers'
 import { Modals } from './modals/Modals'
 import type { Surface } from './mount'
 import { TabsPanel } from './panel/TabsPanel'
@@ -13,20 +15,23 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
   useGlobalShortcuts(active)
   const compact = surface === 'sidepanel'
   return (
-    <div className="flex min-h-screen bg-canvas text-[14px] text-ink">
-      {!compact && <TabsPanel active={active} />}
-      <main className="relative flex min-w-0 flex-1 flex-col">
-        <TopBar active={active} compact={compact} />
-        {active.ready && active.category && active.workspace ? (
-          <BoardView key={active.category.id} active={active} compact={compact} />
-        ) : (
-          <BoardSkeleton />
-        )}
-      </main>
-      <Modals active={active} />
-      <NoteToolbar />
-      <SelectionBar active={active} />
-    </div>
+    <DndProvider active={active}>
+      <div className="flex min-h-screen bg-canvas text-[14px] text-ink">
+        {!compact && <TabsPanel active={active} />}
+        <main className="relative flex min-w-0 flex-1 flex-col">
+          <TopBar active={active} compact={compact} />
+          {active.ready && active.category && active.workspace ? (
+            <BoardView key={active.category.id} active={active} compact={compact} />
+          ) : (
+            <BoardSkeleton />
+          )}
+        </main>
+        <Modals active={active} />
+        <NoteToolbar />
+        <SelectionBar active={active} />
+        <TrashZone enabled={active.settings?.trashZone ?? true} />
+      </div>
+    </DndProvider>
   )
 }
 

@@ -9,12 +9,14 @@ import {
   IconButton,
 } from '@tabhangar/ui'
 import type { Category } from '@tabhangar/core'
-import { useEffect, useRef, useState } from 'react'
+import { type ComponentProps, useEffect, useRef, useState } from 'react'
 import { createCategory, deleteCategory, moveCategory, updateCategory } from '@/db/repo'
 import { useT } from '@/i18n'
 import { confirmDialog } from '@/state/confirm'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
+import { useSimpleDrop } from '../dnd/hooks'
+import { dndId } from '../dnd/types'
 import { setActiveCategory, type ActiveContext } from '../useActive'
 
 const LONG_PRESS_MS = 450
@@ -83,7 +85,8 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
         return (
           <ContextMenu key={cat.id}>
             <ContextMenuTrigger asChild>
-              <button
+              <CategoryDropTab
+                categoryId={cat.id}
                 type="button"
                 role="tab"
                 aria-selected={selected}
@@ -102,7 +105,7 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
                 )}
               >
                 {cat.name || t('category.defaultName')}
-              </button>
+              </CategoryDropTab>
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem icon={<Pencil size={14} />} onSelect={() => setRenamingId(cat.id)}>
@@ -152,6 +155,30 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
         onClick={() => void add()}
       />
     </div>
+  )
+}
+
+function CategoryDropTab({
+  categoryId,
+  className,
+  ref,
+  ...props
+}: ComponentProps<'button'> & { categoryId: string }) {
+  const { setNodeRef, active } = useSimpleDrop(dndId.category(categoryId), {
+    zone: 'category',
+    categoryId,
+  })
+  return (
+    <button
+      ref={(node) => {
+        setNodeRef(node)
+        if (typeof ref === 'function') ref(node)
+        else if (ref) ref.current = node
+      }}
+      type="button"
+      className={cn(className, active && 'shadow-[0_0_0_2px_var(--success)]')}
+      {...props}
+    />
   )
 }
 

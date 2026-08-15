@@ -39,7 +39,10 @@ import { useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
 import type { BoardActions } from './actions'
 import { AddItem } from './AddItem'
+import { ItemList } from './ItemList'
 import { ItemView } from './ItemView'
+import { useGroupDnd, useSimpleDrop } from '../dnd/hooks'
+import { dndId } from '../dnd/types'
 
 export const DEFAULT_GROUP_WIDTH = 332
 const MIN_WIDTH = 260
@@ -47,27 +50,24 @@ const MAX_WIDTH = 720
 
 export interface GroupCardProps {
   group: BoardGroup
+  index: number
   actions: BoardActions
   active: ActiveContext
   compact?: boolean
-  /** Drag handle props injected by the DnD layer. */
-  handleProps?: Record<string, unknown>
   style?: CSSProperties
   className?: string
-  dropHighlight?: boolean
-  /** Rendered instead of the default item list (DnD layer). */
+  /** Rendered instead of the default item list. */
   children?: ReactNode
 }
 
 export function GroupCard({
   group,
+  index,
   actions,
   active,
   compact,
-  handleProps,
   style,
   className,
-  dropHighlight,
   children,
 }: GroupCardProps) {
   const t = useT()
@@ -79,19 +79,32 @@ export function GroupCard({
     counts.notes ? t('count.notes', { count: counts.notes }) : null,
     counts.tasks ? t('count.tasks', { count: counts.tasks }) : null,
   ].filter(Boolean)
+  const dnd = useGroupDnd(group.id, group.categoryId, index, {
+    kind: 'group',
+    title: group.title || t('group.untitled'),
+    subtitle: meta.join(' · '),
+    emoji: group.emoji,
+    count: 1,
+  })
 
   return (
     <section
+      ref={dnd.setNodeRef}
+      data-dnd-group={group.id}
       aria-label={group.title || t('group.untitled')}
       style={{ ...style, width: effectiveWidth }}
       className={cn(
         'relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150',
         compact && 'w-full',
-        dropHighlight && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
+        dnd.dragging && 'opacity-40',
+        dnd.receiving && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
         className,
       )}
     >
-      <header className="flex items-center gap-3 px-1 pb-3.5" {...handleProps}>
+      <header
+        className="flex cursor-grab items-center gap-3 px-1 pb-3.5 active:cursor-grabbing"
+        {...dnd.handleProps}
+      >
         {active.settings?.showGroupEmoji !== false && (
           <EmojiPickerPopover
             onSelect={(emoji) => void updateGroup(group.id, { emoji })}
@@ -124,17 +137,13 @@ export function GroupCard({
       {!group.collapsed && (
         <>
           {children ?? (
-            <div className="flex flex-col gap-1.5">
-              {group.items.map((item) => (
-                <ItemView
-                  key={item.id}
-                  item={item}
-                  group={group}
-                  actions={actions}
-                  active={active}
-                />
-              ))}
-            </div>
+            <ItemList
+              groupId={group.id}
+              items={group.items}
+              renderItem={(item) => (
+                <ItemView item={item} group={group} actions={actions} active={active} />
+              )}
+            />
           )}
           <AddItem groupId={group.id} actions={actions} />
         </>
@@ -191,6 +200,7 @@ export function GroupTitle({ group }: { group: BoardGroup }) {
         value={value}
         placeholder={t('group.titlePlaceholder')}
         onChange={(event) => setValue(event.target.value)}
+        onPointerDown={(event) => event.stopPropagation()}
         onBlur={commit}
         onKeyDown={(event) => {
           if (event.key === 'Enter') commit()
@@ -373,11 +383,16 @@ export function NewGroupColumn({
   label: string
   hint: string
 }) {
+  const { setNodeRef, active } = useSimpleDrop(dndId.newGroup, { zone: 'newGroup' })
   return (
     <button
+      ref={setNodeRef}
       type="button"
       onClick={onCreate}
-      className="flex min-h-[220px] w-[280px] shrink-0 flex-col items-center justify-center gap-2.5 rounded-card border-2 border-dashed border-line p-6 text-center text-ink-3 transition-colors hover:border-accent/40 hover:text-ink-2"
+      className={cn(
+        'flex min-h-[220px] w-[280px] shrink-0 flex-col items-center justify-center gap-2.5 rounded-card border-2 border-dashed border-line p-6 text-center text-ink-3 transition-colors hover:border-accent/40 hover:text-ink-2',
+        active && 'border-success bg-success-soft text-ink',
+      )}
     >
       <span className="flex size-11 items-center justify-center rounded-[14px] bg-subtle-2">
         <Plus size={20} />

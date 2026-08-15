@@ -177,4 +177,17 @@ export const pl: Record<MessageKey, Message> = {
   'restored.group': 'Przywrócone',
   'toast.undo': 'Cofnij',
   'error.generic': 'Coś poszło nie tak',
+  'dnd.pickedUp': 'Podniesiono. Przesuń wskaźnikiem i puść, aby upuścić.',
+  'dnd.dropped': 'Upuszczono.',
+  'dnd.cancelled': 'Anulowano przeciąganie.',
+  'dnd.instructions':
+    'Naciśnij i przeciągnij wskaźnikiem, aby przenieść. Klawiaturą przeniesiesz element z jego menu.',
+  'dnd.dropToDelete': 'Upuść tutaj, aby usunąć',
+  'dnd.tabsSaved': {
+    one: 'Zapisano kartę',
+    few: 'Zapisano {count} karty',
+    many: 'Zapisano {count} kart',
+    other: 'Zapisano {count} karty',
+  },
+  'item.moveTo': 'Przenieś do grupy',
 }

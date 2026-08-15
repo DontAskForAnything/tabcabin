@@ -146,6 +146,14 @@ export const en = {
   'restored.group': 'Restored items',
   'toast.undo': 'Undo',
   'error.generic': 'Something went wrong',
+  'dnd.pickedUp': 'Picked up. Move with the pointer and release to drop.',
+  'dnd.dropped': 'Dropped.',
+  'dnd.cancelled': 'Drag cancelled.',
+  'dnd.instructions':
+    'Press and drag with the pointer to move. Use the item menu to move with the keyboard.',
+  'dnd.dropToDelete': 'Drop here to delete',
+  'dnd.tabsSaved': { one: 'Tab saved', other: '{count} tabs saved' },
+  'item.moveTo': 'Move to group',
 } satisfies Record<string, Message>
 
 export type MessageKey = keyof typeof en

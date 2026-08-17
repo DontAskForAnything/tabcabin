@@ -1,6 +1,9 @@
 import { type BrowserContext, type Page } from '@playwright/test'
 import { expect, test } from './fixtures'
 
+/** The extension page exposes the raw `chrome` API inside `page.evaluate`. */
+declare const chrome: typeof browser
+
 async function openBoard(page: Page, extensionId: string) {
   await page.goto(`chrome-extension://${extensionId}/newtab.html`)
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()

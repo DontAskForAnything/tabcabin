@@ -58,7 +58,15 @@ export function Modal({
                 placement === 'top' ? 'items-start pt-[10vh]' : 'items-center',
               )}
             >
-              <Dialog.Content asChild forceMount>
+              <Dialog.Content
+                asChild
+                forceMount
+                onInteractOutside={(event) => {
+                  // Keep the dialog open when the user clicks a toast (e.g. "Undo").
+                  const target = event.target as HTMLElement | null
+                  if (target?.closest('[data-toaster]')) event.preventDefault()
+                }}
+              >
                 <motion.div
                   className={cn(
                     'pointer-events-auto flex max-h-[85vh] w-full flex-col overflow-hidden rounded-[22px] bg-card text-ink shadow-pop outline-none',

@@ -15,6 +15,7 @@ export function Toaster({ className }: { className?: string }) {
   const toasts = useToasts()
   return (
     <div
+      data-toaster
       aria-live="polite"
       className={cn(
         'pointer-events-none fixed inset-x-0 bottom-6 z-[120] flex flex-col items-center gap-2 px-4',

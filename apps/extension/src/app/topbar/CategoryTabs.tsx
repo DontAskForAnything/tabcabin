@@ -15,6 +15,7 @@ import { useT } from '@/i18n'
 import { confirmDialog } from '@/state/confirm'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
+import { CategoryMoveToWorkspace } from '../board/MoveTargets'
 import { useSimpleDrop } from '../dnd/hooks'
 import { dndId } from '../dnd/types'
 import { setActiveCategory, type ActiveContext } from '../useActive'
@@ -129,6 +130,7 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
               >
                 {t('category.moveRight')}
               </ContextMenuItem>
+              <CategoryMoveToWorkspace categoryId={cat.id} workspaceId={workspace.id} />
               <ContextMenuItem
                 icon={<Settings2 size={14} />}
                 onSelect={() => openModal({ type: 'categories' })}

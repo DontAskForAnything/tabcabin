@@ -40,6 +40,7 @@ import type { ActiveContext } from '../useActive'
 import type { BoardActions } from './actions'
 import { AddItem } from './AddItem'
 import { ItemList } from './ItemList'
+import { GroupMoveToOtherWorkspaces } from './MoveTargets'
 import { ItemView } from './ItemView'
 import { useGroupDnd, useSimpleDrop } from '../dnd/hooks'
 import { dndId } from '../dnd/types'
@@ -277,18 +278,19 @@ export function GroupMenu({
         <MenuItem icon={<ClipboardCopy size={15} />} onSelect={() => void actions.copyGroup(group)}>
           {t('group.copyAsText')}
         </MenuItem>
-        {otherCategories.length > 0 && (
-          <MenuSub>
-            <MenuSubTrigger icon={<FolderInput size={15} />}>{t('group.moveTo')}</MenuSubTrigger>
-            <MenuSubContent>
-              {otherCategories.map((cat) => (
-                <MenuItem key={cat.id} onSelect={() => void actions.moveGroupTo(group, cat.id)}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-            </MenuSubContent>
-          </MenuSub>
-        )}
+        <MenuSub>
+          <MenuSubTrigger icon={<FolderInput size={15} />}>{t('group.moveTo')}</MenuSubTrigger>
+          <MenuSubContent className="min-w-[220px]">
+            {otherCategories.map((cat) => (
+              <MenuItem key={cat.id} onSelect={() => void actions.moveGroupTo(group, cat.id)}>
+                {cat.name}
+              </MenuItem>
+            ))}
+            {active.workspace && (
+              <GroupMoveToOtherWorkspaces groupId={group.id} workspaceId={active.workspace.id} />
+            )}
+          </MenuSubContent>
+        </MenuSub>
         <MenuSub>
           <MenuSubTrigger icon={<ArrowUpDown size={15} />}>{t('group.sortBy')}</MenuSubTrigger>
           <MenuSubContent>

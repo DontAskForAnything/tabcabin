@@ -185,6 +185,23 @@ export const en = {
   'tab.closed': { one: 'Tab closed', other: '{count} tabs closed' },
   'tab.groupUntitled': 'Tab group',
   'tab.saveGroup': 'Save tab group',
+  'workspace.pickerTitle': 'Workspaces',
+  'workspace.search': 'Find a workspace or category',
+  'workspace.emptyCategory': 'Empty',
+  'workspace.groups': { one: '{count} group', other: '{count} groups' },
+  'workspace.changeEmoji': 'Change emoji',
+  'workspace.moveUp': 'Move up',
+  'workspace.moveDown': 'Move down',
+  'workspace.deleteConfirm':
+    'Delete “{name}” with all its categories and groups? You can restore it from the bin.',
+  'workspace.lastOne': 'You need at least one workspace',
+  'workspace.renamed': 'Workspace renamed',
+  'workspace.current': 'Current',
+  'workspace.hint': 'Use arrow keys and Enter to switch',
+  'category.moveToWorkspace': 'Move to workspace',
+  'category.moved': 'Category moved',
+  'group.otherWorkspaces': 'Other workspaces',
+  'workspace.noMatch': 'Nothing matches “{query}”',
 } satisfies Record<string, Message>
 
 export type MessageKey = keyof typeof en

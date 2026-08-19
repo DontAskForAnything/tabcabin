@@ -47,6 +47,18 @@
   --animate-shimmer: shimmer 1.6s ease-in-out infinite;
 }
 
+@keyframes flash {
+  0%,
+  40% {
+    box-shadow:
+      0 0 0 3px var(--accent),
+      0 0 0 9px var(--accent-soft);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 @keyframes shimmer {
   0% {
     opacity: 0.55;

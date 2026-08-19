@@ -1,5 +1,5 @@
 import { cn } from '@tabhangar/ui'
-import type { ComponentProps, ReactNode } from 'react'
+import { type ComponentProps, type ReactNode, useEffect, useRef } from 'react'
 import type { BoardItem } from '@/db/hooks'
 import { useUi } from '@/state/ui'
 import { useItemDnd } from '../dnd/hooks'
@@ -20,6 +20,14 @@ export function DraggableItem({
   children: ReactNode
 }) {
   const editing = useUi((s) => s.editingNoteId === item.id)
+  const flash = useUi((s) => s.flashItemId === item.id)
+  const node = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!flash) return
+    node.current?.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' })
+    const timer = setTimeout(() => useUi.getState().flashItem(null), 1800)
+    return () => clearTimeout(timer)
+  }, [flash])
   const { setNodeRef, handleProps, dragging, combineTarget, pending } = useItemDnd(
     item,
     index,
@@ -29,10 +37,11 @@ export function DraggableItem({
   return (
     <div
       {...rest}
-      ref={(node) => {
-        setNodeRef(node)
-        if (typeof ref === 'function') ref(node)
-        else if (ref) ref.current = node
+      ref={(element) => {
+        node.current = element
+        setNodeRef(element)
+        if (typeof ref === 'function') ref(element)
+        else if (ref) ref.current = element
       }}
       data-dnd-item={item.id}
       {...handleProps}
@@ -41,6 +50,7 @@ export function DraggableItem({
         dragging && 'opacity-35',
         pending && 'shadow-[0_0_0_2px_var(--success-soft)]',
         combineTarget && 'scale-[1.02] bg-success-soft shadow-[0_0_0_2px_var(--success)]',
+        flash && 'animate-[flash_1.8s_ease-out]',
         className,
       )}
     >

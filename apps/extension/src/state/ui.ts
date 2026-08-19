@@ -23,6 +23,10 @@ interface UiState {
   focusGroupTitleId: string | null
   setFocusGroupTitle: (id: string | null) => void
 
+  /** Item to scroll to and highlight briefly (e.g. after "show on board" in search). */
+  flashItemId: string | null
+  flashItem: (id: string | null) => void
+
   /** Item ids selected with Shift/Cmd/Ctrl+click (all within one group). */
   selection: string[]
   selectionGroupId: string | null
@@ -40,6 +44,9 @@ export const useUi = create<UiState>()((set, get) => ({
 
   focusGroupTitleId: null,
   setFocusGroupTitle: (id) => set({ focusGroupTitleId: id }),
+
+  flashItemId: null,
+  flashItem: (id) => set({ flashItemId: id }),
 
   selection: [],
   selectionGroupId: null,

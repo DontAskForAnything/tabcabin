@@ -26,6 +26,15 @@ export interface SeedText {
 
 /** Creates a small starter workspace on the very first run. Returns the workspace id if created. */
 export async function ensureSeed(text: SeedText): Promise<string | null> {
+  // One transaction for check + write: several new-tab pages may start at the same time.
+  return db.transaction(
+    'rw',
+    [db.meta, db.workspaces, db.categories, db.groups, db.items, db.reminders, db.outbox],
+    () => seedInTransaction(text),
+  )
+}
+
+async function seedInTransaction(text: SeedText): Promise<string | null> {
   const seeded = await db.meta.get('seeded')
   if (seeded || (await db.workspaces.count()) > 0) return null
   const clock = { now: Date.now() }

@@ -1,5 +1,6 @@
 /* Design tokens. Semantic colors switch with the `.dark` class on <html>. */
-:root {
+:root,
+:host {
   --canvas: #eceff4;
   --panel: #f6f7fa;
   --card: #ffffff;

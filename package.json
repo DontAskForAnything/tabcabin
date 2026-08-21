@@ -18,7 +18,7 @@
     "test": "pnpm -r --if-present test",
     "build:ext": "pnpm --filter @tabhangar/extension build",
     "zip:ext": "pnpm --filter @tabhangar/extension zip",
-    "e2e": "pnpm --filter @tabhangar/extension build && pnpm --filter @tabhangar/extension e2e"
+    "e2e": "pnpm --filter @tabhangar/extension build:e2e && pnpm --filter @tabhangar/extension e2e"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

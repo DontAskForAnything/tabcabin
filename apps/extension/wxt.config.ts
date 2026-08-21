@@ -24,7 +24,7 @@ export default defineConfig({
       }
     },
   },
-  manifest: {
+  manifest: ({ mode }) => ({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
@@ -50,5 +50,7 @@ export default defineConfig({
         description: '__MSG_cmdSaveCurrentPage__',
       },
     },
-  },
+    // End-to-end tests can't produce the user gesture behind `activeTab`, so the test build may script any page.
+    ...(mode === 'e2e' ? { host_permissions: ['<all_urls>'] } : {}),
+  }),
 })

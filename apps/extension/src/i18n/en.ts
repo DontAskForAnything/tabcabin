@@ -225,6 +225,19 @@ export const en = {
   'search.bookmarksDenied': 'Bookmark access was not granted',
   'search.tabInWindow': 'Open tab · {window}',
   'search.bookmarkPath': 'Bookmarks › {folder}',
+  'menu.savePage': 'Save page to TabHangar',
+  'menu.closeAndSave': 'Close tab and save to TabHangar',
+  'menu.saveLink': 'Save link to TabHangar',
+  'menu.saveSelection': 'Save selection as a note',
+  'menu.saveImage': 'Save image to TabHangar',
+  'menu.newGroup': '＋ New group',
+  'menu.openApp': 'Open TabHangar',
+  'toast.saved': 'Saved to {group}',
+  'toast.noteSaved': 'Note saved to {group}',
+  'toast.imageSaved': 'Image saved to {group}',
+  'toast.failed': 'Could not save',
+  'toast.undone': 'Undone',
+  'popover.closeAfterSave': 'Close the tab after saving',
 } satisfies Record<string, Message>
 
 export type MessageKey = keyof typeof en

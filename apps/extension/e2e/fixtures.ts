@@ -4,9 +4,9 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.output/chrome-mv3')
+const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.output/chrome-mv3-e2e')
 
-/** Launches Chromium with the built extension loaded (run `pnpm build` first). */
+/** Launches Chromium with the built extension loaded (run `pnpm build:e2e` first). */
 export const test = base.extend<{ context: BrowserContext; extensionId: string }>({
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {

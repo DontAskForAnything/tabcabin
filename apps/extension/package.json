@@ -11,7 +11,8 @@
     "postinstall": "wxt prepare",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run --passWithNoTests",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "build:e2e": "wxt build --mode e2e"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

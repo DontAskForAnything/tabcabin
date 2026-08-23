@@ -1,4 +1,5 @@
 import { newId } from './ids'
+import { minutesOfDay } from './reminders'
 import type { Category, Group, Item, Reminder, Workspace } from './schema'
 
 export interface Clock {
@@ -110,7 +111,7 @@ export function makeNote(
 
 export function makeReminder(
   input: Pick<Reminder, 'itemId' | 'dueAt'> &
-    Partial<Pick<Reminder, 'repeat' | 'weekdays' | 'monthDay'>>,
+    Partial<Pick<Reminder, 'repeat' | 'weekdays' | 'monthDay' | 'timeOfDay'>>,
   { now }: Clock,
 ): Reminder {
   return {
@@ -120,6 +121,7 @@ export function makeReminder(
     repeat: input.repeat ?? 'none',
     weekdays: input.weekdays ?? [],
     monthDay: input.monthDay ?? null,
+    timeOfDay: input.timeOfDay ?? minutesOfDay(input.dueAt),
     firedAt: null,
     ...stamps(now),
   }

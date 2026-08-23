@@ -92,9 +92,13 @@ export const reminderSchema = z.object({
   weekdays: z.array(z.number().int().min(0).max(6)).max(7),
   /** 1-31, used when repeat === 'monthly'. */
   monthDay: z.number().int().min(1).max(31).nullable(),
+  /** Local time of repeating reminders in minutes after midnight. */
+  timeOfDay: z.number().int().min(0).max(1439),
+  /** When the notification for the current `dueAt` was shown. */
   firedAt: timestamp.nullable(),
 })
 export type Reminder = z.infer<typeof reminderSchema>
+export type RepeatMode = Reminder['repeat']
 
 export const ENTITY_TYPES = ['workspace', 'category', 'group', 'item', 'reminder'] as const
 export const entityTypeSchema = z.enum(ENTITY_TYPES)

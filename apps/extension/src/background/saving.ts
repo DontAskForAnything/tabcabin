@@ -29,14 +29,16 @@ export async function saveToGroup(
       }
     | { kind: 'note'; text: string; sourceUrl: string; title: string }
     | { kind: 'image'; imageUrl: string; title: string; pageUrl: string },
-): Promise<{ groupTitle: string; result: repo.Result }> {
+): Promise<{ groupTitle: string; result: repo.Result; itemId: string | null }> {
   const { groupId, created } = await resolveGroup(target)
   let result: repo.Result
+  let itemId: string | null = null
   if (what.kind === 'link') {
     const added = await repo.addLinks(groupId, [
       { url: what.url, title: what.title || displayHost(what.url), favIconUrl: what.favIconUrl },
     ])
     result = added
+    itemId = added.ids[0] ?? null
     const note = what.note
     if (note && note.text.trim() && added.ids[0]) {
       if (note.todo) {
@@ -49,6 +51,7 @@ export async function saveToGroup(
           },
           { afterId: added.ids[0] },
         )
+        itemId = extra.id
         result = { undo: [...extra.undo, ...result.undo] }
       } else {
         const edit = await repo.updateItem(added.ids[0], {
@@ -59,11 +62,13 @@ export async function saveToGroup(
       }
     }
   } else if (what.kind === 'note') {
-    result = await repo.addNote(groupId, {
+    const added = await repo.addNote(groupId, {
       text: what.text.slice(0, NOTE_MAX_LENGTH),
       sourceUrl: what.sourceUrl,
       title: what.title,
     })
+    result = added
+    itemId = added.id
   } else {
     result = await repo.addImage(groupId, {
       imageUrl: what.imageUrl,
@@ -73,5 +78,5 @@ export async function saveToGroup(
   }
   if (created) result = { undo: [...result.undo, ...created.undo] }
   const saved = await loadRow('group', groupId)
-  return { groupTitle: saved ? `${saved.emoji} ${saved.title}`.trim() : '', result }
+  return { groupTitle: saved ? `${saved.emoji} ${saved.title}`.trim() : '', result, itemId }
 }

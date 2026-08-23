@@ -1,4 +1,12 @@
-import { Check, ClipboardCopy, FaceSlightlySmiling, ListTodo, Palette, Trash } from 'lucide-react'
+import {
+  Bell,
+  Check,
+  ClipboardCopy,
+  FaceSlightlySmiling,
+  ListTodo,
+  Palette,
+  Trash,
+} from 'lucide-react'
 import { NOTE_COLORS, type NoteColor } from '@tabhangar/core'
 import {
   cn,
@@ -14,7 +22,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { AnimatePresence, motion } from 'motion/react'
 import type { MouseEvent, ReactNode } from 'react'
 import { db } from '@/db/db'
-import { deleteItems, updateItem } from '@/db/repo'
+import { deleteItems, getItemReminder, updateItem } from '@/db/repo'
 import { useT } from '@/i18n'
 import { copyText, emojiBaseUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
@@ -28,6 +36,11 @@ export function NoteToolbar() {
   const editingId = useUi((s) => s.editingNoteId)
   const setEditing = useUi((s) => s.setEditingNote)
   const note = useLiveQuery(() => (editingId ? db.items.get(editingId) : undefined), [editingId])
+  const reminder = useLiveQuery(
+    () => (editingId ? getItemReminder(editingId) : undefined),
+    [editingId],
+  )
+  const editReminder = useUi((s) => s.editReminder)
 
   return (
     <AnimatePresence>
@@ -100,6 +113,15 @@ export function NoteToolbar() {
               />
             </PopoverContent>
           </Popover>
+          <ToolButton
+            label={t('item.reminder')}
+            icon={<Bell size={16} />}
+            active={!!reminder}
+            onClick={() => {
+              setEditing(null)
+              editReminder(note.id)
+            }}
+          />
           <ToolButton
             label={t('note.copy')}
             icon={<ClipboardCopy size={16} />}

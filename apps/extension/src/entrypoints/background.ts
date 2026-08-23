@@ -3,7 +3,9 @@ import { db } from '@/db/db'
 import { startBadge } from '@/background/badge'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
+import { checkReminders, startReminders } from '@/background/reminders'
 import { runUndo } from '@/background/toast'
+import { trimBin } from '@/db/repo'
 import { isRuntimeMessage } from '@/messages'
 
 export default defineBackground(() => {
@@ -17,7 +19,10 @@ export default defineBackground(() => {
     void browser.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: false })
     scheduleMenus()
   })
-  browser.runtime.onStartup.addListener(scheduleMenus)
+  browser.runtime.onStartup.addListener(() => {
+    scheduleMenus()
+    void trimBin()
+  })
 
   // Rebuild the right-click menu whenever groups, categories, workspaces or the active workspace change.
   liveQuery(async () => {
@@ -48,7 +53,10 @@ export default defineBackground(() => {
   })
 
   startBadge()
+  startReminders()
 
   // Hooks for end-to-end tests (menus and the toolbar button can't be clicked from Playwright).
-  Object.assign(globalThis, { tabhangar: { handleMenuClick, togglePopover, rebuildMenus } })
+  Object.assign(globalThis, {
+    tabhangar: { handleMenuClick, togglePopover, rebuildMenus, checkReminders, db },
+  })
 })

@@ -4,6 +4,7 @@ import { useT } from '@/i18n'
 import { formatShortcut } from '@/lib/keys'
 import { updateSettings, type ViewMode } from '@/settings/settings'
 import { useUi } from '@/state/ui'
+import { useDueCount } from '../reminders/useDue'
 import type { ActiveContext } from '../useActive'
 import { CategoryTabs } from './CategoryTabs'
 import { MoreMenu } from './MoreMenu'
@@ -12,6 +13,7 @@ import { WorkspaceMenu } from './WorkspaceMenu'
 export function TopBar({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
+  const dueCount = useDueCount()
   const { settings, category } = active
   const view: ViewMode = (category && settings?.viewModes[category.id]) || 'board'
 
@@ -57,6 +59,7 @@ export function TopBar({ active, compact }: { active: ActiveContext; compact: bo
         icon={<Bell size={17} />}
         variant="tile"
         size="lg"
+        badge={dueCount > 0 ? dueCount : undefined}
         onClick={() => openModal({ type: 'reminders' })}
       />
       <MoreMenu active={active} />

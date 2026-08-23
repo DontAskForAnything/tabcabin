@@ -34,6 +34,8 @@ export interface PopoverSaveRequest {
   page: { url: string; title: string; favIconUrl: string | null }
   target: { groupId: string } | { newGroupIn: string; title: string }
   note: { text: string; color: string | null; todo: boolean } | null
+  /** One-time reminder for the saved link (or its to-do). */
+  remindAt: number | null
   closeTab: boolean
 }
 

@@ -1,4 +1,4 @@
-import { ExternalLink, FolderInput, Pencil, Trash } from 'lucide-react'
+import { Bell, ExternalLink, FolderInput, Pencil, Trash } from 'lucide-react'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -37,6 +37,7 @@ export function ItemContextMenu({
 }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
+  const editReminder = useUi((s) => s.editReminder)
   const targets = groups.filter((group) => group.id !== item.groupId)
   return (
     <ContextMenu>
@@ -56,6 +57,11 @@ export function ItemContextMenu({
             onSelect={() => openModal({ type: 'linkEditor', itemId: item.id })}
           >
             {t('item.edit')}
+          </ContextMenuItem>
+        )}
+        {item.kind !== 'stack' && (
+          <ContextMenuItem icon={<Bell size={14} />} onSelect={() => editReminder(item.id)}>
+            {t('item.reminder')}
           </ContextMenuItem>
         )}
         {targets.length > 0 && (

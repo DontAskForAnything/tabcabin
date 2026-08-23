@@ -1,5 +1,12 @@
-import { Check, ChevronDown, GripVertical, ListTodo, Plus, X } from 'lucide-react'
-import { displayHost, NOTE_COLORS, type NoteColor } from '@tabhangar/core'
+import { Bell, Check, ChevronDown, GripVertical, ListTodo, Plus, X } from 'lucide-react'
+import {
+  displayHost,
+  NOTE_COLORS,
+  type NoteColor,
+  presetTime,
+  TIME_PRESETS,
+  type TimePreset,
+} from '@tabhangar/core'
 import { cn, letterTileFor } from '@tabhangar/ui'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PopoverData } from '@/background/popover'
@@ -21,6 +28,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
   const [color, setColor] = useState<NoteColor | null>(null)
   const [todo, setTodo] = useState(false)
   const [closeTab, setCloseTab] = useState(false)
+  const [remind, setRemind] = useState<TimePreset | null>(null)
   const [target, setTarget] = useState<Target | null>(null)
   const [picking, setPicking] = useState(false)
   const [workspaceId, setWorkspaceId] = useState<string | null>(null)
@@ -77,6 +85,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
       page,
       target,
       note: note.trim() ? { text: note, color, todo } : null,
+      remindAt: remind ? presetTime(remind, Date.now()) : null,
       closeTab,
     }
     const response = (await browser.runtime.sendMessage(request)) as {
@@ -326,6 +335,31 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                     ))}
                   </div>
                 )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="flex items-center gap-1.5 text-[12px] font-semibold text-ink-3">
+                  <Bell size={12} />
+                  {t('popover.remind')}
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {TIME_PRESETS.map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      aria-pressed={remind === preset}
+                      onClick={() => setRemind((value) => (value === preset ? null : preset))}
+                      className={cn(
+                        'h-7 rounded-lg px-2.5 text-[12px] font-semibold transition-colors',
+                        remind === preset
+                          ? 'bg-accent text-white'
+                          : 'bg-subtle text-ink-2 hover:text-ink',
+                      )}
+                    >
+                      {t(`reminders.preset.${preset}`)}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <label className="flex cursor-pointer items-center gap-2.5 text-[13px] text-ink-2">

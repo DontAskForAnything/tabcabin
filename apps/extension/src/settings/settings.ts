@@ -32,6 +32,8 @@ export interface Settings {
   sidebarWidth: number
   trashZone: boolean
   shortcuts: Shortcuts
+  /** The notification permission was offered once (when the first reminder was set). */
+  notificationsAsked: boolean
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -50,6 +52,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sidebarWidth: 292,
   trashZone: true,
   shortcuts: { newGroup: 'g', search: 'mod+k', workspaces: 'mod+o', bin: 'mod+shift+backspace' },
+  notificationsAsked: false,
 }
 
 function merge(rows: { key: string; value: unknown }[]): Settings {

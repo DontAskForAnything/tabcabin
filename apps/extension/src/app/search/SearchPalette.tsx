@@ -8,7 +8,7 @@ import { type MessageKey, useT } from '@/i18n'
 import { faviconUrl, hostSeed, openUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { useOpenTabs } from '../panel/useOpenTabs'
-import { setActiveCategory, type ActiveContext } from '../useActive'
+import { revealItem, type ActiveContext } from '../useActive'
 import { hasBookmarkAccess, loadBookmarkDocs, requestBookmarkAccess } from './bookmarks'
 import { highlightParts, recentDocs, search, type SearchHit } from './engine'
 
@@ -32,7 +32,6 @@ const SECTION: Record<SearchDoc['kind'], MessageKey> = {
 export function SearchPalette({ open, active }: { open: boolean; active: ActiveContext }) {
   const t = useT()
   const close = useUi((s) => s.closeModal)
-  const flashItem = useUi((s) => s.flashItem)
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('workspace')
   const [index, setIndex] = useState(0)
@@ -121,9 +120,12 @@ export function SearchPalette({ open, active }: { open: boolean; active: ActiveC
 
   const goTo = async (doc: SearchDoc) => {
     if (!doc.itemId || !doc.workspaceId || !doc.categoryId || !active.settings) return
-    await setActiveCategory(active.settings, doc.workspaceId, doc.categoryId)
     close()
-    setTimeout(() => flashItem(doc.itemId!), 120)
+    await revealItem(active.settings, {
+      workspaceId: doc.workspaceId,
+      categoryId: doc.categoryId,
+      itemId: doc.itemId,
+    })
   }
 
   const run = async (doc: SearchDoc, reveal = false) => {

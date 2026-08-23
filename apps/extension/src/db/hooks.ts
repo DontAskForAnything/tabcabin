@@ -2,6 +2,7 @@ import {
   type Category,
   type Group,
   type Item,
+  type Reminder,
   sortByPosition,
   type Workspace,
 } from '@tabhangar/core'
@@ -18,6 +19,8 @@ export interface BoardGroup extends Group {
   items: BoardItem[]
   /** All live items including stack children (for counts). */
   allItems: Item[]
+  /** Live reminders by item id. */
+  reminders: Record<string, Reminder>
 }
 
 const live = <T extends { deletedAt: number | null }>(rows: readonly T[]) =>
@@ -33,6 +36,12 @@ export async function loadBoard(categoryId: string): Promise<BoardGroup[]> {
       .anyOf(groups.map((group) => group.id))
       .toArray(),
   )
+  const reminders: Record<string, Reminder> = {}
+  for (const reminder of await db.reminders
+    .where('itemId')
+    .anyOf(items.map((item) => item.id))
+    .toArray())
+    if (reminder.deletedAt === null) reminders[reminder.itemId] = reminder
   const byGroup = new Map<string, Item[]>()
   for (const item of items) {
     const list = byGroup.get(item.groupId) ?? []
@@ -45,6 +54,7 @@ export async function loadBoard(categoryId: string): Promise<BoardGroup[]> {
     return {
       ...group,
       allItems: all,
+      reminders,
       items: top.map((item) => ({
         ...item,
         children:

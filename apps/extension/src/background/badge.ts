@@ -3,6 +3,11 @@ import { liveQuery } from 'dexie'
 import { db } from '@/db/db'
 
 let counts = new Map<string, number>()
+let dueReminders = 0
+let dueTitle = ''
+
+const ACCENT = '#5B4BE0'
+const DUE = '#D93D42'
 
 /** Number of saved links for a URL (normalized). */
 export function savedCount(url: string | undefined): number {
@@ -10,11 +15,22 @@ export function savedCount(url: string | undefined): number {
   return key ? (counts.get(key) ?? 0) : 0
 }
 
+/** Due reminders win over the saved count so they are noticed without notifications. */
 async function updateBadge(tabId: number, url: string | undefined) {
-  const count = savedCount(url)
-  await browser.action
-    .setBadgeText({ tabId, text: count > 0 ? String(count) : '' })
-    .catch(() => undefined)
+  const due = dueReminders > 0
+  const count = due ? dueReminders : savedCount(url)
+  await Promise.all([
+    browser.action.setBadgeBackgroundColor({ tabId, color: due ? DUE : ACCENT }),
+    browser.action.setBadgeText({ tabId, text: count > 0 ? String(count) : '' }),
+    browser.action.setTitle({ tabId, title: due ? dueTitle : 'TabHangar' }),
+  ]).catch(() => undefined)
+}
+
+export function setDueReminders(count: number, title: string) {
+  if (count === dueReminders && title === dueTitle) return
+  dueReminders = count
+  dueTitle = title
+  void updateActiveTabs()
 }
 
 async function updateActiveTabs() {
@@ -26,7 +42,7 @@ async function updateActiveTabs() {
 
 /** Keeps the toolbar badge showing how many times the current page is saved. */
 export function startBadge() {
-  void browser.action.setBadgeBackgroundColor({ color: '#5B4BE0' })
+  void browser.action.setBadgeBackgroundColor({ color: ACCENT })
   void browser.action.setBadgeTextColor?.({ color: '#FFFFFF' })
   liveQuery(() => db.items.toArray()).subscribe({
     next: (items) => {

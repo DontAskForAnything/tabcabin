@@ -1,16 +1,19 @@
-import { Pencil, Trash } from 'lucide-react'
+import { Bell, Pencil, Trash } from 'lucide-react'
 import { displayHost } from '@tabhangar/core'
 import { cn, Favicon, IconButton } from '@tabhangar/ui'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import type { ItemViewProps } from '../board/ItemView'
+import { ReminderChip } from '../reminders/ReminderChip'
 import { selectedRing, useSelectable } from '../board/items/selection'
 
 /** Link shown as a tile in the Collections view. */
 export function LinkCard({ item, group, actions }: ItemViewProps) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
+  const editReminder = useUi((s) => s.editReminder)
+  const reminder = group.reminders[item.id]
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
   const url = item.url ?? ''
   return (
@@ -43,6 +46,11 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
           <span className="mt-0.5 block truncate text-[12px] text-ink-3">{displayHost(url)}</span>
         </span>
       </a>
+      {reminder && (
+        <div className="-mt-1.5 mb-2.5 ml-[60px] flex pr-3">
+          <ReminderChip reminder={reminder} />
+        </div>
+      )}
       {item.text && (
         <div
           className="mx-3 mb-3 -mt-1 line-clamp-3 rounded-[9px] px-2.5 py-1.5 text-[12.5px] leading-snug whitespace-pre-line"
@@ -55,6 +63,13 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
         </div>
       )}
       <div className="absolute top-2 right-2 hidden gap-1 group-hover/card:flex">
+        <IconButton
+          label={t('item.reminder')}
+          icon={<Bell size={12} />}
+          variant="tile"
+          size="xs"
+          onClick={() => editReminder(item.id)}
+        />
         <IconButton
           label={t('item.edit')}
           icon={<Pencil size={12} />}

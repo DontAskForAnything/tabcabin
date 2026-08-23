@@ -1,6 +1,7 @@
 import type { Category, Workspace } from '@tabhangar/core'
 import { useCategories, useWorkspaces } from '@/db/hooks'
 import { type Settings, updateSettings, useSettings } from '@/settings/settings'
+import { useUi } from '@/state/ui'
 
 export interface ActiveContext {
   settings: Settings | undefined
@@ -42,4 +43,13 @@ export async function setActiveCategory(
     activeWorkspaceId: workspaceId,
     activeCategoryIds: { ...settings.activeCategoryIds, [workspaceId]: categoryId },
   })
+}
+
+/** Switches to the item's category and highlights the item on the board. */
+export async function revealItem(
+  settings: Settings,
+  target: { workspaceId: string; categoryId: string; itemId: string },
+) {
+  await setActiveCategory(settings, target.workspaceId, target.categoryId)
+  setTimeout(() => useUi.getState().flashItem(target.itemId), 120)
 }

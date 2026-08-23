@@ -15,6 +15,10 @@ interface UiState {
   openModal: (modal: Exclude<ModalState, null>) => void
   closeModal: () => void
 
+  /** Item whose reminder is being edited (a dialog that can open above other modals). */
+  reminderItemId: string | null
+  editReminder: (itemId: string | null) => void
+
   /** Note currently edited inline (shows the note toolbar). */
   editingNoteId: string | null
   setEditingNote: (id: string | null) => void
@@ -38,6 +42,9 @@ export const useUi = create<UiState>()((set, get) => ({
   modal: null,
   openModal: (modal) => set({ modal }),
   closeModal: () => set({ modal: null }),
+
+  reminderItemId: null,
+  editReminder: (itemId) => set({ reminderItemId: itemId }),
 
   editingNoteId: null,
   setEditingNote: (id) => set({ editingNoteId: id }),

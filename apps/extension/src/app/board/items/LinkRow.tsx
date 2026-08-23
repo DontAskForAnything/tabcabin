@@ -1,9 +1,10 @@
-import { Pencil, Trash } from 'lucide-react'
+import { Bell, Pencil, Trash } from 'lucide-react'
 import { displayUrl } from '@tabhangar/core'
 import { cn, Favicon, IconButton } from '@tabhangar/ui'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'
+import { ReminderChip } from '../../reminders/ReminderChip'
 import type { ItemViewProps } from '../ItemView'
 import { selectedRing, useSelectable } from './selection'
 
@@ -16,6 +17,8 @@ export function LinkRow({
 }: ItemViewProps & { nested?: boolean }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
+  const editReminder = useUi((s) => s.editReminder)
+  const reminder = group.reminders[item.id]
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
   const showUrl = active.settings?.showUrls !== false
   const url = item.url ?? ''
@@ -42,7 +45,7 @@ export function LinkRow({
           seed={hostSeed(url, item.title)}
           size={nested ? 'sm' : 'md'}
         />
-        <span className="min-w-0 flex-1 pr-1 group-hover/item:pr-[68px]">
+        <span className="min-w-0 flex-1 pr-1 group-hover/item:pr-[100px]">
           <span className="block truncate text-[14.5px] leading-snug font-[550]">
             {item.title || displayUrl(url)}
           </span>
@@ -52,6 +55,13 @@ export function LinkRow({
         </span>
       </a>
       <div className="absolute top-[9px] right-2 hidden items-center gap-1 group-hover/item:flex">
+        <IconButton
+          label={t('item.reminder')}
+          icon={<Bell size={13} />}
+          variant="soft"
+          size="sm"
+          onClick={() => editReminder(item.id)}
+        />
         <IconButton
           label={t('item.edit')}
           icon={<Pencil size={13} />}
@@ -67,6 +77,11 @@ export function LinkRow({
           onClick={() => void actions.deleteItems([item.id])}
         />
       </div>
+      {reminder && (
+        <div className={cn('-mt-0.5 mb-1.5 flex', nested ? 'ml-11' : 'ml-14')}>
+          <ReminderChip reminder={reminder} />
+        </div>
+      )}
       {item.text && (
         <div
           className="mx-2 mb-2 ml-14 rounded-[10px] px-[11px] py-2 text-[13px] leading-[1.45] whitespace-pre-line"

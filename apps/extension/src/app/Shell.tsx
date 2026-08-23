@@ -1,4 +1,6 @@
 import { Skeleton } from '@tabhangar/ui'
+import { useEffect } from 'react'
+import { useUi } from '@/state/ui'
 import { BoardView } from './board/BoardView'
 import { DndProvider } from './dnd/DndProvider'
 import { TrashZone } from './dnd/DropMarkers'
@@ -13,6 +15,7 @@ import { SelectionBar } from './board/SelectionBar'
 
 export function Shell({ surface, active }: { surface: Surface; active: ActiveContext }) {
   useGlobalShortcuts(active)
+  useHashViews()
   const compact = surface === 'sidepanel'
   return (
     <DndProvider active={active}>
@@ -56,4 +59,19 @@ function BoardSkeleton() {
       ))}
     </div>
   )
+}
+
+/** Opens a view requested in the URL hash (`#reminders`, `#bin`), e.g. from a notification. */
+function useHashViews() {
+  useEffect(() => {
+    const open = () => {
+      const view = location.hash.slice(1)
+      if (view !== 'reminders' && view !== 'bin') return
+      useUi.getState().openModal({ type: view })
+      history.replaceState(null, '', location.pathname + location.search)
+    }
+    open()
+    window.addEventListener('hashchange', open)
+    return () => window.removeEventListener('hashchange', open)
+  }, [])
 }

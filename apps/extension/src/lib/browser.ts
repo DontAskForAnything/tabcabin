@@ -17,6 +17,11 @@ export function faviconUrl(pageUrl: string | null | undefined, size = 64): strin
   return url.toString()
 }
 
+/** The TabHangar page, optionally opening a view (`#reminders`, `#bin`). */
+export function appUrl(view?: string): string {
+  return extensionUrl(`/newtab.html${view ? `#${view}` : ''}`)
+}
+
 export function hostSeed(url: string | null | undefined, fallback = '?'): string {
   return displayHost(url) || fallback
 }
@@ -102,4 +107,15 @@ export async function copyText(text: string): Promise<boolean> {
 /** Base URL of the emoji data bundled with the extension (undefined outside the extension). */
 export function emojiBaseUrl(): string | undefined {
   return hasBrowser() ? extensionUrl('/emoji').replace(/\/$/, '') : undefined
+}
+
+export async function hasNotifications(): Promise<boolean> {
+  if (!hasBrowser()) return false
+  return browser.permissions.contains({ permissions: ['notifications'] }).catch(() => false)
+}
+
+/** Must be called from a user gesture (before any await). */
+export function requestNotifications(): Promise<boolean> {
+  if (!hasBrowser()) return Promise.resolve(false)
+  return browser.permissions.request({ permissions: ['notifications'] }).catch(() => false)
 }

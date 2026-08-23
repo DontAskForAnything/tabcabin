@@ -39,8 +39,9 @@ export default defineConfig({
       'sidePanel',
       'activeTab',
       'scripting',
+      ...(mode === 'e2e' ? ['notifications'] : []),
     ],
-    optional_permissions: ['bookmarks', 'topSites', 'notifications'],
+    optional_permissions: ['bookmarks', 'topSites', ...(mode === 'e2e' ? [] : ['notifications'])],
     action: {
       default_title: 'TabHangar',
     },
@@ -50,7 +51,8 @@ export default defineConfig({
         description: '__MSG_cmdSaveCurrentPage__',
       },
     },
-    // End-to-end tests can't produce the user gesture behind `activeTab`, so the test build may script any page.
+    // End-to-end tests can't produce user gestures (activeTab, permission prompts), so the test
+    // build may script any page and has notifications granted up front.
     ...(mode === 'e2e' ? { host_permissions: ['<all_urls>'] } : {}),
   }),
 })

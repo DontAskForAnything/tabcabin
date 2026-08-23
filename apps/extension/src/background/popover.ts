@@ -1,6 +1,7 @@
-import { isSavableUrl, normalizeUrl, sortByPosition } from '@tabhangar/core'
+import { isSavableUrl, minutesOfDay, normalizeUrl, sortByPosition } from '@tabhangar/core'
 import { db } from '@/db/db'
 import { loadOverview } from '@/db/overview'
+import { setReminder } from '@/db/repo'
 import { getSettings } from '@/settings/settings'
 import type { RuntimeMessage } from '@/messages'
 import { saveToGroup } from './saving'
@@ -123,6 +124,14 @@ export function handlePopoverMessage(
         favIconUrl: message.page.favIconUrl,
         note: message.note,
       })
+      if (message.remindAt !== null && saved.itemId)
+        await setReminder(saved.itemId, {
+          dueAt: message.remindAt,
+          repeat: 'none',
+          weekdays: [],
+          monthDay: null,
+          timeOfDay: minutesOfDay(message.remindAt),
+        })
       const tabId = sender.tab?.id
       if (message.closeTab && tabId !== undefined) {
         const siblings = await browser.tabs.query({ windowId: sender.tab?.windowId })

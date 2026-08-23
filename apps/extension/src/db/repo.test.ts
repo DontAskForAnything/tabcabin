@@ -6,19 +6,27 @@ import {
   addLinks,
   addNote,
   combine,
+  completeReminder,
   createCategory,
   createGroup,
   createWorkspace,
   deleteGroup,
   deleteItems,
   deleteWorkspace,
+  getItemReminder,
   listBin,
   moveItemsTo,
   purgeFromBin,
   restoreFromBin,
+  type ReminderInput,
+  removeReminder,
   revert,
+  setReminder,
+  snoozeReminder,
+  trimBin,
   unstackById,
 } from './repo'
+import { loadReminders } from './reminders'
 import { ensureSeed, type SeedText } from './seed'
 
 const seedText: SeedText = {
@@ -175,6 +183,88 @@ describe('bin', () => {
     expect(await db.categories.count()).toBe(0)
     expect(await db.groups.count()).toBe(0)
     expect(await db.items.count()).toBe(0)
+  })
+})
+
+describe('reminders', () => {
+  const once = (dueAt: number): ReminderInput => ({
+    dueAt,
+    repeat: 'none',
+    weekdays: [],
+    monthDay: null,
+    timeOfDay: 540,
+  })
+
+  it('keeps one reminder per item and lists it with its place', async () => {
+    const { g1 } = await setup()
+    const { ids } = await addLinks(g1, [{ url: 'https://a.com', title: 'A' }])
+    const id = ids[0]!
+    await setReminder(id, once(Date.now() + 60_000))
+    await setReminder(id, once(Date.now() + 120_000))
+    expect(await db.reminders.count()).toBe(1)
+    const [entry] = await loadReminders()
+    expect(entry?.item.title).toBe('A')
+    expect(entry?.group.title).toBe('One')
+  })
+
+  it('removes one-time reminders when done and moves repeating ones', async () => {
+    const { g1 } = await setup()
+    const { ids } = await addLinks(g1, [
+      { url: 'https://a.com', title: 'A' },
+      { url: 'https://b.com', title: 'B' },
+    ])
+    await setReminder(ids[0]!, once(Date.now() - 1000))
+    await setReminder(ids[1]!, {
+      dueAt: Date.now() - 1000,
+      repeat: 'weekly',
+      weekdays: [0, 1, 2, 3, 4, 5, 6],
+      monthDay: null,
+      timeOfDay: 540,
+    })
+    const first = (await getItemReminder(ids[0]!))!
+    const second = (await getItemReminder(ids[1]!))!
+    const undo = await completeReminder(first.id)
+    await completeReminder(second.id)
+    expect(await getItemReminder(ids[0]!)).toBeUndefined()
+    expect((await getItemReminder(ids[1]!))!.dueAt).toBeGreaterThan(Date.now())
+    await revert(undo)
+    expect(await getItemReminder(ids[0]!)).toBeDefined()
+  })
+
+  it('snoozes and removes reminders', async () => {
+    const { g1 } = await setup()
+    const { ids } = await addLinks(g1, [{ url: 'https://a.com', title: 'A' }])
+    await setReminder(ids[0]!, once(Date.now() - 1000))
+    const reminder = (await getItemReminder(ids[0]!))!
+    const later = Date.now() + 3_600_000
+    await snoozeReminder(reminder.id, later)
+    expect((await getItemReminder(ids[0]!))!.dueAt).toBe(later)
+    await removeReminder(reminder.id)
+    expect(await loadReminders()).toEqual([])
+  })
+
+  it('hides reminders of deleted items and purges them with the item', async () => {
+    const { g1 } = await setup()
+    const { ids } = await addLinks(g1, [{ url: 'https://a.com', title: 'A' }])
+    await setReminder(ids[0]!, once(Date.now() + 60_000))
+    await deleteItems(ids)
+    expect(await loadReminders()).toEqual([])
+    await purgeFromBin('item', ids[0]!)
+    expect(await db.reminders.count()).toBe(0)
+  })
+})
+
+describe('bin limit', () => {
+  it('purges entries beyond the newest ones', async () => {
+    const { g1 } = await setup()
+    const { ids } = await addLinks(
+      g1,
+      ['a', 'b', 'c', 'd'].map((name) => ({ url: `https://${name}.com`, title: name })),
+    )
+    for (const id of ids) await deleteItems([id])
+    expect(await trimBin(2)).toBe(2)
+    expect(await listBin()).toHaveLength(2)
+    expect(await db.items.count()).toBe(2)
   })
 })
 

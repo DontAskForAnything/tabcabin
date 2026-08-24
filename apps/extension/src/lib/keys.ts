@@ -36,3 +36,20 @@ export function formatShortcut(shortcut: string): string {
     })
     .join(mac ? '' : '+')
 }
+
+const MODIFIER_KEYS = new Set(['shift', 'control', 'meta', 'alt', 'altgraph', 'capslock', 'fn'])
+
+/** Turns a key press into the shortcut format ("mod+shift+k"); null for lone modifiers. */
+export function shortcutFromEvent(
+  event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'shiftKey' | 'altKey'>,
+  mac = isMac(),
+): string | null {
+  const key = event.key === ' ' ? 'space' : event.key.toLowerCase()
+  if (!key || MODIFIER_KEYS.has(key)) return null
+  const parts: string[] = []
+  if (mac ? event.metaKey : event.ctrlKey) parts.push('mod')
+  if (event.shiftKey) parts.push('shift')
+  if (event.altKey) parts.push('alt')
+  parts.push(key)
+  return parts.join('+')
+}

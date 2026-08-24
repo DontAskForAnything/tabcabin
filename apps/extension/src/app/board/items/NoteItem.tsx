@@ -35,7 +35,7 @@ export function NoteItem({ item, group, actions }: ItemViewProps) {
       <div className={cn('flex items-start gap-2.5 rounded-xl', selected && selectedRing)}>
         {item.todo && (
           <Checkbox
-            className="mt-2"
+            className="mt-2 dense:mt-1.5"
             checked={item.done}
             label={item.done ? t('note.markUndone') : t('note.markDone')}
             onCheckedChange={(done) => void actions.updateItem(item.id, { done })}
@@ -54,7 +54,7 @@ export function NoteItem({ item, group, actions }: ItemViewProps) {
             }}
             style={item.todo && !item.color ? undefined : noteColors(item.color)}
             className={cn(
-              'min-h-[40px] min-w-0 flex-1 cursor-text rounded-xl px-[13px] py-[9px] text-[14px] leading-[1.5] break-words whitespace-pre-line outline-none',
+              'min-h-[40px] min-w-0 flex-1 cursor-text rounded-xl px-[13px] py-[9px] dense:min-h-[32px] dense:py-[5px] text-[14px] leading-[1.5] break-words whitespace-pre-line outline-none',
               item.todo && !item.color && 'bg-subtle',
               item.done && 'text-ink-3 line-through',
               !item.text && 'text-ink-4',

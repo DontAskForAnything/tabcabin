@@ -29,6 +29,9 @@ export function App({ surface }: { surface: Surface }) {
   const active = useActive()
   const settings = active.settings ?? DEFAULT_SETTINGS
   useApplyTheme(settings.theme)
+  useEffect(() => {
+    document.documentElement.dataset.density = settings.density
+  }, [settings.density])
 
   useEffect(() => {
     const locale = DEFAULT_SETTINGS.locale

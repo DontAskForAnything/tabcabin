@@ -17,6 +17,8 @@ export interface ModalProps {
   /** Align to the top (command palette) instead of the center. */
   placement?: 'center' | 'top'
   className?: string
+  /** Called before Escape closes the dialog; `event.preventDefault()` keeps it open. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void
 }
 
 const widths = {
@@ -37,6 +39,7 @@ export function Modal({
   hideTitle = false,
   placement = 'center',
   className,
+  onEscapeKeyDown,
 }: ModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -61,6 +64,7 @@ export function Modal({
               <Dialog.Content
                 asChild
                 forceMount
+                onEscapeKeyDown={onEscapeKeyDown}
                 onInteractOutside={(event) => {
                   // Keep the dialog open when the user clicks a toast (e.g. "Undo").
                   const target = event.target as HTMLElement | null

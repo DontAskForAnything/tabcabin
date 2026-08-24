@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 
+export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data'
+
 export type ModalState =
   | { type: 'linkEditor'; itemId: string }
   | { type: 'categories' }
   | { type: 'search' }
   | { type: 'workspaces' }
-  | { type: 'settings' }
+  | { type: 'settings'; tab?: SettingsTab }
   | { type: 'bin' }
   | { type: 'reminders' }
   | null

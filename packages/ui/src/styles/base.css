@@ -5,6 +5,7 @@
 @source '../';
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dense (&:where([data-density='compact'], [data-density='compact'] *));
 
 @theme static {
   --font-sans:

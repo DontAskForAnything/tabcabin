@@ -38,7 +38,10 @@ export function LinkRow({
           event.preventDefault()
           actions.openItem(item, event)
         }}
-        className={cn('flex min-w-0 items-center gap-3 px-2', nested ? 'py-1.5' : 'py-[7px]')}
+        className={cn(
+          'flex min-w-0 items-center gap-3 px-2',
+          nested ? 'py-1.5 dense:py-1' : 'py-[7px] dense:py-[3px]',
+        )}
       >
         <Favicon
           src={faviconUrl(url) ?? item.favIconUrl}

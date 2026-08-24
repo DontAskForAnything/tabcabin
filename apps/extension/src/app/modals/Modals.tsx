@@ -7,6 +7,7 @@ import { WorkspacePicker } from './WorkspacePicker'
 import { SearchPalette } from '../search/SearchPalette'
 import { ReminderEditor } from '../reminders/ReminderEditor'
 import { RemindersModal } from '../reminders/RemindersModal'
+import { SettingsModal } from '../settings/SettingsModal'
 import { BinModal } from './BinModal'
 
 export function Modals({ active }: { active: ActiveContext }) {
@@ -20,6 +21,7 @@ export function Modals({ active }: { active: ActiveContext }) {
       <SearchPalette open={modal?.type === 'search'} active={active} />
       <RemindersModal open={modal?.type === 'reminders'} active={active} />
       <BinModal open={modal?.type === 'bin'} active={active} />
+      <SettingsModal active={active} />
       <ReminderEditor itemId={reminderItemId} settings={active.settings} />
       <ConfirmHost />
     </>

@@ -5,6 +5,7 @@ import { loadBoard } from './hooks'
 import {
   addLinks,
   addNote,
+  clearAllData,
   combine,
   completeReminder,
   createCategory,
@@ -273,5 +274,18 @@ describe('settings', () => {
     expect((await getSettings()).theme).toBe('system')
     await setSetting('theme', 'dark')
     expect((await getSettings()).theme).toBe('dark')
+  })
+
+  it('clears all data but keeps the theme and language', async () => {
+    await ensureSeed(seedText)
+    await setSetting('theme', 'dark')
+    await setSetting('locale', 'pl')
+    await setSetting('showUrls', false)
+    await clearAllData()
+    expect(await db.workspaces.count()).toBe(0)
+    expect(await db.meta.count()).toBe(0)
+    const settings = await getSettings()
+    expect([settings.theme, settings.locale, settings.showUrls]).toEqual(['dark', 'pl', true])
+    expect(await ensureSeed(seedText)).toBeTypeOf('string')
   })
 })

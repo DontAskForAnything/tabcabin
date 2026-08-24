@@ -48,7 +48,7 @@ export function ItemList({
       className={cn(
         layout === 'grid'
           ? 'grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3'
-          : 'flex min-h-[44px] flex-col gap-1.5',
+          : 'flex min-h-[44px] flex-col gap-1.5 dense:gap-0.5',
         className,
       )}
     >

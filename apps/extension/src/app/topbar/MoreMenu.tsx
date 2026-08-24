@@ -75,7 +75,10 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
         <MenuItem icon={<Trash size={15} />} onSelect={() => openModal({ type: 'bin' })}>
           {t('menu.bin')}
         </MenuItem>
-        <MenuItem icon={<Keyboard size={15} />} onSelect={() => openModal({ type: 'settings' })}>
+        <MenuItem
+          icon={<Keyboard size={15} />}
+          onSelect={() => openModal({ type: 'settings', tab: 'shortcuts' })}
+        >
           {t('menu.shortcuts')}
         </MenuItem>
         <MenuItem icon={<Settings size={15} />} onSelect={() => openModal({ type: 'settings' })}>

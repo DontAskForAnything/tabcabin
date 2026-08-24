@@ -95,7 +95,7 @@ export function GroupCard({
       aria-label={group.title || t('group.untitled')}
       style={{ ...style, width: effectiveWidth }}
       className={cn(
-        'relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150',
+        'relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150 dense:px-3.5 dense:pt-3.5 dense:pb-3',
         compact && 'w-full',
         dnd.dragging && 'opacity-40',
         dnd.receiving && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
@@ -103,7 +103,7 @@ export function GroupCard({
       )}
     >
       <header
-        className="flex cursor-grab items-center gap-3 px-1 pb-3.5 active:cursor-grabbing"
+        className="flex cursor-grab items-center gap-3 px-1 pb-3.5 active:cursor-grabbing dense:pb-2.5"
         {...dnd.handleProps}
       >
         {active.settings?.showGroupEmoji !== false && (
@@ -115,7 +115,7 @@ export function GroupCard({
             <button
               type="button"
               aria-label={t('group.changeEmoji')}
-              className="flex size-12 shrink-0 items-center justify-center rounded-[14px] text-[36px] leading-none transition-transform hover:scale-105 hover:bg-subtle"
+              className="flex size-12 shrink-0 items-center justify-center rounded-[14px] text-[36px] leading-none transition-transform hover:scale-105 hover:bg-subtle dense:size-9 dense:text-[26px]"
             >
               {group.emoji}
             </button>

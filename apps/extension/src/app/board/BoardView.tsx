@@ -57,7 +57,7 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
     <BoardContext.Provider value={context}>
       <div
         className={cn(
-          'flex flex-1 gap-5 pb-7',
+          'flex flex-1 gap-5 pb-7 dense:gap-3.5',
           compact ? 'flex-col px-4' : 'items-start overflow-x-auto px-7 pt-1.5',
         )}
       >

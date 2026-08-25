@@ -1,0 +1,85 @@
+{
+  "categories": [
+    { "id": "cat-later", "name": "Later", "tabIndex": 1 },
+    { "id": "cat-work", "name": "Work", "tabIndex": 0 }
+  ],
+  "tabData": [
+    {
+      "id": "g-docs",
+      "categoryID": "cat-work",
+      "title": "Docs",
+      "emoji": "📚",
+      "customWidth": 480,
+      "tabs": [
+        {
+          "id": "i-1",
+          "title": "Example handbook",
+          "url": "https://handbook.example.com/start",
+          "favIcon": "https://handbook.example.com/favicon.ico",
+          "comment": "Read chapter 2 first",
+          "commentColor": 1,
+          "note": false,
+          "todo": false,
+          "doneStatus": false,
+          "dateCreated": "Tue Oct 06 2026 10:15:00 GMT+0200 (Central European Summer Time)"
+        },
+        {
+          "id": "i-2",
+          "title": "",
+          "comment": "Ship the release notes",
+          "commentColor": false,
+          "note": true,
+          "todo": true,
+          "doneStatus": true
+        },
+        {
+          "id": "i-3",
+          "isStacked": true,
+          "title": "Specs",
+          "comment": "",
+          "commentColor": false,
+          "stackedItems": [
+            { "id": "s-1", "title": "Spec A", "url": "https://specs.example.org/a", "note": false },
+            { "id": "s-2", "title": "Spec B", "url": "https://specs.example.org/b", "note": false }
+          ]
+        },
+        {
+          "id": "i-4",
+          "type": "textCopied",
+          "title": "A quote",
+          "comment": "Small steps, every day.",
+          "note": true,
+          "todo": false,
+          "url": "https://blog.example.net/post"
+        },
+        {
+          "id": "i-5",
+          "type": "image",
+          "title": "Diagram",
+          "imageUrl": "https://img.example.com/diagram.png",
+          "url": "https://img.example.com/",
+          "note": false
+        },
+        { "id": "i-6", "title": "Broken", "url": "javascript:alert(1)", "note": false }
+      ]
+    },
+    {
+      "id": "g-read",
+      "categoryID": "cat-later",
+      "title": "Read later",
+      "emoji": "📖",
+      "customWidth": 367,
+      "collapsed": true,
+      "tabs": [
+        { "id": "i-7", "title": "Long article", "url": "https://news.example.com/a", "note": false }
+      ]
+    },
+    {
+      "id": "g-orphan",
+      "categoryID": "cat-missing",
+      "title": "Orphan",
+      "emoji": "",
+      "tabs": []
+    }
+  ]
+}

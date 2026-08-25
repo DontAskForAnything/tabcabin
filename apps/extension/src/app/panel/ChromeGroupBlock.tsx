@@ -81,7 +81,7 @@ export function ChromeGroupBlock({
           />
         </button>
         <div
-          className="hidden group-hover/cg:block"
+          className="hidden group-focus-within/cg:block group-hover/cg:block"
           onPointerDown={(event) => event.stopPropagation()}
         >
           <Menu>

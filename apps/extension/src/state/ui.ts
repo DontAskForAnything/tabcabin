@@ -10,6 +10,7 @@ export type ModalState =
   | { type: 'settings'; tab?: SettingsTab }
   | { type: 'bin' }
   | { type: 'bookmarks' }
+  | { type: 'shortcuts' }
   | { type: 'reminders' }
   | null
 

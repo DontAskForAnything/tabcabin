@@ -48,7 +48,7 @@ export function LinkRow({
           seed={hostSeed(url, item.title)}
           size={nested ? 'sm' : 'md'}
         />
-        <span className="min-w-0 flex-1 pr-1 group-hover/item:pr-[100px]">
+        <span className="min-w-0 flex-1 pr-1 group-focus-within/item:pr-[100px] group-hover/item:pr-[100px]">
           <span className="block truncate text-[14.5px] leading-snug font-[550]">
             {item.title || displayUrl(url)}
           </span>
@@ -57,7 +57,7 @@ export function LinkRow({
           )}
         </span>
       </a>
-      <div className="absolute top-[9px] right-2 hidden items-center gap-1 group-hover/item:flex">
+      <div className="absolute top-[9px] right-2 hidden items-center gap-1 group-focus-within/item:flex group-hover/item:flex">
         <IconButton
           label={t('item.reminder')}
           icon={<Bell size={13} />}

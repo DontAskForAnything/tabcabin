@@ -1,4 +1,5 @@
 import { Search } from 'lucide-react'
+import { useUiText } from './UiText'
 import { EmojiPicker as Picker } from 'frimousse'
 import { type ReactElement, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from './Popover'
@@ -15,13 +16,14 @@ export interface EmojiPickerPanelProps {
 export function EmojiPickerPanel({
   onSelect,
   emojibaseUrl,
-  locale = 'en',
-  searchPlaceholder = 'Search emoji',
-  emptyLabel = 'No emoji found',
+  locale,
+  searchPlaceholder,
+  emptyLabel,
 }: EmojiPickerPanelProps) {
+  const text = useUiText()
   return (
     <Picker.Root
-      locale={locale}
+      locale={locale ?? text.locale}
       emojibaseUrl={emojibaseUrl}
       columns={9}
       onEmojiSelect={(emoji) => onSelect(emoji.emoji)}
@@ -30,7 +32,7 @@ export function EmojiPickerPanel({
       <label className="mx-3 mt-3 mb-2 flex h-9 items-center gap-2 rounded-[10px] bg-subtle-2 px-2.5 text-ink-3">
         <Search size={15} />
         <Picker.Search
-          placeholder={searchPlaceholder}
+          placeholder={searchPlaceholder ?? text.searchEmoji}
           className="h-full min-w-0 flex-1 bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-3"
         />
       </label>
@@ -39,7 +41,7 @@ export function EmojiPickerPanel({
           …
         </Picker.Loading>
         <Picker.Empty className="absolute inset-0 flex items-center justify-center text-[13px] text-ink-3">
-          {emptyLabel}
+          {emptyLabel ?? text.noEmoji}
         </Picker.Empty>
         <Picker.List
           className="pb-2 select-none"

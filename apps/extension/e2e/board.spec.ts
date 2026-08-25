@@ -86,7 +86,7 @@ test('edits a note inline with Enter+Enter and the toolbar', async ({ context, e
   await expect(next).toHaveValue('')
   await page.keyboard.type('Second note')
   await page.getByRole('button', { name: 'Color' }).click()
-  await page.getByRole('button', { name: 'lime' }).click()
+  await page.getByRole('button', { name: 'Green' }).click()
   await page.getByRole('button', { name: 'Done' }).click()
   await expect(group.getByText('Second note')).toBeVisible()
   await expect(group.getByText('• last line →')).toBeVisible()

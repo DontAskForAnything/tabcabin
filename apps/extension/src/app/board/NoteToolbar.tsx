@@ -86,7 +86,7 @@ export function NoteToolbar() {
                 {NOTE_COLORS.map((color) => (
                   <Swatch
                     key={color}
-                    label={color}
+                    label={t(`color.${color}`)}
                     color={color}
                     active={note.color === color}
                     onPick={() => void updateItem(note.id, { color })}

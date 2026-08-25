@@ -38,6 +38,11 @@ export function useGlobalShortcuts(active: ActiveContext) {
         void undoLast()
         return
       }
+      if (event.key === '?' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        event.preventDefault()
+        ui.openModal({ type: 'shortcuts' })
+        return
+      }
       if (matchesShortcut(event, shortcuts.newGroup)) {
         event.preventDefault()
         void actions.createGroup()

@@ -78,7 +78,7 @@ export function InPageToasts() {
             )}
             <button
               type="button"
-              aria-label="Dismiss"
+              aria-label={entry.dismissLabel ?? 'Dismiss'}
               onClick={() => dismiss(entry.id)}
               className="flex size-7 items-center justify-center rounded-lg text-white/55 hover:bg-white/10 hover:text-white"
             >

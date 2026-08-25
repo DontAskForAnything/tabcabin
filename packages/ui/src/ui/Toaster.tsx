@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { type ReactNode } from 'react'
 import { cn } from '../lib/cn'
 import { dismissToast, type ToastTone, useToasts } from './toast'
+import { useUiText } from './UiText'
 
 const icons: Record<ToastTone, { node: ReactNode; className: string }> = {
   success: { node: <Check size={13} strokeWidth={3} />, className: 'bg-[#34d399] text-[#08291d]' },
@@ -13,6 +14,7 @@ const icons: Record<ToastTone, { node: ReactNode; className: string }> = {
 /** Renders the toast stack (bottom center). Mount once near the app root. */
 export function Toaster({ className }: { className?: string }) {
   const toasts = useToasts()
+  const text = useUiText()
   return (
     <div
       data-toaster
@@ -62,7 +64,7 @@ export function Toaster({ className }: { className?: string }) {
             )}
             <button
               type="button"
-              aria-label="Dismiss"
+              aria-label={text.dismiss}
               onClick={() => dismissToast(entry.id)}
               className="flex size-7 items-center justify-center rounded-lg text-white/55 hover:bg-white/10 hover:text-white"
             >

@@ -48,7 +48,7 @@ export function ImageItem({ item, group, actions }: ItemViewProps) {
         icon={<Trash size={13} />}
         variant="tile"
         size="sm"
-        className="absolute top-2 right-2 hidden group-hover/item:flex"
+        className="absolute top-2 right-2 hidden group-focus-within/item:flex group-hover/item:flex"
         onClick={() => void actions.deleteItems([item.id])}
       />
     </div>

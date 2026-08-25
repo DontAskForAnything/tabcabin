@@ -217,7 +217,7 @@ export function GroupTitle({ group }: { group: BoardGroup }) {
     <h2
       className={cn(
         'cursor-text truncate text-[17px] font-semibold tracking-[-0.015em]',
-        !group.title && 'text-ink-4',
+        !group.title && 'text-ink-3',
       )}
       onClick={() => {
         setValue(group.title)

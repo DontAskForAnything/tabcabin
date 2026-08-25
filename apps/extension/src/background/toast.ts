@@ -1,3 +1,5 @@
+import { translate } from '@/i18n/translate'
+import { getSettings } from '@/settings/settings'
 import type { ToastMessage, ToastTone } from '@/messages'
 
 const pendingUndo = new Map<string, () => Promise<void>>()
@@ -42,13 +44,15 @@ export async function showToast(
     pendingUndo.set(undoId, toast.undo)
     setTimeout(() => pendingUndo.delete(undoId), 60_000)
   }
+  const { locale } = await getSettings()
   const message: ToastMessage = {
     type: 'tabhangar:toast',
     title: toast.title,
     description: toast.description,
     tone: toast.tone,
     undoId,
-    undoLabel: toast.undoLabel,
+    undoLabel: toast.undoLabel ?? translate(locale, 'common.undo'),
+    dismissLabel: translate(locale, 'common.dismiss'),
   }
   if (await ensureToastScript(tabId)) {
     await browser.tabs.sendMessage(tabId, message).catch(() => undefined)

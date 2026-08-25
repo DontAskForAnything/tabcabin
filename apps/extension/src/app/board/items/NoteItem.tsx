@@ -57,7 +57,7 @@ export function NoteItem({ item, group, actions }: ItemViewProps) {
               'min-h-[40px] min-w-0 flex-1 cursor-text rounded-xl px-[13px] py-[9px] dense:min-h-[32px] dense:py-[5px] text-[14px] leading-[1.5] break-words whitespace-pre-line outline-none',
               item.todo && !item.color && 'bg-subtle',
               item.done && 'text-ink-3 line-through',
-              !item.text && 'text-ink-4',
+              !item.text && 'text-ink-3',
             )}
           >
             {item.text || t('note.placeholder')}

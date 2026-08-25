@@ -62,7 +62,7 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
           {item.text}
         </div>
       )}
-      <div className="absolute top-2 right-2 hidden gap-1 group-hover/card:flex">
+      <div className="absolute top-2 right-2 hidden gap-1 group-focus-within/card:flex group-hover/card:flex">
         <IconButton
           label={t('item.reminder')}
           icon={<Bell size={12} />}

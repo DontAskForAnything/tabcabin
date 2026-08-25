@@ -1,6 +1,7 @@
 import { cn } from '@tabhangar/ui'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { useT } from '@/i18n'
 import { updateSettings } from '@/settings/settings'
 import { useDrag } from '../dnd/store'
 import { HangarMark } from '../HangarMark'
@@ -18,13 +19,14 @@ export function TabsPanel({ active }: { active: ActiveContext }) {
 }
 
 function PinnedPanel({ active }: { active: ActiveContext }) {
+  const t = useT()
   const stored = active.settings?.sidebarWidth ?? 292
   const [width, setWidth] = useState<number | null>(null)
   const start = useRef<{ x: number; width: number } | null>(null)
   const current = width ?? stored
   return (
     <nav
-      aria-label="Open tabs"
+      aria-label={t('panel.openTabs')}
       style={{ width: current }}
       className="sticky top-0 h-screen shrink-0 border-r border-line bg-panel"
     >
@@ -62,6 +64,7 @@ function PinnedPanel({ active }: { active: ActiveContext }) {
 }
 
 function RailPanel({ active }: { active: ActiveContext }) {
+  const t = useT()
   const { inWindow } = usePanelData()
   const peek = usePanel((s) => s.peek)
   const setPeek = usePanel((s) => s.setPeek)
@@ -85,7 +88,7 @@ function RailPanel({ active }: { active: ActiveContext }) {
   return (
     <>
       <nav
-        aria-label="Open tabs"
+        aria-label={t('panel.openTabs')}
         onMouseEnter={open}
         onMouseLeave={close}
         className="sticky top-0 flex h-screen w-[76px] shrink-0 flex-col items-center gap-3 border-r border-line bg-panel py-[18px]"
@@ -105,7 +108,7 @@ function RailPanel({ active }: { active: ActiveContext }) {
       <AnimatePresence>
         {peek && !dragging && (
           <motion.nav
-            aria-label="Open tabs"
+            aria-label={t('panel.openTabs')}
             initial={{ x: -24, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -16, opacity: 0, transition: { duration: 0.12 } }}

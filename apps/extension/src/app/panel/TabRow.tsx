@@ -145,7 +145,7 @@ export function TabRow({
             </span>
           )}
           <div
-            className="hidden shrink-0 items-center gap-1 group-hover/tab:flex"
+            className="hidden shrink-0 items-center gap-1 group-focus-within/tab:flex group-hover/tab:flex"
             onPointerDown={(event) => event.stopPropagation()}
           >
             <Menu>

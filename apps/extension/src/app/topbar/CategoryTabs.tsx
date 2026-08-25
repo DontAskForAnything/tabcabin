@@ -65,91 +65,93 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
   }
 
   return (
-    <div
-      role="tablist"
-      aria-label={t('category.label')}
-      className="flex flex-wrap items-center gap-0.5 rounded-[13px] bg-subtle-2 p-1"
-    >
-      {categories.map((cat, index) => {
-        const selected = cat.id === category?.id
-        if (renamingId === cat.id)
-          return (
-            <RenameInput
-              key={cat.id}
-              initial={cat.name}
-              onDone={(name) => {
-                setRenamingId(null)
-                if (name && name !== cat.name) void updateCategory(cat.id, { name })
-              }}
-            />
-          )
-        return (
-          <ContextMenu key={cat.id}>
-            <ContextMenuTrigger asChild>
-              <CategoryDropTab
-                categoryId={cat.id}
-                type="button"
-                role="tab"
-                aria-selected={selected}
-                onPointerDown={startPress}
-                onPointerUp={endPress}
-                onPointerLeave={endPress}
-                onClick={() => {
-                  if (!longPressed.current) select(cat)
+    <div className="flex flex-wrap items-center gap-0.5 rounded-[13px] bg-subtle-2 p-1">
+      <div
+        role="tablist"
+        aria-label={t('category.label')}
+        className="flex flex-wrap items-center gap-0.5"
+      >
+        {categories.map((cat, index) => {
+          const selected = cat.id === category?.id
+          if (renamingId === cat.id)
+            return (
+              <RenameInput
+                key={cat.id}
+                initial={cat.name}
+                onDone={(name) => {
+                  setRenamingId(null)
+                  if (name && name !== cat.name) void updateCategory(cat.id, { name })
                 }}
-                onDoubleClick={() => setRenamingId(cat.id)}
-                className={cn(
-                  'h-8 max-w-[200px] truncate rounded-[10px] px-4 text-[13.5px] transition-[background,color,box-shadow] duration-150',
-                  selected
-                    ? 'bg-accent font-semibold text-on-accent shadow-glow'
-                    : 'font-medium text-ink-2 hover:text-ink',
-                )}
-              >
-                {cat.name || t('category.defaultName')}
-              </CategoryDropTab>
-            </ContextMenuTrigger>
-            <ContextMenuContent>
-              <ContextMenuItem icon={<Pencil size={14} />} onSelect={() => setRenamingId(cat.id)}>
-                {t('category.rename')}
-              </ContextMenuItem>
-              <ContextMenuItem
-                icon={<ArrowLeft size={14} />}
-                disabled={index === 0}
-                onSelect={() =>
-                  void moveCategory(cat.id, { workspaceId: workspace.id, index: index - 1 })
-                }
-              >
-                {t('category.moveLeft')}
-              </ContextMenuItem>
-              <ContextMenuItem
-                icon={<ArrowRight size={14} />}
-                disabled={index === categories.length - 1}
-                onSelect={() =>
-                  void moveCategory(cat.id, { workspaceId: workspace.id, index: index + 1 })
-                }
-              >
-                {t('category.moveRight')}
-              </ContextMenuItem>
-              <CategoryMoveToWorkspace categoryId={cat.id} workspaceId={workspace.id} />
-              <ContextMenuItem
-                icon={<Settings2 size={14} />}
-                onSelect={() => openModal({ type: 'categories' })}
-              >
-                {t('category.manage')}
-              </ContextMenuItem>
-              <ContextMenuSeparator />
-              <ContextMenuItem
-                icon={<Trash size={14} />}
-                danger
-                disabled={categories.length <= 1}
-                onSelect={() => void remove(cat)}
-              >
-                {t('category.delete')}
-              </ContextMenuItem>
-            </ContextMenuContent>
-          </ContextMenu>
-        )
-      })}
+              />
+            )
+          return (
+            <ContextMenu key={cat.id}>
+              <ContextMenuTrigger asChild>
+                <CategoryDropTab
+                  categoryId={cat.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onPointerDown={startPress}
+                  onPointerUp={endPress}
+                  onPointerLeave={endPress}
+                  onClick={() => {
+                    if (!longPressed.current) select(cat)
+                  }}
+                  onDoubleClick={() => setRenamingId(cat.id)}
+                  className={cn(
+                    'h-8 max-w-[200px] truncate rounded-[10px] px-4 text-[13.5px] transition-[background,color,box-shadow] duration-150',
+                    selected
+                      ? 'bg-accent font-semibold text-on-accent shadow-glow'
+                      : 'font-medium text-ink-2 hover:text-ink',
+                  )}
+                >
+                  {cat.name || t('category.defaultName')}
+                </CategoryDropTab>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem icon={<Pencil size={14} />} onSelect={() => setRenamingId(cat.id)}>
+                  {t('category.rename')}
+                </ContextMenuItem>
+                <ContextMenuItem
+                  icon={<ArrowLeft size={14} />}
+                  disabled={index === 0}
+                  onSelect={() =>
+                    void moveCategory(cat.id, { workspaceId: workspace.id, index: index - 1 })
+                  }
+                >
+                  {t('category.moveLeft')}
+                </ContextMenuItem>
+                <ContextMenuItem
+                  icon={<ArrowRight size={14} />}
+                  disabled={index === categories.length - 1}
+                  onSelect={() =>
+                    void moveCategory(cat.id, { workspaceId: workspace.id, index: index + 1 })
+                  }
+                >
+                  {t('category.moveRight')}
+                </ContextMenuItem>
+                <CategoryMoveToWorkspace categoryId={cat.id} workspaceId={workspace.id} />
+                <ContextMenuItem
+                  icon={<Settings2 size={14} />}
+                  onSelect={() => openModal({ type: 'categories' })}
+                >
+                  {t('category.manage')}
+                </ContextMenuItem>
+                <ContextMenuSeparator />
+                <ContextMenuItem
+                  icon={<Trash size={14} />}
+                  danger
+                  disabled={categories.length <= 1}
+                  onSelect={() => void remove(cat)}
+                >
+                  {t('category.delete')}
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+          )
+        })}
+      </div>
       <IconButton
         label={t('category.new')}
         icon={<Plus size={15} />}

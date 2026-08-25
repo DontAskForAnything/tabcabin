@@ -107,7 +107,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
               <button
                 key={c}
                 type="button"
-                aria-label={c}
+                aria-label={t(`color.${c}`)}
                 onClick={() => setColor(c)}
                 className={cn(
                   'size-6 rounded-[8px] shadow-[inset_0_0_0_1px_rgb(20_24_40/0.1)]',

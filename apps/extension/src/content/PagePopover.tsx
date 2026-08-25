@@ -233,7 +233,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                   <button
                     key={c}
                     type="button"
-                    aria-label={c}
+                    aria-label={t(`color.${c}`)}
                     onClick={() => setColor(c)}
                     style={{ background: `var(--note-${c}-bg)` }}
                     className={cn(

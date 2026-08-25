@@ -8,6 +8,7 @@ export interface ToastMessage {
   tone: ToastTone
   undoId?: string
   undoLabel?: string
+  dismissLabel?: string
 }
 
 export interface UndoMessage {

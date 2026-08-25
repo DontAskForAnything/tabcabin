@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Dialog } from 'radix-ui'
 import { type ReactNode } from 'react'
 import { cn } from '../lib/cn'
+import { useUiText } from './UiText'
 
 export interface ModalProps {
   open: boolean
@@ -41,6 +42,7 @@ export function Modal({
   className,
   onEscapeKeyDown,
 }: ModalProps) {
+  const text = useUiText()
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <AnimatePresence>
@@ -94,7 +96,7 @@ export function Modal({
                       )}
                     </div>
                     <Dialog.Close
-                      aria-label="Close"
+                      aria-label={text.close}
                       className="-mr-2 flex size-9 items-center justify-center rounded-[10px] text-ink-3 hover:bg-subtle hover:text-ink"
                     >
                       <X size={18} />

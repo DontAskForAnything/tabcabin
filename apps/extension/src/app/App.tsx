@@ -1,7 +1,8 @@
-import { Toaster, TooltipProvider, useApplyTheme } from '@tabhangar/ui'
-import { useEffect } from 'react'
+import { Toaster, TooltipProvider, UiTextProvider, useApplyTheme } from '@tabhangar/ui'
+import { MotionConfig } from 'motion/react'
+import { type ReactNode, useEffect } from 'react'
 import { ensureSeed } from '@/db/seed'
-import { I18nProvider, type Translate } from '@/i18n'
+import { I18nProvider, type Translate, useLocale, useT } from '@/i18n'
 import { translate } from '@/i18n/translate'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import { Shell } from './Shell'
@@ -44,10 +45,33 @@ export function App({ surface }: { surface: Surface }) {
 
   return (
     <I18nProvider locale={settings.locale}>
-      <TooltipProvider>
-        <Shell surface={surface} active={active} />
-        <Toaster />
-      </TooltipProvider>
+      <ComponentText>
+        <MotionConfig reducedMotion="user">
+          <TooltipProvider>
+            <Shell surface={surface} active={active} />
+            <Toaster />
+          </TooltipProvider>
+        </MotionConfig>
+      </ComponentText>
     </I18nProvider>
+  )
+}
+
+/** Translations for texts rendered inside the shared UI components. */
+function ComponentText({ children }: { children: ReactNode }) {
+  const t = useT()
+  const locale = useLocale()
+  return (
+    <UiTextProvider
+      text={{
+        locale,
+        close: t('common.close'),
+        dismiss: t('common.dismiss'),
+        searchEmoji: t('emoji.search'),
+        noEmoji: t('emoji.empty'),
+      }}
+    >
+      {children}
+    </UiTextProvider>
   )
 }

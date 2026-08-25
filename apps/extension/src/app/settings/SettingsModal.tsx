@@ -62,7 +62,7 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
           </Tabs.List>
           <div className="flex-1" />
           {version && (
-            <p className="px-3 pb-1 text-[12px] text-ink-4">{t('settings.version', { version })}</p>
+            <p className="px-3 pb-1 text-[12px] text-ink-3">{t('settings.version', { version })}</p>
           )}
         </div>
         <div className="relative min-w-0 flex-1 overflow-y-auto px-8 pt-7 pb-8">

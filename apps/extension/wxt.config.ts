@@ -4,6 +4,7 @@ import { defineConfig } from 'wxt'
 
 const require = createRequire(import.meta.url)
 const EMOJI_LOCALES = ['en', 'pl'] as const
+const OPTIONAL_PERMISSIONS = ['bookmarks', 'topSites', 'notifications']
 
 export default defineConfig({
   srcDir: 'src',
@@ -39,9 +40,9 @@ export default defineConfig({
       'sidePanel',
       'activeTab',
       'scripting',
-      ...(mode === 'e2e' ? ['notifications'] : []),
+      ...(mode === 'e2e' ? OPTIONAL_PERMISSIONS : []),
     ],
-    optional_permissions: ['bookmarks', 'topSites', ...(mode === 'e2e' ? [] : ['notifications'])],
+    optional_permissions: mode === 'e2e' ? [] : OPTIONAL_PERMISSIONS,
     action: {
       default_title: 'TabHangar',
     },
@@ -52,7 +53,7 @@ export default defineConfig({
       },
     },
     // End-to-end tests can't produce user gestures (activeTab, permission prompts), so the test
-    // build may script any page and has notifications granted up front.
+    // build may script any page and has the optional permissions granted up front.
     ...(mode === 'e2e' ? { host_permissions: ['<all_urls>'] } : {}),
   }),
 })

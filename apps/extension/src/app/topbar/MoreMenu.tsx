@@ -1,4 +1,5 @@
 import {
+  BookmarkPlus,
   Ellipsis,
   Keyboard,
   Monitor,
@@ -72,6 +73,12 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
             ))}
           </MenuSubContent>
         </MenuSub>
+        <MenuItem
+          icon={<BookmarkPlus size={15} />}
+          onSelect={() => openModal({ type: 'bookmarks' })}
+        >
+          {t('menu.import')}
+        </MenuItem>
         <MenuItem icon={<Trash size={15} />} onSelect={() => openModal({ type: 'bin' })}>
           {t('menu.bin')}
         </MenuItem>

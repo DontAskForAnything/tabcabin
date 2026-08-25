@@ -83,7 +83,7 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
             <ShortcutSettings active={active} recording={recording} />
           </Tabs.Content>
           <Tabs.Content value="data" className="outline-none">
-            <DataSettings />
+            <DataSettings active={active} />
           </Tabs.Content>
         </div>
       </Tabs.Root>

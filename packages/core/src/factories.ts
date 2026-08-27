@@ -1,6 +1,13 @@
 import { newId } from './ids'
 import { minutesOfDay } from './reminders'
-import type { Category, Group, Item, Reminder, Workspace } from './schema'
+import {
+  type Category,
+  type Group,
+  type Item,
+  type Reminder,
+  URL_MAX_LENGTH,
+  type Workspace,
+} from './schema'
 
 export interface Clock {
   now: number
@@ -94,7 +101,9 @@ export function makeLink(
       position: input.position,
       url: input.url,
       title: input.title ?? input.url,
-      favIconUrl: input.favIconUrl ?? null,
+      // Some pages use huge data: URIs as icons; those are not worth storing.
+      favIconUrl:
+        input.favIconUrl && input.favIconUrl.length <= URL_MAX_LENGTH ? input.favIconUrl : null,
       text: input.text ?? '',
     },
     clock,

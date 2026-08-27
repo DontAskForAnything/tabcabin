@@ -44,7 +44,7 @@ export function LinkRow({
         )}
       >
         <Favicon
-          src={faviconUrl(url) ?? item.favIconUrl}
+          src={[faviconUrl(url), item.favIconUrl]}
           seed={hostSeed(url, item.title)}
           size={nested ? 'sm' : 'md'}
         />

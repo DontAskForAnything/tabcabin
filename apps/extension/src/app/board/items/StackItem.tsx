@@ -44,7 +44,7 @@ export function StackItem(props: ItemViewProps) {
             {item.children.slice(0, 4).map((child) => (
               <Favicon
                 key={child.id}
-                src={faviconUrl(child.url) ?? child.favIconUrl}
+                src={[faviconUrl(child.url), child.favIconUrl]}
                 seed={hostSeed(child.url, child.title)}
                 size="sm"
                 className="-ml-2 ring-2 ring-card"

@@ -304,7 +304,7 @@ function ResultRow({
       </span>
     ) : (
       <Favicon
-        src={faviconUrl(doc.url) ?? doc.favIconUrl}
+        src={[faviconUrl(doc.url), doc.favIconUrl]}
         seed={hostSeed(doc.url, doc.title)}
         size="md"
       />

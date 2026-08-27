@@ -341,7 +341,7 @@ function ReminderCard({
         >
           {item.url ? (
             <Favicon
-              src={faviconUrl(item.url) ?? item.favIconUrl}
+              src={[faviconUrl(item.url), item.favIconUrl]}
               seed={hostSeed(item.url, item.title)}
               size="md"
             />

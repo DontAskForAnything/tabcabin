@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { type BrowserContext, type Page, type Worker } from '@playwright/test'
 import { expect, test } from './fixtures'
 
@@ -143,4 +146,37 @@ test('saves the page with a note from the popover', async ({ context, extensionI
   await expect(group.getByText('Read the cron section')).toBeVisible()
   await expect(group.getByRole('button', { name: /^Reminder: Tomorrow, 09:00/ })).toBeVisible()
   await expect(popover).toHaveCount(0, { timeout: 4000 })
+})
+
+test('shows the page favicon for a saved page', async ({ context, extensionId }) => {
+  const icon = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '../public/icon/32.png'),
+  )
+  await context.route('https://iconic.test/**', (route) =>
+    route.request().url().endsWith('.png')
+      ? route.fulfill({ status: 200, contentType: 'image/png', body: icon })
+      : route.fulfill({
+          status: 200,
+          contentType: 'text/html',
+          body: '<!doctype html><title>Iconic page</title><link rel="icon" href="/icon.png"><h1>Hi</h1>',
+        }),
+  )
+  const board = await openBoard(context, extensionId)
+  const page = await context.newPage()
+  await page.goto('https://iconic.test/page')
+  const sw = await worker(context)
+  await expect
+    .poll(async () => (await tabFor(sw, 'https://iconic.test/page')).favIconUrl)
+    .toBeTruthy()
+  const tab = await tabFor(sw, 'https://iconic.test/page')
+  const { welcome } = await findIds(sw)
+  await sw.evaluate(
+    ({ id, tab }) => tabhangar.handleMenuClick({ menuItemId: `save|g|${id}` }, tab),
+    { id: welcome, tab },
+  )
+  const link = board
+    .getByRole('region', { name: 'Welcome' })
+    .getByRole('link', { name: /Iconic page/ })
+  await expect(link).toBeVisible()
+  await expect(link.locator('img')).toHaveCount(1)
 })

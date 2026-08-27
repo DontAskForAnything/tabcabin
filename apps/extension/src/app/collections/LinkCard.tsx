@@ -35,7 +35,7 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
         className="flex min-w-0 items-center gap-3 px-3 py-3"
       >
         <Favicon
-          src={faviconUrl(url) ?? item.favIconUrl}
+          src={[faviconUrl(url), item.favIconUrl]}
           seed={hostSeed(url, item.title)}
           size="md"
         />

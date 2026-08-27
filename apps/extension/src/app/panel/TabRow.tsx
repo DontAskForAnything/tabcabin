@@ -75,7 +75,7 @@ export function TabRow({
   const dragging = useDrag((s) => s.source?.kind === 'tabs' && s.source.tabIds.includes(tab.id))
   const favicon = (
     <Favicon
-      src={faviconUrl(tab.url) ?? tab.favIconUrl}
+      src={[faviconUrl(tab.url), tab.favIconUrl]}
       seed={displayHost(tab.url) || tab.title}
       size={variant === 'tile' ? 'lg' : 'sm'}
     />

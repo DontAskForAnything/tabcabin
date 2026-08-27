@@ -37,7 +37,7 @@ export function DragPreview() {
           </span>
         ) : (
           <Favicon
-            src={faviconUrl(overlay.url) ?? overlay.favIconUrl}
+            src={[faviconUrl(overlay.url), overlay.favIconUrl]}
             seed={hostSeed(overlay.url, overlay.title)}
             size="md"
           />

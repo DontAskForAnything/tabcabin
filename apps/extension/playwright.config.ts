@@ -5,8 +5,10 @@ export default defineConfig({
   timeout: 30_000,
   fullyParallel: false,
   workers: 1,
-  reporter: process.env.CI ? 'github' : 'list',
+  retries: process.env.CI ? 1 : 0,
+  reporter: process.env.CI ? [['github'], ['list']] : 'list',
   use: {
     viewport: { width: 1440, height: 900 },
+    trace: 'retain-on-failure',
   },
 })

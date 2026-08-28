@@ -9,6 +9,9 @@ const OPTIONAL_PERMISSIONS = ['bookmarks', 'topSites', 'notifications']
 export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
+  zip: {
+    artifactTemplate: 'tabhangar-{{version}}-{{browser}}.zip',
+  },
   vite: () => ({
     plugins: [tailwindcss()],
   }),

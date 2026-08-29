@@ -13,7 +13,8 @@
     "test": "vitest run --passWithNoTests",
     "e2e": "playwright test",
     "build:e2e": "wxt build --mode e2e",
-    "screenshots": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts"
+    "screenshots": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts readme demo",
+    "store-assets": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts store"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

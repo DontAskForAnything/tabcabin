@@ -10,6 +10,9 @@ import { CategoryTabs } from './CategoryTabs'
 import { MoreMenu } from './MoreMenu'
 import { WorkspaceMenu } from './WorkspaceMenu'
 
+/** Text labels give way to icons on narrower screens so the bar stays on one line. */
+const NARROW_HIDDEN = 'max-[1440px]:sr-only'
+
 export function TopBar({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
@@ -35,8 +38,16 @@ export function TopBar({ active, compact }: { active: ActiveContext; compact: bo
             void updateSettings({ viewModes: { ...settings.viewModes, [category.id]: mode } })
           }
           options={[
-            { value: 'board', label: t('view.board'), icon: <Columns3 size={15} /> },
-            { value: 'collections', label: t('view.collections'), icon: <Rows3 size={15} /> },
+            {
+              value: 'board',
+              label: <span className={NARROW_HIDDEN}>{t('view.board')}</span>,
+              icon: <Columns3 size={15} />,
+            },
+            {
+              value: 'collections',
+              label: <span className={NARROW_HIDDEN}>{t('view.collections')}</span>,
+              icon: <Rows3 size={15} />,
+            },
           ]}
         />
       )}
@@ -46,12 +57,17 @@ export function TopBar({ active, compact }: { active: ActiveContext; compact: bo
       >
         <button
           type="button"
+          aria-label={t('search.button')}
           onClick={() => openModal({ type: 'search' })}
           className="flex h-10 items-center gap-2 rounded-xl bg-card pr-2.5 pl-3 text-[13px] text-ink-3 shadow-tile transition-colors hover:text-ink"
         >
           <Search size={16} />
-          {!compact && <span>{t('search.button')}</span>}
-          {!compact && <Kbd>{formatShortcut(settings?.shortcuts.search ?? 'mod+k')}</Kbd>}
+          {!compact && <span className="max-[1440px]:hidden">{t('search.button')}</span>}
+          {!compact && (
+            <Kbd className="max-[1440px]:hidden">
+              {formatShortcut(settings?.shortcuts.search ?? 'mod+k')}
+            </Kbd>
+          )}
         </button>
       </Tooltip>
       <IconButton

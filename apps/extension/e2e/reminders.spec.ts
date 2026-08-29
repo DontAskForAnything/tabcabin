@@ -38,7 +38,8 @@ test('sets a one-time reminder and lists it as coming up', async ({ context, ext
   await setReminderInOneHour(page, 'GitHub')
   await expect(page.getByText(/Reminder set for/)).toBeVisible()
   const group = page.getByRole('region', { name: 'Quick links' })
-  await expect(group.getByRole('button', { name: /^Reminder: Today/ })).toBeVisible()
+  // "In 1 hour" can fall on the next day late in the evening.
+  await expect(group.getByRole('button', { name: /^Reminder: (Today|Tomorrow)/ })).toBeVisible()
 
   await page.getByRole('button', { name: 'Reminders' }).click()
   const modal = page.getByRole('dialog', { name: 'Reminders' })

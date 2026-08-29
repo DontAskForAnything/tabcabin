@@ -30,7 +30,7 @@ export function MenuContent({
 }
 
 const itemClass =
-  'flex h-9 cursor-default items-center gap-2.5 rounded-[9px] px-2.5 text-[13.5px] font-medium outline-none select-none data-[disabled]:opacity-45 data-[highlighted]:bg-subtle'
+  'flex h-9 cursor-pointer items-center gap-2.5 rounded-[9px] px-2.5 text-[13.5px] font-medium outline-none select-none data-[disabled]:cursor-default data-[disabled]:opacity-45 data-[highlighted]:bg-subtle'
 
 export interface MenuItemProps extends ComponentProps<typeof DropdownMenu.Item> {
   icon?: ReactNode

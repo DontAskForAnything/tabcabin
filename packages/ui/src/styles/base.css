@@ -79,6 +79,29 @@
   html.dark {
     color-scheme: dark;
   }
+  :host {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+  /* Tailwind resets buttons to the arrow cursor; everything clickable gets the hand. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  [role='tab'],
+  [role='radio'],
+  [role='switch'],
+  [role='checkbox'],
+  [role='option'],
+  [role='menuitem']:not([data-disabled]),
+  [role='menuitemcheckbox'],
+  select,
+  summary,
+  label:has(input[type='checkbox'], button[role='checkbox']),
+  input[type='checkbox'],
+  input[type='file'] {
+    cursor: pointer;
+  }
   html,
   body,
   #root {

@@ -6,9 +6,21 @@ import { dismissToast, type ToastTone, useToasts } from './toast'
 import { useUiText } from './UiText'
 
 const icons: Record<ToastTone, { node: ReactNode; className: string }> = {
-  success: { node: <Check size={13} strokeWidth={3} />, className: 'bg-[#34d399] text-[#08291d]' },
-  error: { node: <X size={13} strokeWidth={3} />, className: 'bg-[#f87171] text-[#3b0b0b]' },
-  info: { node: <Info size={13} strokeWidth={2.6} />, className: 'bg-[#b3a9ff] text-[#1c1452]' },
+  success: { node: <Check size={13} strokeWidth={3} />, className: 'bg-success text-card' },
+  error: { node: <X size={13} strokeWidth={3} />, className: 'bg-danger text-card' },
+  info: { node: <Info size={13} strokeWidth={2.6} />, className: 'bg-accent text-card' },
+}
+
+/** Shared toast look (also used by the in-page toasts of the extension). */
+export const toastClasses = {
+  card: 'pointer-events-auto flex max-w-[520px] items-center gap-3 rounded-[14px] bg-raised py-2.5 pr-2.5 pl-3.5 text-[13.5px] text-ink shadow-pop',
+  icon: 'flex size-[22px] shrink-0 items-center justify-center rounded-[7px]',
+  description: 'text-[12.5px] text-ink-3',
+  action:
+    'h-7 rounded-lg bg-accent-soft px-2.5 text-[12.5px] font-semibold text-accent-ink transition-[filter] hover:brightness-95',
+  dismiss:
+    'flex size-7 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-subtle hover:text-ink',
+  tone: (tone: ToastTone) => icons[tone].className,
 }
 
 /** Renders the toast stack (bottom center). Mount once near the app root. */
@@ -34,20 +46,15 @@ export function Toaster({ className }: { className?: string }) {
             exit={{ opacity: 0, y: 12, transition: { duration: 0.18 } }}
             transition={{ type: 'spring', stiffness: 500, damping: 36 }}
             role="status"
-            className="pointer-events-auto flex max-w-[520px] items-center gap-3 rounded-[14px] bg-[#1b1e24] py-2.5 pr-2.5 pl-3.5 text-[13.5px] text-[#f2f3f6] shadow-[0_16px_40px_-10px_rgb(0_0_0/0.45)] dark:bg-[#2a2f36]"
+            className={toastClasses.card}
           >
-            <span
-              className={cn(
-                'flex size-[22px] shrink-0 items-center justify-center rounded-[7px]',
-                icons[entry.tone].className,
-              )}
-            >
+            <span className={cn(toastClasses.icon, icons[entry.tone].className)}>
               {icons[entry.tone].node}
             </span>
             <div className="min-w-0 flex-1">
               <div className="font-medium">{entry.title}</div>
               {entry.description && (
-                <div className="text-[12.5px] text-white/65">{entry.description}</div>
+                <div className={toastClasses.description}>{entry.description}</div>
               )}
             </div>
             {entry.action && (
@@ -57,7 +64,7 @@ export function Toaster({ className }: { className?: string }) {
                   entry.action?.onClick()
                   dismissToast(entry.id)
                 }}
-                className="h-7 rounded-lg bg-white/10 px-2.5 text-[12.5px] font-semibold hover:bg-white/20"
+                className={toastClasses.action}
               >
                 {entry.action.label}
               </button>
@@ -66,7 +73,7 @@ export function Toaster({ className }: { className?: string }) {
               type="button"
               aria-label={text.dismiss}
               onClick={() => dismissToast(entry.id)}
-              className="flex size-7 items-center justify-center rounded-lg text-white/55 hover:bg-white/10 hover:text-white"
+              className={toastClasses.dismiss}
             >
               <X size={14} />
             </button>

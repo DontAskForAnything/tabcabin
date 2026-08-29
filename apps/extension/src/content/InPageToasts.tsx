@@ -1,4 +1,5 @@
 import { Check, Info, X } from 'lucide-react'
+import { toastClasses } from '@tabhangar/ui'
 import { AnimatePresence, motion } from 'motion/react'
 import { useSyncExternalStore } from 'react'
 import type { ToastMessage } from '@/messages'
@@ -24,6 +25,10 @@ export function pushToast(message: ToastMessage) {
   setTimeout(() => dismiss(id), message.undoId ? 6500 : 3500)
 }
 
+const isDark = (theme: ToastMessage['theme']) =>
+  theme === 'dark' ||
+  (theme === 'system' && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
+
 const subscribe = (listener: () => void) => {
   listeners.add(listener)
   return () => listeners.delete(listener)
@@ -44,17 +49,9 @@ export function InPageToasts() {
             exit={{ opacity: 0, y: 12 }}
             transition={{ type: 'spring', stiffness: 500, damping: 36 }}
             role="status"
-            className="pointer-events-auto flex items-center gap-3 rounded-[14px] bg-[#1b1e24] py-2.5 pr-2.5 pl-3.5 text-[13.5px] text-[#f2f3f6] shadow-[0_16px_40px_-10px_rgb(0_0_0/0.45)]"
+            className={`${toastClasses.card}${isDark(entry.theme) ? ' dark' : ''}`}
           >
-            <span
-              className={
-                entry.tone === 'error'
-                  ? 'flex size-[22px] items-center justify-center rounded-[7px] bg-[#f87171] text-[#3b0b0b]'
-                  : entry.tone === 'info'
-                    ? 'flex size-[22px] items-center justify-center rounded-[7px] bg-[#b3a9ff] text-[#1c1452]'
-                    : 'flex size-[22px] items-center justify-center rounded-[7px] bg-[#34d399] text-[#08291d]'
-              }
-            >
+            <span className={`${toastClasses.icon} ${toastClasses.tone(entry.tone)}`}>
               {entry.tone === 'error' ? (
                 <X size={13} strokeWidth={3} />
               ) : entry.tone === 'info' ? (
@@ -71,7 +68,7 @@ export function InPageToasts() {
                   void browser.runtime.sendMessage({ type: 'tabhangar:undo', undoId: entry.undoId })
                   dismiss(entry.id)
                 }}
-                className="h-7 rounded-lg bg-white/10 px-2.5 text-[12.5px] font-semibold hover:bg-white/20"
+                className={toastClasses.action}
               >
                 {entry.undoLabel ?? 'Undo'}
               </button>
@@ -80,7 +77,7 @@ export function InPageToasts() {
               type="button"
               aria-label={entry.dismissLabel ?? 'Dismiss'}
               onClick={() => dismiss(entry.id)}
-              className="flex size-7 items-center justify-center rounded-lg text-white/55 hover:bg-white/10 hover:text-white"
+              className={toastClasses.dismiss}
             >
               <X size={14} />
             </button>

@@ -44,7 +44,7 @@ export async function showToast(
     pendingUndo.set(undoId, toast.undo)
     setTimeout(() => pendingUndo.delete(undoId), 60_000)
   }
-  const { locale } = await getSettings()
+  const { locale, theme } = await getSettings()
   const message: ToastMessage = {
     type: 'tabhangar:toast',
     title: toast.title,
@@ -53,6 +53,7 @@ export async function showToast(
     undoId,
     undoLabel: toast.undoLabel ?? translate(locale, 'common.undo'),
     dismissLabel: translate(locale, 'common.dismiss'),
+    theme,
   }
   if (await ensureToastScript(tabId)) {
     await browser.tabs.sendMessage(tabId, message).catch(() => undefined)

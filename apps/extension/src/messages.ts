@@ -9,6 +9,7 @@ export interface ToastMessage {
   undoId?: string
   undoLabel?: string
   dismissLabel?: string
+  theme?: 'light' | 'dark' | 'system'
 }
 
 export interface UndoMessage {

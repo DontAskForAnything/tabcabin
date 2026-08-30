@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { isRuntimeMessage, type ToastMessage } from '@/messages'
 import { InPageToasts, pushToast } from '@/content/InPageToasts'
 import contentCss from '@/content/content.css?inline'
+import { showInTopLayer } from '@/content/topLayer'
 
 export default defineContentScript({
   // Injected on demand through `activeTab` (no host permissions, no web-accessible CSS).
@@ -15,8 +16,8 @@ export default defineContentScript({
     const ui = await createShadowRootUi(ctx, {
       name: 'tabhangar-toast',
       css: contentCss,
-      position: 'overlay',
-      zIndex: 2147483646,
+      position: 'inline',
+      anchor: 'html',
       onMount(container) {
         const root = createRoot(container)
         root.render(<InPageToasts />)
@@ -27,6 +28,7 @@ export default defineContentScript({
       },
     })
     ui.mount()
+    showInTopLayer(ui.shadowHost)
 
     browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       if (!isRuntimeMessage(message)) return undefined

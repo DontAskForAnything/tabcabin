@@ -2,6 +2,7 @@ import { createRoot, type Root } from 'react-dom/client'
 import { isRuntimeMessage } from '@/messages'
 import { PagePopover } from '@/content/PagePopover'
 import contentCss from '@/content/content.css?inline'
+import { showInTopLayer } from '@/content/topLayer'
 
 export default defineContentScript({
   // Injected on demand through `activeTab` (no host permissions, no web-accessible CSS).
@@ -19,8 +20,8 @@ export default defineContentScript({
     const ui = await createShadowRootUi<Root>(ctx, {
       name: 'tabhangar-popover',
       css: contentCss,
-      position: 'overlay',
-      zIndex: 2147483647,
+      position: 'inline',
+      anchor: 'html',
       onMount(container) {
         const root = createRoot(container)
         root.render(<PagePopover page={page} onClose={() => toggle(false)} />)
@@ -32,7 +33,10 @@ export default defineContentScript({
     })
 
     function toggle(show = !mounted) {
-      if (show && !mounted) ui.mount()
+      if (show && !mounted) {
+        ui.mount()
+        showInTopLayer(ui.shadowHost)
+      }
       if (!show && mounted) ui.remove()
       mounted = show
     }

@@ -7,7 +7,7 @@ import {
   TIME_PRESETS,
   type TimePreset,
 } from '@tabhangar/core'
-import { cn, letterTileFor } from '@tabhangar/ui'
+import { Checkbox, cn, letterTileFor } from '@tabhangar/ui'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PopoverData } from '@/background/popover'
 import type { MessageKey } from '@/i18n/en'
@@ -362,12 +362,12 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                 </div>
               </div>
 
-              <label className="flex cursor-pointer items-center gap-2.5 text-[13px] text-ink-2">
-                <input
-                  type="checkbox"
+              <label className="flex cursor-pointer items-center gap-2.5 text-[13px] text-ink-2 select-none">
+                <Checkbox
+                  size="sm"
                   checked={closeTab}
-                  onChange={(event) => setCloseTab(event.target.checked)}
-                  className="size-4 accent-[var(--accent)]"
+                  onCheckedChange={setCloseTab}
+                  label={t('popover.closeAfterSave')}
                 />
                 {t('popover.closeAfterSave')}
               </label>

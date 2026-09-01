@@ -1,5 +1,5 @@
 import { cn } from '@tabhangar/ui'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { useT } from '@/i18n'
 import { updateSettings } from '@/settings/settings'
@@ -85,43 +85,57 @@ function RailPanel({ active }: { active: ActiveContext }) {
     timer.current = setTimeout(() => setPeek(false), 220)
   }
 
+  const expanded = peek && !dragging
+
+  // The rail keeps its place in the layout; the panel itself widens over the board on hover.
   return (
-    <>
-      <nav
+    <div className="sticky top-0 z-40 h-screen w-[76px] shrink-0">
+      <motion.nav
         aria-label={t('panel.openTabs')}
         onMouseEnter={open}
         onMouseLeave={close}
-        className="sticky top-0 flex h-screen w-[76px] shrink-0 flex-col items-center gap-3 border-r border-line bg-panel py-[18px]"
-      >
-        <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-white shadow-glow">
-          <HangarMark size={22} />
-        </span>
-        <span className="mt-1.5 rounded-lg bg-subtle-2 px-2 py-1 text-[12px] font-semibold text-ink-2">
-          {inWindow.length}
-        </span>
-        <div className="no-scrollbar flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto px-2 pt-1 pb-2">
-          {inWindow.map((tab) => (
-            <TabRow key={tab.id} tab={tab} allTabs={inWindow} active={active} variant="tile" />
-          ))}
-        </div>
-      </nav>
-      <AnimatePresence>
-        {peek && !dragging && (
-          <motion.nav
-            aria-label={t('panel.openTabs')}
-            initial={{ x: -24, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -16, opacity: 0, transition: { duration: 0.12 } }}
-            transition={{ type: 'spring', stiffness: 520, damping: 40 }}
-            onMouseEnter={open}
-            onMouseLeave={close}
-            style={{ width }}
-            className={cn('fixed top-0 left-0 z-40 h-screen rounded-r-[22px] bg-panel shadow-pop')}
-          >
-            <PanelBody active={active} onPinChange={() => setPeek(false)} />
-          </motion.nav>
+        initial={false}
+        animate={{ width: expanded ? width : 76 }}
+        transition={{ type: 'spring', stiffness: 420, damping: 40 }}
+        className={cn(
+          'absolute inset-y-0 left-0 overflow-hidden border-r border-line bg-panel transition-[box-shadow,border-radius] duration-200',
+          expanded && 'rounded-r-[22px] shadow-pop',
         )}
-      </AnimatePresence>
-    </>
+      >
+        <div className="relative h-full" style={{ width: expanded ? width : 76 }}>
+          {expanded ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15, delay: 0.05 }}
+              className="h-full"
+              style={{ width }}
+            >
+              <PanelBody active={active} onPinChange={() => setPeek(false)} />
+            </motion.div>
+          ) : (
+            <div className="flex h-full w-[76px] flex-col items-center gap-3 py-[18px]">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-white shadow-glow">
+                <HangarMark size={22} />
+              </span>
+              <span className="mt-1.5 rounded-lg bg-subtle-2 px-2 py-1 text-[12px] font-semibold text-ink-2">
+                {inWindow.length}
+              </span>
+              <div className="no-scrollbar flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto px-2 pt-1 pb-2">
+                {inWindow.map((tab) => (
+                  <TabRow
+                    key={tab.id}
+                    tab={tab}
+                    allTabs={inWindow}
+                    active={active}
+                    variant="tile"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.nav>
+    </div>
   )
 }

@@ -6,7 +6,7 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-## [0.1.0] — 2026-10-07
+## [0.1.0] — 2026-08-29
 
 First release: a local-first Chrome extension.
 

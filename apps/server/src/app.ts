@@ -6,10 +6,13 @@ import pkg from '../package.json' with { type: 'json' }
 import type { Config } from './config'
 import type { Db } from './db/client'
 import { authRoutes } from './routes/auth'
+import { syncRoutes } from './routes/sync'
+import { ChangeFeed } from './sync'
 
 export interface AppDeps {
   db: Db
   config: Config
+  feed?: ChangeFeed
   /** Clock, replaceable in tests. */
   now?: () => number
 }
@@ -21,7 +24,7 @@ function allowedOrigin(origin: string, config: Config): string | null {
   return null
 }
 
-export function createApp({ db, config, now = Date.now }: AppDeps) {
+export function createApp({ db, config, feed = new ChangeFeed(), now = Date.now }: AppDeps) {
   const app = new Hono()
 
   app.use('*', secureHeaders())
@@ -41,6 +44,7 @@ export function createApp({ db, config, now = Date.now }: AppDeps) {
   })
 
   app.route('/auth', authRoutes(db, config, now))
+  app.route('/', syncRoutes(db, config, feed, now))
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404))
   app.onError((error, c) => {

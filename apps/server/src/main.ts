@@ -5,10 +5,13 @@ import { createApp } from './app'
 import { loadConfig } from './config'
 import { openDatabase } from './db/client'
 import { migrationsFolder } from './paths'
+import { ensureAdmin } from './users'
 
 const config = loadConfig()
 mkdirSync(config.dataDir, { recursive: true })
 const { db, sqlite } = openDatabase(join(config.dataDir, 'tabhangar.db'), migrationsFolder())
+const admin = await ensureAdmin(db, config.admin)
+if (admin) console.log(`Created the first account: ${admin.username}`)
 const app = createApp({ db, config })
 
 const server = serve({ fetch: app.fetch, port: config.port, hostname: config.host }, (info) => {

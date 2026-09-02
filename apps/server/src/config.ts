@@ -11,6 +11,7 @@ const envSchema = z.object({
   PUBLIC_URL: z.url().optional(),
   SESSION_TTL_DAYS: z.coerce.number().int().min(1).max(3650).default(30),
   ALLOW_SIGNUP: flag.default(false),
+  TRUST_PROXY: flag.default(false),
   ADMIN_USERNAME: z.string().min(3).max(64).optional(),
   ADMIN_PASSWORD: z.string().min(8).max(256).optional(),
 })
@@ -23,6 +24,8 @@ export interface Config {
   publicUrl: string | null
   sessionTtlMs: number
   allowSignup: boolean
+  /** Take the client address from X-Forwarded-For (behind a reverse proxy such as Caddy). */
+  trustProxy: boolean
   /** First account, created on start when there are no users yet. */
   admin: { username: string; password: string } | null
 }
@@ -44,6 +47,7 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     publicUrl: e.PUBLIC_URL?.replace(/\/+$/, '') ?? null,
     sessionTtlMs: e.SESSION_TTL_DAYS * 86_400_000,
     allowSignup: e.ALLOW_SIGNUP,
+    trustProxy: e.TRUST_PROXY,
     admin:
       e.ADMIN_USERNAME && e.ADMIN_PASSWORD
         ? { username: e.ADMIN_USERNAME, password: e.ADMIN_PASSWORD }

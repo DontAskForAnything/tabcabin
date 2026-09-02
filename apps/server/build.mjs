@@ -1,11 +1,11 @@
-// Bundles the server (and @tabhangar/core) into dist/main.js; the native SQLite driver stays external.
+// Bundles the server and the admin CLI (with @tabhangar/core) into dist/; the native SQLite driver stays external.
 import { build } from 'esbuild'
 import { cpSync, rmSync } from 'node:fs'
 
 rmSync('dist', { recursive: true, force: true })
 await build({
-  entryPoints: ['src/main.ts'],
-  outfile: 'dist/main.js',
+  entryPoints: ['src/main.ts', 'src/cli.ts'],
+  outdir: 'dist',
   bundle: true,
   platform: 'node',
   format: 'esm',
@@ -18,4 +18,4 @@ await build({
   },
 })
 cpSync('drizzle', 'dist/drizzle', { recursive: true })
-console.log('Built dist/main.js')
+console.log('Built dist/main.js and dist/cli.js')

@@ -5,6 +5,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import pkg from '../package.json' with { type: 'json' }
 import type { Config } from './config'
 import type { Db } from './db/client'
+import { authRoutes } from './routes/auth'
 
 export interface AppDeps {
   db: Db
@@ -20,7 +21,7 @@ function allowedOrigin(origin: string, config: Config): string | null {
   return null
 }
 
-export function createApp({ db, config }: AppDeps) {
+export function createApp({ db, config, now = Date.now }: AppDeps) {
   const app = new Hono()
 
   app.use('*', secureHeaders())
@@ -38,6 +39,8 @@ export function createApp({ db, config }: AppDeps) {
     db.get(sql`select 1`)
     return c.json({ ok: true, name: 'tabhangar', version: pkg.version })
   })
+
+  app.route('/auth', authRoutes(db, config, now))
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404))
   app.onError((error, c) => {

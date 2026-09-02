@@ -25,8 +25,13 @@ export default tseslint.config(
     },
   },
   {
+    // The server logs to stdout on purpose (container logs).
+    files: ['apps/server/**'],
+    rules: { 'no-console': 'off' },
+  },
+  {
     files: ['**/*.tsx', '**/src/**/*.ts'],
-    ignores: ['**/e2e/**'],
+    ignores: ['**/e2e/**', 'apps/server/**'],
     plugins: { 'react-hooks': reactHooks },
     rules: {
       'react-hooks/rules-of-hooks': 'error',

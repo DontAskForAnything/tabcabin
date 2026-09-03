@@ -9,7 +9,6 @@ import {
   isTabExtendExport,
   parseBackup,
   positionsAtEnd,
-
   puts,
   remapBundle,
   TITLE_MAX_LENGTH,
@@ -173,7 +172,10 @@ export interface BookmarkFolder {
 export async function loadBookmarkFolders(): Promise<BookmarkFolder[]> {
   const tree = await browser.bookmarks.getTree()
   const folders: BookmarkFolder[] = []
-  const walk = (node: Browser.bookmarks.BookmarkTreeNode, depth: number): BookmarkFolder['links'] => {
+  const walk = (
+    node: Browser.bookmarks.BookmarkTreeNode,
+    depth: number,
+  ): BookmarkFolder['links'] => {
     const links: BookmarkFolder['links'] = []
     const entry: BookmarkFolder = { id: node.id, title: node.title, depth, links }
     if (depth >= 0) folders.push(entry)
@@ -190,4 +192,3 @@ export async function loadBookmarkFolders(): Promise<BookmarkFolder[]> {
 export async function loadTopSites(): Promise<{ url: string; title: string }[]> {
   return (await browser.topSites.get()).map((site) => ({ url: site.url, title: site.title }))
 }
-

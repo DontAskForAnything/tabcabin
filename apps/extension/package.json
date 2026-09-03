@@ -35,6 +35,7 @@
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@resvg/resvg-js": "^2.6.2",
+    "@tabhangar/server": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/react": "^16.3.3",
     "@types/pngjs": "^6.0.5",

@@ -41,6 +41,11 @@ export interface PopoverSaveRequest {
   closeTab: boolean
 }
 
+/** Ask the background to synchronize now (e.g. when a board page opens). */
+export interface SyncNowRequest {
+  type: 'tabhangar:sync-now'
+}
+
 export interface OpenAppRequest {
   type: 'tabhangar:open-app'
 }
@@ -53,6 +58,7 @@ export type RuntimeMessage =
   | PopoverDataRequest
   | PopoverSaveRequest
   | OpenAppRequest
+  | SyncNowRequest
 
 export function isRuntimeMessage(value: unknown): value is RuntimeMessage {
   return (

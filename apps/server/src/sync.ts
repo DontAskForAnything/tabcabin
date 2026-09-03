@@ -33,6 +33,7 @@ export interface PulledChange {
   id: string
   /** The latest row, or null when it was purged. */
   row: Record<string, unknown> | null
+  updatedAt: number
   seq: number
 }
 
@@ -133,6 +134,7 @@ export function pullChanges(db: Db, userId: string, since: number, limit: number
     entity: r.entity,
     id: r.id,
     row: r.data ?? null,
+    updatedAt: r.updatedAt,
     seq: r.seq,
   }))
   return {

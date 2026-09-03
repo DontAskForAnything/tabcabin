@@ -4,6 +4,7 @@ import { startBadge } from '@/background/badge'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
+import { startSync, syncEngine } from '@/background/sync'
 import { runUndo } from '@/background/toast'
 import { trimBin } from '@/db/repo'
 import { isRuntimeMessage } from '@/messages'
@@ -40,6 +41,11 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!isRuntimeMessage(message)) return undefined
+    if (message.type === 'tabhangar:sync-now') {
+      void syncEngine.syncNow()
+      syncEngine.startLive()
+      return undefined
+    }
     if (message.type === 'tabhangar:undo') {
       void runUndo(message.undoId)
       return undefined
@@ -54,6 +60,7 @@ export default defineBackground(() => {
 
   startBadge()
   startReminders()
+  startSync()
 
   // Hooks for end-to-end tests (menus and the toolbar button can't be clicked from Playwright).
   Object.assign(globalThis, {

@@ -77,7 +77,9 @@ describe('sync', () => {
     await push([put('workspace', ws)])
     await push([{ type: 'purge', entity: 'workspace', id: ws.id, at: ws.updatedAt + 1 }])
     const { changes } = await pull()
-    expect(changes).toEqual([{ entity: 'workspace', id: ws.id, row: null, seq: 2 }])
+    expect(changes).toEqual([
+      { entity: 'workspace', id: ws.id, row: null, updatedAt: ws.updatedAt + 1, seq: 2 },
+    ])
   })
 
   it('rejects invalid rows and keeps users apart', async () => {

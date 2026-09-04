@@ -4,8 +4,9 @@ import { Button, cn, Favicon, IconButton, Modal } from '@tabhangar/ui'
 import { useEffect } from 'react'
 import { type BinRow, useBin } from '@/db/bin'
 import { BIN_LIMIT, emptyBin, purgeFromBin, restoreFromBin, trimBin } from '@/db/repo'
-import { type Locale, type Translate, useLocale, useT } from '@/i18n'
+import { type Translate, useLocale, useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
+import { relativeTime } from '@/lib/time'
 import { confirmDialog } from '@/state/confirm'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
@@ -98,19 +99,6 @@ function describe(row: BinRow, t: Translate): { title: string; kind: string } {
   }
 }
 
-function relative(ts: number, locale: Locale): string {
-  const seconds = Math.round((ts - Date.now()) / 1000)
-  const format = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
-  const steps: [Intl.RelativeTimeFormatUnit, number][] = [
-    ['day', 86_400],
-    ['hour', 3_600],
-    ['minute', 60],
-  ]
-  for (const [unit, size] of steps)
-    if (Math.abs(seconds) >= size) return format.format(Math.round(seconds / size), unit)
-  return format.format(0, 'minute')
-}
-
 function BinIcon({ row }: { row: BinRow }) {
   const tile = 'flex size-10 shrink-0 items-center justify-center rounded-[11px] text-[20px]'
   if (row.entity === 'workspace')
@@ -168,7 +156,7 @@ function BinRowView({ row, active }: { row: BinRow; active: ActiveContext }) {
         <div className="truncate text-[12.5px] text-ink-3">
           {kind}
           {row.place ? ` · ${t('bin.from', { place: row.place })}` : ''}
-          {row.row.deletedAt ? ` · ${relative(row.row.deletedAt, locale)}` : ''}
+          {row.row.deletedAt ? ` · ${relativeTime(row.row.deletedAt, locale)}` : ''}
         </div>
       </div>
       <Button

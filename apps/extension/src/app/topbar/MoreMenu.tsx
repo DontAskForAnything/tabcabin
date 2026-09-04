@@ -1,5 +1,6 @@
 import {
   BookmarkPlus,
+  Cloud,
   Ellipsis,
   Keyboard,
   Monitor,
@@ -84,6 +85,12 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
         </MenuItem>
         <MenuItem icon={<Keyboard size={15} />} onSelect={() => openModal({ type: 'shortcuts' })}>
           {t('menu.shortcuts')}
+        </MenuItem>
+        <MenuItem
+          icon={<Cloud size={15} />}
+          onSelect={() => openModal({ type: 'settings', tab: 'account' })}
+        >
+          {t('settings.tab.account')}
         </MenuItem>
         <MenuItem icon={<Settings size={15} />} onSelect={() => openModal({ type: 'settings' })}>
           {t('menu.settings')}

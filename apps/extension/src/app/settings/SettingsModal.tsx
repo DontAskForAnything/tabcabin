@@ -1,9 +1,10 @@
-import { Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
+import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
 import { IconButton, Modal, Tabs } from '@tabhangar/ui'
 import { useRef, type ReactNode } from 'react'
 import { useT } from '@/i18n'
 import { type SettingsTab, useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
+import { AccountSettings } from './AccountSettings'
 import { AppearanceSettings } from './AppearanceSettings'
 import { DataSettings } from './DataSettings'
 import { GeneralSettings } from './GeneralSettings'
@@ -14,6 +15,7 @@ const TABS: { value: SettingsTab; icon: ReactNode }[] = [
   { value: 'appearance', icon: <Palette size={16} /> },
   { value: 'shortcuts', icon: <Keyboard size={16} /> },
   { value: 'data', icon: <Database size={16} /> },
+  { value: 'account', icon: <Cloud size={16} /> },
 ]
 
 export function SettingsModal({ active }: { active: ActiveContext }) {
@@ -84,6 +86,9 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
           </Tabs.Content>
           <Tabs.Content value="data" className="outline-none">
             <DataSettings active={active} />
+          </Tabs.Content>
+          <Tabs.Content value="account" className="outline-none">
+            <AccountSettings />
           </Tabs.Content>
         </div>
       </Tabs.Root>

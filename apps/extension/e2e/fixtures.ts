@@ -6,25 +6,31 @@ import { fileURLToPath } from 'node:url'
 
 const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.output/chrome-mv3-e2e')
 
-/** Launches Chromium with the built extension loaded (run `pnpm build:e2e` first). */
+/** A fresh browser profile with the built extension loaded (run `pnpm build:e2e` first). */
+export async function launchExtension(): Promise<BrowserContext> {
+  const userDataDir = mkdtempSync(join(tmpdir(), 'tabhangar-e2e-'))
+  return chromium.launchPersistentContext(userDataDir, {
+    channel: 'chromium',
+    headless: true,
+    viewport: { width: 1440, height: 900 },
+    args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
+  })
+}
+
+export async function extensionIdOf(context: BrowserContext): Promise<string> {
+  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  return new URL(worker.url()).host
+}
+
 export const test = base.extend<{ context: BrowserContext; extensionId: string }>({
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
-    const userDataDir = mkdtempSync(join(tmpdir(), 'tabhangar-e2e-'))
-    const context = await chromium.launchPersistentContext(userDataDir, {
-      channel: 'chromium',
-      headless: true,
-      viewport: { width: 1440, height: 900 },
-      args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
-    })
+    const context = await launchExtension()
     await use(context)
     await context.close()
   },
   extensionId: async ({ context }, use) => {
-    let [worker] = context.serviceWorkers()
-    if (!worker) worker = await context.waitForEvent('serviceworker')
-    const id = new URL(worker.url()).host
-    await use(id)
+    await use(await extensionIdOf(context))
   },
 })
 

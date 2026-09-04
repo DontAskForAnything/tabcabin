@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data'
+export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data' | 'account'
 
 export type ModalState =
   | { type: 'linkEditor'; itemId: string }

@@ -35,6 +35,12 @@ export function App({ surface }: { surface: Surface }) {
   }, [settings.density])
 
   useEffect(() => {
+    // Wake the background so it pulls changes made on other computers.
+    if (typeof browser !== 'undefined' && browser.runtime?.id)
+      void browser.runtime.sendMessage({ type: 'tabhangar:sync-now' }).catch(() => undefined)
+  }, [])
+
+  useEffect(() => {
     const locale = DEFAULT_SETTINGS.locale
     void ensureSeed(seedText((key, params) => translate(locale, key, params))).then(
       (workspaceId) => {

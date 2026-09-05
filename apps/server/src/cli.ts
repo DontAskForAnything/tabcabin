@@ -52,6 +52,9 @@ const { db, sqlite } = openDatabase(join(config.dataDir, 'tabhangar.db'), migrat
 const code = await runCommand(db, process.argv.slice(2), {
   readPassword,
   print: (line) => console.log(line),
+  backup: async (file) => {
+    await sqlite.backup(file)
+  },
 })
 sqlite.close()
 process.exit(code)

@@ -1,3 +1,7 @@
+import Database from 'better-sqlite3'
+import { mkdtempSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { hashPassword, verifyPassword } from '../src/auth/password'
 import { RateLimiter } from '../src/auth/rateLimit'
@@ -150,5 +154,22 @@ describe('accounts', () => {
     expect(await runCommand(db, ['nonsense'], io)).toBe(2)
     expect(out).toContain('Created michal (admin)')
     expect(out).toContain('michal  (admin)')
+  })
+  it('backs up the database from the command line', async () => {
+    const { db, sqlite } = testApp()
+    await createUser(db, { username: 'michal', password: 'correct horse' })
+    const file = join(mkdtempSync(join(tmpdir(), 'tabhangar-backup-')), 'copy.db')
+    const out: string[] = []
+    const io = {
+      readPassword: async () => '',
+      print: (l: string) => out.push(l),
+      backup: async (target: string) => {
+        await sqlite.backup(target)
+      },
+    }
+    expect(await runCommand(db, ['backup', file], io)).toBe(0)
+    const copy = new Database(file, { readonly: true })
+    expect(copy.prepare('select username from users').all()).toEqual([{ username: 'michal' }])
+    copy.close()
   })
 })

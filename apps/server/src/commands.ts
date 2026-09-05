@@ -7,6 +7,7 @@ export const USAGE = `Usage: tabhangar <command>
   reset-password <username>          set a new password and sign the user out everywhere
   delete-user <username>             delete an account and all of its data
   list-users                         list accounts
+  backup <file>                      write a consistent copy of the database to <file>
 
 The password is read from standard input when it is not a terminal, e.g.
   echo 'secret password' | tabhangar create-user michal`
@@ -14,6 +15,8 @@ The password is read from standard input when it is not a terminal, e.g.
 export interface CommandIo {
   readPassword: (prompt: string) => Promise<string>
   print: (line: string) => void
+  /** Copies the live database to a file (SQLite online backup). */
+  backup?: (file: string) => Promise<void>
 }
 
 /** Runs one administration command; returns the process exit code. */
@@ -42,6 +45,12 @@ export async function runCommand(db: Db, args: string[], io: CommandIo): Promise
         if (!username) break
         deleteUser(db, username)
         io.print(`Deleted ${username}`)
+        return 0
+      }
+      case 'backup': {
+        if (!username || !io.backup) break
+        await io.backup(username)
+        io.print(`Backup written to ${username}`)
         return 0
       }
       case 'list-users': {

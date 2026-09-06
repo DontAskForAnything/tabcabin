@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/.output
+**/.wxt
+**/test-results
+**/playwright-report
+apps/extension
+apps/landing
+docs
+.git
+.github
+*.log
+.env
+.env.*

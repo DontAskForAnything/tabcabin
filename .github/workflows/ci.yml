@@ -44,3 +44,19 @@ jobs:
           name: e2e-results
           path: apps/extension/test-results
           retention-days: 7
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-qemu-action@v4
+      - uses: docker/setup-buildx-action@v4
+      # Builds the server image for both architectures without publishing it.
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: apps/server/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

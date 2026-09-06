@@ -6,6 +6,23 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Self-hosted sync server: accounts with scrypt passwords and sessions, login rate limiting,
+  push/pull sync with last-write-wins per row, live updates over server-sent events, admin CLI,
+  online backups
+- Account & sync settings in the extension, first-sync choice (keep both or use the server's
+  data), background sync with live updates and an alarm fallback
+- Docker image (amd64 and arm64), Compose file with optional Caddy for HTTPS, backup script and a
+  self-hosting guide
+
+### Fixed
+
+- Clickable elements show the pointer cursor
+- The save popover and in-page toasts stay above every element of the page
+- The icon-only tabs panel widens in place on hover
+- Toasts follow the light and dark theme
+
 ## [0.1.0] — 2026-08-29
 
 First release: a local-first Chrome extension.

@@ -1,0 +1,8 @@
+# Used by the `caddy` service in docker-compose.yml. DOMAIN comes from .env.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy tabhangar:8787 {
+		# Pass server-sent events (live sync) through without buffering.
+		flush_interval -1
+	}
+}

@@ -70,6 +70,17 @@ searchable, and works offline. There is no account, no tracking and no subscript
   </tr>
 </table>
 
+## Sync between computers
+
+Run the small sync server on your own machine or VPS (Docker, SQLite, automatic HTTPS with Caddy),
+then sign in from **Settings → Account & sync** in every browser. Changes show up on your other
+computers within seconds. See [docs/self-hosting.md](docs/self-hosting.md).
+
+```bash
+cp .env.example .env    # domain and first account
+docker compose --profile caddy up -d
+```
+
 ## Install
 
 TabHangar is not in the Chrome Web Store yet.
@@ -141,6 +152,7 @@ The screenshots in this README are generated from demo data with
 
 ```
 apps/extension      Chrome extension (WXT, React): new tab, side panel, background, content scripts
+apps/server         self-hosted sync server (Hono, SQLite, Drizzle) and its Docker image
 packages/core       data model, ordering, reminders, import/export — no browser APIs, fully unit tested
 packages/ui         design system: tokens, Tailwind theme, accessible components on Radix
 docs/               architecture, data model, screenshots
@@ -151,12 +163,13 @@ Read more in [docs/architecture.md](docs/architecture.md) and [docs/data-model.m
 ### Tech stack
 
 TypeScript · React 19 · Tailwind CSS 4 · Radix UI · Motion · dnd-kit · Dexie (IndexedDB) · Zod ·
-WXT (Manifest V3) · Vitest · Playwright · axe-core
+WXT (Manifest V3) · Hono · SQLite (better-sqlite3) · Drizzle ORM · Docker · Caddy · Vitest · Playwright ·
+axe-core
 
 ## Roadmap
 
 - [x] Local-first Chrome extension (board, collections, panel, saving, search, reminders, bin, import/export)
-- [ ] Self-hosted sync server — Docker image with login and password, live sync between browsers
+- [x] Self-hosted sync server — Docker image with login and password, live sync between browsers
 - [ ] Landing page and Chrome Web Store listing
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version.

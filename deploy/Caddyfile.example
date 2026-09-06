@@ -1,0 +1,8 @@
+# For a Caddy that already runs on the host (not in Docker). Add this block to
+# /etc/caddy/Caddyfile, replace the domain and run `sudo systemctl reload caddy`.
+tabs.example.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8787 {
+		flush_interval -1
+	}
+}

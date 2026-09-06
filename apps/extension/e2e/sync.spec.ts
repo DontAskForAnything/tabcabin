@@ -8,21 +8,27 @@ import { expect, extensionIdOf, launchExtension, test } from './fixtures'
 
 const serverMain = resolve(dirname(fileURLToPath(import.meta.url)), '../../server/dist/main.js')
 const PORT = 18_000 + Math.floor(Math.random() * 1000)
-const SERVER = `http://127.0.0.1:${PORT}`
-let server: ChildProcess
+/**
+ * By default a fresh server is started from apps/server/dist. Set SYNC_SERVER to test
+ * against a running one instead (e.g. the Docker image), with the account michal /
+ * "correct horse" and no data yet.
+ */
+const SERVER = process.env.SYNC_SERVER ?? `http://127.0.0.1:${PORT}`
+let server: ChildProcess | undefined
 
 test.beforeAll(async () => {
-  server = spawn(process.execPath, [serverMain], {
-    env: {
-      ...process.env,
-      PORT: String(PORT),
-      HOST: '127.0.0.1',
-      DATA_DIR: mkdtempSync(join(tmpdir(), 'tabhangar-server-')),
-      ADMIN_USERNAME: 'michal',
-      ADMIN_PASSWORD: 'correct horse',
-    },
-    stdio: 'ignore',
-  })
+  if (!process.env.SYNC_SERVER)
+    server = spawn(process.execPath, [serverMain], {
+      env: {
+        ...process.env,
+        PORT: String(PORT),
+        HOST: '127.0.0.1',
+        DATA_DIR: mkdtempSync(join(tmpdir(), 'tabhangar-server-')),
+        ADMIN_USERNAME: 'michal',
+        ADMIN_PASSWORD: 'correct horse',
+      },
+      stdio: 'ignore',
+    })
   await expect
     .poll(
       () =>

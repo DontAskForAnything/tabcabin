@@ -328,7 +328,6 @@ const later = [
           rotateX: [18, 0],
           scale: [0.92, 1],
           y: [40, 0],
-          opacity: [0.6, 1],
         }),
         { target: root, offset: ['start end', 'start 0.35'] },
       )
@@ -386,14 +385,11 @@ const later = [
         tab.style.background = 'var(--accent-soft)'
         const start = topLeft(tab)
         await animate(ghost, { x: start.x, y: start.y, rotate: 0, scale: 1 }, { duration: 0 })
-        await Promise.all([
-          animate(
-            ghost,
-            { opacity: [0, 1], rotate: [0, -2], scale: [1, 1.03] },
-            { duration: 0.18 },
-          ),
-          animate(tab, { opacity: 0.35 }, { duration: 0.18 }),
-        ])
+        await animate(
+          ghost,
+          { opacity: [0, 1], rotate: [0, -2], scale: [1, 1.03] },
+          { duration: 0.18 },
+        )
         const drop = $('[data-demo-drop]')
         const end = center(drop, 0, -28)
         const mid = { x: (start.x + end.x) / 2, y: Math.min(start.y, end.y) - 90 }

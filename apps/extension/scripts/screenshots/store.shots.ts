@@ -129,3 +129,27 @@ test('store promo images', async () => {
     new Resvg(padded, { fitTo: { mode: 'width', value: 128 } }).render().asPng(),
   )
 })
+
+test('social preview image for the website (1200×630)', async () => {
+  const board = readFileSync(
+    resolve(here, '../../../../docs/screenshots/board-light.png'),
+  ).toString('base64')
+  await render(
+    base(
+      `<div style="position:absolute;left:72px;top:0;bottom:0;width:520px;display:flex;flex-direction:column;justify-content:center;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div class="logo" style="width:56px;height:56px">${logo}</div>
+          <span style="font-size:30px;font-weight:650;letter-spacing:-0.02em">TabHangar</span>
+        </div>
+        <h1 style="font-size:58px;line-height:1.04">Your tabs,<br>parked calmly</h1>
+        <p style="font-size:23px;line-height:1.4;white-space:nowrap">Open-source tab manager.<br>Kanban boards, notes, reminders.<br>Self-hosted sync.</p>
+      </div>
+      <img src="data:image/png;base64,${board}" style="position:absolute;left:620px;top:96px;width:900px;border-radius:16px;box-shadow:0 40px 90px -20px rgb(15 8 70 / .6), 0 0 0 1px rgb(255 255 255 / .15)">`,
+      1200,
+      630,
+    ),
+    1200,
+    630,
+    resolve(here, '../../../landing/public/og.png'),
+  )
+})

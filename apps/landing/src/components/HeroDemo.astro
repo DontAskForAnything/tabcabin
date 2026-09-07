@@ -1,0 +1,507 @@
+---
+/**
+ * A live, animated miniature of the extension (HTML, not a screenshot): a cursor drags an open
+ * tab into a group, writes a to-do, ticks another and sets a reminder, then starts over.
+ * Designed at 1120×620 and scaled to fit; with reduced motion it stays still.
+ */
+const tabs = [
+  { id: 'drag', letter: 'F', color: '#0f9d8a', title: 'Designing calm software – Field notes' },
+  { letter: 'G', color: '#24292f', title: 'Pull requests · GitHub' },
+  { letter: 'D', color: '#7cb342', title: 'Drizzle ORM – Overview' },
+  { letter: 'F', color: '#e2479c', title: 'Recents – Figma' },
+  { letter: 'Y', color: '#f26522', title: 'Hacker News' },
+]
+const build = [
+  { letter: 'G', color: '#24292f', title: 'GitHub · Pull requests', host: 'github.com' },
+  { letter: 'H', color: '#f05a28', title: 'Hono – Web framework', host: 'hono.dev' },
+  { letter: 'T', color: '#0ea5b7', title: 'Tailwind CSS – Docs', host: 'tailwindcss.com' },
+]
+const later = [
+  { letter: 'W', color: '#4f46e5', title: 'Web Vitals | web.dev', host: 'web.dev' },
+  { letter: 'M', color: '#1b1b1f', title: 'IndexedDB API – MDN', host: 'developer.mozilla.org' },
+  { id: 'hn', letter: 'Y', color: '#f26522', title: 'Hacker News', host: 'news.ycombinator.com' },
+]
+---
+
+<div class="hero-demo relative mx-auto w-full max-w-[1120px] [perspective:1600px]" data-hero-demo>
+  <p class="sr-only">
+    Animated preview of TabHangar: a tab is dragged from the open tabs panel into a group, a to-do
+    is added and ticked off, and a reminder is set on a saved link.
+  </p>
+  <div class="demo-stage relative w-full [transform-style:preserve-3d]" aria-hidden="true">
+    <div class="demo-frame absolute top-0 left-0 h-[620px] w-[1120px] origin-top-left overflow-hidden rounded-[22px] bg-canvas text-ink shadow-pop ring-1 ring-line">
+      <!-- browser strip -->
+      <div class="flex h-9 items-center gap-2 border-b border-line bg-panel px-4">
+        <span class="size-3 rounded-full bg-[#ff5f57]"></span>
+        <span class="size-3 rounded-full bg-[#febc2e]"></span>
+        <span class="size-3 rounded-full bg-[#28c840]"></span>
+        <span class="ml-4 flex h-6 w-[260px] items-center rounded-md bg-subtle-2 px-3 text-[11.5px] text-ink-3">
+          New Tab
+        </span>
+      </div>
+      <div class="demo-content flex h-[584px]">
+        <!-- open tabs panel -->
+        <aside class="flex w-[232px] shrink-0 flex-col gap-2.5 border-r border-line bg-panel p-3.5">
+          <div class="flex items-center gap-2 pb-1 text-[14px] font-semibold">
+            <span class="flex size-7 items-center justify-center rounded-lg bg-accent text-[13px] text-white">
+              ⌂
+            </span>
+            TabHangar
+          </div>
+          <div class="rounded-[10px] bg-card px-2.5 py-1.5 text-[11.5px] font-medium shadow-tile">
+            <span class="text-success">●</span> This window · <span data-tab-count>5</span> tabs
+          </div>
+          <div class="flex flex-col gap-1" data-tabs>
+            {tabs.map((tab) => (
+              <div
+                class="demo-tab flex items-center gap-2 overflow-hidden rounded-[9px] px-1.5 py-1.5 text-[12px] font-medium"
+                data-demo-tab={tab.id}
+              >
+                <span
+                  class="flex size-6 shrink-0 items-center justify-center rounded-[7px] text-[11px] font-bold text-white"
+                  style={`background:${tab.color}`}
+                >
+                  {tab.letter}
+                </span>
+                <span class="truncate">{tab.title}</span>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <div class="flex min-w-0 flex-1 flex-col gap-4 p-5">
+          <!-- top bar -->
+          <div class="flex items-center gap-3">
+            <span class="flex h-8 items-center gap-1.5 rounded-[10px] bg-card px-2.5 text-[12.5px] font-semibold shadow-tile">
+              🚀 Side project
+            </span>
+            <span class="flex gap-0.5 rounded-[11px] bg-subtle-2 p-[3px] text-[12px] font-medium">
+              <span class="rounded-[8px] bg-accent px-3 py-1 font-semibold text-white">Today</span>
+              <span class="px-3 py-1 text-ink-2">Research</span>
+              <span class="px-3 py-1 text-ink-2">Reading</span>
+            </span>
+            <span class="flex-1"></span>
+            <span class="flex h-8 items-center gap-2 rounded-[10px] bg-card px-3 text-[12px] text-ink-3 shadow-tile">
+              ⌕ Search <span class="rounded bg-subtle px-1 text-[10px]">Ctrl K</span>
+            </span>
+            <span class="flex size-8 items-center justify-center rounded-[10px] bg-card text-[13px] shadow-tile">
+              🔔
+            </span>
+          </div>
+
+          <!-- board -->
+          <div class="flex items-start gap-4">
+            <section
+              class="w-[262px] shrink-0 rounded-[18px] bg-card p-4 shadow-card"
+              data-group="launch"
+            >
+              <header class="mb-3 flex items-center gap-2.5">
+                <span class="text-[28px] leading-none">🎯</span>
+                <div>
+                  <div class="text-[14.5px] font-semibold">Launch week</div>
+                  <div class="text-[11px] text-ink-3">1 note · 3 tasks</div>
+                </div>
+              </header>
+              <div class="flex flex-col gap-1.5 text-[12.5px]">
+                <div class="flex items-center gap-2">
+                  <span class="flex size-[17px] items-center justify-center rounded-[5px] bg-accent text-[10px] text-white">
+                    ✓
+                  </span>
+                  <span class="flex-1 rounded-[9px] bg-subtle px-2.5 py-1.5 text-ink-3 line-through">
+                    Write the changelog
+                  </span>
+                </div>
+                <div class="flex items-center gap-2" data-demo-todo>
+                  <span class="demo-check flex size-[17px] items-center justify-center rounded-[5px] border-[1.5px] border-ink-4 text-[10px] text-transparent transition-colors">
+                    ✓
+                  </span>
+                  <span class="demo-todo-text flex-1 rounded-[9px] bg-subtle px-2.5 py-1.5 transition-colors">
+                    Record a 30-second demo
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="size-[17px] rounded-[5px] border-[1.5px] border-ink-4"></span>
+                  <span class="flex-1 rounded-[9px] bg-subtle px-2.5 py-1.5">
+                    Post on the forum
+                  </span>
+                </div>
+                <div
+                  class="rounded-[9px] px-2.5 py-1.5"
+                  style="background:var(--note-amber-bg);color:var(--note-amber-ink)"
+                >
+                  Ship small, ship often.
+                </div>
+                <div class="demo-new-note hidden items-center gap-2" data-demo-note>
+                  <span class="demo-note-check hidden size-[17px] shrink-0 rounded-[5px] border-[1.5px] border-ink-4"></span>
+                  <span class="min-h-[30px] flex-1 rounded-[9px] bg-subtle px-2.5 py-1.5 shadow-[0_0_0_2px_var(--focus)]">
+                    <span data-demo-typed></span>
+                    <span class="demo-caret">|</span>
+                  </span>
+                </div>
+                <div
+                  class="mt-1 rounded-[9px] border border-dashed border-line py-1.5 text-center text-[11.5px] text-ink-3"
+                  data-demo-add
+                >
+                  + Note or link
+                </div>
+              </div>
+            </section>
+
+            <section class="w-[262px] shrink-0 rounded-[18px] bg-card p-4 shadow-card">
+              <header class="mb-3 flex items-center gap-2.5">
+                <span class="text-[28px] leading-none">🛠️</span>
+                <div>
+                  <div class="text-[14.5px] font-semibold">Build</div>
+                  <div class="text-[11px] text-ink-3">5 links</div>
+                </div>
+              </header>
+              <div class="flex flex-col gap-2">
+                {build.map((link) => (
+                  <div class="flex items-center gap-2.5 px-1">
+                    <span
+                      class="flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[12px] font-bold text-white"
+                      style={`background:${link.color}`}
+                    >
+                      {link.letter}
+                    </span>
+                    <span class="min-w-0">
+                      <span class="block truncate text-[12.5px] font-semibold">{link.title}</span>
+                      <span class="block truncate text-[11px] text-ink-3">{link.host}</span>
+                    </span>
+                  </div>
+                ))}
+                <div class="flex items-center gap-2.5 rounded-[11px] border border-dashed border-line px-2 py-2">
+                  <span class="flex -space-x-1.5">
+                    <span class="size-5 rounded-[6px] bg-[#a259ff] ring-2 ring-card"></span>
+                    <span class="size-5 rounded-[6px] bg-[#ea4c89] ring-2 ring-card"></span>
+                  </span>
+                  <span class="text-[12px] font-semibold">Design</span>
+                  <span class="text-[11px] text-ink-3">figma.com · dribbble.com</span>
+                </div>
+              </div>
+            </section>
+
+            <section
+              class="demo-later w-[262px] shrink-0 rounded-[18px] bg-card p-4 shadow-card transition-[box-shadow,background-color] duration-200"
+              data-group="later"
+            >
+              <header class="mb-3 flex items-center gap-2.5">
+                <span class="text-[28px] leading-none">📚</span>
+                <div>
+                  <div class="text-[14.5px] font-semibold">Read later</div>
+                  <div class="text-[11px] text-ink-3">
+                    <span data-later-count>3</span> links
+                  </div>
+                </div>
+              </header>
+              <div class="flex flex-col gap-2">
+                {later.map((link) => (
+                  <div class="flex flex-col gap-1 px-1" data-demo-link={link.id}>
+                    <div class="flex items-center gap-2.5">
+                      <span
+                        class="flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[12px] font-bold text-white"
+                        style={`background:${link.color}`}
+                      >
+                        {link.letter}
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block truncate text-[12.5px] font-semibold">{link.title}</span>
+                        <span class="block truncate text-[11px] text-ink-3">{link.host}</span>
+                      </span>
+                    </div>
+                    {link.id === 'hn' && (
+                      <span
+                        class="demo-chip ml-9 hidden w-fit items-center gap-1 rounded-[6px] bg-accent-soft px-1.5 py-0.5 text-[10.5px] font-semibold text-accent-ink"
+                        data-demo-chip
+                      >
+                        🔔 Tomorrow, 09:00
+                      </span>
+                    )}
+                  </div>
+                ))}
+                <div class="demo-drop-line hidden h-[3px] rounded-full bg-success"></div>
+                <div
+                  class="demo-saved hidden items-center gap-2.5 rounded-[10px] px-1 py-0.5"
+                  data-demo-saved
+                >
+                  <span
+                    class="flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[12px] font-bold text-white"
+                    style="background:#0f9d8a"
+                  >
+                    F
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block truncate text-[12.5px] font-semibold">
+                      Designing calm software
+                    </span>
+                    <span class="block truncate text-[11px] text-ink-3">fieldnotes.example</span>
+                  </span>
+                </div>
+                <div
+                  class="mt-1 rounded-[9px] border border-dashed border-line py-1.5 text-center text-[11.5px] text-ink-3"
+                  data-demo-drop
+                >
+                  + Note or link
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- toast -->
+      <div class="demo-toast absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-[12px] bg-raised px-3 py-2 text-[12.5px] font-medium opacity-0 shadow-pop">
+        <span class="flex size-[18px] items-center justify-center rounded-[6px] bg-success text-[10px] text-white">
+          ✓
+        </span>
+        Tab saved to 📚 Read later
+      </div>
+
+      <!-- drag preview -->
+      <div class="demo-ghost pointer-events-none absolute top-0 left-0 flex w-[214px] items-center gap-2 rounded-[11px] bg-card px-2 py-2 text-[12px] font-medium opacity-0 shadow-lift ring-2 ring-success">
+        <span
+          class="flex size-6 shrink-0 items-center justify-center rounded-[7px] text-[11px] font-bold text-white"
+          style="background:#0f9d8a"
+        >
+          F
+        </span>
+        <span class="truncate">Designing calm software</span>
+      </div>
+
+      <!-- cursor -->
+      <svg
+        class="demo-cursor pointer-events-none absolute top-0 left-0 opacity-0 drop-shadow-[0_2px_3px_rgb(0_0_0/0.3)]"
+        width="22"
+        height="26"
+        viewBox="0 0 22 26"
+      >
+        <path
+          d="M2 2l17 10.5-7.4 1.6L8 22z"
+          fill="#111"
+          stroke="#fff"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        ></path>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .demo-stage {
+    /* Height follows the scaled frame (set from script; this is the unscaled fallback). */
+    aspect-ratio: 1120 / 620;
+  }
+  .demo-caret {
+    animation: caret 1s steps(1) infinite;
+    color: var(--accent);
+  }
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  import { animate, scroll } from 'motion'
+
+  const root = document.querySelector<HTMLElement>('[data-hero-demo]')
+  const stage = root?.querySelector<HTMLElement>('.demo-stage')
+  const frame = root?.querySelector<HTMLElement>('.demo-frame')
+
+  if (root && stage && frame) {
+    let scale = 1
+    const fit = () => {
+      scale = stage.clientWidth / 1120
+      frame.style.transform = `scale(${scale})`
+    }
+    fit()
+    new ResizeObserver(fit).observe(stage)
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // The app rises out of a tilted perspective while it scrolls into place.
+    if (!reduced)
+      scroll(
+        animate(stage, {
+          rotateX: [18, 0],
+          scale: [0.92, 1],
+          y: [40, 0],
+          opacity: [0.6, 1],
+        }),
+        { target: root, offset: ['start end', 'start 0.35'] },
+      )
+    const content = frame.querySelector<HTMLElement>('.demo-content')!
+    const initial = content.innerHTML
+    const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
+      frame.querySelector<T>(selector)!
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+    /** Center of an element in the frame's own (unscaled) coordinates. */
+    const center = (el: Element, dx = 0, dy = 0) => {
+      const f = frame.getBoundingClientRect()
+      const r = el.getBoundingClientRect()
+      return {
+        x: (r.left + r.width / 2 - f.left) / scale + dx,
+        y: (r.top + r.height / 2 - f.top) / scale + dy,
+      }
+    }
+    const topLeft = (el: Element) => {
+      const f = frame.getBoundingClientRect()
+      const r = el.getBoundingClientRect()
+      return { x: (r.left - f.left) / scale, y: (r.top - f.top) / scale }
+    }
+
+    const cursor = $('.demo-cursor')
+    const ghost = $('.demo-ghost')
+    const toast = $('.demo-toast')
+    let pos = { x: 980, y: 560 }
+    const moveCursor = async (to: { x: number; y: number }, duration = 0.7) => {
+      await animate(
+        cursor,
+        { x: [pos.x, to.x], y: [pos.y, to.y] },
+        { duration, ease: [0.45, 0, 0.2, 1] },
+      )
+      pos = to
+    }
+    const click = () => animate(cursor, { scale: [1, 0.82, 1] }, { duration: 0.22 })
+
+    let running = false
+    let visible = false
+
+    async function play() {
+      if (running) return
+      running = true
+      while (visible) {
+        content.innerHTML = initial
+        pos = { x: 980, y: 560 }
+        await animate(cursor, { x: pos.x, y: pos.y, scale: 1 }, { duration: 0 })
+        await animate(cursor, { opacity: [0, 1] }, { duration: 0.3 })
+
+        // 1. Drag the open tab into "Read later".
+        const tab = $('[data-demo-tab="drag"]')
+        await moveCursor(center(tab, -60, 0))
+        await click()
+        tab.style.background = 'var(--accent-soft)'
+        const start = topLeft(tab)
+        await animate(ghost, { x: start.x, y: start.y, rotate: 0, scale: 1 }, { duration: 0 })
+        await Promise.all([
+          animate(
+            ghost,
+            { opacity: [0, 1], rotate: [0, -2], scale: [1, 1.03] },
+            { duration: 0.18 },
+          ),
+          animate(tab, { opacity: 0.35 }, { duration: 0.18 }),
+        ])
+        const drop = $('[data-demo-drop]')
+        const end = center(drop, 0, -28)
+        const mid = { x: (start.x + end.x) / 2, y: Math.min(start.y, end.y) - 90 }
+        const later = $('.demo-later')
+        const line = $('.demo-drop-line')
+        const dragDuration = 1.15
+        void animate(
+          ghost,
+          {
+            x: [start.x, mid.x - 107, end.x - 107],
+            y: [start.y, mid.y - 18, end.y - 18],
+          },
+          { duration: dragDuration, ease: 'easeInOut' },
+        )
+        void animate(
+          cursor,
+          { x: [pos.x, mid.x - 40, end.x - 40], y: [pos.y, mid.y, end.y] },
+          { duration: dragDuration, ease: 'easeInOut' },
+        )
+        await wait(dragDuration * 650)
+        later.style.boxShadow = '0 0 0 2px var(--success), var(--shadow-card)'
+        later.style.background = 'var(--success-soft)'
+        line.classList.remove('hidden')
+        await wait(dragDuration * 350 + 250)
+        pos = { x: end.x - 40, y: end.y }
+        await click()
+        line.classList.add('hidden')
+        later.style.boxShadow = ''
+        later.style.background = ''
+        const saved = $('[data-demo-saved]')
+        saved.classList.replace('hidden', 'flex')
+        void animate(ghost, { opacity: 0, scale: 0.96 }, { duration: 0.18 })
+        void animate(
+          saved,
+          { opacity: [0, 1], backgroundColor: ['rgb(124 108 246 / 0.25)', 'rgb(124 108 246 / 0)'] },
+          { duration: 1.2 },
+        )
+        $('[data-later-count]').textContent = '4'
+        await animate(
+          tab,
+          { height: [tab.offsetHeight, 0], opacity: 0, paddingTop: 0, paddingBottom: 0 },
+          { duration: 0.3 },
+        )
+        tab.remove()
+        $('[data-tab-count]').textContent = '4'
+        void animate(toast, { opacity: [0, 1], y: [10, 0] }, { duration: 0.25 })
+        await wait(900)
+        void animate(toast, { opacity: 0 }, { duration: 0.3 })
+
+        // 2. Add a to-do.
+        if (!visible) break
+        await moveCursor(center($('[data-demo-add]')))
+        await click()
+        const note = $('[data-demo-note]')
+        note.classList.replace('hidden', 'flex')
+        await animate(note, { opacity: [0, 1], y: [-4, 0] }, { duration: 0.2 })
+        await moveCursor({ x: pos.x + 120, y: pos.y + 70 }, 0.4)
+        const typed = $('[data-demo-typed]')
+        for (const char of 'Ask beta testers for feedback') {
+          typed.textContent += char
+          await wait(38)
+        }
+        await wait(250)
+        const box = $('.demo-note-check')
+        box.classList.remove('hidden')
+        void animate(box, { scale: [0.4, 1] }, { type: 'spring', stiffness: 500, damping: 18 })
+        $('.demo-caret').remove()
+
+        // 3. Tick a to-do.
+        await wait(300)
+        const todo = $('[data-demo-todo]')
+        const check = todo.querySelector<HTMLElement>('.demo-check')!
+        await moveCursor(center(check))
+        await click()
+        check.style.background = 'var(--accent)'
+        check.style.borderColor = 'var(--accent)'
+        check.style.color = '#fff'
+        void animate(check, { scale: [0.7, 1] }, { type: 'spring', stiffness: 500, damping: 15 })
+        const text = todo.querySelector<HTMLElement>('.demo-todo-text')!
+        text.classList.add('line-through', 'text-ink-3')
+
+        // 4. Set a reminder on a saved link.
+        await wait(350)
+        const hn = $('[data-demo-link="hn"]')
+        await moveCursor(center(hn, 70, -10))
+        await click()
+        const chip = $('[data-demo-chip]')
+        chip.classList.replace('hidden', 'flex')
+        await animate(
+          chip,
+          { scale: [0.6, 1], opacity: [0, 1] },
+          { type: 'spring', stiffness: 420, damping: 16 },
+        )
+        await moveCursor({ x: pos.x + 160, y: pos.y + 140 }, 0.6)
+        await animate(cursor, { opacity: 0 }, { duration: 0.3 })
+        await wait(2400)
+      }
+      running = false
+    }
+
+    if (!reduced) {
+      new IntersectionObserver(
+        ([entry]) => {
+          visible = !!entry?.isIntersecting
+          if (visible) void play()
+        },
+        { threshold: 0.35 },
+      ).observe(root)
+    }
+  }
+</script>

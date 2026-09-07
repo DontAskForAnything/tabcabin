@@ -1,0 +1,77 @@
+---
+/** A terminal that types the self-hosting commands when it scrolls into view. */
+const repo = 'https://github.com/DontAskForAnything/tabhangar'
+const lines = [
+  { kind: 'comment', text: '# on your server' },
+  { kind: 'cmd', text: `git clone ${repo}.git` },
+  { kind: 'cmd', text: 'cd tabhangar && cp .env.example .env' },
+  { kind: 'comment', text: '# set DOMAIN and the first account, then' },
+  { kind: 'cmd', text: 'docker compose --profile caddy up -d' },
+  { kind: 'out', text: '✔ Container tabhangar-tabhangar-1  Started' },
+  { kind: 'out', text: '✔ Container tabhangar-caddy-1      Started' },
+  { kind: 'cmd', text: 'curl https://tabs.example.com/health' },
+  { kind: 'out', text: '{"ok":true,"name":"tabhangar","version":"0.1.0"}' },
+]
+---
+
+<div
+  class="overflow-hidden rounded-[18px] bg-[#111318] text-[13.5px] shadow-pop ring-1 ring-white/10"
+  data-terminal
+>
+  <div class="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
+    <span class="size-3 rounded-full bg-[#ff5f57]"></span>
+    <span class="size-3 rounded-full bg-[#febc2e]"></span>
+    <span class="size-3 rounded-full bg-[#28c840]"></span>
+    <span class="ml-3 font-mono text-[12px] text-white/45">~/tabhangar</span>
+  </div>
+  <div class="min-h-[300px] overflow-x-auto p-5 font-mono leading-[1.8] text-[#e6e8ee]">
+    {lines.map((line) => (
+      <div class="term-line whitespace-pre" data-kind={line.kind} data-text={line.text}>
+        {line.kind === 'cmd' && <span class="text-[#8b7cf8]">$ </span>}
+        <span
+          class:list={[
+            line.kind === 'comment' && 'text-white/40',
+            line.kind === 'out' && 'text-[#34d399]',
+          ]}
+          data-typed
+        >
+          {line.text}
+        </span>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  import { inView } from 'motion'
+
+  const terminal = document.querySelector<HTMLElement>('[data-terminal]')
+  if (terminal && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const lines = [...terminal.querySelectorAll<HTMLElement>('.term-line')]
+    lines.forEach((line) => (line.style.visibility = 'hidden'))
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+    inView(
+      terminal,
+      () => {
+        void (async () => {
+          for (const line of lines) {
+            const typed = line.querySelector<HTMLElement>('[data-typed]')!
+            const text = line.dataset.text ?? ''
+            line.style.visibility = 'visible'
+            if (line.dataset.kind === 'cmd') {
+              typed.textContent = ''
+              for (const char of text) {
+                typed.textContent += char
+                await wait(22)
+              }
+              await wait(260)
+            } else {
+              await wait(line.dataset.kind === 'out' ? 140 : 60)
+            }
+          }
+        })()
+      },
+      { amount: 0.5 },
+    )
+  }
+</script>

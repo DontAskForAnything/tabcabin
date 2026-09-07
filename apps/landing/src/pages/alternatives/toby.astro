@@ -1,0 +1,36 @@
+---
+import ComparePage from '../../components/ComparePage.astro'
+---
+
+<ComparePage
+  name="Toby"
+  slug="toby"
+  intro="Toby made collections of tabs on the new tab page popular. TabHangar offers the same calm collections view — plus kanban boards, notes, to-dos and reminders — and keeps your data in your browser or on a server you own instead of a vendor cloud."
+  about="Toby is a tab manager that replaces the new tab page with collections of saved tabs organized in spaces, with an online account for sync, sharing and paid plans."
+  rows={[
+    ['Collections of saved tabs', true, true],
+    ['Kanban board view', false, true],
+    ['Notes, to-dos and reminders next to links', false, true],
+    ['Open tabs sidebar with drag and drop', true, true],
+    ['Works without an account', false, true],
+    ['Sync', 'Toby cloud account', 'Your own server'],
+    ['Browsers', 'Chrome, Edge, Firefox', 'Chrome, Edge, Brave'],
+    ['Price', 'Free plan with limits, paid plans', 'Free'],
+    ['Open source', false, 'MIT'],
+  ]}
+  whySwitch={[
+    'Choose between a board and a collections view for each category.',
+    'Mix links with notes, to-dos and reminders in the same group.',
+    'No account required; when you want sync, it goes through your own server.',
+    'Free and open source — nothing is locked behind a paid plan.',
+  ]}
+  betterFit={[
+    'You rely on sharing collections with a team in a hosted product.',
+    'You use Firefox — Toby has a Firefox add-on, TabHangar is Chromium-only for now.',
+  ]}
+  moving={[
+    'Open a Toby collection’s tabs (open all).',
+    'In TabHangar’s open tabs panel, click <strong>Save all tabs</strong>, choose <strong>New group</strong> and give it the collection’s name.',
+    'Or, if you keep your links in Chrome bookmarks, use <strong>Settings → Data → Chrome bookmarks</strong> to turn bookmark folders into groups.',
+  ]}
+/>

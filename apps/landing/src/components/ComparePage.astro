@@ -1,0 +1,166 @@
+---
+import Footer from './Footer.astro'
+import Icon from './Icon.astro'
+import Nav from './Nav.astro'
+import Layout from '../layouts/Layout.astro'
+import { releases } from '../site'
+
+export type Cell = true | false | string
+
+interface Props {
+  name: string
+  slug: string
+  intro: string
+  /** One-line description of the other tool, fair and factual. */
+  about: string
+  rows: [string, Cell, Cell][]
+  betterFit: string[]
+  whySwitch: string[]
+  moving: string[]
+}
+
+const { name, slug, intro, about, rows, betterFit, whySwitch, moving } = Astro.props
+const title = `${name} alternative: TabHangar, an open-source tab manager with self-hosted sync`
+const description = `Comparing ${name} and TabHangar: boards, notes, reminders, privacy and sync. TabHangar is a free, open-source ${name} alternative you can self-host.`
+---
+
+<Layout
+  title={title}
+  description={description}
+  path={`/alternatives/${slug}`}
+  breadcrumbs={[
+    ['Alternatives', '/alternatives/'],
+    [`${name} alternative`, `/alternatives/${slug}`],
+  ]}
+>
+  <Nav />
+  <main class="mx-auto max-w-4xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /
+      <a href="/alternatives/" class="hover:text-ink">
+        Alternatives
+      </a>{' '}
+      /<span class="text-ink-2">{name}</span>
+    </nav>
+    <h1
+      class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]"
+      data-reveal
+    >
+      A calm, open-source alternative to {name}
+    </h1>
+    <p class="mt-6 text-[18px] leading-relaxed text-ink-2" data-reveal="0.05">
+      {intro}
+    </p>
+    <p class="mt-4 text-[15.5px] leading-relaxed text-ink-3" data-reveal="0.08">
+      {about}
+    </p>
+
+    <div class="mt-12 overflow-hidden rounded-[18px] bg-card shadow-card" data-reveal="0.1">
+      <table class="w-full text-left text-[15px]">
+        <caption class="sr-only">{name}compared with TabHangar</caption>
+        <thead class="bg-subtle text-[13.5px] text-ink-2">
+          <tr>
+            <th class="px-5 py-3.5 font-semibold" scope="col">
+              Feature
+            </th>
+            <th class="px-5 py-3.5 font-semibold" scope="col">
+              {name}
+            </th>
+            <th class="px-5 py-3.5 font-semibold text-accent-ink" scope="col">
+              TabHangar
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([feature, other, ours]) => (
+            <tr class="border-t border-line">
+              <th class="px-5 py-3.5 font-medium" scope="row">
+                {feature}
+              </th>
+              {[other, ours].map((cell) => (
+                <td class="px-5 py-3.5 text-ink-2">
+                  {cell === true ? (
+                    <span class="inline-flex items-center gap-1.5 text-success">
+                      <Icon name="Check" size={18} /> <span class="sr-only">Yes</span>
+                    </span>
+                  ) : cell === false ? (
+                    <span class="text-ink-3">
+                      — <span class="sr-only">No</span>
+                    </span>
+                  ) : (
+                    cell
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-[13px] text-ink-3">
+      Based on public information about {name} in September 2026. Features change — check their
+      website for the latest.
+    </p>
+
+    <div class="mt-16 grid gap-10 md:grid-cols-2">
+      <section data-reveal>
+        <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Why people pick TabHangar</h2>
+        <ul class="mt-4 flex flex-col gap-3 text-[15.5px] leading-relaxed text-ink-2">
+          {whySwitch.map((point) => (
+            <li class="flex gap-2.5">
+              <span class="mt-0.5 shrink-0 text-success">
+                <Icon name="Check" size={18} />
+              </span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section data-reveal="0.05">
+        <h2 class="text-[24px] font-semibold tracking-[-0.02em]">
+          When {name} may suit you better
+        </h2>
+        <ul class="mt-4 flex flex-col gap-3 text-[15.5px] leading-relaxed text-ink-2">
+          {betterFit.map((point) => (
+            <li class="flex gap-2.5">
+              <span class="mt-0.5 shrink-0 text-ink-3">
+                <Icon name="ArrowRight" size={18} />
+              </span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+
+    <section class="mt-16 rounded-[20px] bg-panel p-8 ring-1 ring-line" data-reveal>
+      <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Moving your tabs over</h2>
+      <ol class="mt-4 flex list-decimal flex-col gap-2.5 pl-5 text-[15.5px] leading-relaxed text-ink-2">
+        {moving.map((step) => (
+          <li set:html={step} />
+        ))}
+      </ol>
+      <a
+        href={releases}
+        class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-glow hover:brightness-110"
+      >
+        <Icon name="Download" size={17} /> Get TabHangar
+      </a>
+    </section>
+
+    <p class="mt-12 text-[15px] text-ink-2">
+      See also:
+      <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">
+        all comparisons
+      </a>{' '}
+      ·{' '}
+      <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager">
+        self-hosted tab manager
+      </a>
+    </p>
+  </main>
+  <Footer />
+</Layout>

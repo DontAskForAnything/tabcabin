@@ -1,0 +1,34 @@
+---
+import ComparePage from '../../components/ComparePage.astro'
+---
+
+<ComparePage
+  name="Workona"
+  slug="workona"
+  intro="Workona organizes the browser into workspaces for projects. TabHangar shares the idea of workspaces, but focuses on a calm board of saved tabs, notes and reminders that you own — open source, offline-first and self-hostable."
+  about="Workona is a workspace manager for the browser with an online account, project workspaces and paid plans for advanced features."
+  rows={[
+    ['Workspaces for projects', true, true],
+    ['Kanban boards of saved tabs', false, true],
+    ['Notes, to-dos and reminders', 'Notes and tasks', 'Notes, to-dos and reminders'],
+    ['Works without an account', false, true],
+    ['Sync', 'Workona cloud account', 'Your own server'],
+    ['Open source', false, 'MIT'],
+    ['Price', 'Free plan with limits, paid plans', 'Free'],
+  ]}
+  whySwitch={[
+    'No account and no limits on workspaces, groups or saved tabs.',
+    'Everything stays in your browser unless you connect your own sync server.',
+    'Boards and collections make saved tabs easy to scan and drag around.',
+    'Keyboard-first: search, workspace switcher and rebindable shortcuts.',
+  ]}
+  betterFit={[
+    'You want open tabs saved and suspended per workspace automatically, with sessions restored after a crash.',
+    'Your team already shares workspaces and resources in Workona.',
+  ]}
+  moving={[
+    'Open the tabs of a Workona workspace.',
+    'In TabHangar, create a workspace with the same name (Ctrl+O), then click <strong>Save all tabs</strong> in the open tabs panel.',
+    'Drag the saved links into groups and add notes where they help.',
+  ]}
+/>

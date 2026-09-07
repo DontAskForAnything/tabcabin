@@ -6,3 +6,5 @@ allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.4'
+  - astro@7.3.7
+  - lucide-static@1.53.0

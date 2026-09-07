@@ -1,0 +1,173 @@
+---
+import Footer from '../components/Footer.astro'
+import Icon from '../components/Icon.astro'
+import Nav from '../components/Nav.astro'
+import Terminal from '../components/Terminal.astro'
+import Layout from '../layouts/Layout.astro'
+import { releases, selfHostingGuide } from '../site'
+
+const parts = [
+  [
+    'Server',
+    'One container with Hono and SQLite. Accounts with scrypt-hashed passwords, sessions, rate-limited login.',
+  ],
+  [
+    'HTTPS',
+    'Caddy in the same Compose file fetches and renews certificates for your domain automatically.',
+  ],
+  [
+    'Sync',
+    'Browsers push changes and pull everything newer; the newest edit of each item wins. Live updates arrive over server-sent events.',
+  ],
+  [
+    'Backups',
+    'A script writes a consistent copy of the database every night and keeps the last seven.',
+  ],
+]
+const faqs = [
+  [
+    'What hardware do I need?',
+    'Anything that runs Docker: a 1 vCPU / 512 MB VPS, a home server or a Raspberry Pi 4. The server uses a few dozen MB of memory.',
+  ],
+  [
+    'Is it safe to expose to the internet?',
+    'Sign-up is off by default, passwords are hashed with scrypt, session tokens are stored only as hashes, logins are rate-limited and the API only accepts requests from the extension. Keep the host updated like any other server.',
+  ],
+  [
+    'What happens when I am offline?',
+    'TabHangar keeps working from the browser’s local database. Changes wait in a queue and are sent when the server is reachable again.',
+  ],
+  [
+    'Can several people use one server?',
+    'Yes. Create an account for each person with the built-in command; everyone only sees their own boards.',
+  ],
+]
+---
+
+<Layout
+  title="Self-hosted tab manager with sync — TabHangar"
+  description="Run your own tab sync server with Docker: SQLite, automatic HTTPS with Caddy, backups and live updates. TabHangar is a free, open-source, self-hosted tab manager for Chrome."
+  path="/self-hosted-tab-manager"
+  breadcrumbs={[['Self-hosted tab manager', '/self-hosted-tab-manager']]}
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+  ]}
+>
+  <Nav />
+  <main>
+    <section class="mx-auto max-w-4xl px-5 pt-16 pb-12 sm:pt-24">
+      <span
+        class="text-[13px] font-semibold tracking-[0.08em] text-accent-ink uppercase"
+        data-reveal
+      >
+        Self-hosted
+      </span>
+      <h1
+        class="mt-3 text-[38px] leading-[1.06] font-semibold tracking-[-0.035em] sm:text-[56px]"
+        data-reveal="0.05"
+      >
+        A self-hosted tab manager that syncs every browser you use
+      </h1>
+      <p class="mt-6 max-w-3xl text-[18px] leading-relaxed text-ink-2" data-reveal="0.1">
+        Most tab managers keep your saved pages in their cloud. TabHangar keeps them in your
+        browser, and when you want them everywhere, it syncs through a small server you run yourself
+        — on a VPS, a home server or a Raspberry Pi.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3" data-reveal="0.15">
+        <a
+          href={selfHostingGuide}
+          class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-glow hover:brightness-110"
+        >
+          Read the step-by-step guide <Icon name="ArrowRight" size={17} />
+        </a>
+        <a
+          href={releases}
+          class="flex h-12 items-center gap-2 rounded-xl bg-card px-6 text-[15.5px] font-semibold shadow-tile hover:bg-raised"
+        >
+          <Icon name="Download" size={17} /> Get the extension
+        </a>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-6xl gap-10 px-5 pb-20 lg:grid-cols-[1fr_1.1fr]">
+      <div class="grid gap-4 sm:grid-cols-2" data-spotlight>
+        {parts.map(([title, text], index) => (
+          <article
+            class="spotlight rounded-[18px] bg-card p-6 shadow-card"
+            data-reveal={index * 0.05}
+          >
+            <h2 class="text-[17px] font-semibold">{title}</h2>
+            <p class="mt-2 text-[14.5px] leading-relaxed text-ink-2">{text}</p>
+          </article>
+        ))}
+      </div>
+      <div data-reveal="0.1">
+        <Terminal />
+      </div>
+    </section>
+
+    <section class="border-t border-line bg-panel/60 py-20">
+      <div class="mx-auto max-w-3xl px-5">
+        <h2 class="text-[30px] font-semibold tracking-[-0.03em] sm:text-[38px]" data-reveal>
+          How it works
+        </h2>
+        <ol class="mt-8 flex flex-col gap-5 text-[16px] leading-relaxed text-ink-2">
+          {[
+            'Point a domain at your server and copy <code>.env.example</code> to <code>.env</code> with the domain and your first account.',
+            'Run <code>docker compose --profile caddy up -d</code>. Caddy gets a certificate, the server creates the database and your account.',
+            'In TabHangar open <strong>Settings → Account &amp; sync</strong>, enter the address and sign in. Choose whether to keep this browser’s boards or use the server’s.',
+            'Sign in on your other browsers. Changes appear everywhere within seconds; offline edits are sent when you reconnect.',
+          ].map((step, index) => (
+            <li class="flex gap-4" data-reveal={index * 0.05}>
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-[14px] font-semibold text-on-accent">
+                {index + 1}
+              </span>
+              <span
+                class="[&_code]:rounded [&_code]:bg-subtle-2 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[14px]"
+                set:html={step}
+              />
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-5 py-20">
+      <h2 class="text-[30px] font-semibold tracking-[-0.03em] sm:text-[38px]" data-reveal>
+        Self-hosting questions
+      </h2>
+      <div class="mt-8 flex flex-col gap-3">
+        {faqs.map(([q, a]) => (
+          <details
+            class="group rounded-[16px] bg-card px-5 py-4 shadow-tile open:shadow-card"
+            data-reveal
+          >
+            <summary class="flex list-none items-center justify-between gap-4 text-[16px] font-semibold [&::-webkit-details-marker]:hidden">
+              {q}
+              <span class="text-ink-3 transition-transform duration-200 group-open:rotate-45">
+                <Icon name="Plus" size={18} />
+              </span>
+            </summary>
+            <p class="mt-3 text-[15px] leading-relaxed text-ink-2">{a}</p>
+          </details>
+        ))}
+      </div>
+      <p class="mt-10 text-[15px] text-ink-2">
+        Comparing tools? See{' '}
+        <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">
+          TabHangar vs OneTab, Toby and Workona
+        </a>
+        .
+      </p>
+    </section>
+  </main>
+  <Footer />
+</Layout>

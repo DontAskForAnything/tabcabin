@@ -1,0 +1,88 @@
+@import '@tabhangar/ui/styles.css';
+
+@source '../';
+
+html body {
+  font-size: 16px;
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.motion-ok [data-reveal] {
+  opacity: 0;
+}
+
+/* Cards that glow where the cursor is (see Layout). */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    360px circle at var(--x, -999px) var(--y, -999px),
+    rgb(124 108 246 / 0.16),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+[data-spotlight]:hover .spotlight::before {
+  opacity: 1;
+}
+.spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--x, -999px) var(--y, -999px),
+    rgb(124 108 246 / 0.55),
+    transparent 60%
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Slowly shifting accent on the hero word. */
+.shimmer {
+  background: linear-gradient(100deg, var(--accent) 20%, #b06ab3 45%, var(--accent) 70%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-move 7s ease-in-out infinite alternate;
+}
+@keyframes shimmer-move {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Faint grid behind the hero. */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}

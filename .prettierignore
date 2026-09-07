@@ -4,3 +4,4 @@ dist
 .wxt
 data
 coverage
+.astro

@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets'
+import board from '../../../../docs/screenshots/board-light.png'
+import collections from '../../../../docs/screenshots/collections-light.png'
+import popover from '../../../../docs/screenshots/popover-closeup.png'
+import reminders from '../../../../docs/screenshots/reminders.png'
+import search from '../../../../docs/screenshots/search.png'
+import { nb } from '../site'
+
+const steps = [
+  {
+    image: board,
+    kicker: 'Board',
+    title: 'Every tab gets a place to land',
+    text: 'Categories across the top, groups as columns with big emoji headers. Links, notes, to-dos, images and stacks live side by side — and everything is drag and drop.',
+  },
+  {
+    image: collections,
+    kicker: 'Collections',
+    title: 'Or see it all as cards',
+    text: 'Switch any category to wide panels of link tiles. Same data, calmer overview — open a whole group with one click.',
+  },
+  {
+    image: popover,
+    kicker: 'Capture',
+    title: 'Save without leaving the page',
+    text: 'Ctrl+Shift+S opens a small popover: add a sticky note, pick the group, set a reminder, close the tab. The right-click menu saves links, images and selected text.',
+  },
+  {
+    image: search,
+    kicker: 'Search',
+    title: 'Find anything in a keystroke',
+    text: 'Ctrl+K searches titles, addresses and notes across workspaces, open tabs and bookmarks, then jumps straight to the result on your board.',
+  },
+  {
+    image: reminders,
+    kicker: 'Reminders',
+    title: 'Come back to what matters',
+    text: 'One-time, weekly or monthly reminders on any link or to-do, with desktop notifications, snooze and a due count on the toolbar icon.',
+  },
+]
+---
+
+<section class="py-24" data-showcase>
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[0.9fr_1.3fr] lg:gap-16">
+    <ol class="flex flex-col">
+      {steps.map((step, index) => (
+        <li
+          class="showcase-step flex flex-col justify-center py-10 lg:min-h-[78vh]"
+          data-step={index}
+        >
+          <span class="text-[13px] font-semibold tracking-[0.08em] text-accent-ink uppercase">
+            {String(index + 1).padStart(2, '0')} · {step.kicker}
+          </span>
+          <h3 class="mt-3 text-[28px] leading-tight font-semibold tracking-[-0.025em] sm:text-[34px]">
+            {step.title}
+          </h3>
+          <p
+            class="mt-4 max-w-md text-[16.5px] leading-relaxed text-ink-2"
+            set:html={nb(step.text)}
+          />
+          <div class="mt-8 overflow-hidden rounded-[16px] shadow-pop ring-1 ring-line lg:hidden">
+            <Image
+              src={step.image}
+              alt=""
+              widths={[720, 1080]}
+              sizes="100vw"
+              class="block w-full"
+            />
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div class="hidden lg:block">
+      <div class="sticky top-[14vh] aspect-[1440/900] w-full">
+        {steps.map((step, index) => (
+          <div
+            class="showcase-shot absolute inset-0 overflow-hidden rounded-[18px] shadow-pop ring-1 ring-line"
+            data-shot={index}
+            style={index === 0 ? '' : 'opacity:0'}
+          >
+            <Image
+              src={step.image}
+              alt={step.title}
+              widths={[900, 1300]}
+              sizes="(min-width: 1180px) 700px, 60vw"
+              class="block h-full w-full object-cover object-left-top"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { animate } from 'motion'
+
+  const root = document.querySelector<HTMLElement>('[data-showcase]')
+  if (root) {
+    const shots = [...root.querySelectorAll<HTMLElement>('[data-shot]')]
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')]
+    let active = 0
+    const show = (index: number) => {
+      if (index === active) return
+      const previous = shots[active]
+      const next = shots[index]
+      active = index
+      if (previous) void animate(previous, { opacity: 0, scale: 0.985 }, { duration: 0.35 })
+      if (next) void animate(next, { opacity: [0, 1], scale: [1.015, 1] }, { duration: 0.45 })
+      steps.forEach((step, i) => step.classList.toggle('is-active', i === index))
+    }
+    steps[0]?.classList.add('is-active')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) show(Number((entry.target as HTMLElement).dataset.step))
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    )
+    steps.forEach((step) => observer.observe(step))
+  }
+</script>
+
+<style>
+  @media (min-width: 1024px) {
+    .showcase-step {
+      opacity: 0.35;
+      transition: opacity 0.35s ease;
+    }
+    .showcase-step:global(.is-active) {
+      opacity: 1;
+    }
+  }
+</style>

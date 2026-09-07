@@ -1,0 +1,56 @@
+---
+import GitHubMark from './GitHubMark.astro'
+import Icon from './Icon.astro'
+import Logo from './Logo.astro'
+
+const repo = 'https://github.com/DontAskForAnything/tabhangar'
+---
+
+<header class="sticky top-0 z-30 border-b border-line/70 bg-canvas/80 backdrop-blur-xl">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5" aria-label="Main">
+    <a href="/" class="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.02em]">
+      <Logo size={30} />
+      TabHangar
+    </a>
+    <div class="hidden flex-1 items-center gap-6 text-[14.5px] text-ink-2 md:flex">
+      <a href="/#features" class="hover:text-ink">
+        Features
+      </a>
+      <a href="/#self-host" class="hover:text-ink">
+        Self-host
+      </a>
+      <a href="/#faq" class="hover:text-ink">
+        FAQ
+      </a>
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <button
+        type="button"
+        id="theme-toggle"
+        aria-label="Toggle dark mode"
+        class="flex size-9 items-center justify-center rounded-[10px] text-ink-2 hover:bg-subtle hover:text-ink"
+      >
+        <Icon name="Moon" size={18} class="dark:hidden" />
+        <Icon name="Sun" size={18} class="hidden dark:block" />
+      </button>
+      <a
+        href={repo}
+        class="flex h-9 items-center gap-2 rounded-[10px] bg-card px-3.5 text-[14px] font-semibold shadow-tile hover:bg-raised"
+      >
+        <GitHubMark size={16} />
+        GitHub
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark')
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light')
+    } catch {
+      // Private mode: the choice lasts for this page only.
+    }
+  })
+</script>

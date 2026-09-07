@@ -1,0 +1,25 @@
+---
+import Logo from './Logo.astro'
+const repo = 'https://github.com/DontAskForAnything/tabhangar'
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 text-[14px] text-ink-3 sm:flex-row sm:items-center">
+    <div class="flex items-center gap-2.5 font-semibold text-ink">
+      <Logo size={24} />
+      TabHangar
+    </div>
+    <p class="sm:flex-1">Open source under the MIT license · © 2026 Michał</p>
+    <div class="flex gap-5">
+      <a href={repo} class="hover:text-ink">
+        GitHub
+      </a>
+      <a href={`${repo}/blob/main/docs/self-hosting.md`} class="hover:text-ink">
+        Self-hosting
+      </a>
+      <a href="/privacy" class="hover:text-ink">
+        Privacy
+      </a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,53 @@
+---
+import Footer from '../../components/Footer.astro'
+import Icon from '../../components/Icon.astro'
+import Nav from '../../components/Nav.astro'
+import Layout from '../../layouts/Layout.astro'
+
+const tools = [
+  [
+    'OneTab',
+    'onetab',
+    'Collapse tabs into a list — or give them a board with notes and reminders.',
+  ],
+  ['Toby', 'toby', 'Collections of tabs, plus kanban boards and sync through your own server.'],
+  ['Workona', 'workona', 'Workspaces without an account, limits or a vendor cloud.'],
+]
+---
+
+<Layout
+  title="Best open-source alternatives to OneTab, Toby and Workona — TabHangar"
+  description="How TabHangar compares with popular tab managers: boards, notes, reminders, privacy, price and self-hosted sync."
+  path="/alternatives/"
+  breadcrumbs={[['Alternatives', '/alternatives/']]}
+>
+  <Nav />
+  <main class="mx-auto max-w-4xl px-5 py-16 sm:py-24">
+    <h1
+      class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]"
+      data-reveal
+    >
+      Tab managers, compared
+    </h1>
+    <p class="mt-6 max-w-2xl text-[18px] leading-relaxed text-ink-2" data-reveal="0.05">
+      TabHangar is a free, open-source tab manager with kanban boards, notes, reminders and optional
+      self-hosted sync. Here is how it stacks up against tools you may already use.
+    </p>
+    <div class="mt-12 grid gap-4 sm:grid-cols-3" data-spotlight>
+      {tools.map(([name, slug, text], index) => (
+        <a
+          href={`/alternatives/${slug}`}
+          class="spotlight flex flex-col rounded-[18px] bg-card p-6 shadow-card transition-transform hover:-translate-y-0.5"
+          data-reveal={index * 0.06}
+        >
+          <span class="text-[19px] font-semibold">TabHangar vs {name}</span>
+          <span class="mt-2 flex-1 text-[14.5px] leading-relaxed text-ink-2">{text}</span>
+          <span class="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-accent-ink">
+            Compare <Icon name="ArrowRight" size={15} />
+          </span>
+        </a>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Layout>

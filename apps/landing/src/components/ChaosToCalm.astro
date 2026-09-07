@@ -1,0 +1,157 @@
+---
+/** Scroll-linked: scattered tabs settle into three tidy groups while the section scrolls by. */
+const groups = [
+  {
+    emoji: '🛠️',
+    title: 'Side project',
+    tabs: [
+      ['G', '#24292f', 'Pull requests · GitHub'],
+      ['D', '#7cb342', 'Drizzle ORM – Overview'],
+      ['H', '#f05a28', 'Hono – Middleware'],
+      ['T', '#0ea5b7', 'Tailwind CSS – Grid'],
+      ['S', '#ff4f00', 'SQLite – WAL mode'],
+      ['C', '#22b638', 'Caddy – Reverse proxy'],
+    ],
+  },
+  {
+    emoji: '📚',
+    title: 'Read later',
+    tabs: [
+      ['F', '#0f9d8a', 'Designing calm software'],
+      ['W', '#4f46e5', 'Web Vitals | web.dev'],
+      ['Y', '#f26522', 'Show HN: Local-first apps'],
+      ['S', '#e8463c', 'Smashing Magazine'],
+      ['M', '#1b1b1f', 'IndexedDB API – MDN'],
+      ['A', '#8b5cf6', 'The art of focus'],
+    ],
+  },
+  {
+    emoji: '✈️',
+    title: 'Trip to Lisbon',
+    tabs: [
+      ['M', '#34a853', 'Google Maps – Alfama'],
+      ['B', '#003580', 'Booking – Stays'],
+      ['T', '#00af87', 'Tram 28 tips'],
+      ['P', '#e60023', 'Pastéis de nata spots'],
+      ['W', '#636466', 'Weather in October'],
+      ['C', '#ff7e1b', 'Train Lisbon – Sintra'],
+    ],
+  },
+]
+---
+
+<section class="chaos relative" data-chaos>
+  <div class="chaos-sticky flex flex-col items-center px-5">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-[34px] leading-tight font-semibold tracking-[-0.03em] sm:text-[44px]">
+        From forty open tabs
+        <br />
+        to three calm groups
+      </h2>
+      <p class="mt-4 text-[17px] text-ink-2">
+        Drag tabs into groups and close them. They stay one new tab away — searchable, with notes
+        and reminders.
+      </p>
+    </div>
+    <div class="chaos-board mt-12 grid w-full max-w-5xl gap-5 md:grid-cols-3">
+      {groups.map((group) => (
+        <div class="relative">
+          <div
+            class="chaos-card absolute inset-0 rounded-[20px] bg-card shadow-card"
+            data-chaos-card
+          />
+          <div class="relative p-5">
+            <div class="chaos-head mb-4 flex items-center gap-3" data-chaos-card>
+              <span class="text-[30px] leading-none">{group.emoji}</span>
+              <span class="text-[16px] font-semibold">{group.title}</span>
+              <span class="ml-auto rounded-md bg-subtle px-1.5 text-[12px] text-ink-3">
+                {group.tabs.length} links
+              </span>
+            </div>
+            <div class="flex flex-col gap-2">
+              {group.tabs.map(([letter, color, title]) => (
+                <div
+                  class="chaos-chip flex items-center gap-2.5 rounded-[12px] bg-card px-2.5 py-2 text-[13.5px] font-medium shadow-tile"
+                  data-chaos-chip
+                >
+                  <span
+                    class="flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[12px] font-bold text-white"
+                    style={`background:${color}`}
+                  >
+                    {letter}
+                  </span>
+                  <span class="truncate">{title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 768px) {
+    .chaos {
+      height: 210vh;
+    }
+    .chaos-sticky {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      justify-content: center;
+      padding-top: 5rem;
+      padding-bottom: 3rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .chaos {
+      padding: 6rem 0;
+    }
+  }
+</style>
+
+<script>
+  import { animate, scroll } from 'motion'
+
+  const section = document.querySelector<HTMLElement>('[data-chaos]')
+  const wide = matchMedia('(min-width: 768px)').matches
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (section && wide && !reduced) {
+    // Deterministic "random" so the scatter looks the same on every visit.
+    let seed = 7
+    const random = () => {
+      seed = (seed * 16807) % 2147483647
+      return seed / 2147483647
+    }
+    const board = section.querySelector<HTMLElement>('.chaos-board')!
+    const chips = section.querySelectorAll<HTMLElement>('[data-chaos-chip]')
+    const boardBox = board.getBoundingClientRect()
+    chips.forEach((chip) => {
+      const box = chip.getBoundingClientRect()
+      // Scatter around the board: anywhere across its width, above and below it.
+      const targetX =
+        boardBox.left - boardBox.width * 0.12 + random() * (boardBox.width * 1.24 - box.width)
+      const targetY = boardBox.top + (random() - 0.5) * boardBox.height * 1.3
+      const settle = animate(
+        chip,
+        {
+          x: [targetX - box.left, 0],
+          y: [targetY - box.top, 0],
+          rotate: [(random() - 0.5) * 34, 0],
+          boxShadow: ['var(--shadow-lift)', 'var(--shadow-tile)'],
+        },
+        { ease: [0.3, 0, 0.2, 1] },
+      )
+      scroll(settle, { target: section, offset: ['start start', '55% end'] })
+    })
+    section.querySelectorAll<HTMLElement>('[data-chaos-card]').forEach((card) => {
+      scroll(animate(card, { opacity: [0, 0, 1], scale: [0.96, 0.96, 1] }), {
+        target: section,
+        offset: ['start start', '60% end'],
+      })
+    })
+  }
+</script>

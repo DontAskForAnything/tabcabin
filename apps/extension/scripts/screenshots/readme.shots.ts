@@ -58,3 +58,30 @@ for (const theme of ['light', 'dark'] as const) {
     await context.close()
   })
 }
+
+test('popover close-up (2x)', async () => {
+  const { context, worker } = await launch(2)
+  await loadDemo(worker, 'light')
+  await openApp(context, worker)
+  await context.route('https://journal.example.dev/**', (route) =>
+    route.fulfill({ contentType: 'text/html; charset=utf-8', body: ARTICLE }),
+  )
+  const article = await context.newPage()
+  await article.goto('https://journal.example.dev/calm-software')
+  const tab = await worker.evaluate(
+    async () => (await chrome.tabs.query({ url: 'https://journal.example.dev/*' }))[0]!,
+  )
+  await worker.evaluate((tab) => tabhangar.togglePopover(tab), tab)
+  const dialog = article.getByRole('dialog', { name: 'TabHangar' })
+  await expect(dialog).toBeVisible()
+  await article.waitForTimeout(600)
+  const box = (await dialog.boundingBox())!
+  // The whole dialog plus some of the article behind it, cropped to 16:10.
+  const height = Math.ceil(box.y + box.height + 28)
+  const width = Math.ceil((height * 16) / 10)
+  await article.screenshot({
+    path: join(OUT, 'popover-closeup.png'),
+    clip: { x: box.x + box.width + 24 - width, y: 0, width, height },
+  })
+  await context.close()
+})

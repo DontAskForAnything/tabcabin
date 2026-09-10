@@ -27,6 +27,8 @@ searchable, and works offline. There is no account, no tracking and no subscript
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
 
+▶ [Watch the 45-second demo video](apps/landing/public/demo.webm)
+
 ## Features
 
 **Organize**

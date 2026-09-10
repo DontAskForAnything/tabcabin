@@ -14,7 +14,8 @@
     "e2e": "playwright test",
     "build:e2e": "wxt build --mode e2e",
     "screenshots": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts readme demo",
-    "store-assets": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts store"
+    "store-assets": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts store",
+    "demo-video": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts video"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

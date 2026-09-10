@@ -1,0 +1,52 @@
+---
+import { getImage } from 'astro:assets'
+import poster from '../../../../docs/screenshots/board-light.png'
+
+const posterImage = await getImage({ src: poster, width: 1280, format: 'webp' })
+---
+
+<section class="py-24" id="demo">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-[34px] font-semibold tracking-[-0.03em] sm:text-[44px]" data-words>
+        See it in under a minute
+      </h2>
+      <p class="mt-4 text-[17px] text-ink-2" data-reveal="0.05">
+        A real recording of the extension: saving a tab, adding a{' '}
+        <span class="whitespace-nowrap">to-do</span>, searching, the collections view, reminders and
+        the dark theme.
+      </p>
+    </div>
+    <div
+      class="mt-12 overflow-hidden rounded-[22px] bg-card shadow-pop ring-1 ring-line"
+      data-reveal="0.1"
+    >
+      <video
+        class="block aspect-[16/10] w-full"
+        src="/demo.webm"
+        poster={posterImage.src}
+        muted
+        loop
+        playsinline
+        controls
+        preload="none"
+        aria-label="Demo of TabHangar"
+        data-autoplay-video
+      ></video>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Load and play only while the video is on screen (and never when motion is reduced).
+  const video = document.querySelector<HTMLVideoElement>('[data-autoplay-video]')
+  if (video && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) void video.play().catch(() => undefined)
+        else video.pause()
+      },
+      { threshold: 0.4 },
+    ).observe(video)
+  }
+</script>

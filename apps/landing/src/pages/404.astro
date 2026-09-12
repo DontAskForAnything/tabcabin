@@ -1,0 +1,28 @@
+---
+import Footer from '../components/Footer.astro'
+import Icon from '../components/Icon.astro'
+import Nav from '../components/Nav.astro'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Page not found — TabHangar"
+  description="This page does not exist. Head back to TabHangar, the open-source tab manager."
+  path="/404"
+>
+  <Nav />
+  <main class="mx-auto flex max-w-xl flex-col items-center px-5 py-28 text-center">
+    <div class="text-[64px] leading-none">🛩️</div>
+    <h1 class="mt-6 text-[36px] font-semibold tracking-[-0.03em]">This tab flew away</h1>
+    <p class="mt-4 text-[17px] text-ink-2">
+      The page you are looking for does not exist — maybe it was never saved.
+    </p>
+    <a
+      href="/"
+      class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-glow hover:brightness-110"
+    >
+      Back to the hangar <Icon name="ArrowRight" size={16} />
+    </a>
+  </main>
+  <Footer />
+</Layout>

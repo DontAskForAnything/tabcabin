@@ -1,0 +1,15 @@
+# Serve the landing page from the same server as the sync server.
+# Build it with SITE_URL set, copy apps/landing/dist to /srv/tabhangar-site, then add:
+tabhangar.example.com {
+	root * /srv/tabhangar-site
+	encode zstd gzip
+	file_server
+	# Fingerprinted assets never change.
+	@assets path /_astro/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	header Strict-Transport-Security "max-age=31536000"
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}

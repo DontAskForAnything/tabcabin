@@ -8,7 +8,7 @@ const site = process.env.SITE_URL ?? 'https://tabs.example.com'
 
 export default defineConfig({
   site,
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
   vite: {
     plugins: [tailwindcss()],
     server: { fs: { allow: ['../..'] } },

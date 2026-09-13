@@ -6,6 +6,7 @@ import GitHubMark from '../components/GitHubMark.astro'
 import HeroDemo from '../components/HeroDemo.astro'
 import Icon from '../components/Icon.astro'
 import Nav from '../components/Nav.astro'
+import PromoFilm from '../components/PromoFilm.astro'
 import StickyShowcase from '../components/StickyShowcase.astro'
 import Terminal from '../components/Terminal.astro'
 import Layout from '../layouts/Layout.astro'
@@ -51,12 +52,24 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: item.a },
   })),
 }
+
+const filmSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'TabHangar in under a minute',
+  description:
+    'A short film about the TabHangar browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync through your own server.',
+  thumbnailUrl: new URL('/promo-poster.jpg', Astro.site).toString(),
+  contentUrl: new URL('/promo.mp4', Astro.site).toString(),
+  uploadDate: '2026-10-08',
+  duration: 'PT53S',
+}
 ---
 
 <Layout
   title="TabHangar — open-source tab manager with kanban boards and self-hosted sync"
   description="Turn your new tab into kanban boards for tabs, links, notes and to-dos. Free, open-source Chrome extension that works offline, with optional sync through your own server."
-  schema={[faqSchema]}
+  schema={[faqSchema, filmSchema]}
 >
   <Nav />
   <main>
@@ -104,6 +117,7 @@ const faqSchema = {
           >
             <GitHubMark size={18} /> Star on GitHub
           </a>
+          <PromoFilm />
         </div>
         <p class="mt-4 text-[13.5px] text-ink-3" data-reveal="0.25">
           Free & MIT licensed · Chrome, Edge, Brave · no account needed

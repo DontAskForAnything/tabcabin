@@ -27,7 +27,7 @@ searchable, and works offline. There is no account, no tracking and no subscript
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
 
-▶ [Watch the 45-second demo video](apps/landing/public/demo.webm)
+▶ [Watch the 52-second film](apps/landing/public/promo.mp4) (with music) · [plain screen recording](apps/landing/public/demo.webm)
 
 ## Features
 
@@ -150,6 +150,11 @@ pnpm zip:ext        # store-ready zip in apps/extension/.output
 The screenshots in this README are generated from demo data with
 `pnpm --filter @tabhangar/extension screenshots`.
 
+The promo film (`apps/landing/public/promo.mp4`) and its stills in [`docs/promo/`](docs/promo) are
+rendered with `pnpm --filter @tabhangar/extension promo` (needs ffmpeg). Every frame is drawn from a
+real recording of the extension, and the soundtrack is synthesized from scratch by
+`scripts/promo/music.ts`, so there is no third-party audio or footage to license.
+
 ### Repository layout
 
 ```
@@ -157,7 +162,7 @@ apps/extension      Chrome extension (WXT, React): new tab, side panel, backgrou
 apps/server         self-hosted sync server (Hono, SQLite, Drizzle) and its Docker image
 packages/core       data model, ordering, reminders, import/export — no browser APIs, fully unit tested
 packages/ui         design system: tokens, Tailwind theme, accessible components on Radix
-docs/               architecture, data model, screenshots
+docs/               architecture, data model, screenshots, promo stills
 ```
 
 Read more in [docs/architecture.md](docs/architecture.md) and [docs/data-model.md](docs/data-model.md).

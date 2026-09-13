@@ -1,0 +1,80 @@
+---
+import Icon from './Icon.astro'
+---
+
+<button
+  type="button"
+  class="group flex h-12 items-center gap-3 rounded-xl px-4 text-[15.5px] font-semibold transition hover:bg-card/70"
+  data-film-open
+>
+  <span class="flex size-8 items-center justify-center rounded-full bg-ink text-canvas shadow-tile transition group-hover:scale-110">
+    <Icon name="Play" size={14} class="translate-x-px fill-current" />
+  </span>
+  Watch the film
+  <span class="font-medium text-ink-3 tabular-nums">0:52</span>
+</button>
+
+<dialog
+  class="film m-auto w-[min(1100px,calc(100vw-32px))] overflow-visible bg-transparent p-0 text-white"
+  aria-label="TabHangar film"
+  data-film
+>
+  <div class="relative overflow-hidden rounded-[20px] bg-black shadow-pop ring-1 ring-white/10">
+    <video
+      class="block aspect-video w-full"
+      src="/promo.mp4"
+      poster="/promo-poster.jpg"
+      controls
+      playsinline
+      preload="none"
+    ></video>
+  </div>
+  <form method="dialog" class="absolute -top-12 right-0">
+    <button
+      class="flex size-10 items-center justify-center rounded-full bg-white/15 backdrop-blur transition hover:bg-white/25"
+      aria-label="Close"
+    >
+      <Icon name="X" size={18} />
+    </button>
+  </form>
+</dialog>
+
+<style>
+  .film::backdrop {
+    background: rgb(8 6 24 / 0.82);
+    backdrop-filter: blur(6px);
+  }
+  .film[open] {
+    animation: film-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes film-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.97);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .film[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-film]')
+  const video = dialog?.querySelector('video')
+  if (dialog && video) {
+    document.querySelectorAll('[data-film-open]').forEach((button) =>
+      button.addEventListener('click', () => {
+        dialog.showModal()
+        video.currentTime = 0
+        void video.play().catch(() => undefined)
+      }),
+    )
+    // A click on the backdrop closes the film.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+    dialog.addEventListener('close', () => video.pause())
+  }
+</script>

@@ -16,15 +16,16 @@ upload.
 
 ## Assets
 
-| Field                               | File                                                       |
-| ----------------------------------- | ---------------------------------------------------------- |
-| Store icon (128×128, 96×96 artwork) | [`icon-128.png`](icon-128.png)                             |
-| Screenshots (1280×800)              | [`screenshots/`](screenshots) — upload in file name order  |
-| Small promo tile (440×280)          | [`promo-small-440x280.png`](promo-small-440x280.png)       |
-| Marquee promo tile (1400×560)       | [`promo-marquee-1400x560.png`](promo-marquee-1400x560.png) |
+| Field                               | File                                                                                    |
+| ----------------------------------- | --------------------------------------------------------------------------------------- |
+| Store icon (128×128, 96×96 artwork) | [`icon-128.png`](icon-128.png)                                                          |
+| Screenshots (1280×800)              | [`screenshots/`](screenshots) — upload in file name order                               |
+| Small promo tile (440×280)          | [`promo-small-440x280.png`](promo-small-440x280.png)                                    |
+| Marquee promo tile (1400×560)       | [`promo-marquee-1400x560.png`](promo-marquee-1400x560.png)                              |
+| Promo video (YouTube link)          | upload [`promo.mp4`](../../apps/landing/public/promo.mp4) to YouTube (unlisted is fine) |
 
 Regenerate them with `pnpm --filter @tabhangar/extension store-assets` (needs network access for the
-demo favicons).
+demo favicons). Stills from the promo film for social posts are in [`../promo/`](../promo).
 
 ## Store listing
 

@@ -112,7 +112,29 @@ export async function openApp(context: BrowserContext, worker: Worker): Promise<
   const page = await context.newPage()
   await page.goto(`chrome-extension://${id}/newtab.html`)
   await expect(page.getByRole('heading', { name: 'Launch week' })).toBeVisible()
-  // Let favicons load.
+  // Let favicons load, including those of items that are not on screen yet (other workspaces,
+  // search results), so no icon pops in during a recording.
+  const icons = [
+    ...new Set(
+      demoBundle()
+        .items.map((item) => item.favIconUrl)
+        .filter(Boolean),
+    ),
+  ]
+  await page.evaluate(
+    (urls) =>
+      Promise.all(
+        urls.map(
+          (src) =>
+            new Promise((done) => {
+              const img = new Image()
+              img.onload = img.onerror = done
+              img.src = src!
+            }),
+        ),
+      ),
+    icons,
+  )
   await page.waitForLoadState('networkidle').catch(() => undefined)
   await page.waitForTimeout(1200)
   return page

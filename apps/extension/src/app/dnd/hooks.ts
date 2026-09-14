@@ -12,7 +12,7 @@ function dragHandleProps(drag: ReturnType<typeof useDraggable>) {
   return { ...drag.listeners, 'aria-roledescription': drag.attributes['aria-roledescription'] }
 }
 
-export function overlayForItem(item: Item & { children?: Item[] }): OverlayInfo {
+function overlayForItem(item: Item & { children?: Item[] }): OverlayInfo {
   if (item.kind === 'note')
     return {
       kind: 'note',

@@ -56,7 +56,7 @@ export async function createUser(
   return toPublic(row)
 }
 
-export function findUser(db: Db, username: string) {
+function findUser(db: Db, username: string) {
   const parsed = usernameSchema.safeParse(username)
   if (!parsed.success) return undefined
   return db.select().from(users).where(eq(users.username, parsed.data)).get()
@@ -66,7 +66,7 @@ export function listUsers(db: Db): PublicUser[] {
   return db.select().from(users).orderBy(asc(users.username)).all().map(toPublic)
 }
 
-export function countUsers(db: Db): number {
+function countUsers(db: Db): number {
   return db.select().from(users).all().length
 }
 

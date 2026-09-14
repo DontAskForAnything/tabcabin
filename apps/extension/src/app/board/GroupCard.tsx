@@ -45,7 +45,7 @@ import { ItemView } from './ItemView'
 import { useGroupDnd, useSimpleDrop } from '../dnd/hooks'
 import { dndId } from '../dnd/types'
 
-export const DEFAULT_GROUP_WIDTH = 332
+const DEFAULT_GROUP_WIDTH = 332
 const MIN_WIDTH = 260
 const MAX_WIDTH = 720
 

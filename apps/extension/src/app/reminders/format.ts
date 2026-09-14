@@ -16,7 +16,7 @@ export function formatTime(ts: number, locale: Locale): string {
 }
 
 /** "Today", "Tomorrow", or a short date (with the year when it differs). */
-export function formatDay(ts: number, locale: Locale, t: Translate, now = Date.now()): string {
+function formatDay(ts: number, locale: Locale, t: Translate, now = Date.now()): string {
   const diff = Math.round((startOfDay(ts) - startOfDay(now)) / DAY)
   if (diff === 0) return t('reminders.today')
   if (diff === 1) return t('reminders.tomorrow')

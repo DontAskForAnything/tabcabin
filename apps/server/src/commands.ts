@@ -1,7 +1,7 @@
 import type { Db } from './db/client'
 import { createUser, deleteUser, listUsers, setPassword, UserError } from './users'
 
-export const USAGE = `Usage: tabhangar <command>
+const USAGE = `Usage: tabhangar <command>
 
   create-user <username> [--admin]   create an account (asks for the password)
   reset-password <username>          set a new password and sign the user out everywhere

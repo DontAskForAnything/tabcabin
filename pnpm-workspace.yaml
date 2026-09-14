@@ -8,3 +8,6 @@ minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.4'
   - astro@7.3.7
   - lucide-static@1.53.0
+overrides:
+  # drizzle-kit's loader pins an esbuild with a dev-server advisory (GHSA-67mh-4wv8-2f99).
+  '@esbuild-kit/core-utils>esbuild': ^0.25.0

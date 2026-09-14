@@ -10,7 +10,7 @@ const ACCENT = '#5B4BE0'
 const DUE = '#D93D42'
 
 /** Number of saved links for a URL (normalized). */
-export function savedCount(url: string | undefined): number {
+function savedCount(url: string | undefined): number {
   const key = url ? normalizeUrl(url) : null
   return key ? (counts.get(key) ?? 0) : 0
 }

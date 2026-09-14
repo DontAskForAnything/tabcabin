@@ -1,6 +1,7 @@
 ---
+import { repo } from '../site'
+
 /** A terminal that types the self-hosting commands when it scrolls into view. */
-const repo = 'https://github.com/DontAskForAnything/tabhangar'
 const lines = [
   { kind: 'comment', text: '# on your server' },
   { kind: 'cmd', text: `git clone ${repo}.git` },

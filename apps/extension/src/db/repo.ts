@@ -80,7 +80,7 @@ export async function getGroups(categoryId: string): Promise<Group[]> {
 }
 
 /** Live items of a group (top level and stack children). */
-export async function getGroupItems(groupId: string): Promise<Item[]> {
+async function getGroupItems(groupId: string): Promise<Item[]> {
   return live(await db.items.where('groupId').equals(groupId).toArray())
 }
 

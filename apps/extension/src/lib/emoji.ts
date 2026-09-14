@@ -1,4 +1,4 @@
-export const GROUP_EMOJI = [
+const GROUP_EMOJI = [
   '📦',
   '🌍',
   '📥',

@@ -19,11 +19,11 @@ import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import type { ActiveContext } from '../useActive'
 
-export { GROUP_EMOJI, randomEmoji } from '@/lib/emoji'
+export { randomEmoji } from '@/lib/emoji'
 import { randomEmoji } from '@/lib/emoji'
 
 /** Text representation of a group for the clipboard. */
-export function groupAsText(group: BoardGroup, t: Translate): string {
+function groupAsText(group: BoardGroup, t: Translate): string {
   const lines = [`${group.emoji} ${group.title || t('group.untitled')}`, '']
   const line = (item: Item, indent = '') => {
     if (item.kind === 'note')

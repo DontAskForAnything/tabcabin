@@ -1,4 +1,4 @@
-export interface DraggedTab {
+interface DraggedTab {
   id: number
   url: string
   title: string

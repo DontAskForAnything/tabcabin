@@ -34,7 +34,7 @@ export function listRects(groupId: string, parentId: string | null): DOMRect[] {
   )
 }
 
-export function groupOrder(): string[] {
+function groupOrder(): string[] {
   return [...document.querySelectorAll<HTMLElement>('[data-dnd-group]')].map(
     (el) => el.dataset.dndGroup!,
   )

@@ -6,7 +6,7 @@ export function isTyping(event: KeyboardEvent): boolean {
   return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable
 }
 
-export const isMac = () =>
+const isMac = () =>
   typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
 
 /** Matches shortcuts written like "mod+k", "g", "mod+shift+backspace". */

@@ -14,7 +14,7 @@ function parentOf(entry: BinEntry): string | null {
   return null
 }
 
-export async function loadBin(): Promise<BinRow[]> {
+async function loadBin(): Promise<BinRow[]> {
   const entries = await listBin()
   const ids = (entity: BinEntry['entity']) =>
     entries.flatMap((entry) => (entry.entity === entity ? [parentOf(entry) ?? ''] : []))

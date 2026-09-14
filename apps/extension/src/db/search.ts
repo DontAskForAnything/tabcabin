@@ -1,7 +1,7 @@
 import type { Item } from '@tabhangar/core'
 import { db } from './db'
 
-export type SearchKind = 'link' | 'note' | 'todo' | 'image' | 'tab' | 'bookmark'
+type SearchKind = 'link' | 'note' | 'todo' | 'image' | 'tab' | 'bookmark'
 
 export interface SearchDoc {
   key: string

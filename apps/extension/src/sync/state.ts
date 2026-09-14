@@ -9,7 +9,7 @@ export interface Account {
   initialized: boolean
 }
 
-export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'offline' | 'error' | 'signed-out'
+type SyncStatus = 'idle' | 'syncing' | 'synced' | 'offline' | 'error' | 'signed-out'
 
 export interface SyncState {
   status: SyncStatus

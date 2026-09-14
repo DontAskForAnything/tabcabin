@@ -4,7 +4,7 @@ import { z } from 'zod'
 import type { Db } from './db/client'
 import { meta, records } from './db/schema'
 
-export const MAX_BATCH = 1000
+const MAX_BATCH = 1000
 
 export const pushSchema = z.object({
   changes: z
@@ -28,7 +28,7 @@ export const pushSchema = z.object({
 })
 export type PushRequest = z.infer<typeof pushSchema>
 
-export interface PulledChange {
+interface PulledChange {
   entity: EntityType
   id: string
   /** The latest row, or null when it was purged. */

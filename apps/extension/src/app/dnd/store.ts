@@ -31,5 +31,3 @@ export const useDrag = create<DragState>()((set) => ({
   reset: () => set({ source: null, overlay: null, target: null, pendingCombine: null }),
 }))
 
-export const isDraggingItems = (ids: readonly string[]) => (s: DragState) =>
-  s.source?.kind === 'items' && ids.some((id) => (s.source as { ids: string[] }).ids.includes(id))

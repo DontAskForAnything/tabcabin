@@ -8,17 +8,17 @@ export interface OutboxEntry {
   queuedAt: number
 }
 
-export interface SettingRow {
+interface SettingRow {
   key: string
   value: unknown
 }
 
-export interface MetaRow {
+interface MetaRow {
   key: string
   value: unknown
 }
 
-export class TabHangarDB extends Dexie {
+class TabHangarDB extends Dexie {
   workspaces!: EntityTable<Workspace, 'id'>
   categories!: EntityTable<Category, 'id'>
   groups!: EntityTable<Group, 'id'>

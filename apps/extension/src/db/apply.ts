@@ -35,16 +35,6 @@ export async function applyChanges(changes: readonly Change[], options: { bump?:
   })
 }
 
-/** Current rows for the given ids (missing ids are skipped). */
-export async function loadRows<E extends EntityType>(
-  entity: E,
-  ids: readonly string[],
-): Promise<EntityMap[E][]> {
-  const table = tables[entity]() as unknown as Table<EntityMap[E], string>
-  const rows = await table.bulkGet([...ids])
-  return rows.filter((row): row is EntityMap[E] => row !== undefined)
-}
-
 export async function loadRow<E extends EntityType>(
   entity: E,
   id: string,

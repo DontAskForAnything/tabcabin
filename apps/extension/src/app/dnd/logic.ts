@@ -13,7 +13,7 @@ export interface Point {
 }
 
 /** Share of an item's height (top and bottom) that means "insert before/after" rather than "combine". */
-export const EDGE_RATIO = 0.3
+const EDGE_RATIO = 0.3
 
 export type ItemHover = { position: 'before' | 'after' } | { position: 'middle' }
 
@@ -65,7 +65,7 @@ export function gridIndexFromPointer(itemRects: readonly Rect[], pointer: Point)
 }
 
 /** Insertion index among groups laid out left to right (board) or top to bottom (collections). */
-export function groupIndexFromPointer(
+function groupIndexFromPointer(
   rect: Rect,
   pointer: Point,
   index: number,

@@ -12,21 +12,21 @@ export interface ToastMessage {
   theme?: 'light' | 'dark' | 'system'
 }
 
-export interface UndoMessage {
+interface UndoMessage {
   type: 'tabhangar:undo'
   undoId: string
 }
 
-export interface PingMessage {
+interface PingMessage {
   type: 'tabhangar:ping'
   target: 'toast' | 'popover'
 }
 
-export interface TogglePopoverMessage {
+interface TogglePopoverMessage {
   type: 'tabhangar:popover-toggle'
 }
 
-export interface PopoverDataRequest {
+interface PopoverDataRequest {
   type: 'tabhangar:popover-data'
   url: string
 }
@@ -42,11 +42,11 @@ export interface PopoverSaveRequest {
 }
 
 /** Ask the background to synchronize now (e.g. when a board page opens). */
-export interface SyncNowRequest {
+interface SyncNowRequest {
   type: 'tabhangar:sync-now'
 }
 
-export interface OpenAppRequest {
+interface OpenAppRequest {
   type: 'tabhangar:open-app'
 }
 

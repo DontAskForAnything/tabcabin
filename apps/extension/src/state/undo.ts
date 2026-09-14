@@ -28,6 +28,3 @@ export async function undoLast(): Promise<boolean> {
   return true
 }
 
-export function hasUndo() {
-  return last !== null
-}

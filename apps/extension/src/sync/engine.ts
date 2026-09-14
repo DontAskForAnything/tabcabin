@@ -10,7 +10,7 @@ const table = (entity: EntityType) => tables[entity]() as unknown as Table<Row, 
 const entityTables = () => ENTITY_TYPES.map((entity) => tables[entity]())
 
 /** The oldest queued local changes, with the current version of each row. */
-export async function collectPush(
+async function collectPush(
   limit = 500,
 ): Promise<{ entries: OutboxEntry[]; changes: PushChange[] }> {
   const entries = await db.outbox.orderBy('queuedAt').limit(limit).toArray()
@@ -27,7 +27,7 @@ export async function collectPush(
 }
 
 /** Removes sent outbox entries unless the row changed again in the meantime. */
-export async function acknowledge(entries: OutboxEntry[]) {
+async function acknowledge(entries: OutboxEntry[]) {
   await db.transaction('rw', db.outbox, async () => {
     for (const entry of entries) {
       const current = await db.outbox.get([entry.entity, entry.id])
@@ -41,7 +41,7 @@ export async function acknowledge(entries: OutboxEntry[]) {
  * Writes rows that came from the server without queuing them again. A local row with a
  * pending, newer change is kept (it will be pushed and win on the server).
  */
-export async function applyRemote(changes: RemoteChange[], seq: number) {
+async function applyRemote(changes: RemoteChange[], seq: number) {
   await db.transaction('rw', [...entityTables(), db.outbox, db.meta], async () => {
     for (const change of changes) {
       const t = table(change.entity)
@@ -66,7 +66,7 @@ export async function applyRemote(changes: RemoteChange[], seq: number) {
 }
 
 /** Queues every local row, so a first sync uploads what this browser already has. */
-export async function enqueueEverything() {
+async function enqueueEverything() {
   const now = Date.now()
   await db.transaction('rw', [...entityTables(), db.outbox], async () => {
     for (const entity of ENTITY_TYPES) {
@@ -79,7 +79,7 @@ export async function enqueueEverything() {
 }
 
 /** Drops local boards (keeps settings) before downloading the server's copy. */
-export async function clearLocalData() {
+async function clearLocalData() {
   await db.transaction('rw', [...entityTables(), db.outbox], async () => {
     await Promise.all([...entityTables(), db.outbox].map((t) => t.clear()))
   })
@@ -224,7 +224,7 @@ export class SyncEngine {
   }
 }
 
-export async function pushAll(client: SyncClient) {
+async function pushAll(client: SyncClient) {
   for (;;) {
     const { entries, changes } = await collectPush()
     if (entries.length === 0) return
@@ -234,7 +234,7 @@ export async function pushAll(client: SyncClient) {
   }
 }
 
-export async function pullAll(client: SyncClient) {
+async function pullAll(client: SyncClient) {
   for (;;) {
     const { lastSeq } = await getSyncState()
     const page = await client.pull(lastSeq)

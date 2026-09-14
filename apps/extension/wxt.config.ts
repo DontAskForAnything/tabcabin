@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module'
+import { thirdPartyLicenses } from '@tabhangar/ui/vite/licenses'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'wxt'
 
@@ -13,7 +14,13 @@ export default defineConfig({
     artifactTemplate: 'tabhangar-{{version}}-{{browser}}.zip',
   },
   vite: () => ({
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      thirdPartyLicenses({
+        product: 'TabHangar',
+        extraFiles: [require.resolve('emojibase-data/package.json')],
+      }),
+    ],
   }),
   hooks: {
     // Ship emoji data with the extension so the picker works offline.

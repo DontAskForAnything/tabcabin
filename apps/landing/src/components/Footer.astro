@@ -1,6 +1,6 @@
 ---
+import { repo, selfHostingGuide } from '../site'
 import Logo from './Logo.astro'
-const repo = 'https://github.com/DontAskForAnything/tabhangar'
 ---
 
 <footer class="border-t border-line">
@@ -14,11 +14,14 @@ const repo = 'https://github.com/DontAskForAnything/tabhangar'
       <a href={repo} class="hover:text-ink">
         GitHub
       </a>
-      <a href={`${repo}/blob/main/docs/self-hosting.md`} class="hover:text-ink">
+      <a href={selfHostingGuide} class="hover:text-ink">
         Self-hosting
       </a>
       <a href="/privacy" class="hover:text-ink">
         Privacy
+      </a>
+      <a href="/third-party-licenses.txt" class="hover:text-ink">
+        Licenses
       </a>
     </div>
   </div>

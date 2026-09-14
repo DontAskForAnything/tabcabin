@@ -294,6 +294,7 @@ export const en = {
     'Delete everything TabHangar stored in this browser? This can’t be undone.',
   'settings.clearButton': 'Delete everything',
   'settings.version': 'TabHangar {version}',
+  'settings.licenses': 'Third-party licenses',
   'transfer.export': 'Export',
   'transfer.exportHint': 'JSON can be imported again; the bookmarks file works in any browser.',
   'transfer.scopeWorkspace': 'This workspace',

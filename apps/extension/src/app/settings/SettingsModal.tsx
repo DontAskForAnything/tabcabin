@@ -2,6 +2,7 @@ import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide
 import { IconButton, Modal, Tabs } from '@tabhangar/ui'
 import { useRef, type ReactNode } from 'react'
 import { useT } from '@/i18n'
+import { extensionUrl } from '@/lib/browser'
 import { type SettingsTab, useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
 import { AccountSettings } from './AccountSettings'
@@ -64,7 +65,17 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
           </Tabs.List>
           <div className="flex-1" />
           {version && (
-            <p className="px-3 pb-1 text-[12px] text-ink-3">{t('settings.version', { version })}</p>
+            <div className="flex flex-col gap-0.5 px-3 pb-1 text-[12px] text-ink-3">
+              <p>{t('settings.version', { version })}</p>
+              <a
+                href={extensionUrl('/third-party-licenses.txt')}
+                target="_blank"
+                rel="noreferrer"
+                className="w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]"
+              >
+                {t('settings.licenses')}
+              </a>
+            </div>
           )}
         </div>
         <div className="relative min-w-0 flex-1 overflow-y-auto px-8 pt-7 pb-8">

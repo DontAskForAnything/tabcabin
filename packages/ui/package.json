@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles/index.css",
-    "./base.css": "./src/styles/base.css"
+    "./base.css": "./src/styles/base.css",
+    "./vite/licenses": "./vite/licenses.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",

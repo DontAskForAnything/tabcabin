@@ -352,6 +352,7 @@ export const pl: Record<MessageKey, Message> = {
     'Usunąć wszystko, co TabHangar zapisał w tej przeglądarce? Tego nie da się cofnąć.',
   'settings.clearButton': 'Usuń wszystko',
   'settings.version': 'TabHangar {version}',
+  'settings.licenses': 'Licencje bibliotek',
   'transfer.export': 'Eksport',
   'transfer.exportHint':
     'JSON można później zaimportować; plik zakładek działa w każdej przeglądarce.',

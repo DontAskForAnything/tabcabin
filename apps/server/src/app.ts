@@ -54,4 +54,3 @@ export function createApp({ db, config, feed = new ChangeFeed(), now = Date.now 
 
   return app
 }
-

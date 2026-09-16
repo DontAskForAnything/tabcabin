@@ -27,4 +27,3 @@ export async function undoLast(): Promise<boolean> {
   await revert(entry.result)
   return true
 }
-

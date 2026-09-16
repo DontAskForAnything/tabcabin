@@ -65,12 +65,7 @@ export function gridIndexFromPointer(itemRects: readonly Rect[], pointer: Point)
 }
 
 /** Insertion index among groups laid out left to right (board) or top to bottom (collections). */
-function groupIndexFromPointer(
-  rect: Rect,
-  pointer: Point,
-  index: number,
-  axis: 'x' | 'y',
-): number {
+function groupIndexFromPointer(rect: Rect, pointer: Point, index: number, axis: 'x' | 'y'): number {
   const before =
     axis === 'x' ? pointer.x < rect.left + rect.width / 2 : pointer.y < rect.top + rect.height / 2
   return before ? index : index + 1

@@ -362,9 +362,9 @@ export const pl: Record<MessageKey, Message> = {
   'transfer.html': 'Zakładki',
   'transfer.csv': 'CSV',
   'transfer.exported': 'Zapisano {file}',
-  'transfer.import': 'Import kopii',
+  'transfer.import': 'Import z pliku',
   'transfer.importHint':
-    'Kopie TabHangar i eksporty JSON z tabExtend. Wszystko trafia do nowych przestrzeni.',
+    'Kopie TabHangar, eksporty z Toby i tabExtend, pliki zakładek i listy linków (OneTab). Wszystko trafia do nowych przestrzeni.',
   'transfer.chooseFile': 'Wybierz plik…',
   'transfer.imported': {
     one: 'Zaimportowano {count} przestrzeń',
@@ -376,6 +376,11 @@ export const pl: Record<MessageKey, Message> = {
   'transfer.importFailed': 'Nie udało się zaimportować pliku ({reason})',
   'transfer.tabExtendWorkspace': 'Zaimportowane z tabExtend',
   'transfer.tabExtendCategory': 'Zaimportowane',
+  'transfer.tobyWorkspace': 'Zaimportowane z Toby',
+  'transfer.bookmarksWorkspace': 'Zaimportowane zakładki',
+  'transfer.oneTabWorkspace': 'Zaimportowane z OneTab',
+  'transfer.linksWorkspace': 'Zaimportowane linki',
+  'transfer.importedGroup': 'Linki',
   'transfer.chromeBookmarks': 'Zakładki Chrome',
   'transfer.chromeBookmarksHint': 'Zamień foldery zakładek w grupy w bieżącej kategorii.',
   'transfer.chooseFolders': 'Wybierz foldery…',

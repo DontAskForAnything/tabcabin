@@ -8,7 +8,7 @@ import {
   downloadFile,
   type ExportFormat,
   ImportError,
-  importJson,
+  importFile as importFileText,
   loadTopSites,
 } from '@/data/transfer'
 import { db } from '@/db/db'
@@ -75,9 +75,14 @@ export function DataSettings({ active }: { active: ActiveContext }) {
 
   const importFile = async (file: File) => {
     try {
-      const result = await importJson(await file.text(), {
-        tabExtendWorkspace: t('transfer.tabExtendWorkspace'),
-        tabExtendCategory: t('transfer.tabExtendCategory'),
+      const result = await importFileText(await file.text(), {
+        tabExtend: t('transfer.tabExtendWorkspace'),
+        toby: t('transfer.tobyWorkspace'),
+        bookmarks: t('transfer.bookmarksWorkspace'),
+        oneTab: t('transfer.oneTabWorkspace'),
+        links: t('transfer.linksWorkspace'),
+        category: t('transfer.tabExtendCategory'),
+        group: t('transfer.importedGroup'),
       })
       await updateSettings({ activeWorkspaceId: result.workspaceId })
       toast({
@@ -148,7 +153,7 @@ export function DataSettings({ active }: { active: ActiveContext }) {
         <input
           ref={fileInput}
           type="file"
-          accept=".json,application/json"
+          accept=".json,.html,.htm,.txt,.md,application/json,text/html,text/plain"
           aria-label={t('transfer.import')}
           className="hidden"
           onChange={(event) => {

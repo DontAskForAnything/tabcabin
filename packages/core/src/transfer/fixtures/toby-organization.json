@@ -1,0 +1,31 @@
+{
+  "version": 4,
+  "groups": [
+    {
+      "name": "Studio",
+      "lists": [
+        {
+          "title": "Clients",
+          "notes": "Invoices go out on the 1st",
+          "cards": [
+            { "title": "Client portal", "url": "https://portal.example.com/" },
+            {
+              "title": "Shared drive",
+              "url": "https://files.example.com/studio",
+              "labels": [{ "name": "docs" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Home",
+      "lists": [
+        {
+          "title": "Recipes",
+          "cards": [{ "title": "Shakshuka", "url": "https://cook.example.net/shakshuka" }]
+        }
+      ]
+    }
+  ]
+}

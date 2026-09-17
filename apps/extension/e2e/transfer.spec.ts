@@ -6,10 +6,11 @@ import { expect, test } from './fixtures'
 
 declare const chrome: typeof browser
 
-const fixture = resolve(
+const fixtures = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  '../../../packages/core/src/transfer/fixtures/tabextend-export.json',
+  '../../../packages/core/src/transfer/fixtures',
 )
+const fixture = resolve(fixtures, 'tabextend-export.json')
 
 async function openData(context: BrowserContext, extensionId: string): Promise<Page> {
   const page = await context.newPage()
@@ -34,7 +35,7 @@ test('exports a workspace as JSON and imports it again', async ({ context, exten
   expect(backup).toMatchObject({ format: 'tabhangar', version: 1 })
   expect(backup.groups.length).toBeGreaterThan(2)
 
-  await dialog.getByLabel('Import a backup').setInputFiles(path)
+  await dialog.getByLabel('Import from a file').setInputFiles(path)
   await expect(page.getByText('Imported 1 workspace')).toBeVisible()
   await page.keyboard.press('Escape')
   await page.getByRole('button', { name: 'Switch workspace' }).click()
@@ -61,7 +62,7 @@ test('imports a tabExtend export into a new workspace', async ({ context, extens
   const page = await openData(context, extensionId)
   await page
     .getByRole('dialog', { name: 'Settings' })
-    .getByLabel('Import a backup')
+    .getByLabel('Import from a file')
     .setInputFiles(fixture)
   await expect(page.getByText('Imported 1 workspace')).toBeVisible()
   await page.keyboard.press('Escape')
@@ -70,6 +71,37 @@ test('imports a tabExtend export into a new workspace', async ({ context, extens
   await expect(docs.getByRole('link', { name: /Example handbook/ })).toBeVisible()
   await expect(docs.getByText('Read chapter 2 first')).toBeVisible()
   await expect(docs.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
+})
+
+test('imports Toby, bookmark files and OneTab lists', async ({ context, extensionId }) => {
+  const page = await openData(context, extensionId)
+  const dialog = page.getByRole('dialog', { name: 'Settings' })
+  const input = dialog.getByLabel('Import from a file')
+
+  await input.setInputFiles(resolve(fixtures, 'toby-organization.json'))
+  await expect(page.getByText('Imported 1 workspace')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Switch workspace' })).toContainText(
+    'Imported from Toby',
+  )
+  await expect(page.getByRole('tab', { name: 'Studio' })).toHaveAttribute('aria-selected', 'true')
+  const clients = page.getByRole('region', { name: 'Clients' })
+  await expect(clients.getByRole('link', { name: /Client portal/ })).toBeVisible()
+  await expect(clients.getByText('Invoices go out on the 1st')).toBeVisible()
+
+  for (const [file, workspace, group] of [
+    ['bookmarks.html', 'Imported bookmarks', 'Research'],
+    ['onetab.txt', 'Imported from OneTab', 'Links'],
+  ] as const) {
+    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('menuitem', { name: 'Settings' }).click()
+    await dialog.getByRole('tab', { name: 'Data' }).click()
+    await input.setInputFiles(resolve(fixtures, file))
+    await expect(page.getByText('Imported 1 workspace').last()).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('button', { name: 'Switch workspace' })).toContainText(workspace)
+    await expect(page.getByRole('heading', { name: group }).first()).toBeVisible()
+  }
 })
 
 test('turns bookmark folders into groups', async ({ context, extensionId }) => {

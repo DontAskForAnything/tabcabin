@@ -1,0 +1,29 @@
+{
+  "version": 3,
+  "lists": [
+    {
+      "title": "Morning reads",
+      "labels": [],
+      "cards": [
+        {
+          "title": "Field notes – Designing calm software",
+          "url": "https://journal.example.dev/calm-software",
+          "customTitle": "Calm software",
+          "customDescription": "Read the part about notifications"
+        },
+        {
+          "title": "Release notes",
+          "url": "https://changelog.example.org/2026",
+          "customTitle": "",
+          "customDescription": "",
+          "tags": ["work", "weekly review"]
+        },
+        { "title": "Bookmarklet", "url": "javascript:alert(1)" }
+      ]
+    },
+    {
+      "title": "Empty collection",
+      "cards": []
+    }
+  ]
+}

@@ -153,7 +153,7 @@ describe('accounts', () => {
     expect(await runCommand(db, ['delete-user', 'michal'], io)).toBe(0)
     expect(await runCommand(db, ['nonsense'], io)).toBe(2)
     expect(out).toContain('Created michal (admin)')
-    expect(out).toContain('michal  (admin)')
+    expect(out).toContain('michal  -  password  (admin)')
   })
   it('backs up the database from the command line', async () => {
     const { db, sqlite } = testApp()

@@ -1,5 +1,4 @@
-import { getConnInfo } from '@hono/node-server/conninfo'
-import { Hono, type Context } from 'hono'
+import { Hono } from 'hono'
 import { z } from 'zod'
 import { requireAuth } from '../auth/middleware'
 import { RateLimiter } from '../auth/rateLimit'
@@ -15,6 +14,7 @@ import {
   UserError,
   usernameSchema,
 } from '../users'
+import { clientIp } from './clientIp'
 
 const loginSchema = z.object({
   username: z.string().max(64),
@@ -22,18 +22,6 @@ const loginSchema = z.object({
   /** Shown in a future session list, e.g. "Chrome on laptop". */
   label: z.string().max(120).optional(),
 })
-
-function clientIp(c: Context, config: Config): string {
-  if (config.trustProxy) {
-    const forwarded = c.req.header('x-forwarded-for')?.split(',')[0]?.trim()
-    if (forwarded) return forwarded
-  }
-  try {
-    return getConnInfo(c).remote.address ?? 'unknown'
-  } catch {
-    return 'unknown'
-  }
-}
 
 export function authRoutes(db: Db, config: Config, now: () => number) {
   // Per address: 20 attempts per 15 minutes; per account: 8 failures per 15 minutes.

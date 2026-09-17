@@ -6,6 +6,7 @@ import pkg from '../package.json' with { type: 'json' }
 import type { Config } from './config'
 import type { Db } from './db/client'
 import { authRoutes } from './routes/auth'
+import { googleRoutes } from './routes/google'
 import { syncRoutes } from './routes/sync'
 import { ChangeFeed } from './sync'
 
@@ -15,6 +16,8 @@ export interface AppDeps {
   feed?: ChangeFeed
   /** Clock, replaceable in tests. */
   now?: () => number
+  /** HTTP client for Google's token endpoint, replaceable in tests. */
+  fetch?: typeof fetch
 }
 
 /** Origins allowed to call the API: browser extensions and the server's own address. */
@@ -24,7 +27,13 @@ function allowedOrigin(origin: string, config: Config): string | null {
   return null
 }
 
-export function createApp({ db, config, feed = new ChangeFeed(), now = Date.now }: AppDeps) {
+export function createApp({
+  db,
+  config,
+  feed = new ChangeFeed(),
+  now = Date.now,
+  fetch: fetcher = fetch,
+}: AppDeps) {
   const app = new Hono()
 
   app.use('*', secureHeaders())
@@ -40,9 +49,16 @@ export function createApp({ db, config, feed = new ChangeFeed(), now = Date.now 
 
   app.get('/health', (c) => {
     db.get(sql`select 1`)
-    return c.json({ ok: true, name: 'tabhangar', version: pkg.version })
+    return c.json({
+      ok: true,
+      name: 'tabhangar',
+      version: pkg.version,
+      // Lets the extension offer only the sign-in options this server has.
+      auth: { password: true, google: config.google !== null, signup: config.allowSignup },
+    })
   })
 
+  app.route('/auth/google', googleRoutes(db, config, now, fetcher))
   app.route('/auth', authRoutes(db, config, now))
   app.route('/', syncRoutes(db, config, feed, now))
 

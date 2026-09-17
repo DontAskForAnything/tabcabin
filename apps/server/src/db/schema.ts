@@ -4,10 +4,28 @@ import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlit
 export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
   username: text('username').notNull().unique(),
+  /** Empty for accounts that only sign in with Google. */
   passwordHash: text('password_hash').notNull(),
+  /** Lets a Google account with this address sign in as this user. */
+  email: text('email').unique(),
   isAdmin: integer('is_admin', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at').notNull(),
 })
+
+/** External sign-in accounts linked to a user (Google's stable `sub`). */
+export const identities = sqliteTable(
+  'identities',
+  {
+    provider: text('provider', { enum: ['google'] }).notNull(),
+    subject: text('subject').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    email: text('email').notNull().default(''),
+    createdAt: integer('created_at').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.provider, t.subject] }), index('identities_user').on(t.userId)],
+)
 
 /** Login sessions; only a hash of the bearer token is stored. */
 export const sessions = sqliteTable(

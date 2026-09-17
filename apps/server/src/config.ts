@@ -1,5 +1,13 @@
 import { z } from 'zod'
 
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token'
+
+const list = (value: string | undefined) =>
+  (value ?? '')
+    .split(/[\s,]+/)
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean)
+
 const flag = z
   .enum(['true', 'false', '1', '0', 'yes', 'no'])
   .transform((value) => value === 'true' || value === '1' || value === 'yes')
@@ -14,6 +22,13 @@ const envSchema = z.object({
   TRUST_PROXY: flag.default(false),
   ADMIN_USERNAME: z.string().min(3).max(64).optional(),
   ADMIN_PASSWORD: z.string().min(8).max(256).optional(),
+  GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+  GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+  SIGNUP_EMAILS: z.string().optional(),
+  EXTENSION_IDS: z.string().optional(),
+  // Only for tests: a stand-in for Google's endpoints.
+  GOOGLE_AUTH_URL: z.url().default('https://accounts.google.com/o/oauth2/v2/auth'),
+  GOOGLE_TOKEN_URL: z.url().default(GOOGLE_TOKEN_URL),
 })
 
 export interface Config {
@@ -28,6 +43,22 @@ export interface Config {
   trustProxy: boolean
   /** First account, created on start when there are no users yet. */
   admin: { username: string; password: string } | null
+  /** "Sign in with Google", when a Google OAuth client is configured. */
+  google: {
+    clientId: string
+    clientSecret: string
+    authUrl: string
+    tokenUrl: string
+    /** Accepted `iss` values of ID tokens (empty when a test stand-in is used). */
+    issuers: string[]
+  } | null
+  /**
+   * Addresses that may create an account with Google even when signup is off: full addresses
+   * (`ola@gmail.com`) or whole domains (`@example.com`).
+   */
+  signupEmails: string[]
+  /** Extensions allowed to receive sign-ins (empty: any). */
+  extensionIds: string[]
 }
 
 /** Reads the configuration from environment variables; throws with every problem at once. */
@@ -40,6 +71,12 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
   const e = parsed.data
   if (!!e.ADMIN_USERNAME !== !!e.ADMIN_PASSWORD)
     throw new Error('Invalid configuration: set both ADMIN_USERNAME and ADMIN_PASSWORD, or neither')
+  if (!!e.GOOGLE_CLIENT_ID !== !!e.GOOGLE_CLIENT_SECRET)
+    throw new Error(
+      'Invalid configuration: set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, or neither',
+    )
+  if (e.GOOGLE_CLIENT_ID && !e.PUBLIC_URL)
+    throw new Error('Invalid configuration: Google sign-in needs PUBLIC_URL (for the callback)')
   return {
     port: e.PORT,
     host: e.HOST,
@@ -52,5 +89,20 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
       e.ADMIN_USERNAME && e.ADMIN_PASSWORD
         ? { username: e.ADMIN_USERNAME, password: e.ADMIN_PASSWORD }
         : null,
+    google:
+      e.GOOGLE_CLIENT_ID && e.GOOGLE_CLIENT_SECRET
+        ? {
+            clientId: e.GOOGLE_CLIENT_ID,
+            clientSecret: e.GOOGLE_CLIENT_SECRET,
+            authUrl: e.GOOGLE_AUTH_URL,
+            tokenUrl: e.GOOGLE_TOKEN_URL,
+            issuers:
+              e.GOOGLE_TOKEN_URL === GOOGLE_TOKEN_URL
+                ? ['https://accounts.google.com', 'accounts.google.com']
+                : [],
+          }
+        : null,
+    signupEmails: list(e.SIGNUP_EMAILS).map((entry) => entry.replace(/^\*@/, '@')),
+    extensionIds: list(e.EXTENSION_IDS),
   }
 }

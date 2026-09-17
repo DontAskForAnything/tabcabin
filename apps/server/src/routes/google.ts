@@ -2,6 +2,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { RateLimiter } from '../auth/rateLimit'
+import type { SignupGuard } from '../auth/signupGuard'
 import { hashToken } from '../auth/tokens'
 import type { Config } from '../config'
 import type { Db } from '../db/client'
@@ -100,7 +101,13 @@ function readIdToken(idToken: string, config: NonNullable<Config['google']>, now
 const page = (title: string, text: string) =>
   `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><body style="font:16px/1.5 system-ui,sans-serif;max-width:420px;margin:15vh auto;padding:0 24px;color:#1c1d22"><h1 style="font-size:20px">${title}</h1><p>${text}</p></body>`
 
-export function googleRoutes(db: Db, config: Config, now: () => number, fetcher: typeof fetch) {
+export function googleRoutes(
+  db: Db,
+  config: Config,
+  now: () => number,
+  fetcher: typeof fetch,
+  signups: SignupGuard,
+) {
   const routes = new Hono<AppEnv>()
   const pending = new Map<string, Pending>()
   const grants = new Map<string, Grant>()
@@ -192,8 +199,10 @@ export function googleRoutes(db: Db, config: Config, now: () => number, fetcher:
     }
     if (!claims) return back({ error: 'google_failed' })
 
-    const result = signInWithGoogle(db, claims, config, now())
+    const ip = clientIp(c, config)
+    const result = signInWithGoogle(db, claims, config, now(), signups.blocked(ip, now()))
     if ('error' in result) return back({ error: result.error })
+    if (result.created) signups.created(ip, now())
     const grant = base64url(randomBytes(32))
     grants.set(hashToken(grant), {
       userId: result.user.id,

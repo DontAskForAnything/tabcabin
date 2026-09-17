@@ -5,6 +5,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import pkg from '../package.json' with { type: 'json' }
 import type { Config } from './config'
 import type { Db } from './db/client'
+import { SignupGuard } from './auth/signupGuard'
 import { authRoutes } from './routes/auth'
 import { googleRoutes } from './routes/google'
 import { syncRoutes } from './routes/sync'
@@ -58,8 +59,9 @@ export function createApp({
     })
   })
 
-  app.route('/auth/google', googleRoutes(db, config, now, fetcher))
-  app.route('/auth', authRoutes(db, config, now))
+  const signups = new SignupGuard(db, config)
+  app.route('/auth/google', googleRoutes(db, config, now, fetcher, signups))
+  app.route('/auth', authRoutes(db, config, now, signups))
   app.route('/', syncRoutes(db, config, feed, now))
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404))

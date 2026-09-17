@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 import { requireAuth } from '../auth/middleware'
 import { RateLimiter } from '../auth/rateLimit'
+import type { SignupGuard } from '../auth/signupGuard'
 import type { Config } from '../config'
 import type { Db } from '../db/client'
 import type { AppEnv } from '../env'
@@ -23,7 +24,7 @@ const loginSchema = z.object({
   label: z.string().max(120).optional(),
 })
 
-export function authRoutes(db: Db, config: Config, now: () => number) {
+export function authRoutes(db: Db, config: Config, now: () => number, signups: SignupGuard) {
   // Per address: 20 attempts per 15 minutes; per account: 8 failures per 15 minutes.
   const byIp = new RateLimiter(20, 15 * 60_000)
   const byUser = new RateLimiter(8, 15 * 60_000)
@@ -65,8 +66,11 @@ export function authRoutes(db: Db, config: Config, now: () => number) {
     const ip = clientIp(c, config)
     if (byIp.retryAfter(ip, now()) > 0) return c.json({ error: 'too_many_attempts' }, 429)
     byIp.hit(ip, now())
+    const blocked = signups.blocked(ip, now())
+    if (blocked) return c.json({ error: blocked }, blocked === 'server_full' ? 403 : 429)
     try {
       const user = await createUser(db, body.data, now())
+      signups.created(ip, now())
       return c.json({ user, ...session(user.id, body.data.label) }, 201)
     } catch (error) {
       if (error instanceof UserError && error.code === 'username_taken')

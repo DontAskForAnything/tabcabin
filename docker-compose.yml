@@ -15,6 +15,13 @@ services:
       SESSION_TTL_DAYS: ${SESSION_TTL_DAYS:-30}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      SIGNUP_EMAILS: ${SIGNUP_EMAILS:-}
+      EXTENSION_IDS: ${EXTENSION_IDS:-}
+      MAX_USERS: ${MAX_USERS:-0}
+      SIGNUPS_PER_IP_PER_DAY: ${SIGNUPS_PER_IP_PER_DAY:-5}
+      MAX_RECORDS_PER_USER: ${MAX_RECORDS_PER_USER:-100000}
     volumes:
       - tabhangar-data:/data
     # Only reachable from this machine; Caddy (below or on the host) serves it over HTTPS.

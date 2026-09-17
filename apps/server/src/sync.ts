@@ -1,5 +1,5 @@
 import { type EntityType, entitySchemas, ENTITY_TYPES } from '@tabhangar/core'
-import { and, asc, eq, gt } from 'drizzle-orm'
+import { and, asc, eq, gt, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import type { Db } from './db/client'
 import { meta, records } from './db/schema'
@@ -60,7 +60,16 @@ function nextSeq(tx: Pick<Db, 'select' | 'insert'>, count: number): number {
  * Applies a batch of changes for one user. A change wins when its `updatedAt` is not older
  * than the stored one (last write wins per row); older changes are skipped and reported.
  */
-export function applyPush(db: Db, userId: string, request: PushRequest, now = Date.now()) {
+/** The push would take the account over its storage limit. */
+export class QuotaExceeded extends Error {}
+
+export function applyPush(
+  db: Db,
+  userId: string,
+  request: PushRequest,
+  now = Date.now(),
+  maxRecords = Infinity,
+) {
   const validated = request.changes.map((change, index) => {
     if (change.type === 'purge') return change
     const parsed = entitySchemas[change.entity].safeParse(change.row)
@@ -78,11 +87,12 @@ export function applyPush(db: Db, userId: string, request: PushRequest, now = Da
   return db.transaction((tx) => {
     const skipped: { entity: EntityType; id: string }[] = []
     const writes: (typeof records.$inferInsert)[] = []
+    let added = 0
     for (const change of validated) {
       const id = change.type === 'put' ? change.row.id : change.id
       const updatedAt = change.type === 'put' ? change.row.updatedAt : (change.at ?? now)
       const existing = tx
-        .select({ updatedAt: records.updatedAt })
+        .select({ updatedAt: records.updatedAt, live: sql<number>`${records.data} is not null` })
         .from(records)
         .where(
           and(eq(records.userId, userId), eq(records.entity, change.entity), eq(records.id, id)),
@@ -92,6 +102,7 @@ export function applyPush(db: Db, userId: string, request: PushRequest, now = Da
         skipped.push({ entity: change.entity, id })
         continue
       }
+      if (change.type === 'put' && !existing?.live) added++
       writes.push({
         userId,
         entity: change.entity,
@@ -100,6 +111,15 @@ export function applyPush(db: Db, userId: string, request: PushRequest, now = Da
         updatedAt,
         seq: 0,
       })
+    }
+    if (added > 0 && Number.isFinite(maxRecords)) {
+      const stored =
+        tx
+          .select({ n: sql<number>`count(*)` })
+          .from(records)
+          .where(and(eq(records.userId, userId), sql`${records.data} is not null`))
+          .get()?.n ?? 0
+      if (stored + added > maxRecords) throw new QuotaExceeded()
     }
     let seq = writes.length ? nextSeq(tx, writes.length) : currentSeq(tx)
     for (const write of writes) {

@@ -1,5 +1,5 @@
 import { newId } from '@tabhangar/core'
-import { and, asc, eq, gt } from 'drizzle-orm'
+import { and, asc, eq, gt, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { hashPassword, verifyPassword } from './auth/password'
 import { hashToken, newToken } from './auth/tokens'
@@ -94,8 +94,13 @@ export function listUsers(db: Db): (PublicUser & { password: boolean; google: bo
     }))
 }
 
-function countUsers(db: Db): number {
-  return db.select().from(users).all().length
+export function countUsers(db: Db): number {
+  return (
+    db
+      .select({ n: sql<number>`count(*)` })
+      .from(users)
+      .get()?.n ?? 0
+  )
 }
 
 /** Sets a new password and signs the user out everywhere. */
@@ -170,7 +175,8 @@ function usernameFor(db: Db, email: string): string {
 }
 
 export type GoogleSignIn =
-  { user: PublicUser; created: boolean } | { error: 'not_invited' | 'email_not_verified' }
+  | { user: PublicUser; created: boolean }
+  | { error: 'not_invited' | 'email_not_verified' | 'too_many_signups' | 'server_full' }
 
 /**
  * The user behind a Google account: a linked one, the user with that address, or, when the
@@ -181,6 +187,8 @@ export function signInWithGoogle(
   claims: { sub: string; email: string; emailVerified: boolean },
   rules: { allowSignup: boolean; signupEmails: string[] },
   now = Date.now(),
+  /** Why no new account may be created right now (anti-abuse limits), if so. */
+  blocked: 'too_many_signups' | 'server_full' | null = null,
 ): GoogleSignIn {
   const linked = db
     .select({ user: users })
@@ -203,6 +211,7 @@ export function signInWithGoogle(
     return { user: toPublic(existing), created: false }
   }
   if (!mayJoin(email, rules)) return { error: 'not_invited' }
+  if (blocked) return { error: blocked }
   const row = {
     id: newId(),
     username: usernameFor(db, email),

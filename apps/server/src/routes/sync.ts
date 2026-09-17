@@ -11,6 +11,7 @@ import {
   type ChangeFeed,
   currentSeq,
   InvalidChange,
+  QuotaExceeded,
   pullChanges,
   pushSchema,
 } from '../sync'
@@ -29,10 +30,12 @@ export function syncRoutes(db: Db, config: Config, feed: ChangeFeed, now: () => 
     if (!body.success) return c.json({ error: 'invalid_request', issues: body.error.issues }, 400)
     try {
       const user = c.get('user')
-      const result = applyPush(db, user.id, body.data, now())
+      const result = applyPush(db, user.id, body.data, now(), config.maxRecordsPerUser)
       if (result.accepted > 0) feed.publish(user.id, result.seq)
       return c.json(result)
     } catch (error) {
+      if (error instanceof QuotaExceeded)
+        return c.json({ error: 'quota_exceeded', limit: config.maxRecordsPerUser }, 413)
       if (error instanceof InvalidChange)
         return c.json({ error: 'invalid_change', index: error.index, message: error.message }, 400)
       throw error

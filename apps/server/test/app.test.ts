@@ -25,6 +25,12 @@ describe('config', () => {
     })
   })
 
+  it('treats empty variables as not set (as Docker Compose passes them)', () => {
+    const config = loadConfig({ ADMIN_USERNAME: '', ADMIN_PASSWORD: '', GOOGLE_CLIENT_ID: '' })
+    expect(config.admin).toBeNull()
+    expect(config.google).toBeNull()
+  })
+
   it('reports invalid values together', () => {
     expect(() => loadConfig({ PORT: 'abc', PUBLIC_URL: 'nope' })).toThrow(/PORT[\s\S]*PUBLIC_URL/)
     expect(() => loadConfig({ ADMIN_USERNAME: 'only-name' })).toThrow(/both/)

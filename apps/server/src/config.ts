@@ -22,6 +22,9 @@ const envSchema = z.object({
   TRUST_PROXY: flag.default(false),
   ADMIN_USERNAME: z.string().min(3).max(64).optional(),
   ADMIN_PASSWORD: z.string().min(8).max(256).optional(),
+  MAX_USERS: z.coerce.number().int().min(0).default(0),
+  SIGNUPS_PER_IP_PER_DAY: z.coerce.number().int().min(1).default(5),
+  MAX_RECORDS_PER_USER: z.coerce.number().int().min(100).default(100_000),
   GOOGLE_CLIENT_ID: z.string().min(1).optional(),
   GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
   SIGNUP_EMAILS: z.string().optional(),
@@ -59,11 +62,20 @@ export interface Config {
   signupEmails: string[]
   /** Extensions allowed to receive sign-ins (empty: any). */
   extensionIds: string[]
+  /** Accounts the server accepts in total (0: no limit). */
+  maxUsers: number
+  /** New accounts (password or Google) one address may create per day. */
+  signupsPerIpPerDay: number
+  /** Synced rows (workspaces, groups, items…) one account may store. */
+  maxRecordsPerUser: number
 }
 
 /** Reads the configuration from environment variables; throws with every problem at once. */
 export function loadConfig(env: Record<string, string | undefined> = process.env): Config {
-  const parsed = envSchema.safeParse(env)
+  // Compose passes unset variables as empty strings; treat them as not set.
+  const parsed = envSchema.safeParse(
+    Object.fromEntries(Object.entries(env).filter(([, value]) => value !== '')),
+  )
   if (!parsed.success) {
     const problems = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`)
     throw new Error(`Invalid configuration:\n  ${problems.join('\n  ')}`)
@@ -104,5 +116,8 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
         : null,
     signupEmails: list(e.SIGNUP_EMAILS).map((entry) => entry.replace(/^\*@/, '@')),
     extensionIds: list(e.EXTENSION_IDS),
+    maxUsers: e.MAX_USERS,
+    signupsPerIpPerDay: e.SIGNUPS_PER_IP_PER_DAY,
+    maxRecordsPerUser: e.MAX_RECORDS_PER_USER,
   }
 }

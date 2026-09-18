@@ -1,7 +1,7 @@
 /** Google's "G" mark, as Google's sign-in branding guidelines ask for. */
-export function GoogleMark() {
+export function GoogleMark({ size = 18 }: { size?: number }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
       <path
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"

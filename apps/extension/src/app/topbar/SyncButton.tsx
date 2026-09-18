@@ -1,20 +1,12 @@
 import { Cloud, CloudOff, RefreshCw } from 'lucide-react'
 import { IconButton, Tooltip, cn } from '@tabhangar/ui'
 import { useLocale, useT } from '@/i18n'
+import { openSignInPage } from '@/lib/pages'
 import { relativeTime } from '@/lib/time'
 import { useSyncServer } from '@/sync/server'
-import { INITIAL_STATE, type SyncState, useAccount, useSyncState } from '@/sync/state'
+import { INITIAL_STATE, useAccount, useSyncState } from '@/sync/state'
+import { SYNC_STATUS_DOT } from '@/sync/statusColors'
 import { useUi } from '@/state/ui'
-import { openSignInPage } from '../signin/connect'
-
-const DOT: Record<SyncState['status'], string> = {
-  idle: 'bg-ink-4',
-  syncing: 'bg-warning',
-  synced: 'bg-success',
-  offline: 'bg-warning',
-  error: 'bg-danger',
-  'signed-out': 'bg-ink-4',
-}
 
 /**
  * Sync at a glance: "Sign in" while signed out, otherwise the live status (syncing runs on its
@@ -68,7 +60,7 @@ export function SyncButton({ compact, hideLabel }: { compact: boolean; hideLabel
           <span
             className={cn(
               'absolute -right-1 -bottom-0.5 size-2 rounded-full ring-2 ring-card',
-              DOT[state.status],
+              SYNC_STATUS_DOT[state.status],
             )}
           />
         </span>

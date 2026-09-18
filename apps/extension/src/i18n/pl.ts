@@ -503,10 +503,9 @@ export const pl: Record<MessageKey, Message> = {
   'sync.signOutHint': 'Tablice zostają w tej przeglądarce, tylko przestają się synchronizować.',
   'sync.signedOut': 'Wylogowano',
   'signin.title': 'Zaloguj się',
-  'signin.createTitle': 'Załóż konto',
   'signin.subtitle': 'Twoje tablice zsynchronizowane na każdym komputerze.',
-  'signin.server': 'Synchronizacja z {host}',
-  'signin.serverDown': 'Nie można teraz połączyć się z {host}',
+  'signin.unavailable': 'Synchronizacja jest teraz niedostępna. Spróbuj ponownie później.',
+  'signin.googleNew': 'Pierwszy raz? Konto założy się samo przy pierwszym logowaniu przez Google.',
   'signin.noAccount': 'Nie masz konta? Załóż je',
   'signin.haveAccount': 'Masz już konto? Zaloguj się',
   'signin.invite':

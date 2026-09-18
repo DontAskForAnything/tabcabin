@@ -63,7 +63,8 @@ async function openBoard(context: BrowserContext): Promise<Page> {
 async function signIn(page: Page, password = 'correct horse') {
   await page.getByRole('button', { name: 'Sign in to sync' }).click()
   await expect(page).toHaveURL(/\/signin\.html$/)
-  await expect(page.getByRole('status')).toContainText(`Syncs with ${new URL(SERVER).host}`)
+  // No Google on this server, so the username and password form shows right away.
+  await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible()
   await page.getByLabel('Username').fill('michal')
   await page.getByLabel('Password').fill(password)
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()

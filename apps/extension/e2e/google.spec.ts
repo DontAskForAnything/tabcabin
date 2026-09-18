@@ -119,4 +119,8 @@ test('explains when a Google account is not invited', async ({ context, extensio
   const page = await openSignIn(context, extensionId)
   await page.getByRole('button', { name: 'Continue with Google' }).click()
   await expect(page.getByRole('alert')).toHaveText(/can’t join this server yet/)
+  // Username and password stay one small click away.
+  await expect(page.getByLabel('Username')).toHaveCount(0)
+  await page.getByRole('button', { name: 'or with a username and password' }).click()
+  await expect(page.getByLabel('Username')).toBeFocused()
 })

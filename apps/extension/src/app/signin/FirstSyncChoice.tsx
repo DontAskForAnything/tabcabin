@@ -2,8 +2,9 @@ import { Download, Upload } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { useT } from '@/i18n'
 import { firstSync } from '@/sync/engine'
+import type { PendingChoice } from '@/sync/session'
 import { setAccount } from '@/sync/state'
-import { errorText, type PendingChoice } from './connect'
+import { errorText } from './errorText'
 
 /** Asked once, when this browser and the account both have boards. */
 export function FirstSyncChoice({ choice, onDone }: { choice: PendingChoice; onDone: () => void }) {

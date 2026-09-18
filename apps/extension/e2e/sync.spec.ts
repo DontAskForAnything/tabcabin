@@ -44,23 +44,35 @@ test.afterAll(() => {
   server?.kill()
 })
 
+declare const tabhangar: { db: { meta: { put(row: object): Promise<unknown> } } }
+
 async function openBoard(context: BrowserContext): Promise<Page> {
+  // Point the test build at the server of this test.
+  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  await worker.evaluate(
+    (server) => tabhangar.db.meta.put({ key: 'test.syncServer', value: server }),
+    SERVER,
+  )
   const page = await context.newPage()
   await page.goto(`chrome-extension://${await extensionIdOf(context)}/newtab.html`)
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
   return page
 }
 
-async function signIn(page: Page) {
+/** From the board's "Sign in" button to the filled-in sign-in page. */
+async function signIn(page: Page, password = 'correct horse') {
+  await page.getByRole('button', { name: 'Sign in to sync' }).click()
+  await expect(page).toHaveURL(/\/signin\.html$/)
+  await expect(page.getByRole('status')).toContainText(`Syncs with ${new URL(SERVER).host}`)
+  await page.getByLabel('Username').fill('michal')
+  await page.getByLabel('Password').fill(password)
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
+}
+
+async function accountDialog(page: Page) {
   await page.getByRole('button', { name: 'More' }).click()
   await page.getByRole('menuitem', { name: 'Account & sync' }).click()
-  const dialog = page.getByRole('dialog', { name: 'Settings' })
-  await dialog.getByLabel('Server address').fill(SERVER)
-  await expect(dialog.getByText(/Server responds · v/)).toBeVisible()
-  await dialog.getByLabel('Username').fill('michal')
-  await dialog.getByLabel('Password').fill('correct horse')
-  await dialog.getByRole('button', { name: 'Sign in' }).click()
-  return dialog
+  return page.getByRole('dialog', { name: 'Settings' })
 }
 
 test('syncs boards between two browsers through the server', async ({ context }) => {
@@ -70,7 +82,10 @@ test('syncs boards between two browsers through the server', async ({ context })
   await a.getByRole('heading', { name: 'Welcome' }).dblclick()
   await a.getByPlaceholder('Group name').fill('Shared plans')
   await a.getByPlaceholder('Group name').press('Enter')
-  const dialogA = await signIn(a)
+  await signIn(a)
+  await expect(a.getByRole('heading', { name: 'You’re signed in' })).toBeVisible()
+  await a.getByRole('button', { name: 'Open my boards' }).click()
+  const dialogA = await accountDialog(a)
   await expect(dialogA.getByText('Signed in as michal')).toBeVisible()
   await expect(dialogA.getByText('Up to date')).toBeVisible({ timeout: 15_000 })
   await a.keyboard.press('Escape')
@@ -79,10 +94,10 @@ test('syncs boards between two browsers through the server', async ({ context })
   const other = await launchExtension()
   try {
     const b = await openBoard(other)
-    const dialogB = await signIn(b)
-    await dialogB.getByRole('button', { name: /Use the server’s data/ }).click()
-    await expect(dialogB.getByText('Signed in as michal')).toBeVisible()
-    await b.keyboard.press('Escape')
+    await signIn(b)
+    await b.getByRole('button', { name: /Use the server’s data/ }).click()
+    await expect(b.getByRole('heading', { name: 'You’re signed in' })).toBeVisible()
+    await b.getByRole('button', { name: 'Open my boards' }).click()
     await expect(b.getByRole('heading', { name: 'Shared plans' })).toBeVisible()
     await expect(b.getByRole('heading', { name: 'Welcome' })).toHaveCount(0)
 
@@ -99,17 +114,13 @@ test('syncs boards between two browsers through the server', async ({ context })
   }
 })
 
-test('rejects a wrong password and explains disabled sign-up', async ({ context }) => {
+test('rejects a wrong password and explains how to get an account', async ({ context }) => {
   const page = await openBoard(context)
-  await page.getByRole('button', { name: 'More' }).click()
-  await page.getByRole('menuitem', { name: 'Account & sync' }).click()
-  const dialog = page.getByRole('dialog', { name: 'Settings' })
-  await dialog.getByLabel('Server address').fill(SERVER)
-  await dialog.getByLabel('Username').fill('michal')
-  await dialog.getByLabel('Password').fill('wrong password')
-  await dialog.getByRole('button', { name: 'Sign in' }).click()
-  await expect(dialog.getByRole('alert')).toHaveText('Wrong username or password')
-  await dialog.getByLabel('Username').fill('newbie')
-  await dialog.getByRole('button', { name: 'Create account' }).click()
-  await expect(dialog.getByRole('alert')).toContainText('Sign-up is turned off')
+  await signIn(page, 'wrong password')
+  await expect(page.getByRole('alert')).toHaveText('Wrong username or password')
+  // Sign-up is off on this server, so there is no "create one" link, only a hint.
+  await expect(page.getByText(/Ask the person who runs this server/)).toBeVisible()
+  await expect(page.getByRole('button', { name: /Create one/ })).toHaveCount(0)
+  await page.getByRole('button', { name: /back to my boards/ }).click()
+  await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
 })

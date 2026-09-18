@@ -5,7 +5,7 @@ import { defineConfig } from 'wxt'
 
 const require = createRequire(import.meta.url)
 const EMOJI_LOCALES = ['en', 'pl'] as const
-const OPTIONAL_PERMISSIONS = ['bookmarks', 'topSites', 'notifications']
+const OPTIONAL_PERMISSIONS = ['bookmarks', 'topSites', 'notifications', 'identity']
 
 export default defineConfig({
   srcDir: 'src',

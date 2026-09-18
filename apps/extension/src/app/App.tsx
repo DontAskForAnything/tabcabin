@@ -6,6 +6,7 @@ import { I18nProvider, type Translate, useLocale, useT } from '@/i18n'
 import { translate } from '@/i18n/translate'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import { Shell } from './Shell'
+import { SignInPage } from './signin/SignInPage'
 import type { Surface } from './mount'
 import { useActive } from './useActive'
 
@@ -54,7 +55,7 @@ export function App({ surface }: { surface: Surface }) {
       <ComponentText>
         <MotionConfig reducedMotion="user">
           <TooltipProvider>
-            <Shell surface={surface} active={active} />
+            {surface === 'signin' ? <SignInPage /> : <Shell surface={surface} active={active} />}
             <Toaster />
           </TooltipProvider>
         </MotionConfig>

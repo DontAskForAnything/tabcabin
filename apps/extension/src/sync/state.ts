@@ -1,10 +1,11 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db/db'
+import type { PublicUser } from './client'
 
 export interface Account {
   serverUrl: string
   token: string
-  user: { id: string; username: string; isAdmin: boolean }
+  user: PublicUser
   /** Set once the first synchronization (merge or download) finished. */
   initialized: boolean
 }

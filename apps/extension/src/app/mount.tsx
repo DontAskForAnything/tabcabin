@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from './App'
 import './styles.css'
 
-export type Surface = 'newtab' | 'sidepanel'
+export type Surface = 'newtab' | 'sidepanel' | 'signin'
 
 export function mountApp(surface: Surface) {
   const root = document.getElementById('root')

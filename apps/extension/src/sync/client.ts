@@ -12,7 +12,22 @@ export interface RemoteChange {
 export interface PublicUser {
   id: string
   username: string
+  email?: string | null
   isAdmin: boolean
+}
+
+export interface ServerHealth {
+  ok: boolean
+  name: string
+  version: string
+  /** Sign-in options (missing on servers older than Google sign-in). */
+  auth?: { password: boolean; google: boolean; signup: boolean }
+}
+
+export interface SignedIn {
+  token: string
+  user: PublicUser
+  expiresAt: number
 }
 
 export type PushChange =
@@ -56,14 +71,34 @@ export class SyncClient {
   }
 
   health() {
-    return this.request<{ ok: boolean; name: string; version: string }>('/health')
+    return this.request<ServerHealth>('/health')
   }
 
   async login(username: string, password: string, label: string, signup = false) {
-    const result = await this.request<{ token: string; user: PublicUser; expiresAt: number }>(
-      signup ? '/auth/signup' : '/auth/login',
-      { method: 'POST', body: JSON.stringify({ username, password, label }) },
-    )
+    const result = await this.request<SignedIn>(signup ? '/auth/signup' : '/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password, label }),
+    })
+    this.token = result.token
+    return result
+  }
+
+  /** Where the Google sign-in window starts (see apps/server/src/routes/google.ts). */
+  googleStartUrl(redirectUri: string, challenge: string, label: string) {
+    const params = new URLSearchParams({
+      redirect_uri: redirectUri,
+      code_challenge: challenge,
+      label,
+    })
+    return `${this.serverUrl}/auth/google/start?${params}`
+  }
+
+  /** Trades the one-time code from the sign-in window for a session. */
+  async exchangeGoogleCode(code: string, verifier: string) {
+    const result = await this.request<SignedIn>('/auth/google/exchange', {
+      method: 'POST',
+      body: JSON.stringify({ code, verifier }),
+    })
     this.token = result.token
     return result
   }

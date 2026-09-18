@@ -36,9 +36,15 @@ export interface Settings {
   notificationsAsked: boolean
 }
 
+/** The browser's language when TabHangar speaks it, English otherwise. */
+function browserLocale(): Settings['locale'] {
+  const language = typeof navigator === 'undefined' ? '' : navigator.language
+  return /^pl\b/i.test(language) ? 'pl' : 'en'
+}
+
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
-  locale: 'en',
+  locale: browserLocale(),
   activeWorkspaceId: null,
   activeCategoryIds: {},
   viewModes: {},

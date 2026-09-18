@@ -1,8 +1,9 @@
 # Self-hosting the sync server
 
-The TabHangar extension works without a server. Run one when you want the same boards in several
-browsers or on several computers. The server is a single small container with an SQLite database;
-a 1 vCPU / 512 MB VPS is plenty for a household.
+The TabHangar extension works without a server, and the official build syncs through the TabHangar
+server. Run your own when you want your boards on hardware you control, for yourself, your family or
+anyone you let in. The server is a single small container with an SQLite database; a 1 vCPU /
+512 MB VPS is plenty for a household.
 
 What you need:
 
@@ -25,12 +26,17 @@ cp .env.example .env
 nano .env
 ```
 
-| Variable                           | Meaning                                                                     |
-| ---------------------------------- | --------------------------------------------------------------------------- |
-| `DOMAIN`                           | Your domain, e.g. `tabs.example.com`                                        |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | First account, created on the first start (remove the password afterwards)  |
-| `ALLOW_SIGNUP`                     | `true` lets anyone who knows the address create an account. Default `false` |
-| `SESSION_TTL_DAYS`                 | How long an unused device stays signed in. Default `30`                     |
+| Variable                           | Meaning                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------- |
+| `DOMAIN`                           | Your domain, e.g. `tabs.example.com`                                             |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | First account, created on the first start (remove the password afterwards)       |
+| `ALLOW_SIGNUP`                     | `true` lets anyone create an account (password or Google). Default `false`       |
+| `SESSION_TTL_DAYS`                 | How long an unused device stays signed in. Default `30`                          |
+| `GOOGLE_CLIENT_ID`, `…_SECRET`     | Turn on "Continue with Google" (see [Sign in with Google](#sign-in-with-google)) |
+| `SIGNUP_EMAILS`                    | Google addresses that may join while signup is off: `ola@gmail.com,@family.org`  |
+| `MAX_USERS`                        | Most accounts the server accepts. Default `0` (no limit)                         |
+| `SIGNUPS_PER_IP_PER_DAY`           | New accounts one network may create per day. Default `5`                         |
+| `MAX_RECORDS_PER_USER`             | Synced boards, groups, links and notes per account. Default `100000`             |
 
 ## 3. Start
 
@@ -49,12 +55,54 @@ curl https://tabs.example.com/health
 
 After the first start, remove `ADMIN_PASSWORD` from `.env`.
 
-## 4. Connect the extension
+## 4. Build the extension for your server
 
-In TabHangar open **Settings → Account & sync** (or **More → Account & sync**), enter
-`https://tabs.example.com`, wait for "Server responds", then sign in. If the browser already has
-boards and so does your account, choose **Keep both** or **Use the server's data**. Repeat on every
-browser you want to sync.
+The sync server is part of the extension build, so nobody has to type an address. Build it with
+yours (needs Node 24 and pnpm):
+
+```bash
+cd /path/to/tabhangar            # on your computer
+echo 'WXT_SYNC_SERVER=https://tabs.example.com' > apps/extension/.env
+pnpm install
+pnpm --filter @tabhangar/extension build
+```
+
+Load `apps/extension/.output/chrome-mv3` in `chrome://extensions` (Developer mode → **Load
+unpacked**), or `pnpm zip:ext` for a zip to share with your family.
+
+Then click **Sign in** in the top bar of a new tab. If the browser already has boards and so does the
+account, choose **Keep both** or **Use the server's data**. From then on syncing runs by itself:
+every change is sent right away and changes from other computers arrive live.
+
+## Sign in with Google
+
+Optional, but nicer for people who don't want another password.
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/) → create a project.
+2. **APIs & Services → OAuth consent screen**: user type **External**, app name "TabHangar", your
+   support e-mail. Scopes: only `openid`, `email` and `profile` (no verification needed for these).
+   Then **Publish app** so it is not limited to test users.
+3. **Credentials → Create credentials → OAuth client ID** → type **Web application** → authorized
+   redirect URI `https://tabs.example.com/auth/google/callback`.
+4. Put the client ID and secret into `.env` as `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, then
+   `docker compose up -d`.
+
+Who can come in with Google:
+
+- everyone, when `ALLOW_SIGNUP=true`;
+- addresses and domains listed in `SIGNUP_EMAILS` (e.g. `ola@gmail.com,@studio.dev`);
+- existing users whose address you set: `tabhangar set-email michal michal@gmail.com`. Their
+  password keeps working too.
+
+Optionally, set `EXTENSION_IDS` to the id of your extension build (from `chrome://extensions`) so
+sign-ins can only be handed to it.
+
+## Limits
+
+A public server needs a few brakes. Sign-ins are rate-limited (20 attempts per 15 minutes per
+network, 8 failures per account), each network can create `SIGNUPS_PER_IP_PER_DAY` accounts a day,
+`MAX_USERS` caps the total and `MAX_RECORDS_PER_USER` the size of one account. When an account is
+full, the extension says so and keeps new things locally until there is room again.
 
 ## Managing accounts
 
@@ -64,6 +112,8 @@ The image includes a small command-line tool:
 docker compose exec tabhangar tabhangar list-users
 docker compose exec tabhangar tabhangar create-user anna          # asks for a password
 docker compose exec tabhangar tabhangar create-user anna --admin
+docker compose exec tabhangar tabhangar create-user anna --email anna@gmail.com  # can also use Google
+docker compose exec tabhangar tabhangar set-email anna anna@gmail.com           # link Google later
 docker compose exec tabhangar tabhangar reset-password anna      # also signs out every device
 docker compose exec tabhangar tabhangar delete-user anna         # deletes the account and its data
 ```
@@ -149,14 +199,17 @@ Run it as a service (systemd, pm2…) and put an HTTPS proxy in front of it.
 
 | Problem                               | What to check                                                                                                    |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| "Can't reach a TabHangar server here" | `curl https://your-domain/health` from your computer; DNS record; ports 80/443 open; `docker compose logs caddy` |
+| "Can't reach <your-domain> right now" | `curl https://your-domain/health` from your computer; DNS record; ports 80/443 open; `docker compose logs caddy` |
 | Certificate errors                    | The domain must resolve to this server before the first start; Caddy retries automatically                       |
 | Changes appear only after a minute    | The proxy buffers responses — disable buffering for `/events` (see above)                                        |
 | "Too many attempts" when signing in   | Wait 15 minutes, or restart the container to clear the counters                                                  |
+| "This Google account can't join"      | Signup is off: add the address to `SIGNUP_EMAILS` or run `tabhangar set-email <user> <address>`                  |
+| Google shows `redirect_uri_mismatch`  | The OAuth client needs exactly `https://<DOMAIN>/auth/google/callback` and `PUBLIC_URL` must match `DOMAIN`      |
 | Forgot the password                   | `docker compose exec tabhangar tabhangar reset-password <name>`                                                  |
 
 ## What is stored
 
-Accounts (username and a scrypt password hash), active sessions (only a hash of each token), and the
+Accounts (username, a scrypt password hash, and the e-mail and Google account id when Google
+sign-in is used), active sessions (only a hash of each token), and the
 rows your browsers sync: workspaces, categories, groups, links, notes and reminders. Nothing is sent
 anywhere else; there is no telemetry.

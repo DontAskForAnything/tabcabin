@@ -1,7 +1,7 @@
 import { Download, Upload } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { useT } from '@/i18n'
-import { firstSync } from '@/sync/engine'
+import { firstSync } from '@/sync/firstSync'
 import type { PendingChoice } from '@/sync/session'
 import { setAccount } from '@/sync/state'
 import { errorText } from './errorText'

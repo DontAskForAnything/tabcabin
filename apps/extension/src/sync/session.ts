@@ -1,5 +1,5 @@
 import { type SignedIn, type SyncClient } from './client'
-import { firstSync, localHasData } from './engine'
+import { firstSync, localHasData } from './firstSync'
 import { type Account, setAccount } from './state'
 
 /** Names the session on the server, e.g. "TabHangar · Windows". */

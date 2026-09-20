@@ -1,7 +1,7 @@
 import { Folder } from 'lucide-react'
 import { Button, Checkbox, cn, Modal, toast } from '@tabhangar/ui'
 import { useEffect, useState } from 'react'
-import { addGroupWithLinks, type BookmarkFolder, loadBookmarkFolders } from '@/data/transfer'
+import { addGroupWithLinks, type BookmarkFolder, loadBookmarkFolders } from '@/data/browserLinks'
 import type { Change } from '@tabhangar/core'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'

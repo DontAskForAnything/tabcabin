@@ -2,15 +2,9 @@ import { Braces, FileSpreadsheet, Bookmark, Upload } from 'lucide-react'
 import { Button, SegmentedControl, toast } from '@tabhangar/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useRef, useState } from 'react'
-import {
-  addGroupWithLinks,
-  buildExport,
-  downloadFile,
-  type ExportFormat,
-  ImportError,
-  importFile as importFileText,
-  loadTopSites,
-} from '@/data/transfer'
+import { addGroupWithLinks, loadTopSites } from '@/data/browserLinks'
+import { buildExport, downloadFile, type ExportFormat } from '@/data/exportFile'
+import { ImportError, importFile as importFileText } from '@/data/importFile'
 import { db } from '@/db/db'
 import { clearAllData } from '@/db/repo'
 import { useLocale, useT } from '@/i18n'

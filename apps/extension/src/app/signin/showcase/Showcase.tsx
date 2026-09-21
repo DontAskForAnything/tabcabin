@@ -1,5 +1,5 @@
 import { useT } from '@/i18n'
-import { HangarMark } from '../../HangarMark'
+import { HangarMark } from '@/app/shared/HangarMark'
 import { CardHead, PreviewCard, PreviewLink, PreviewTask } from './previews'
 
 /** The left half: a few board cards and the promise, as in the design. */

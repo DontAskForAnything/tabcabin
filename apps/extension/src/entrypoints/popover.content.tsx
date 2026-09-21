@@ -1,6 +1,6 @@
 import { createRoot, type Root } from 'react-dom/client'
 import { isRuntimeMessage } from '@/messages'
-import { PagePopover } from '@/content/PagePopover'
+import { PagePopover } from '@/content/popover/PagePopover'
 import contentCss from '@/content/content.css?inline'
 import { showInTopLayer } from '@/content/topLayer'
 

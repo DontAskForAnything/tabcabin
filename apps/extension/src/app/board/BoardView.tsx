@@ -9,7 +9,8 @@ import { GroupDropLine } from '../dnd/DropMarkers'
 import { useGroupInsertIndex } from '../dnd/hooks'
 import { useBoardActions } from './actions'
 import { BoardContext } from './BoardContext'
-import { GroupCard, NewGroupColumn } from './GroupCard'
+import { GroupCard } from './group/GroupCard'
+import { NewGroupColumn } from './group/NewGroupColumn'
 
 export function BoardView({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()

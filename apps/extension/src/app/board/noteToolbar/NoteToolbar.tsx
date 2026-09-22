@@ -1,3 +1,6 @@
+import { NOTE_COLORS } from '@tabhangar/core'
+import { EmojiPickerPanel, Popover, PopoverContent, PopoverTrigger, toast } from '@tabhangar/ui'
+import { useLiveQuery } from 'dexie-react-hooks'
 import {
   Bell,
   Check,
@@ -7,28 +10,16 @@ import {
   Palette,
   Trash,
 } from 'lucide-react'
-import { NOTE_COLORS, type NoteColor } from '@tabhangar/core'
-import {
-  cn,
-  EmojiPickerPanel,
-  IconButton,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  toast,
-  Tooltip,
-} from '@tabhangar/ui'
-import { useLiveQuery } from 'dexie-react-hooks'
 import { AnimatePresence, motion } from 'motion/react'
-import type { MouseEvent, ReactNode } from 'react'
 import { db } from '@/db/db'
 import { deleteItems, getItemReminder, updateItem } from '@/db/repo'
 import { useT } from '@/i18n'
 import { copyText, emojiBaseUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
-import { insertIntoNote } from './items/noteEvents'
-
-const keepFocus = (event: MouseEvent) => event.preventDefault()
+import { insertIntoNote } from '../items/noteEvents'
+import { Swatch } from './Swatch'
+import { ToolButton } from './ToolButton'
+import { keepFocus } from './keepFocus'
 
 /** Docked toolbar shown while a note is being edited. */
 export function NoteToolbar() {
@@ -151,56 +142,5 @@ export function NoteToolbar() {
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
-
-function ToolButton({
-  label,
-  icon,
-  onClick,
-  active,
-}: {
-  label: string
-  icon: ReactNode
-  onClick?: () => void
-  active?: boolean
-}) {
-  return (
-    <IconButton
-      label={label}
-      icon={icon}
-      onClick={onClick}
-      onMouseDown={keepFocus}
-      variant={active ? 'accent' : 'plain'}
-      className={cn('size-9 rounded-[11px]', !active && 'text-ink-2')}
-    />
-  )
-}
-
-function Swatch({
-  label,
-  color,
-  active,
-  onPick,
-}: {
-  label: string
-  color: NoteColor | null
-  active: boolean
-  onPick: () => void
-}) {
-  return (
-    <Tooltip label={label}>
-      <button
-        type="button"
-        aria-label={label}
-        onMouseDown={keepFocus}
-        onClick={onPick}
-        className={cn(
-          'size-7 rounded-[9px] shadow-[inset_0_0_0_1px_rgb(20_24_40/0.1)] transition-transform hover:scale-110',
-          active && 'shadow-[0_0_0_2px_var(--card),0_0_0_4px_var(--accent)]',
-        )}
-        style={{ background: color ? `var(--note-${color}-bg)` : 'var(--subtle)' }}
-      />
-    </Tooltip>
   )
 }

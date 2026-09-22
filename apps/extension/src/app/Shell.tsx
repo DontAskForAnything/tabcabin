@@ -10,7 +10,7 @@ import { TabsPanel } from './panel/TabsPanel'
 import { TopBar } from './topbar/TopBar'
 import { type ActiveContext } from './useActive'
 import { useGlobalShortcuts } from './useGlobalShortcuts'
-import { NoteToolbar } from './board/NoteToolbar'
+import { NoteToolbar } from './board/noteToolbar/NoteToolbar'
 import { SelectionBar } from './board/SelectionBar'
 
 export function Shell({ surface, active }: { surface: Surface; active: ActiveContext }) {

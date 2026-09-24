@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Pencil, Plus, Settings2, Trash } from 'lucide-react'
+import type { Category } from '@tabhangar/core'
 import {
   cn,
   ContextMenu,
@@ -8,17 +8,17 @@ import {
   ContextMenuTrigger,
   IconButton,
 } from '@tabhangar/ui'
-import type { Category } from '@tabhangar/core'
-import { type ComponentProps, useEffect, useRef, useState } from 'react'
+import { ArrowLeft, ArrowRight, Pencil, Plus, Settings2, Trash } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { createCategory, deleteCategory, moveCategory, updateCategory } from '@/db/repo'
 import { useT } from '@/i18n'
 import { confirmDialog } from '@/state/confirm'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import { CategoryMoveToWorkspace } from '../board/MoveTargets'
-import { useSimpleDrop } from '../dnd/hooks'
-import { dndId } from '../dnd/types'
+import { InlineRename } from '../shared/InlineRename'
 import { setActiveCategory, type ActiveContext } from '../useActive'
+import { CategoryDropTab } from './CategoryDropTab'
 
 const LONG_PRESS_MS = 450
 
@@ -75,8 +75,10 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
           const selected = cat.id === category?.id
           if (renamingId === cat.id)
             return (
-              <RenameInput
+              <InlineRename
                 key={cat.id}
+                fitContent
+                className="rounded-[10px] px-3 text-[13.5px]"
                 initial={cat.name}
                 onDone={(name) => {
                   setRenamingId(null)
@@ -159,52 +161,5 @@ export function CategoryTabs({ active }: { active: ActiveContext }) {
         onClick={() => void add()}
       />
     </div>
-  )
-}
-
-function CategoryDropTab({
-  categoryId,
-  className,
-  ref,
-  ...props
-}: ComponentProps<'button'> & { categoryId: string }) {
-  const { setNodeRef, active } = useSimpleDrop(dndId.category(categoryId), {
-    zone: 'category',
-    categoryId,
-  })
-  return (
-    <button
-      ref={(node) => {
-        setNodeRef(node)
-        if (typeof ref === 'function') ref(node)
-        else if (ref) ref.current = node
-      }}
-      type="button"
-      className={cn(className, active && 'shadow-[0_0_0_2px_var(--success)]')}
-      {...props}
-    />
-  )
-}
-
-function RenameInput({ initial, onDone }: { initial: string; onDone: (value: string) => void }) {
-  const [value, setValue] = useState(initial)
-  const ref = useRef<HTMLInputElement>(null)
-  useEffect(() => {
-    ref.current?.focus()
-    ref.current?.select()
-  }, [])
-  return (
-    <input
-      ref={ref}
-      value={value}
-      onChange={(event) => setValue(event.target.value)}
-      onBlur={() => onDone(value.trim())}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') onDone(value.trim())
-        if (event.key === 'Escape') onDone(initial)
-      }}
-      size={Math.max(6, value.length + 1)}
-      className="h-8 rounded-[10px] bg-card px-3 text-[13.5px] font-semibold text-ink shadow-tile outline-none"
-    />
   )
 }

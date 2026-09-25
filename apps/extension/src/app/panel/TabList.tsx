@@ -2,7 +2,7 @@ import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
 import { ChromeGroupBlock } from './ChromeGroupBlock'
 import type { TabBlock } from './tabBlocks'
-import { TabRow } from './TabRow'
+import { TabRow } from './tab/TabRow'
 import type { OpenTab } from './useOpenTabs'
 
 export function TabList({

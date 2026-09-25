@@ -8,7 +8,7 @@ import type { ActiveContext } from '../useActive'
 import { usePanel } from './panelStore'
 import { saveTabs } from './saveTabs'
 import { SaveToMenuItems } from './SaveToMenu'
-import { TabRow } from './TabRow'
+import { TabRow } from './tab/TabRow'
 import { type ChromeTabGroup, TAB_GROUP_COLORS, type OpenTab } from './useOpenTabs'
 
 export function ChromeGroupBlock({

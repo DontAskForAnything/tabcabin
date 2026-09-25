@@ -7,7 +7,7 @@ import { useDrag } from '../dnd/store'
 import type { ActiveContext } from '../useActive'
 import { PanelBody } from './PanelBody'
 import { usePanelData } from './usePanelData'
-import { TabRow } from './TabRow'
+import { TabTile } from './tab/TabTile'
 import { usePanel } from './panelStore'
 
 export function RailPanel({ active }: { active: ActiveContext }) {
@@ -70,13 +70,7 @@ export function RailPanel({ active }: { active: ActiveContext }) {
               </span>
               <div className="no-scrollbar flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto px-2 pt-1 pb-2">
                 {inWindow.map((tab) => (
-                  <TabRow
-                    key={tab.id}
-                    tab={tab}
-                    allTabs={inWindow}
-                    active={active}
-                    variant="tile"
-                  />
+                  <TabTile key={tab.id} tab={tab} allTabs={inWindow} />
                 ))}
               </div>
             </div>

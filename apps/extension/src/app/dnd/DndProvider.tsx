@@ -1,6 +1,5 @@
 import {
   type Announcements,
-  type CollisionDetection,
   DndContext,
   type DragEndEvent,
   type DragMoveEvent,
@@ -9,7 +8,6 @@ import {
   type DragStartEvent,
   MeasuringStrategy,
   PointerSensor,
-  pointerWithin,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -19,22 +17,14 @@ import { useUi } from '@/state/ui'
 import { useBoardActions } from '../board/actions'
 import { setActiveCategory, type ActiveContext } from '../useActive'
 import { applyDrop, listOrder, listRects } from './apply'
-import { acceptsZone, type Point, resolveTarget } from './logic'
+import { zoneCollision } from './collision'
+import { type Point, resolveTarget } from './logic'
 import { DragPreview } from './DragPreview'
 import { type OverlayInfo, useDrag } from './store'
 import type { DragSource, DropZone } from './types'
 
 const COMBINE_DELAY = 450
 const CATEGORY_DELAY = 550
-
-const PRIORITY: Record<DropZone['zone'], number> = {
-  item: 0,
-  trash: 1,
-  newGroup: 1,
-  category: 1,
-  list: 2,
-  group: 3,
-}
 
 interface MoveSnapshot {
   zone: DropZone | null
@@ -63,26 +53,7 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
   const activeRef = useRef(active)
   activeRef.current = active
 
-  const collision: CollisionDetection = (args) => {
-    if (args.pointerCoordinates) pointer.current = args.pointerCoordinates
-    // Read from our store: the dragged node may unmount (e.g. after switching category mid-drag).
-    const source =
-      useDrag.getState().source ?? (args.active.data.current?.source as DragSource | undefined)
-    const containers = args.droppableContainers.filter((container) => {
-      const zone = container.data.current?.zone as DropZone | undefined
-      return zone && source && acceptsZone(source, zone)
-    })
-    const hits = pointerWithin({ ...args, droppableContainers: containers })
-    const area = (id: string | number) => {
-      const rect = args.droppableRects.get(id)
-      return rect ? rect.width * rect.height : Infinity
-    }
-    return hits.sort((a, b) => {
-      const za = a.data?.droppableContainer.data.current?.zone as DropZone
-      const zb = b.data?.droppableContainer.data.current?.zone as DropZone
-      return PRIORITY[za.zone] - PRIORITY[zb.zone] || area(a.id) - area(b.id)
-    })
-  }
+  const collision = useMemo(() => zoneCollision((point) => (pointer.current = point)), [])
 
   const clearTimers = () => {
     if (combine.current.timer) clearTimeout(combine.current.timer)

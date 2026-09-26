@@ -7,7 +7,7 @@ import { type SettingsTab, useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
 import { AccountSettings } from './account/AccountSettings'
 import { AppearanceSettings } from './AppearanceSettings'
-import { DataSettings } from './DataSettings'
+import { DataSettings } from './data/DataSettings'
 import { GeneralSettings } from './GeneralSettings'
 import { ShortcutSettings } from './ShortcutSettings'
 

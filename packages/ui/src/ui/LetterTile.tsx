@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { cn } from '../lib/cn'
-import { isDefaultFavicon } from './faviconDefault'
+import { type TileSize, tileSizes } from './tileSizes'
+
+export type { TileSize }
 
 const PALETTE = [
   ['#5b4be0', '#ffffff'],
@@ -28,22 +29,6 @@ export function letterTileFor(seed: string): { letter: string; bg: string; fg: s
   return { letter, bg, fg }
 }
 
-export type TileSize = 'xs' | 'sm' | 'md' | 'lg'
-
-const sizes: Record<TileSize, string> = {
-  xs: 'size-6 rounded-md text-[11px]',
-  sm: 'size-7 rounded-lg text-[12px]',
-  md: 'size-9 rounded-[10px] text-[14px]',
-  lg: 'size-10 rounded-[11px] text-[15px]',
-}
-
-const imgSizes: Record<TileSize, string> = {
-  xs: 'size-3.5',
-  sm: 'size-4',
-  md: 'size-5',
-  lg: 'size-[22px]',
-}
-
 export function LetterTile({
   seed,
   size = 'md',
@@ -59,57 +44,12 @@ export function LetterTile({
       aria-hidden
       className={cn(
         'flex shrink-0 items-center justify-center font-bold shadow-tile',
-        sizes[size],
+        tileSizes[size],
         className,
       )}
       style={{ background: bg, color: fg }}
     >
       {letter}
-    </span>
-  )
-}
-
-export interface FaviconProps {
-  /** Image URLs tried in order (e.g. the browser's favicon service, then the page's own icon). */
-  src?: string | null | readonly (string | null | undefined)[]
-  /** Used for the letter fallback, usually the page host. */
-  seed: string
-  size?: TileSize
-  className?: string
-}
-
-/**
- * Favicon in a white rounded tile. Moves to the next source when an image fails or is the
- * browser's generic globe, and ends with a colored letter.
- */
-export function Favicon({ src, seed, size = 'md', className }: FaviconProps) {
-  const sources = (Array.isArray(src) ? src : [src]).filter((s): s is string => !!s)
-  const key = sources.join('\n')
-  const [state, setState] = useState({ key, index: 0 })
-  const index = state.key === key ? state.index : 0
-  const current = sources[index]
-  const next = () => setState({ key, index: index + 1 })
-  if (!current) return <LetterTile seed={seed} size={size} className={className} />
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'flex shrink-0 items-center justify-center bg-white shadow-tile',
-        sizes[size],
-        className,
-      )}
-    >
-      <img
-        key={current}
-        src={current}
-        alt=""
-        draggable={false}
-        className={cn('object-contain', imgSizes[size])}
-        onError={next}
-        onLoad={(event) => {
-          void isDefaultFavicon(event.currentTarget).then((generic) => generic && next())
-        }}
-      />
     </span>
   )
 }

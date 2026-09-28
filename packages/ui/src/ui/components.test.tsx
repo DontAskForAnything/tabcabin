@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { Button } from './Button'
 import { Checkbox } from './Checkbox'
-import { Favicon } from './LetterTile'
+import { Favicon } from './Favicon'
 
 describe('components', () => {
   it('renders a button with the given variant', () => {

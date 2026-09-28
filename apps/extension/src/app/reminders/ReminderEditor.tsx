@@ -11,7 +11,8 @@ import { type Settings, updateSettings } from '@/settings/settings'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import { formatDue } from './format'
-import { ReminderFields, useReminderForm } from './ReminderForm'
+import { ReminderFields } from './ReminderFields'
+import { useReminderForm } from './useReminderForm'
 
 export function itemLabel(item: Item): string {
   if (item.kind === 'note') return item.text.split('\n')[0]?.trim() || item.title

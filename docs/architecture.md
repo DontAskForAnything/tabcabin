@@ -1,29 +1,33 @@
 # Architecture
 
-TabHangar is a pnpm monorepo with three TypeScript packages today and two more planned:
+TabHangar is a pnpm monorepo with five TypeScript packages:
 
 ```
-packages/core      pure domain logic — runs anywhere (extension, tests, the future server)
+packages/core      pure domain logic — runs anywhere (extension, server, tests)
 packages/ui        design system — tokens, Tailwind theme and accessible React components
 apps/extension     the Chrome extension (WXT, Manifest V3, React)
-apps/server        (planned) self-hosted sync server: Hono + SQLite
-apps/landing       (planned) Astro landing page
+apps/server        sync server: Hono, SQLite (Drizzle), password and Google sign-in
+apps/landing       the website (Astro)
 ```
+
+Code is organized by feature: a folder per feature (`app/board/group`, `app/signin`,
+`db/repo`, `sync`, …), one component or one job per file, with hooks (`use…`) for state and side
+effects and plain functions for logic that can be tested on its own.
 
 ## packages/core
 
 Everything that can be written without browser APIs lives here and is covered by unit tests:
 
 - **Schema** (`schema.ts`) — Zod schemas for workspaces, categories, groups, items and reminders. The
-  same schemas validate backups and will validate sync payloads on the server.
+  same schemas validate backups and sync payloads on the server.
 - **Ordering** (`position.ts`) — fractional index keys (`fractional-indexing`). Moving an item writes
   one row instead of renumbering a list, which keeps change sets small and sync conflicts rare.
 - **Operations** (`ops.ts`) — moving, combining into stacks, unstacking, duplicating, sorting and soft
   deletion return **change sets** (`put`/`purge` lists) instead of writing anything themselves.
 - **Reminders** (`reminders.ts`) — next occurrence of weekly and monthly rules, snooze presets, due
   checks.
-- **Transfer** (`transfer/`) — the backup format, bookmarks HTML and CSV exporters, and the tabExtend
-  importer.
+- **Transfer** (`transfer/`) — the backup format, bookmarks HTML and CSV exporters, and importers for
+  tabExtend and Toby exports, bookmark files and link lists (parsed into a shared outline first).
 - **Text helpers** — URL normalization (for "already saved" checks and duplicate detection) and note
   shortcuts (`- ` → `•`, `/todo`, `/done`).
 
@@ -42,13 +46,14 @@ a shadow root without loading fonts into visited pages.
 
 Built with [WXT](https://wxt.dev). Entry points in `src/entrypoints`:
 
-| Entry             | Purpose                                                                                         |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| `newtab`          | The main app (board, collections, panel, dialogs) replacing the new tab page                    |
-| `sidepanel`       | The same app in compact layout for Chrome's side panel                                          |
-| `background`      | Service worker: context menus, toolbar badge, popover toggle, reminder alarms and notifications |
-| `popover.content` | Save popover, injected into the active tab on demand, rendered in a shadow root                 |
-| `toast.content`   | Small in-page toasts with Undo after saving from the context menu                               |
+| Entry             | Purpose                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `newtab`          | The main app (board, collections, panel, dialogs) replacing the new tab page             |
+| `sidepanel`       | The same app in compact layout for Chrome's side panel                                   |
+| `background`      | Service worker: context menus, toolbar badge, popover toggle, reminders, the sync engine |
+| `signin`          | The sign-in page (Google or username and password)                                       |
+| `popover.content` | Save popover, injected into the active tab on demand, rendered in a shadow root          |
+| `toast.content`   | Small in-page toasts with Undo after saving from the context menu                        |
 
 Content scripts are registered at runtime without `matches` and injected with `activeTab` +
 `scripting`, so the extension needs **no host permissions**.
@@ -56,7 +61,7 @@ Content scripts are registered at runtime without `matches` and injected with `a
 ### Data flow
 
 ```
-UI action ──► repo.ts (commit) ──► applyChanges ──► Dexie transaction ─┬─► IndexedDB tables
+UI action ──► db/repo (commit) ──► applyChanges ──► Dexie transaction ─┬─► IndexedDB tables
                  │                                                     └─► outbox (for sync)
                  └─ undo change set (rows as they were before)
 
@@ -65,12 +70,24 @@ IndexedDB ──► liveQuery (dexie-react-hooks) ──► React components   (
 ```
 
 - **`db/db.ts`** — Dexie schema: one table per entity plus `settings`, `meta` and `outbox`.
-- **`db/repo.ts`** — every write goes through `commit()`, which snapshots the affected rows first and
-  returns the inverse change set. Undo is therefore generic: re-apply the snapshot.
+- **`db/repo/`** — one module per entity (workspaces, categories, groups, items, bin, reminders).
+  Every write goes through `commit()`, which snapshots the affected rows first and returns the inverse
+  change set. Undo is therefore generic: re-apply the snapshot.
 - **`db/apply.ts`** — writes a change set in one transaction and records each changed row in the
-  `outbox`, which the sync engine will push to the server.
+  `outbox`, which the sync engine pushes to the server.
 - Reads are live queries; there is no client-side cache to invalidate. New tab pages, the side panel
   and the service worker all observe the same database.
+
+### Sync
+
+The sync engine runs in the service worker (`sync/`): `push.ts` sends the outbox, `pull.ts` applies
+the server's changes without queuing them again, `firstSync.ts` handles the first sign-in, and
+`engine.ts` only schedules them (on every change, on a server-sent event, and once a minute). The
+server keeps the newest version of each row (last write wins by the client's `updatedAt`).
+
+The server address is part of the build (`src/sync/server.ts`, or `WXT_SYNC_SERVER` in
+`apps/extension/.env`). Signing in happens on its own page: Google through the server's OAuth flow
+with PKCE (the extension receives a one-time code only it can redeem), or username and password.
 
 ### UI state
 

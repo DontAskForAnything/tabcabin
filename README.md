@@ -58,7 +58,7 @@ searchable, and works offline. There is no account, no tracking and no subscript
 
 - Light and dark themes, compact density, English and Polish
 - Rebindable keyboard shortcuts and a cheat sheet on `?`
-- **Import** TabHangar backups, **tabExtend JSON exports**, Chrome bookmark folders and your most visited sites
+- **Import** TabHangar backups, **Toby** and **tabExtend** exports, bookmark files (Chrome, Firefox, Safari, Raindrop), OneTab lists, Chrome bookmark folders and your most visited sites
 - **Export** a workspace or everything as JSON, a bookmarks file or CSV
 
 <table>
@@ -74,12 +74,16 @@ searchable, and works offline. There is no account, no tracking and no subscript
 
 ## Sync between computers
 
-Run the small sync server on your own machine or VPS (Docker, SQLite, automatic HTTPS with Caddy),
-then sign in from **Settings → Account & sync** in every browser. Changes show up on your other
-computers within seconds. See [docs/self-hosting.md](docs/self-hosting.md).
+Click **Sign in** in the top bar and continue with Google (or a username and password). From then on
+syncing runs by itself: every change is sent right away and changes from your other computers arrive
+live. Without an account everything stays in your browser.
+
+**Your own server** — run the small sync server on your machine or a VPS (Docker, SQLite, automatic
+HTTPS with Caddy, optional Google sign-in, limits for public servers) and build the extension with
+its address in `apps/extension/.env`. See [docs/self-hosting.md](docs/self-hosting.md).
 
 ```bash
-cp .env.example .env    # domain and first account
+cp .env.example .env    # domain, first account, sign-up rules
 docker compose --profile caddy up -d
 ```
 

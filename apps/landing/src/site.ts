@@ -30,7 +30,7 @@ export const faq: FaqItem[] = [
   },
   {
     q: 'Can I import my existing tabs and bookmarks?',
-    a: 'Yes: TabHangar backups, tabExtend JSON exports, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
+    a: 'Yes: TabHangar backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
   },
   {
     q: 'Which browsers are supported?',

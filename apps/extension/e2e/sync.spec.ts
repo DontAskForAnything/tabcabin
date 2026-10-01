@@ -1,5 +1,5 @@
 import { type ChildProcess, spawn } from 'node:child_process'
-import { mkdtempSync } from 'node:fs'
+import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -15,15 +15,18 @@ const PORT = 18_000 + Math.floor(Math.random() * 1000)
  */
 const SERVER = process.env.SYNC_SERVER ?? `http://127.0.0.1:${PORT}`
 let server: ChildProcess | undefined
+/** Created in beforeAll: Playwright also loads this file just to list the tests. */
+let dataDir = ''
 
 test.beforeAll(async () => {
+  dataDir = mkdtempSync(join(tmpdir(), 'tabhangar-server-'))
   if (!process.env.SYNC_SERVER)
     server = spawn(process.execPath, [serverMain], {
       env: {
         ...process.env,
         PORT: String(PORT),
         HOST: '127.0.0.1',
-        DATA_DIR: mkdtempSync(join(tmpdir(), 'tabhangar-server-')),
+        DATA_DIR: dataDir,
         ADMIN_USERNAME: 'michal',
         ADMIN_PASSWORD: 'correct horse',
       },
@@ -42,6 +45,7 @@ test.beforeAll(async () => {
 
 test.afterAll(() => {
   server?.kill()
+  if (dataDir) rmSync(dataDir, { recursive: true, force: true })
 })
 
 declare const tabhangar: { db: { meta: { put(row: object): Promise<unknown> } } }

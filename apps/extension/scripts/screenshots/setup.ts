@@ -1,6 +1,6 @@
 import { chromium, expect, type BrowserContext, type Page, type Worker } from '@playwright/test'
 import type { Dexie } from 'dexie'
-import { mkdtempSync } from 'node:fs'
+import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -32,24 +32,23 @@ export async function launch(
   /** Folder for a WebM recording of every page. */
   recordVideoDir?: string,
 ): Promise<{ context: BrowserContext; worker: Worker }> {
-  const context = await chromium.launchPersistentContext(
-    mkdtempSync(join(tmpdir(), 'tabhangar-shots-')),
-    {
-      channel: 'chromium',
-      headless: true,
-      // Recordings capture the real window, so size the window instead of emulating a viewport
-      // (144 px is what the headless window keeps for itself).
-      ...(recordVideoDir
-        ? { viewport: null, recordVideo: { dir: recordVideoDir, size: viewport } }
-        : { viewport, deviceScaleFactor: scale }),
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        ...(recordVideoDir ? [`--window-size=${viewport.width},${viewport.height + 144}`] : []),
-      ],
-    },
-  )
+  const profile = mkdtempSync(join(tmpdir(), 'tabhangar-shots-'))
+  const context = await chromium.launchPersistentContext(profile, {
+    channel: 'chromium',
+    headless: true,
+    // Recordings capture the real window, so size the window instead of emulating a viewport
+    // (144 px is what the headless window keeps for itself).
+    ...(recordVideoDir
+      ? { viewport: null, recordVideo: { dir: recordVideoDir, size: viewport } }
+      : { viewport, deviceScaleFactor: scale }),
+    args: [
+      `--disable-extensions-except=${extensionPath}`,
+      `--load-extension=${extensionPath}`,
+      ...(recordVideoDir ? [`--window-size=${viewport.width},${viewport.height + 144}`] : []),
+    ],
+  })
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  context.on('close', () => rmSync(profile, { recursive: true, force: true }))
   return { context, worker }
 }
 

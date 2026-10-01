@@ -1,5 +1,5 @@
 import { type ChildProcess, spawn } from 'node:child_process'
-import { mkdtempSync } from 'node:fs'
+import { mkdtempSync, rmSync } from 'node:fs'
 import { createServer, type Server } from 'node:http'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
@@ -17,6 +17,8 @@ const CLIENT_ID = 'test-client.apps.googleusercontent.com'
 let account = { sub: 'g-1', email: 'ola@studio.dev' }
 let google: Server | undefined
 let server: ChildProcess | undefined
+/** Created in beforeAll: Playwright also loads this file just to list the tests. */
+let dataDir = ''
 
 /** Stands in for Google: approves every sign-in at once and returns an ID token for `account`. */
 function fakeGoogle(): Server {
@@ -47,13 +49,14 @@ function fakeGoogle(): Server {
 }
 
 test.beforeAll(async () => {
+  dataDir = mkdtempSync(join(tmpdir(), 'tabhangar-server-'))
   google = fakeGoogle()
   server = spawn(process.execPath, [serverMain], {
     env: {
       ...process.env,
       PORT: String(PORT),
       HOST: '127.0.0.1',
-      DATA_DIR: mkdtempSync(join(tmpdir(), 'tabhangar-server-')),
+      DATA_DIR: dataDir,
       PUBLIC_URL: SERVER,
       GOOGLE_CLIENT_ID: CLIENT_ID,
       GOOGLE_CLIENT_SECRET: 'test-secret',
@@ -77,6 +80,7 @@ test.beforeAll(async () => {
 
 test.afterAll(() => {
   server?.kill()
+  if (dataDir) rmSync(dataDir, { recursive: true, force: true })
   google?.close()
 })
 

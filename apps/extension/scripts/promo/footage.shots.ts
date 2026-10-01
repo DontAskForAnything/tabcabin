@@ -18,21 +18,19 @@ test('promo footage', async () => {
   const dir = join(PROMO_DIR, 'footage')
   rmSync(dir, { recursive: true, force: true })
   mkdirSync(dir, { recursive: true })
-  const context = await chromium.launchPersistentContext(
-    mkdtempSync(join(tmpdir(), 'tabhangar-footage-')),
-    {
-      channel: 'chromium',
-      headless: true,
-      // Screencasts capture the real window: size the window, not an emulated viewport.
-      viewport: null,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--window-size=1280,944',
-        '--force-device-scale-factor=1.5',
-      ],
-    },
-  )
+  const profile = mkdtempSync(join(tmpdir(), 'tabhangar-footage-'))
+  const context = await chromium.launchPersistentContext(profile, {
+    channel: 'chromium',
+    headless: true,
+    // Screencasts capture the real window: size the window, not an emulated viewport.
+    viewport: null,
+    args: [
+      `--disable-extensions-except=${extensionPath}`,
+      `--load-extension=${extensionPath}`,
+      '--window-size=1280,944',
+      '--force-device-scale-factor=1.5',
+    ],
+  })
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
   await context.addInitScript(CURSOR)
   await openTabs(context, worker)
@@ -125,4 +123,5 @@ test('promo footage', async () => {
     marks.map((m) => `${m.name}@${(m.t - start).toFixed(1)}`).join(' '),
   )
   await context.close()
+  rmSync(profile, { recursive: true, force: true })
 })

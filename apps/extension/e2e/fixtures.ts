@@ -1,20 +1,29 @@
 import { type BrowserContext, chromium, test as base } from '@playwright/test'
-import { mkdtempSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.output/chrome-mv3-e2e')
 
+/** Browser profiles of a test run; e2e/teardown.ts removes what is left when the run ends. */
+export const PROFILES_DIR = join(tmpdir(), 'tabhangar-e2e')
+
 /** A fresh browser profile with the built extension loaded (run `pnpm build:e2e` first). */
 export async function launchExtension(): Promise<BrowserContext> {
-  const userDataDir = mkdtempSync(join(tmpdir(), 'tabhangar-e2e-'))
-  return chromium.launchPersistentContext(userDataDir, {
+  mkdirSync(PROFILES_DIR, { recursive: true })
+  const userDataDir = mkdtempSync(join(PROFILES_DIR, 'profile-'))
+  const context = await chromium.launchPersistentContext(userDataDir, {
     channel: 'chromium',
     headless: true,
     viewport: { width: 1440, height: 900 },
     args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
   })
+  // Profiles are a few megabytes each; don't leave hundreds of them behind.
+  context.on('close', () =>
+    rmSync(userDataDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }),
+  )
+  return context
 }
 
 export async function extensionIdOf(context: BrowserContext): Promise<string> {

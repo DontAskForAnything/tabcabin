@@ -11,8 +11,17 @@ async function center(locator: Locator) {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2, box }
 }
 
-/** Drags `from` to a point, moving in small steps like a real pointer. */
-async function drag(page: Page, from: Locator, to: { x: number; y: number }, holdMs = 0) {
+/**
+ * Drags `from` to a point, moving in small steps like a real pointer. Before releasing it pauses
+ * briefly, as a hand does, so the drop target has caught up with the last move.
+ */
+async function drag(
+  page: Page,
+  from: Locator,
+  to: { x: number; y: number },
+  holdMs = 0,
+  beforeRelease?: () => Promise<void>,
+) {
   const start = await center(from)
   await page.mouse.move(start.x, start.y)
   await page.mouse.down()
@@ -22,6 +31,8 @@ async function drag(page: Page, from: Locator, to: { x: number; y: number }, hol
     await page.waitForTimeout(holdMs)
     await page.mouse.move(to.x + 1, to.y, { steps: 1 })
   }
+  await page.waitForTimeout(60)
+  await beforeRelease?.()
   await page.mouse.up()
 }
 
@@ -121,9 +132,20 @@ test('saves an open tab by dragging it from the panel', async ({ context, extens
 test('creates a group by dropping on the new group column', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)
-  await page.getByRole('region', { name: 'Welcome' }).scrollIntoViewIfNeeded()
-  const column = await center(page.getByRole('button', { name: /New group/ }).last())
-  await drag(page, page.getByRole('link', { name: /YouTube/ }), { x: column.x, y: column.y })
+  // Wide enough to show the first group and the new group column together (aiming off-screen
+  // would start auto-scrolling the board under the pointer).
+  await page.setViewportSize({ width: 1800, height: 900 })
+  const newGroup = page.getByRole('button', { name: /New group/ }).last()
+  await expect(newGroup).toBeInViewport({ ratio: 1 })
+  const column = await center(newGroup)
+  // Let go once the column shows it will take the link.
+  await drag(
+    page,
+    page.getByRole('link', { name: /YouTube/ }),
+    { x: column.x, y: column.y },
+    0,
+    () => expect(newGroup).toHaveClass(/border-success/),
+  )
   await expect(page.getByPlaceholder('Group name')).toBeFocused()
   await page.getByPlaceholder('Group name').fill('Videos')
   await page.keyboard.press('Enter')

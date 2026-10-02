@@ -13,12 +13,12 @@ import { normalizeServerUrl } from './state'
 const DEFAULT_SYNC_SERVER = ''
 
 const configured = import.meta.env.WXT_SYNC_SERVER ?? DEFAULT_SYNC_SERVER
-export const BUILD_SYNC_SERVER = normalizeServerUrl(configured)
+const BUILD_SYNC_SERVER = normalizeServerUrl(configured)
 
 /** End-to-end tests point the test build at the server they start (meta `test.syncServer`). */
 const TEST_KEY = 'test.syncServer'
 
-export async function getSyncServer(): Promise<string | null> {
+async function getSyncServer(): Promise<string | null> {
   if (import.meta.env.MODE === 'e2e') {
     const row = await db.meta.get(TEST_KEY)
     if (typeof row?.value === 'string') return normalizeServerUrl(row.value)

@@ -16,7 +16,7 @@ export interface PublicUser {
   isAdmin: boolean
 }
 
-export interface ServerHealth {
+interface ServerHealth {
   ok: boolean
   name: string
   version: string

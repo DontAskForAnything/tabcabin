@@ -29,7 +29,7 @@ export {
 } from './items'
 export { type BinEntry, listBin } from './bin/list'
 export { BIN_LIMIT, emptyBin, purgeFromBin, trimBin } from './bin/purge'
-export { restoreFromBin, type RestoreTarget } from './bin/restore'
+export { restoreFromBin } from './bin/restore'
 export {
   completeReminder,
   getItemReminder,

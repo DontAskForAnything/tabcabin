@@ -8,7 +8,7 @@ import { emailSchema, type PublicUser, toPublic } from './schemas'
 /* Accounts that sign in with Google. */
 
 /** Whether a new account may be created for this (verified) address. */
-export function mayJoin(email: string, rules: { allowSignup: boolean; signupEmails: string[] }) {
+function mayJoin(email: string, rules: { allowSignup: boolean; signupEmails: string[] }) {
   if (rules.allowSignup) return true
   const address = email.toLowerCase()
   const domain = address.slice(address.lastIndexOf('@'))

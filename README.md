@@ -5,17 +5,12 @@
 # TabHangar
 
 **A calm home for your tabs.** TabHangar replaces the new tab page with boards where you park
-tabs, links, notes and to-dos — and keeps them on your machine (or, soon, on a server you host
-yourself).
+tabs, links, notes and to-dos — and keeps them in sync between your computers when you sign in.
 
-[![CI](https://github.com/DontAskForAnything/tabhangar/actions/workflows/ci.yml/badge.svg)](https://github.com/DontAskForAnything/tabhangar/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/license-MIT-5B4BE0)
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-5B4BE0)
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/board-dark.png" />
-  <img src="docs/screenshots/board-light.png" alt="TabHangar board with groups of links, notes and to-dos next to the open tabs panel" />
-</picture>
+<img src="docs/screenshots/board-light.png" alt="TabHangar board with groups of links, notes and to-dos next to the open tabs panel" />
 
 </div>
 
@@ -23,7 +18,7 @@ yourself).
 
 Tabs pile up because closing them feels like losing them. TabHangar gives every tab a place to
 land: drag it into a group, add a note, set a reminder, close it. Everything is one new tab away,
-searchable, and works offline. There is no account, no tracking and no subscription.
+searchable, and works offline. No account needed, no tracking and no subscription.
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
 

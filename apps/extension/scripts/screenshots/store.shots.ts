@@ -11,7 +11,7 @@ declare const tabhangar: { togglePopover: (tab: object) => Promise<void> }
 
 const here = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(here, '../../../../docs/chrome-web-store')
-const logo = readFileSync(resolve(here, '../../assets/logo.svg'), 'utf8').replace('STROKE', '2.1')
+const logo = readFileSync(resolve(here, '../../assets/logo.svg'), 'utf8')
 const fontFile = createRequire(resolve(here, '../../../../packages/ui/package.json')).resolve(
   '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2',
 )

@@ -1,6 +1,7 @@
 import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
 import { IconButton, Modal, Tabs } from '@tabhangar/ui'
 import { useRef, type ReactNode } from 'react'
+import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { extensionUrl } from '@/lib/browser'
 import { type SettingsTab, useUi } from '@/state/ui'
@@ -65,16 +66,19 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
           </Tabs.List>
           <div className="flex-1" />
           {version && (
-            <div className="flex flex-col gap-0.5 px-3 pb-1 text-[12px] text-ink-3">
-              <p>{t('settings.version', { version })}</p>
-              <a
-                href={extensionUrl('/third-party-licenses.txt')}
-                target="_blank"
-                rel="noreferrer"
-                className="w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]"
-              >
-                {t('settings.licenses')}
-              </a>
+            <div className="flex items-center gap-2.5 px-3 pb-1 text-[12px] text-ink-3">
+              <CabinMark size={28} />
+              <div className="flex flex-col gap-0.5">
+                <p>{t('settings.version', { version })}</p>
+                <a
+                  href={extensionUrl('/third-party-licenses.txt')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]"
+                >
+                  {t('settings.licenses')}
+                </a>
+              </div>
             </div>
           )}
         </div>

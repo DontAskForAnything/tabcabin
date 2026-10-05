@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 import { Button, cn } from '@tabhangar/ui'
+import { CabinMark } from '@/app/shared/CabinMark'
 import { useBoard } from '@/db/hooks'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
@@ -33,7 +34,7 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
   if (groups.length === 0)
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-24 text-center">
-        <div className="text-[44px]">🛩️</div>
+        <CabinMark size={56} />
         <h2 className="text-[19px] font-semibold tracking-[-0.015em]">{t('empty.category')}</h2>
         <p className="max-w-[360px] text-[14px] text-ink-3">{t('empty.categoryHint')}</p>
         <Button

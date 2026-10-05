@@ -1,5 +1,5 @@
 import { useT } from '@/i18n'
-import { HangarMark } from '@/app/shared/HangarMark'
+import { CabinMark } from '@/app/shared/CabinMark'
 import { CardHead, PreviewCard, PreviewLink, PreviewTask } from './previews'
 
 /** The left half: a few board cards and the promise, as in the design. */
@@ -9,9 +9,7 @@ export function Showcase() {
     <aside className="relative hidden flex-col justify-between overflow-hidden bg-[linear-gradient(160deg,#5646dc,#4335c4_55%,#382aa8)] p-12 text-white lg:flex">
       <div className="pointer-events-none absolute -top-40 -left-40 size-[520px] rounded-full bg-[radial-gradient(closest-side,rgb(255_255_255/0.14),transparent)]" />
       <div className="relative flex items-center gap-3 text-[20px] font-semibold tracking-[-0.01em]">
-        <span className="flex size-11 items-center justify-center rounded-[13px] bg-white text-accent shadow-[0_8px_24px_-8px_rgb(10_5_40/0.5)]">
-          <HangarMark size={22} />
-        </span>
+        <CabinMark size={44} tone="cream" />
         TabHangar
       </div>
 

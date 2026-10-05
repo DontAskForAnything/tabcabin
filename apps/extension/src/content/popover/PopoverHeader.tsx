@@ -1,4 +1,5 @@
 import { GripVertical, X } from 'lucide-react'
+import { CabinMark } from '@/app/shared/CabinMark'
 import type { Translate } from '@/i18n'
 import type { useDraggable } from './useDraggable'
 
@@ -17,7 +18,10 @@ export function PopoverHeader({
       className="flex cursor-grab items-center justify-between px-3 pt-2.5 active:cursor-grabbing"
       {...handle}
     >
-      <GripVertical size={17} className="text-ink-4" />
+      <span className="flex items-center gap-1.5">
+        <CabinMark size={22} />
+        <GripVertical size={17} className="text-ink-4" />
+      </span>
       <button
         type="button"
         aria-label={t('common.close')}

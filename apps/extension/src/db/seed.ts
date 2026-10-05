@@ -38,7 +38,7 @@ async function seedInTransaction(text: SeedText): Promise<string | null> {
   const seeded = await db.meta.get('seeded')
   if (seeded || (await db.workspaces.count()) > 0) return null
   const clock = { now: Date.now() }
-  const workspace = makeWorkspace({ name: text.workspace, emoji: '🛩️', position: 'a0' }, clock)
+  const workspace = makeWorkspace({ name: text.workspace, emoji: '🏡', position: 'a0' }, clock)
   const [p0, p1, p2] = positionsAtEnd([], 3)
   const categories = text.categories.map((name, i) =>
     makeCategory({ workspaceId: workspace.id, name, position: [p0, p1, p2][i]! }, clock),

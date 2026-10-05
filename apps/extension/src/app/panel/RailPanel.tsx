@@ -1,7 +1,7 @@
 import { cn } from '@tabhangar/ui'
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
-import { HangarMark } from '@/app/shared/HangarMark'
+import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { useDrag } from '../dnd/store'
 import type { ActiveContext } from '../useActive'
@@ -62,9 +62,7 @@ export function RailPanel({ active }: { active: ActiveContext }) {
             </motion.div>
           ) : (
             <div className="flex h-full w-[76px] flex-col items-center gap-3 py-[18px]">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-white shadow-glow">
-                <HangarMark size={22} />
-              </span>
+              <CabinMark size={40} />
               <span className="mt-1.5 rounded-lg bg-subtle-2 px-2 py-1 text-[12px] font-semibold text-ink-2">
                 {inWindow.length}
               </span>

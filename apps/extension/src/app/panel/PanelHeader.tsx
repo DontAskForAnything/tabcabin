@@ -1,6 +1,6 @@
 import { Pin, PinOff } from 'lucide-react'
 import { IconButton } from '@tabhangar/ui'
-import { HangarMark } from '@/app/shared/HangarMark'
+import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { updateSettings } from '@/settings/settings'
 
@@ -15,9 +15,7 @@ export function PanelHeader({
   const t = useT()
   return (
     <div className="flex items-center gap-2.5 px-1">
-      <span className="flex size-[34px] shrink-0 items-center justify-center rounded-[10px] bg-accent text-white shadow-glow">
-        <HangarMark size={19} />
-      </span>
+      <CabinMark size={34} />
       <span className="flex-1 text-[16px] font-semibold tracking-[-0.02em]">TabHangar</span>
       <IconButton
         label={pinned ? t('panel.unpin') : t('panel.pin')}

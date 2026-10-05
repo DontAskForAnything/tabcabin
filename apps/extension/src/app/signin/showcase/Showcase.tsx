@@ -6,8 +6,8 @@ import { CardHead, PreviewCard, PreviewLink, PreviewTask } from './previews'
 export function Showcase() {
   const t = useT()
   return (
-    <aside className="relative hidden flex-col justify-between overflow-hidden bg-[linear-gradient(160deg,#5646dc,#4335c4_55%,#382aa8)] p-12 text-white lg:flex">
-      <div className="pointer-events-none absolute -top-40 -left-40 size-[520px] rounded-full bg-[radial-gradient(closest-side,rgb(255_255_255/0.14),transparent)]" />
+    <aside className="relative hidden flex-col justify-between overflow-hidden bg-[linear-gradient(160deg,#245541,#1f4a3a_55%,#183b2e)] p-12 text-[#f4ead5] lg:flex">
+      <div className="pointer-events-none absolute -top-40 -left-40 size-[520px] rounded-full bg-[radial-gradient(closest-side,rgb(244_234_213/0.1),transparent)]" />
       <div className="relative flex items-center gap-3 text-[20px] font-semibold tracking-[-0.01em]">
         <CabinMark size={44} tone="cream" />
         TabHangar
@@ -23,7 +23,7 @@ export function Showcase() {
           <CardHead emoji="📥" title={t('seed.today')} meta={t('signin.cardTasks')} />
           <PreviewTask done text={t('signin.task1')} />
           <PreviewTask text={t('signin.task2')} />
-          <div className="mt-2 rounded-[10px] bg-[#fde68a] px-3 py-2 text-[12.5px] text-[#5b4a14]">
+          <div className="mt-2 rounded-[10px] bg-[#ffe9ad] px-3 py-2 text-[12.5px] text-[#4a3510]">
             {t('signin.task3')}
           </div>
         </PreviewCard>
@@ -36,7 +36,7 @@ export function Showcase() {
         <h2 className="text-[36px] leading-[1.1] font-semibold tracking-[-0.03em]">
           {t('signin.headline')}
         </h2>
-        <p className="mt-3 max-w-[440px] text-[15px] leading-relaxed text-white/75">
+        <p className="mt-3 max-w-[440px] text-[15px] leading-relaxed text-[#f4ead5]/80">
           {t('signin.lead')}
         </p>
       </div>

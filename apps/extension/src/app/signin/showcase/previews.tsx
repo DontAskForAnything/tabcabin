@@ -8,7 +8,7 @@ export function PreviewCard({ className, children }: { className: string; childr
   return (
     <div
       className={cn(
-        'absolute rounded-[18px] bg-white p-4 text-[#1c1d22] shadow-[0_24px_50px_-18px_rgb(10_5_40/0.55)]',
+        'absolute rounded-[18px] bg-white p-4 text-[#0f1110] shadow-[0_24px_50px_-18px_rgb(4_20_14/0.6)]',
         className,
       )}
     >
@@ -23,7 +23,7 @@ export function CardHead({ emoji, title, meta }: { emoji: string; title: string;
       <span className="text-[26px] leading-none">{emoji}</span>
       <span>
         <span className="block text-[14px] font-semibold">{title}</span>
-        <span className="block text-[11.5px] text-[#6b6f7a]">{meta}</span>
+        <span className="block text-[11.5px] text-[#5d635f]">{meta}</span>
       </span>
     </div>
   )
@@ -57,12 +57,12 @@ export function PreviewTask({ text, done = false }: { text: string; done?: boole
       <span
         className={cn(
           'flex size-[18px] items-center justify-center rounded-[5px] border',
-          done ? 'border-[#5b4be0] bg-[#5b4be0] text-white' : 'border-[#c9ccd4]',
+          done ? 'border-[#1f4a3a] bg-[#1f4a3a] text-[#faf6ee]' : 'border-[#a3a79f]',
         )}
       >
         {done && <Check size={12} strokeWidth={3} />}
       </span>
-      <span className={done ? 'text-[#8b8f99] line-through' : ''}>{text}</span>
+      <span className={done ? 'text-[#5d635f] line-through' : ''}>{text}</span>
     </div>
   )
 }

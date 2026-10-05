@@ -9,7 +9,7 @@ const variants: Record<ButtonVariant, string> = {
   secondary: 'bg-card text-ink shadow-tile hover:bg-raised',
   soft: 'bg-subtle text-ink hover:bg-subtle-2',
   ghost: 'text-ink-2 hover:bg-subtle hover:text-ink',
-  danger: 'bg-danger text-white hover:brightness-110',
+  danger: 'bg-danger text-on-danger hover:brightness-110',
 }
 
 const sizes: Record<ButtonSize, string> = {

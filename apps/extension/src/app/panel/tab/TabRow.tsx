@@ -48,7 +48,7 @@ export function TabRow({
           <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium">{tab.title}</span>
           {tab.pinned && <Pin size={12} className="shrink-0 text-ink-4" />}
           {selected && (
-            <span className="flex size-[18px] shrink-0 items-center justify-center rounded-[6px] bg-accent text-white">
+            <span className="flex size-[18px] shrink-0 items-center justify-center rounded-[6px] bg-accent text-on-accent">
               <Check size={12} strokeWidth={3} />
             </span>
           )}

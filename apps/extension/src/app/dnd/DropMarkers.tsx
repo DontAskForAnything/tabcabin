@@ -57,7 +57,9 @@ export function TrashZone({ enabled }: { enabled: boolean }) {
         className={cn(
           'flex h-14 min-w-[280px] items-center justify-center gap-2.5 rounded-2xl border-2 border-dashed px-6 text-[14px] font-semibold shadow-pop transition-colors',
           visible && 'pointer-events-auto',
-          active ? 'border-danger bg-danger text-white' : 'border-danger/60 bg-card text-danger',
+          active
+            ? 'border-danger bg-danger text-on-danger'
+            : 'border-danger/60 bg-card text-danger',
         )}
       >
         <Trash size={18} />

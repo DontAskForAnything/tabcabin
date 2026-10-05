@@ -58,7 +58,7 @@ export function TargetPicker({
                   onClick={() => onWorkspace(ws.id)}
                   className={cn(
                     'h-7 rounded-lg px-2 text-[12px] font-semibold',
-                    ws.id === workspace?.id ? 'bg-accent text-white' : 'bg-subtle text-ink-2',
+                    ws.id === workspace?.id ? 'bg-accent text-on-accent' : 'bg-subtle text-ink-2',
                   )}
                 >
                   {ws.emoji} {ws.name}

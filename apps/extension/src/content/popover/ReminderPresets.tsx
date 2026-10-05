@@ -28,7 +28,7 @@ export function ReminderPresets({
             onClick={() => onChange(value === preset ? null : preset)}
             className={cn(
               'h-7 rounded-lg px-2.5 text-[12px] font-semibold transition-colors',
-              value === preset ? 'bg-accent text-white' : 'bg-subtle text-ink-2 hover:text-ink',
+              value === preset ? 'bg-accent text-on-accent' : 'bg-subtle text-ink-2 hover:text-ink',
             )}
           >
             {t(`reminders.preset.${preset}`)}

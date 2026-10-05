@@ -54,7 +54,7 @@ export function IconButton({
     >
       {icon}
       {badge !== undefined && badge !== null && badge !== false && (
-        <span className="absolute -top-1.5 -right-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-canvas bg-danger px-1 text-[11px] leading-none font-bold text-white">
+        <span className="absolute -top-1.5 -right-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-canvas bg-danger px-1 text-[11px] leading-none font-bold text-on-danger">
           {badge}
         </span>
       )}

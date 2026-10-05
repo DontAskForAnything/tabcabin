@@ -132,7 +132,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                   type="button"
                   disabled={!target || status === 'saving'}
                   onClick={() => void save()}
-                  className="h-[42px] flex-1 rounded-xl bg-accent text-[13.5px] font-semibold text-white shadow-glow disabled:opacity-60"
+                  className="h-[42px] flex-1 rounded-xl bg-accent text-[13.5px] font-semibold text-on-accent shadow-glow disabled:opacity-60"
                 >
                   {t('common.save')}
                 </button>

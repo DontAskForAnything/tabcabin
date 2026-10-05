@@ -28,12 +28,13 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
-  --color-on-accent: #ffffff;
+  --color-on-accent: var(--on-accent);
+  --color-cream: var(--cream);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
-  --color-warning: var(--warning);
+  --color-on-danger: var(--on-danger);
   --color-overlay: var(--overlay);
 
   --shadow-card: var(--shadow-card);

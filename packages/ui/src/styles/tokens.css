@@ -1,37 +1,41 @@
 /* Design tokens. Semantic colors switch with the `.dark` class on <html>. */
 :root,
 :host {
-  --canvas: #eceff4;
-  --panel: #f6f7fa;
+  /* Brand: black, white and pine, plus one cream (see docs/brand.md). */
+  --canvas: #f2eee5;
+  --panel: #faf6ee;
   --card: #ffffff;
   --raised: #ffffff;
-  --subtle: #f1f3f7;
-  --subtle-2: #e6e9ef;
-  --line: #e2e6ed;
-  --ink: #171a21;
-  --ink-2: #454c5a;
-  --ink-3: #5f6776;
-  --ink-4: #a2a9b5;
-  --accent: #5b4be0;
-  --accent-ink: #4a3bc8;
-  --accent-soft: rgb(91 75 224 / 0.12);
-  --accent-gradient: linear-gradient(145deg, #7f71f2 0%, #5b4be0 100%);
-  --success: #12a272;
-  --success-soft: rgb(18 162 114 / 0.1);
-  --danger: #c53035;
-  --danger-soft: rgb(197 48 53 / 0.1);
-  --warning: #e7950f;
-  --focus: #8b7cf8;
-  --overlay: rgb(16 18 27 / 0.36);
-  --scrollbar: rgb(120 128 145 / 0.35);
+  --subtle: #f5f2eb;
+  --subtle-2: #ebe6db;
+  --line: #e7e2d8;
+  --ink: #0f1110;
+  --ink-2: #3a3f3c;
+  --ink-3: #5d635f;
+  --ink-4: #a3a79f;
+  --accent: #1f4a3a;
+  --accent-ink: #1f4a3a;
+  --accent-soft: #e3ece7;
+  --accent-gradient: linear-gradient(145deg, #275a47 0%, #1f4a3a 100%);
+  --on-accent: #faf6ee;
+  --cream: #f4ead5;
+  /* Drag and drop feedback uses the accent; there is no separate green. */
+  --success: var(--accent);
+  --success-soft: var(--accent-soft);
+  --danger: #b3261e;
+  --danger-soft: rgb(179 38 30 / 0.1);
+  --on-danger: #ffffff;
+  --focus: #2e6b52;
+  --overlay: rgb(15 17 16 / 0.36);
+  --scrollbar: rgb(93 99 95 / 0.35);
 
-  --shadow-card: 0 1px 2px rgb(20 24 40 / 0.04), 0 10px 28px -8px rgb(20 24 40 / 0.1);
+  --shadow-card: 0 1px 2px rgb(15 17 16 / 0.04), 0 10px 28px -8px rgb(15 17 16 / 0.09);
   --shadow-pop:
-    0 0 0 1px rgb(20 24 40 / 0.05), 0 12px 28px -6px rgb(20 24 40 / 0.18),
-    0 32px 64px -16px rgb(20 24 40 / 0.22);
-  --shadow-tile: 0 1px 2px rgb(20 24 40 / 0.14), 0 0 0 1px rgb(20 24 40 / 0.05);
-  --shadow-glow: 0 8px 18px -6px rgb(91 75 224 / 0.55);
-  --shadow-lift: 0 22px 44px -12px rgb(20 24 40 / 0.32), 0 0 0 1px rgb(20 24 40 / 0.04);
+    0 0 0 1px rgb(15 17 16 / 0.05), 0 12px 28px -6px rgb(15 17 16 / 0.16),
+    0 32px 64px -16px rgb(15 17 16 / 0.2);
+  --shadow-tile: 0 1px 2px rgb(15 17 16 / 0.12), 0 0 0 1px rgb(15 17 16 / 0.05);
+  --shadow-glow: 0 6px 14px -6px rgb(31 74 58 / 0.45);
+  --shadow-lift: 0 22px 44px -12px rgb(15 17 16 / 0.3), 0 0 0 1px rgb(15 17 16 / 0.04);
 
   --note-rose-bg: #ffdadd;
   --note-rose-ink: #4a1b21;
@@ -54,34 +58,38 @@
 }
 
 .dark {
-  --canvas: #0c0e11;
-  --panel: #111317;
-  --card: #191c21;
-  --raised: #20242a;
-  --subtle: #23282e;
-  --subtle-2: #2a2f36;
-  --line: #2a2f36;
-  --ink: #eceef2;
-  --ink-2: #bcc3cd;
-  --ink-3: #99a2b0;
-  --ink-4: #5b6370;
-  --accent: #6d5cf0;
-  --accent-ink: #b3a9ff;
-  --accent-soft: rgb(139 124 248 / 0.18);
-  --accent-gradient: linear-gradient(145deg, #9b8ffc 0%, #6d5cf0 100%);
-  --success: #34d399;
-  --success-soft: rgb(52 211 153 / 0.12);
-  --danger: #f87171;
-  --danger-soft: rgb(248 113 113 / 0.14);
+  --canvas: #0f1110;
+  --panel: #141715;
+  --card: #181b19;
+  --raised: #202421;
+  --subtle: #202421;
+  --subtle-2: #2b302c;
+  --line: #2b302c;
+  --ink: #f2f4f2;
+  --ink-2: #c9cec9;
+  --ink-3: #9aa29c;
+  --ink-4: #5f6661;
+  --accent: #6db592;
+  --accent-ink: #8fcbad;
+  --accent-soft: #1c2e25;
+  --accent-gradient: linear-gradient(145deg, #7fc2a1 0%, #6db592 100%);
+  --on-accent: #0f1110;
+  /* Repeated here so nested .dark roots (popover, toasts) resolve the dark accent. */
+  --success: var(--accent);
+  --success-soft: var(--accent-soft);
+  --danger: #f2867a;
+  --danger-soft: rgb(242 134 122 / 0.14);
+  --on-danger: #0f1110;
+  --focus: #6db592;
   --overlay: rgb(0 0 0 / 0.55);
-  --scrollbar: rgb(140 150 165 / 0.25);
+  --scrollbar: rgb(154 162 156 / 0.25);
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 30px -10px rgb(0 0 0 / 0.55);
   --shadow-pop:
     0 0 0 1px rgb(255 255 255 / 0.06), 0 16px 36px -8px rgb(0 0 0 / 0.6),
     0 32px 64px -16px rgb(0 0 0 / 0.55);
   --shadow-tile: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.06);
-  --shadow-glow: 0 8px 18px -6px rgb(124 108 246 / 0.5);
+  --shadow-glow: 0 6px 14px -6px rgb(0 0 0 / 0.6);
   --shadow-lift: 0 22px 44px -10px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.07);
 
   --note-rose-bg: #4a262b;

@@ -3,16 +3,17 @@ import { type TileSize, tileSizes } from './tileSizes'
 
 export type { TileSize }
 
+/** Calm, earthy tones that sit well next to pine (white letters, at least 5.8:1). */
 const PALETTE = [
-  ['#5b4be0', '#ffffff'],
-  ['#1d63ed', '#ffffff'],
-  ['#12a272', '#ffffff'],
-  ['#e7950f', '#ffffff'],
-  ['#d93d42', '#ffffff'],
-  ['#c2378f', '#ffffff'],
-  ['#0f8fa3', '#ffffff'],
-  ['#2b2f36', '#ffffff'],
-  ['#7a5b2e', '#ffffff'],
+  ['#1f4a3a', '#ffffff'],
+  ['#2c5f63', '#ffffff'],
+  ['#3d5a73', '#ffffff'],
+  ['#4f6b4a', '#ffffff'],
+  ['#7a6230', '#ffffff'],
+  ['#8a4b3a', '#ffffff'],
+  ['#5a3d55', '#ffffff'],
+  ['#5b4636', '#ffffff'],
+  ['#2b2f2d', '#ffffff'],
 ] as const
 
 function hash(text: string): number {

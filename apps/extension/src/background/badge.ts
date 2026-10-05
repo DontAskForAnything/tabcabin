@@ -6,8 +6,8 @@ let counts = new Map<string, number>()
 let dueReminders = 0
 let dueTitle = ''
 
-const ACCENT = '#5B4BE0'
-const DUE = '#D93D42'
+const ACCENT = '#1F4A3A'
+const DUE = '#B3261E'
 
 /** Number of saved links for a URL (normalized). */
 function savedCount(url: string | undefined): number {
@@ -43,7 +43,7 @@ async function updateActiveTabs() {
 /** Keeps the toolbar badge showing how many times the current page is saved. */
 export function startBadge() {
   void browser.action.setBadgeBackgroundColor({ color: ACCENT })
-  void browser.action.setBadgeTextColor?.({ color: '#FFFFFF' })
+  void browser.action.setBadgeTextColor?.({ color: '#FAF6EE' })
   liveQuery(() => db.items.toArray()).subscribe({
     next: (items) => {
       const next = new Map<string, number>()

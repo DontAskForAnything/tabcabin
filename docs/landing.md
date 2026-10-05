@@ -8,14 +8,14 @@ and `robots.txt`. It has no server-side code, so any static host works.
 
 ```bash
 pnpm install
-SITE_URL=https://tabhangar.example.com pnpm --filter @tabhangar/landing build
+SITE_URL=https://tabhangar.example.com pnpm --filter @tabcabin/landing build
 # → apps/landing/dist
 ```
 
 `SITE_URL` is the address the site will live at. It is used for canonical links, Open Graph tags,
 structured data, the sitemap and `robots.txt`, so set it for every production build.
 
-Preview locally with `pnpm --filter @tabhangar/landing preview`.
+Preview locally with `pnpm --filter @tabcabin/landing preview`.
 
 ## Option A — Caddy on your server
 
@@ -23,7 +23,7 @@ If the sync server already runs behind Caddy (see [self-hosting.md](self-hosting
 can serve the site:
 
 ```bash
-SITE_URL=https://tabhangar.example.com pnpm --filter @tabhangar/landing build
+SITE_URL=https://tabhangar.example.com pnpm --filter @tabcabin/landing build
 rsync -a --delete apps/landing/dist/ you@server:/srv/tabhangar-site/
 ```
 
@@ -45,7 +45,7 @@ by hand. For a custom domain, add it under **Settings → Pages** and point a `C
 ## Option C — other static hosts
 
 Netlify, Cloudflare Pages and similar: build command
-`pnpm --filter @tabhangar/landing build`, output directory `apps/landing/dist`, environment variable
+`pnpm --filter @tabcabin/landing build`, output directory `apps/landing/dist`, environment variable
 `SITE_URL`.
 
 ## After the first deploy

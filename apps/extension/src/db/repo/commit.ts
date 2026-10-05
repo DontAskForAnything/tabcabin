@@ -1,4 +1,4 @@
-import { type Change, type EntityMap, type EntityType, purge, put } from '@tabhangar/core'
+import { type Change, type EntityMap, type EntityType, purge, put } from '@tabcabin/core'
 import { applyChanges, loadRow } from '../apply'
 
 export interface Result {

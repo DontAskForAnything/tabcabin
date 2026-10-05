@@ -6,7 +6,7 @@ import {
   put,
   puts,
   touch,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { clock, commit, mustGet, type Result } from './commit'
 import { descendantsOfCategories, getCategories } from './reads'
 

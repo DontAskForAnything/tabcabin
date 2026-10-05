@@ -1,4 +1,4 @@
-import { toast } from '@tabhangar/ui'
+import { toast } from '@tabcabin/ui'
 import * as repo from '@/db/repo'
 import type { Translate } from '@/i18n'
 import { closeTabs, type TabLike, tabsToLinks } from '@/lib/tabs'

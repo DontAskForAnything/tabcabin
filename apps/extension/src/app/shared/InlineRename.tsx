@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { useEffect, useRef, useState } from 'react'
 
 /** Edits a name in place: Enter or clicking away saves, Escape keeps the old name. */

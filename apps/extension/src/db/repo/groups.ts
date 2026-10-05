@@ -9,7 +9,7 @@ import {
   sortItems,
   type SortMode,
   touch,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { clock, commit, mustGet, type Result } from './commit'
 import { getGroupItems, getGroups } from './reads'
 

@@ -1,4 +1,4 @@
-import { ENTITY_TYPES } from '@tabhangar/core'
+import { ENTITY_TYPES } from '@tabcabin/core'
 import { db } from '@/db/db'
 import type { SyncClient } from './client'
 import { pullAll } from './pull'

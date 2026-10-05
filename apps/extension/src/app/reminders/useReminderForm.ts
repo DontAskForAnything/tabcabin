@@ -6,7 +6,7 @@ import {
   type Reminder,
   type ReminderRule,
   weekdayOf,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { useMemo, useState } from 'react'
 import type { ReminderInput } from '@/db/repo'
 import { useT } from '@/i18n'

@@ -1,5 +1,5 @@
-import { splitReminders } from '@tabhangar/core'
-import { Button, Modal } from '@tabhangar/ui'
+import { splitReminders } from '@tabcabin/core'
+import { Button, Modal } from '@tabcabin/ui'
 import { BellOff, BellRing, Check, ExternalLink } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useReminders } from '@/db/reminders'

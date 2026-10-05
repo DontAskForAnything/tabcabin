@@ -1,4 +1,4 @@
-import { Checkbox, cn } from '@tabhangar/ui'
+import { Checkbox, cn } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { ReminderChip } from '../../reminders/ReminderChip'

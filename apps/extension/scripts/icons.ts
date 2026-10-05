@@ -1,7 +1,7 @@
 /**
  * Renders the extension icons and the website favicons from assets/logo.svg (and logo-small.svg
  * for 16 px, a bolder drawing with two tabs that stays readable in the toolbar).
- * Run with: pnpm --filter @tabhangar/extension icons
+ * Run with: pnpm --filter @tabcabin/extension icons
  */
 import { copyFileSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'

@@ -1,4 +1,4 @@
-import { isDue } from '@tabhangar/core'
+import { isDue } from '@tabcabin/core'
 import { useEffect, useState } from 'react'
 import { useReminders } from '@/db/reminders'
 

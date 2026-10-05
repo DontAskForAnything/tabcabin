@@ -147,10 +147,10 @@ pnpm zip:ext        # store-ready zip in apps/extension/.output
 ```
 
 The screenshots in this README are generated from demo data with
-`pnpm --filter @tabhangar/extension screenshots`.
+`pnpm --filter @tabcabin/extension screenshots`.
 
 The promo film (`apps/landing/public/promo.mp4`) and its stills in [`docs/promo/`](docs/promo) are
-rendered with `pnpm --filter @tabhangar/extension promo` (needs ffmpeg). Every frame is drawn from a
+rendered with `pnpm --filter @tabcabin/extension promo` (needs ffmpeg). Every frame is drawn from a
 real recording of the extension, and the soundtrack is synthesized from scratch by
 `scripts/promo/music.ts`, so there is no third-party audio or footage to license.
 

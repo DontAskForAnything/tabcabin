@@ -1,4 +1,4 @@
-import { Toaster, TooltipProvider, UiTextProvider, useApplyTheme } from '@tabhangar/ui'
+import { Toaster, TooltipProvider, UiTextProvider, useApplyTheme } from '@tabcabin/ui'
 import { MotionConfig } from 'motion/react'
 import { type ReactNode, useEffect } from 'react'
 import { ensureSeed } from '@/db/seed'

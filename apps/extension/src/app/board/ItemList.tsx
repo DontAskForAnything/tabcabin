@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { Fragment, type ReactNode } from 'react'
 import type { BoardItem } from '@/db/hooks'
 import { DropCell, DropLine } from '../dnd/DropMarkers'

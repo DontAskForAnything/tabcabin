@@ -1,4 +1,4 @@
-import { Button, toast } from '@tabhangar/ui'
+import { Button, toast } from '@tabcabin/ui'
 import { addGroupWithLinks, loadTopSites } from '@/data/browserLinks'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'

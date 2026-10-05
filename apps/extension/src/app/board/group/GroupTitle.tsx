@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { useEffect, useRef, useState } from 'react'
 import type { BoardGroup } from '@/db/hooks'
 import { updateGroup } from '@/db/repo'

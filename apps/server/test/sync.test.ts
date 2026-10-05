@@ -1,4 +1,4 @@
-import { makeCategory, makeGroup, makeLink, makeWorkspace, type Workspace } from '@tabhangar/core'
+import { makeCategory, makeGroup, makeLink, makeWorkspace, type Workspace } from '@tabcabin/core'
 import { describe, expect, it } from 'vitest'
 import { createUser } from '../src/users'
 import { testApp } from './helpers'

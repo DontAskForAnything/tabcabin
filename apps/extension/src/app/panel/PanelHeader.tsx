@@ -1,5 +1,5 @@
 import { Pin, PinOff } from 'lucide-react'
-import { IconButton } from '@tabhangar/ui'
+import { IconButton } from '@tabcabin/ui'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { updateSettings } from '@/settings/settings'

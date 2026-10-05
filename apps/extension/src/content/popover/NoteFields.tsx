@@ -1,6 +1,6 @@
 import { ListTodo } from 'lucide-react'
-import { NOTE_COLORS, type NoteColor } from '@tabhangar/core'
-import { cn } from '@tabhangar/ui'
+import { NOTE_COLORS, type NoteColor } from '@tabcabin/core'
+import { cn } from '@tabcabin/ui'
 import type { RefObject } from 'react'
 import type { Translate } from '@/i18n'
 

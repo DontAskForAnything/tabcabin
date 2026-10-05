@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { type ComponentProps, type ReactNode, useEffect, useRef } from 'react'
 import type { BoardItem } from '@/db/hooks'
 import { useUi } from '@/state/ui'

@@ -1,4 +1,4 @@
-import type { Category, Workspace } from '@tabhangar/core'
+import type { Category, Workspace } from '@tabcabin/core'
 import { useCategories, useWorkspaces } from '@/db/hooks'
 import { type Settings, updateSettings, useSettings } from '@/settings/settings'
 import { useUi } from '@/state/ui'

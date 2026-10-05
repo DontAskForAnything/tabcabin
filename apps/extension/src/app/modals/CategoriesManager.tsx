@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, Plus, Trash } from 'lucide-react'
-import { Button, IconButton, Modal } from '@tabhangar/ui'
+import { Button, IconButton, Modal } from '@tabcabin/ui'
 import { createCategory, deleteCategory, moveCategory, updateCategory } from '@/db/repo'
 import { useT } from '@/i18n'
 import { confirmDialog } from '@/state/confirm'

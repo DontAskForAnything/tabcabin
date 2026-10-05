@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
-import { Button, cn } from '@tabhangar/ui'
+import { Button, cn } from '@tabcabin/ui'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useBoard } from '@/db/hooks'
 import { useT } from '@/i18n'

@@ -1,4 +1,4 @@
-import { type ReminderRule, startOfDay } from '@tabhangar/core'
+import { type ReminderRule, startOfDay } from '@tabcabin/core'
 import type { Translate } from '@/i18n/translate'
 import type { Locale } from '@/i18n/types'
 

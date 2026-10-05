@@ -1,5 +1,5 @@
 import { ChevronDown, Ellipsis, Layers, Split, Trash } from 'lucide-react'
-import { displayHost } from '@tabhangar/core'
+import { displayHost } from '@tabcabin/core'
 import {
   cn,
   Favicon,
@@ -9,7 +9,7 @@ import {
   MenuItem,
   MenuSeparator,
   MenuTrigger,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { useState } from 'react'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'

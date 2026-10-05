@@ -1,4 +1,4 @@
-import { displayHost, NOTE_MAX_LENGTH } from '@tabhangar/core'
+import { displayHost, NOTE_MAX_LENGTH } from '@tabcabin/core'
 import * as repo from '@/db/repo'
 import { loadRow } from '@/db/apply'
 import { randomEmoji } from '@/lib/emoji'

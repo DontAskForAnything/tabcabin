@@ -1,4 +1,4 @@
-import { entitySchemas } from '@tabhangar/core'
+import { entitySchemas } from '@tabcabin/core'
 import { db } from '@/db/db'
 import type { RemoteChange, SyncClient } from './client'
 import { entityTables, type Row, table } from './rows'

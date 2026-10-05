@@ -1,4 +1,4 @@
-import type { Category, EntityType, Group, Item, Reminder, Workspace } from '@tabhangar/core'
+import type { Category, EntityType, Group, Item, Reminder, Workspace } from '@tabcabin/core'
 import { Dexie, type EntityTable, type Table } from 'dexie'
 
 export interface OutboxEntry {

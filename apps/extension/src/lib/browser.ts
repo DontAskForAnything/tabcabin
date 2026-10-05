@@ -1,4 +1,4 @@
-import { displayHost, normalizeUrl } from '@tabhangar/core'
+import { displayHost, normalizeUrl } from '@tabcabin/core'
 
 const hasBrowser = () => typeof browser !== 'undefined' && !!browser.runtime?.id
 

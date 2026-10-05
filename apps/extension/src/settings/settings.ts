@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db/db'
-import type { ThemePreference } from '@tabhangar/ui'
+import type { ThemePreference } from '@tabcabin/ui'
 import type { Locale } from '@/i18n'
 
 export type ViewMode = 'board' | 'collections'

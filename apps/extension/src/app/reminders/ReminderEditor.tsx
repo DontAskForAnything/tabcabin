@@ -1,6 +1,6 @@
 import { Trash } from 'lucide-react'
-import type { Item, Reminder } from '@tabhangar/core'
-import { Button, Modal } from '@tabhangar/ui'
+import type { Item, Reminder } from '@tabcabin/core'
+import { Button, Modal } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { db } from '@/db/db'

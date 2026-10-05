@@ -1,4 +1,4 @@
-import { normalizeUrl } from '@tabhangar/core'
+import { normalizeUrl } from '@tabcabin/core'
 import { liveQuery } from 'dexie'
 import { db } from '@/db/db'
 

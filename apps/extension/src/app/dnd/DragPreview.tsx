@@ -1,5 +1,5 @@
-import { displayHost } from '@tabhangar/core'
-import { cn, Favicon } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { cn, Favicon } from '@tabcabin/ui'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useDrag } from './store'
 

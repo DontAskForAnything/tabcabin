@@ -1,4 +1,4 @@
-import { cn, IconButton } from '@tabhangar/ui'
+import { cn, IconButton } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 import { keepFocus } from './keepFocus'
 

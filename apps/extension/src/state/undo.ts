@@ -1,4 +1,4 @@
-import { toast } from '@tabhangar/ui'
+import { toast } from '@tabcabin/ui'
 import { type Result, revert } from '@/db/repo'
 
 let last: { label: string; result: Result } | null = null

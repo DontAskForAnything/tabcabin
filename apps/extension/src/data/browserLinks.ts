@@ -1,4 +1,4 @@
-import { isSavableUrl, TITLE_MAX_LENGTH } from '@tabhangar/core'
+import { isSavableUrl, TITLE_MAX_LENGTH } from '@tabcabin/core'
 import { addLinks, createGroup, type Result } from '@/db/repo'
 
 /* Links that come from the browser itself: bookmark folders and the most visited sites. */

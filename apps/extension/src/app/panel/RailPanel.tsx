@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'

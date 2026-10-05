@@ -1,5 +1,5 @@
-import { displayHost } from '@tabhangar/core'
-import { letterTileFor } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { letterTileFor } from '@tabcabin/ui'
 import type { PageInfo } from './types'
 
 /** Icon, title and address of the page. */

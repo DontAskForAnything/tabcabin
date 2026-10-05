@@ -1,4 +1,4 @@
-import { isSavableUrl, minutesOfDay, normalizeUrl, sortByPosition } from '@tabhangar/core'
+import { isSavableUrl, minutesOfDay, normalizeUrl, sortByPosition } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview } from '@/db/overview'
 import { setReminder } from '@/db/repo'

@@ -1,4 +1,4 @@
-import { displayHost, isDue, needsNotification, presetTime } from '@tabhangar/core'
+import { displayHost, isDue, needsNotification, presetTime } from '@tabcabin/core'
 import { liveQuery } from 'dexie'
 import { loadReminders, type ReminderEntry } from '@/db/reminders'
 import { completeReminder, markRemindersFired, snoozeReminder } from '@/db/repo'

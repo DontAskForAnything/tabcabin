@@ -1,6 +1,6 @@
 import { Bell, BellRing, Repeat } from 'lucide-react'
-import { isDue, type Reminder } from '@tabhangar/core'
-import { cn } from '@tabhangar/ui'
+import { isDue, type Reminder } from '@tabcabin/core'
+import { cn } from '@tabcabin/ui'
 import { useLocale, useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { formatDue } from './format'

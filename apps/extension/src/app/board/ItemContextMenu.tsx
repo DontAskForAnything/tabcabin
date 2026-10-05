@@ -8,7 +8,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 import type { BoardItem } from '@/db/hooks'
 import { moveItemsTo } from '@/db/repo'

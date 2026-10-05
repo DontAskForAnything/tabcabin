@@ -1,4 +1,4 @@
-import type { EntityType } from '@tabhangar/core'
+import type { EntityType } from '@tabcabin/core'
 
 export interface RemoteChange {
   entity: EntityType

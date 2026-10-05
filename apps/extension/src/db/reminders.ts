@@ -1,4 +1,4 @@
-import type { Category, Group, Item, Reminder, Workspace } from '@tabhangar/core'
+import type { Category, Group, Item, Reminder, Workspace } from '@tabcabin/core'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from './db'
 

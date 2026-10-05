@@ -1,5 +1,5 @@
 {
-  "name": "@tabhangar/server",
+  "name": "@tabcabin/server",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.4",
-    "@tabhangar/core": "workspace:*",
+    "@tabcabin/core": "workspace:*",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.3",
     "hono": "^4.13.13",

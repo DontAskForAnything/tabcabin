@@ -1,4 +1,4 @@
-import { type Bundle, collectBundle, createBackup, toBookmarksHtml, toCsv } from '@tabhangar/core'
+import { type Bundle, collectBundle, createBackup, toBookmarksHtml, toCsv } from '@tabcabin/core'
 import { db } from '@/db/db'
 
 export type ExportFormat = 'json' | 'html' | 'csv'

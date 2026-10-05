@@ -1,5 +1,5 @@
 import { Cloud, CloudOff, LogOut } from 'lucide-react'
-import { Button, cn, toast } from '@tabhangar/ui'
+import { Button, cn, toast } from '@tabcabin/ui'
 import { useLocale, useT } from '@/i18n'
 import { relativeTime } from '@/lib/time'
 import { SyncClient } from '@/sync/client'

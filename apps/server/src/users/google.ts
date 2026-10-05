@@ -1,4 +1,4 @@
-import { newId } from '@tabhangar/core'
+import { newId } from '@tabcabin/core'
 import { and, eq } from 'drizzle-orm'
 import type { Db } from '../db/client'
 import { identities, users } from '../db/schema'

@@ -1,4 +1,4 @@
-import { makeWorkspace } from '@tabhangar/core'
+import { makeWorkspace } from '@tabcabin/core'
 import { describe, expect, it } from 'vitest'
 import { createUser } from '../src/users'
 import { testApp } from './helpers'

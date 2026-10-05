@@ -10,7 +10,7 @@ import {
   MenuSub,
   MenuSubContent,
   MenuSubTrigger,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { useOverview } from '@/db/overview'
 import { moveCategory, moveGroup } from '@/db/repo'
 import { useT } from '@/i18n'

@@ -1,6 +1,6 @@
 import { Bell } from 'lucide-react'
-import { TIME_PRESETS, type TimePreset } from '@tabhangar/core'
-import { cn } from '@tabhangar/ui'
+import { TIME_PRESETS, type TimePreset } from '@tabcabin/core'
+import { cn } from '@tabcabin/ui'
 import type { Translate } from '@/i18n'
 
 /** Quick reminder choices; picking the selected one again clears it. */

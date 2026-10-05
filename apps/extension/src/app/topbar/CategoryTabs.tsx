@@ -1,4 +1,4 @@
-import type { Category } from '@tabhangar/core'
+import type { Category } from '@tabcabin/core'
 import {
   cn,
   ContextMenu,
@@ -7,7 +7,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
   IconButton,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { ArrowLeft, ArrowRight, Pencil, Plus, Settings2, Trash } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { createCategory, deleteCategory, moveCategory, updateCategory } from '@/db/repo'

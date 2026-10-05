@@ -1,4 +1,4 @@
-import { Button, Modal } from '@tabhangar/ui'
+import { Button, Modal } from '@tabcabin/ui'
 import { Trash, Trash2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { useBin } from '@/db/bin'

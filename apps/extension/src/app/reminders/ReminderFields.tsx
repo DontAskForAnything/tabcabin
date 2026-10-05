@@ -1,5 +1,5 @@
-import { presetTime, TIME_PRESETS } from '@tabhangar/core'
-import { cn, SegmentedControl } from '@tabhangar/ui'
+import { presetTime, TIME_PRESETS } from '@tabcabin/core'
+import { cn, SegmentedControl } from '@tabcabin/ui'
 import { Bell, CircleAlert } from 'lucide-react'
 import { useLocale, useT } from '@/i18n'
 import { formatDue, toInputs, weekdayNames } from './format'

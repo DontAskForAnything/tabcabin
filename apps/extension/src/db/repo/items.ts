@@ -11,7 +11,7 @@ import {
   puts,
   touch,
   unstack,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { db } from '../db'
 import { clock, commit, live, mustGet, type Result } from './commit'
 import { getGroupItems, getTopLevelItems } from './reads'

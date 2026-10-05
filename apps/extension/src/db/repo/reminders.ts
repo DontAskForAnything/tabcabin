@@ -1,4 +1,4 @@
-import { type Change, dueAfterDone, makeReminder, put, type Reminder, touch } from '@tabhangar/core'
+import { type Change, dueAfterDone, makeReminder, put, type Reminder, touch } from '@tabcabin/core'
 import { applyChanges } from '../apply'
 import { db } from '../db'
 import { clock, commit, live, mustGet } from './commit'

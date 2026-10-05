@@ -6,8 +6,8 @@ import {
   MenuSub,
   MenuSubContent,
   MenuSubTrigger,
-} from '@tabhangar/ui'
-import { sortByPosition } from '@tabhangar/core'
+} from '@tabcabin/ui'
+import { sortByPosition } from '@tabcabin/core'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/db/db'
 import { useT } from '@/i18n'

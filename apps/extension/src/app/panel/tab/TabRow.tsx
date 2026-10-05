@@ -1,5 +1,5 @@
 import { Check, Pin } from 'lucide-react'
-import { cn, ContextMenu, ContextMenuTrigger } from '@tabhangar/ui'
+import { cn, ContextMenu, ContextMenuTrigger } from '@tabcabin/ui'
 import type { ActiveContext } from '../../useActive'
 import type { OpenTab } from '../useOpenTabs'
 import { TabContextMenu } from './TabContextMenu'

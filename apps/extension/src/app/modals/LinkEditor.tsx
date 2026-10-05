@@ -1,6 +1,6 @@
 import { Trash } from 'lucide-react'
-import { NOTE_COLORS, type NoteColor, withProtocol } from '@tabhangar/core'
-import { Button, cn, Field, Modal, Textarea, toast } from '@tabhangar/ui'
+import { NOTE_COLORS, type NoteColor, withProtocol } from '@tabcabin/core'
+import { Button, cn, Field, Modal, Textarea, toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { db } from '@/db/db'

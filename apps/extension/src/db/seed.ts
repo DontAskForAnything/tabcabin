@@ -7,7 +7,7 @@ import {
   positionsAtEnd,
   put,
   puts,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { applyChanges } from './apply'
 import { db } from './db'
 

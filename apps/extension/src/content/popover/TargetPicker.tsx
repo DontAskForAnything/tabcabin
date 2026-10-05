@@ -1,6 +1,6 @@
 import { ChevronDown, Plus } from 'lucide-react'
-import { displayHost } from '@tabhangar/core'
-import { cn } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { cn } from '@tabcabin/ui'
 import { useState } from 'react'
 import type { PopoverData } from '@/background/popover'
 import type { Translate } from '@/i18n'

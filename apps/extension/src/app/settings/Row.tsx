@@ -1,4 +1,4 @@
-import { Switch } from '@tabhangar/ui'
+import { Switch } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 
 export function SectionTitle({ children }: { children: ReactNode }) {

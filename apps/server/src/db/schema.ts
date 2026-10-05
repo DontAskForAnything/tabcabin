@@ -1,4 +1,4 @@
-import { ENTITY_TYPES } from '@tabhangar/core'
+import { ENTITY_TYPES } from '@tabcabin/core'
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('users', {

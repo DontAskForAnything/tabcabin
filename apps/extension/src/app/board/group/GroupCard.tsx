@@ -1,5 +1,5 @@
-import { countItems } from '@tabhangar/core'
-import { cn, EmojiPickerPopover } from '@tabhangar/ui'
+import { countItems } from '@tabcabin/core'
+import { cn, EmojiPickerPopover } from '@tabcabin/ui'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { type CSSProperties, type ReactNode, useState } from 'react'
 import type { BoardGroup } from '@/db/hooks'

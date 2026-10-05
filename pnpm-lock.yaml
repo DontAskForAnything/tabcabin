@@ -199,10 +199,10 @@ importers:
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@tabhangar/core':
+      '@tabcabin/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@tabhangar/ui':
+      '@tabcabin/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       dexie:
@@ -242,7 +242,7 @@ importers:
       '@resvg/resvg-js':
         specifier: ^2.6.2
         version: 2.6.2
-      '@tabhangar/server':
+      '@tabcabin/server':
         specifier: workspace:*
         version: link:../server
       '@tailwindcss/vite':
@@ -287,7 +287,7 @@ importers:
       '@astrojs/sitemap':
         specifier: ^3.7.4
         version: 3.7.4
-      '@tabhangar/ui':
+      '@tabcabin/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@tailwindcss/vite':
@@ -318,7 +318,7 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.4
         version: 2.1.4(hono@4.13.13)
-      '@tabhangar/core':
+      '@tabcabin/core':
         specifier: workspace:*
         version: link:../../packages/core
       better-sqlite3:

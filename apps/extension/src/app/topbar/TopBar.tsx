@@ -1,5 +1,5 @@
 import { Bell, Columns3, Rows3, Search } from 'lucide-react'
-import { IconButton, Kbd, SegmentedControl, Tooltip, cn } from '@tabhangar/ui'
+import { IconButton, Kbd, SegmentedControl, Tooltip, cn } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { formatShortcut } from '@/lib/keys'
 import { updateSettings, type ViewMode } from '@/settings/settings'

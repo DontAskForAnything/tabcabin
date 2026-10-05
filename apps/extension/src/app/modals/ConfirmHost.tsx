@@ -1,4 +1,4 @@
-import { Button, Modal } from '@tabhangar/ui'
+import { Button, Modal } from '@tabcabin/ui'
 import { useConfirm } from '@/state/confirm'
 
 export function ConfirmHost() {

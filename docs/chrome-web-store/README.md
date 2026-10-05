@@ -24,7 +24,7 @@ upload.
 | Marquee promo tile (1400×560)       | [`promo-marquee-1400x560.png`](promo-marquee-1400x560.png)                              |
 | Promo video (YouTube link)          | upload [`promo.mp4`](../../apps/landing/public/promo.mp4) to YouTube (unlisted is fine) |
 
-Regenerate them with `pnpm --filter @tabhangar/extension store-assets` (needs network access for the
+Regenerate them with `pnpm --filter @tabcabin/extension store-assets` (needs network access for the
 demo favicons). Stills from the promo film for social posts are in [`../promo/`](../promo).
 
 ## Store listing

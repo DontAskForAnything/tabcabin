@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { type Scope, SCOPES } from './scopes'
 

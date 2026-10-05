@@ -1,5 +1,5 @@
 import { Upload } from 'lucide-react'
-import { Button, toast } from '@tabhangar/ui'
+import { Button, toast } from '@tabcabin/ui'
 import { useRef } from 'react'
 import { ImportError, importFile } from '@/data/importFile'
 import { useT } from '@/i18n'

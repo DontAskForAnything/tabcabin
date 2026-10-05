@@ -1,5 +1,5 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
-import { SegmentedControl, type ThemePreference } from '@tabhangar/ui'
+import { SegmentedControl, type ThemePreference } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import {
   DEFAULT_SETTINGS,

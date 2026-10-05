@@ -1,4 +1,4 @@
-import { type Category, type Group, type Item, type Workspace } from '@tabhangar/core'
+import { type Category, type Group, type Item, type Workspace } from '@tabcabin/core'
 import { db } from '../../db'
 
 export type BinEntry =

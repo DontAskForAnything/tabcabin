@@ -7,10 +7,10 @@ RUN npm install -g pnpm@12.10.1
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
 COPY packages/core/package.json packages/core/
 COPY apps/server/package.json apps/server/
-RUN pnpm install --frozen-lockfile --filter @tabhangar/server...
+RUN pnpm install --frozen-lockfile --filter @tabcabin/server...
 COPY packages/core packages/core
 COPY apps/server apps/server
-RUN pnpm --filter @tabhangar/server build
+RUN pnpm --filter @tabcabin/server build
 
 FROM node:24-slim AS runtime
 ENV NODE_ENV=production \

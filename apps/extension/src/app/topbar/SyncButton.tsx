@@ -1,5 +1,5 @@
 import { Cloud, CloudOff, RefreshCw } from 'lucide-react'
-import { IconButton, Tooltip, cn } from '@tabhangar/ui'
+import { IconButton, Tooltip, cn } from '@tabcabin/ui'
 import { useLocale, useT } from '@/i18n'
 import { openSignInPage } from '@/lib/pages'
 import { relativeTime } from '@/lib/time'

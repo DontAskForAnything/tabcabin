@@ -1,4 +1,4 @@
-import { Button, Field } from '@tabhangar/ui'
+import { Button, Field } from '@tabcabin/ui'
 import { useState } from 'react'
 import { useT } from '@/i18n'
 import { FormError } from './FormError'

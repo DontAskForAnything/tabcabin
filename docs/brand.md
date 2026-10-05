@@ -22,7 +22,7 @@ Lockups with the wordmark and the tagline (PNG, 1920×640):
 [cream](brand/lockup-light.png) · [dark](brand/lockup-dark.png) · [pine](brand/lockup-pine.png). Brand
 moments such as lockups, the store tiles and the film use the full cream `#F4EAD5` as background;
 the app itself sits on the lighter page colour.
-They are rendered by `pnpm --filter @tabhangar/extension brand` from the SVGs above.
+They are rendered by `pnpm --filter @tabcabin/extension brand` from the SVGs above.
 
 - **Clear space:** keep at least a quarter of the tile's width free on every side.
 - **Smallest size:** 16 px in the browser, 24 px next to the wordmark. The extension icons at

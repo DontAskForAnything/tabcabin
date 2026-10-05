@@ -1,4 +1,4 @@
-import { Button } from '@tabhangar/ui'
+import { Button } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { SELF_HOSTING_DOCS } from '@/lib/links'
 import { openBoards } from '@/lib/pages'

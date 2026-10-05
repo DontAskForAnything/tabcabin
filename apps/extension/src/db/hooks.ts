@@ -5,7 +5,7 @@ import {
   type Reminder,
   sortByPosition,
   type Workspace,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from './db'
 import { getCategories, getWorkspaces } from './repo'

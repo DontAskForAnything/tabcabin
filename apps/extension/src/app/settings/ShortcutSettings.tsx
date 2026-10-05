@@ -1,4 +1,4 @@
-import { Button, cn, Kbd } from '@tabhangar/ui'
+import { Button, cn, Kbd } from '@tabcabin/ui'
 import { type KeyboardEvent, type RefObject, useEffect, useState } from 'react'
 import { useT } from '@/i18n'
 import { formatShortcut, shortcutFromEvent } from '@/lib/keys'

@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react'
 import { Fragment } from 'react'
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import type { BoardGroup } from '@/db/hooks'
 import { useT } from '@/i18n'
 import type { BoardActions } from '../board/actions'

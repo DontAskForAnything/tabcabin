@@ -8,7 +8,7 @@ import {
   puts,
   touch,
   type Workspace,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { clock, commit, mustGet, type Result } from './commit'
 import { descendantsOfCategories, getCategories, getWorkspaces } from './reads'
 

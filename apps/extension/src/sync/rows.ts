@@ -1,4 +1,4 @@
-import { type EntityType, ENTITY_TYPES } from '@tabhangar/core'
+import { type EntityType, ENTITY_TYPES } from '@tabcabin/core'
 import type { Table } from 'dexie'
 import { tables } from '@/db/db'
 

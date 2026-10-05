@@ -1,5 +1,5 @@
 import { Bookmark, Braces, FileSpreadsheet } from 'lucide-react'
-import { Button, SegmentedControl, toast } from '@tabhangar/ui'
+import { Button, SegmentedControl, toast } from '@tabcabin/ui'
 import { useState } from 'react'
 import { buildExport, downloadFile, type ExportFormat } from '@/data/exportFile'
 import { useT } from '@/i18n'

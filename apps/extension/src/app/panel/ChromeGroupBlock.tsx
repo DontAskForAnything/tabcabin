@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { ChevronDown } from 'lucide-react'
-import { cn, Menu, MenuContent, MenuTrigger } from '@tabhangar/ui'
+import { cn, Menu, MenuContent, MenuTrigger } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { useDrag } from '../dnd/store'
 import type { DragSource } from '../dnd/types'

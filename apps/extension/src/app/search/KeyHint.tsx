@@ -1,4 +1,4 @@
-import { Kbd } from '@tabhangar/ui'
+import { Kbd } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 
 export function KeyHint({ keys, children }: { keys: string[]; children: ReactNode }) {

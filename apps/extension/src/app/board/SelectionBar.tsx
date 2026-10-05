@@ -1,5 +1,5 @@
 import { Layers, SquareStack, Trash, X } from 'lucide-react'
-import { Button, IconButton } from '@tabhangar/ui'
+import { Button, IconButton } from '@tabcabin/ui'
 import { AnimatePresence, motion } from 'motion/react'
 import { db } from '@/db/db'
 import { useT } from '@/i18n'

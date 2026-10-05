@@ -1,5 +1,5 @@
 import { Trash } from 'lucide-react'
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import { motion } from 'motion/react'
 import { useT } from '@/i18n'
 import { useSimpleDrop } from './hooks'

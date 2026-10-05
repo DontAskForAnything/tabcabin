@@ -1,4 +1,4 @@
-import type { Change, EntityMap, EntityType } from '@tabhangar/core'
+import type { Change, EntityMap, EntityType } from '@tabcabin/core'
 import type { Table } from 'dexie'
 import { db, tables } from './db'
 

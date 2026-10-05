@@ -1,5 +1,5 @@
-import { displayHost, isSavableUrl } from '@tabhangar/core'
-import { sortByPosition } from '@tabhangar/core'
+import { displayHost, isSavableUrl } from '@tabcabin/core'
+import { sortByPosition } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview, type WorkspaceOverview } from '@/db/overview'
 import { revert } from '@/db/repo'

@@ -1,5 +1,5 @@
 import { Layers, MemoryStick, Pin, PinOff, Ungroup, X } from 'lucide-react'
-import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '@tabhangar/ui'
+import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { closeTabs } from '@/lib/tabs'
 import type { OpenTab } from '../useOpenTabs'

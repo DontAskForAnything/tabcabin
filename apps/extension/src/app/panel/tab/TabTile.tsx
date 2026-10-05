@@ -1,4 +1,4 @@
-import { cn, Tooltip } from '@tabhangar/ui'
+import { cn, Tooltip } from '@tabcabin/ui'
 import type { OpenTab } from '../useOpenTabs'
 import { TabFavicon } from './TabFavicon'
 import { useOpenTab } from './useOpenTab'

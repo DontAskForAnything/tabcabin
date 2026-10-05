@@ -1,4 +1,4 @@
-import { toast } from '@tabhangar/ui'
+import { toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useMemo, useState } from 'react'
 import { loadItemDocs, type SearchDoc } from '@/db/search'

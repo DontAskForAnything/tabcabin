@@ -1,4 +1,4 @@
-import { Button, cn, Favicon, IconButton } from '@tabhangar/ui'
+import { Button, cn, Favicon, IconButton } from '@tabcabin/ui'
 import { RotateCcw, Trash } from 'lucide-react'
 import type { BinRow } from '@/db/bin'
 import { purgeFromBin, restoreFromBin } from '@/db/repo'

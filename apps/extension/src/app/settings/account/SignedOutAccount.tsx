@@ -1,5 +1,5 @@
 import { LogIn } from 'lucide-react'
-import { Button } from '@tabhangar/ui'
+import { Button } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { openSignInPage } from '@/lib/pages'
 

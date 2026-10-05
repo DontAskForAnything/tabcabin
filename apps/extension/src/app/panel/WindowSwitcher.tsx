@@ -1,5 +1,5 @@
 import { AppWindow, ChevronDown, Plus } from 'lucide-react'
-import { IconButton, Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@tabhangar/ui'
+import { IconButton, Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { usePanel } from './panelStore'
 import type { PanelData } from './usePanelData'

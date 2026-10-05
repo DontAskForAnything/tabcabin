@@ -1,5 +1,5 @@
-import type { NoteColor } from '@tabhangar/core'
-import { cn, Tooltip } from '@tabhangar/ui'
+import type { NoteColor } from '@tabcabin/core'
+import { cn, Tooltip } from '@tabcabin/ui'
 import { keepFocus } from './keepFocus'
 
 export function Swatch({

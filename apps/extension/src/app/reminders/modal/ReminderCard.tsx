@@ -1,5 +1,5 @@
-import { displayUrl } from '@tabhangar/core'
-import { cn, Favicon } from '@tabhangar/ui'
+import { displayUrl } from '@tabcabin/core'
+import { cn, Favicon } from '@tabcabin/ui'
 import { Image, Layers, Link2, ListTodo, Repeat, StickyNote } from 'lucide-react'
 import type { ReminderEntry } from '@/db/reminders'
 import { useLocale, useT } from '@/i18n'

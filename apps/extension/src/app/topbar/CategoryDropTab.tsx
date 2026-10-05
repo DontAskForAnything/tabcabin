@@ -1,4 +1,4 @@
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import type { ComponentProps } from 'react'
 import { useSimpleDrop } from '../dnd/hooks'
 import { dndId } from '../dnd/types'

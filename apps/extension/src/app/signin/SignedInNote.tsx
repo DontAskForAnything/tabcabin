@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { Button } from '@tabhangar/ui'
+import { Button } from '@tabcabin/ui'
 import { useEffect } from 'react'
 import { useT } from '@/i18n'
 import { openBoards } from '@/lib/pages'

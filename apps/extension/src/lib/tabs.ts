@@ -1,4 +1,4 @@
-import { isSavableUrl, normalizeUrl } from '@tabhangar/core'
+import { isSavableUrl, normalizeUrl } from '@tabcabin/core'
 import type { NewLink } from '@/db/repo'
 
 export interface TabLike {

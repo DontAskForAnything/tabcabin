@@ -1,4 +1,4 @@
-import { type Change, type EntityType, purge } from '@tabhangar/core'
+import { type Change, type EntityType, purge } from '@tabcabin/core'
 import { loadRow } from '../../apply'
 import { db } from '../../db'
 import { commit } from '../commit'

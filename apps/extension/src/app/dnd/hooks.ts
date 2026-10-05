@@ -1,5 +1,5 @@
 import { useDraggable, useDroppable } from '@dnd-kit/core'
-import type { Item } from '@tabhangar/core'
+import type { Item } from '@tabcabin/core'
 import { useCallback } from 'react'
 import { type OverlayInfo, useDrag } from './store'
 import { type DragSource, dndId, type DropZone } from './types'

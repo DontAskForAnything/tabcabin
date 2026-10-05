@@ -1,4 +1,4 @@
-// Bundles the server and the admin CLI (with @tabhangar/core) into dist/; the native SQLite driver stays external.
+// Bundles the server and the admin CLI (with @tabcabin/core) into dist/; the native SQLite driver stays external.
 import { build } from 'esbuild'
 import { cpSync, rmSync } from 'node:fs'
 

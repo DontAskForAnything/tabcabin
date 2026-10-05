@@ -1,5 +1,5 @@
-import { displayUrl } from '@tabhangar/core'
-import { cn, Favicon, Kbd } from '@tabhangar/ui'
+import { displayUrl } from '@tabcabin/core'
+import { cn, Favicon, Kbd } from '@tabcabin/ui'
 import { CircleCheck, Image as ImageIcon, StickyNote } from 'lucide-react'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { highlightParts, type SearchHit } from './engine'

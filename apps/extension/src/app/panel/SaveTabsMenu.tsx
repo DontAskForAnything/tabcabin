@@ -11,7 +11,7 @@ import {
   MenuSubTrigger,
   MenuTrigger,
   toast,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { useLocale, useT } from '@/i18n'
 import { closeTabs, duplicateTabIds } from '@/lib/tabs'
 import type { ActiveContext } from '../useActive'

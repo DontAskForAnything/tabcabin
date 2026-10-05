@@ -1,5 +1,5 @@
 import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
-import { IconButton, Modal, Tabs } from '@tabhangar/ui'
+import { IconButton, Modal, Tabs } from '@tabcabin/ui'
 import { useRef, type ReactNode } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'

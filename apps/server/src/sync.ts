@@ -1,4 +1,4 @@
-import { type EntityType, entitySchemas, ENTITY_TYPES } from '@tabhangar/core'
+import { type EntityType, entitySchemas, ENTITY_TYPES } from '@tabcabin/core'
 import { and, asc, eq, gt, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import type { Db } from './db/client'

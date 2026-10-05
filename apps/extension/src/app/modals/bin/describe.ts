@@ -1,4 +1,4 @@
-import type { Item } from '@tabhangar/core'
+import type { Item } from '@tabcabin/core'
 import type { BinRow } from '@/db/bin'
 import type { Translate } from '@/i18n'
 

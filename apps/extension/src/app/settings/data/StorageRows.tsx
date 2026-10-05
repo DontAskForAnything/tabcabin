@@ -1,4 +1,4 @@
-import { Button } from '@tabhangar/ui'
+import { Button } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { db } from '@/db/db'

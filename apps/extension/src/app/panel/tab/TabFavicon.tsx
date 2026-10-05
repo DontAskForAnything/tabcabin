@@ -1,5 +1,5 @@
-import { displayHost } from '@tabhangar/core'
-import { Favicon, type TileSize } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { Favicon, type TileSize } from '@tabcabin/ui'
 import { faviconUrl } from '@/lib/browser'
 import type { OpenTab } from '../useOpenTabs'
 

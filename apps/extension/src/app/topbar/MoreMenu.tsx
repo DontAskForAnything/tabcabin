@@ -22,7 +22,7 @@ import {
   MenuSubTrigger,
   MenuTrigger,
   type ThemePreference,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 import { useT } from '@/i18n'
 import { setSetting } from '@/settings/settings'

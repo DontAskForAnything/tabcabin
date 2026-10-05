@@ -5,8 +5,8 @@ import {
   looksLikeUrl,
   NOTE_MAX_LENGTH,
   withProtocol,
-} from '@tabhangar/core'
-import { cn, Textarea, toast } from '@tabhangar/ui'
+} from '@tabcabin/core'
+import { cn, Textarea, toast } from '@tabcabin/ui'
 import { Link2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { convertNote } from '@/db/repo'

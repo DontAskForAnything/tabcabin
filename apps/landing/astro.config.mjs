@@ -1,6 +1,6 @@
 // @ts-check
 import sitemap from '@astrojs/sitemap'
-import { thirdPartyLicenses } from '@tabhangar/ui/vite/licenses'
+import { thirdPartyLicenses } from '@tabcabin/ui/vite/licenses'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { createRequire } from 'node:module'

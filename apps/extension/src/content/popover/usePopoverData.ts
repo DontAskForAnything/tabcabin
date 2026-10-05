@@ -1,4 +1,4 @@
-import { displayHost } from '@tabhangar/core'
+import { displayHost } from '@tabcabin/core'
 import { useEffect, useState } from 'react'
 import type { PopoverData } from '@/background/popover'
 import type { PageInfo, Target } from './types'

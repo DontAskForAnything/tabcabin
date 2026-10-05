@@ -7,7 +7,7 @@ import {
   makeReminder,
   makeWorkspace,
   positionsAtEnd,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 
 /** Favicons for the demo come from a public favicon service (the profile has no history). */
 const icon = (url: string) =>

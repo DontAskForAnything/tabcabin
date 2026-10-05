@@ -1,5 +1,5 @@
 import { ChevronDown, LayoutGrid, Plus } from 'lucide-react'
-import { Menu, MenuContent, MenuItem, MenuLabel, MenuSeparator, MenuTrigger } from '@tabhangar/ui'
+import { Menu, MenuContent, MenuItem, MenuLabel, MenuSeparator, MenuTrigger } from '@tabcabin/ui'
 import { createWorkspace } from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'

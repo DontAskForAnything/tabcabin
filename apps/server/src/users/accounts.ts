@@ -1,4 +1,4 @@
-import { newId } from '@tabhangar/core'
+import { newId } from '@tabcabin/core'
 import { asc, eq, sql } from 'drizzle-orm'
 import { hashPassword, verifyPassword } from '../auth/password'
 import type { Db } from '../db/client'

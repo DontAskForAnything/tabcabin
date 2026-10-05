@@ -1,4 +1,4 @@
-import { presetTime, TIME_PRESETS } from '@tabhangar/core'
+import { presetTime, TIME_PRESETS } from '@tabcabin/core'
 import {
   Button,
   Menu,
@@ -9,7 +9,7 @@ import {
   MenuSubContent,
   MenuSubTrigger,
   MenuTrigger,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { ChevronDown, Clock, LocateFixed, Pencil, SkipForward, Trash } from 'lucide-react'
 import { useT } from '@/i18n'
 import type { ReminderActions } from './useReminderActions'

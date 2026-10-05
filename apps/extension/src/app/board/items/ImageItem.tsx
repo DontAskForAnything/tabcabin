@@ -1,6 +1,6 @@
 import { Trash } from 'lucide-react'
-import { displayHost } from '@tabhangar/core'
-import { cn, IconButton } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { cn, IconButton } from '@tabcabin/ui'
 import { useState } from 'react'
 import { useT } from '@/i18n'
 import type { ItemViewProps } from '../ItemView'

@@ -1,5 +1,5 @@
-import { type NoteColor, presetTime, type TimePreset } from '@tabhangar/core'
-import { Checkbox, cn } from '@tabhangar/ui'
+import { type NoteColor, presetTime, type TimePreset } from '@tabcabin/core'
+import { Checkbox, cn } from '@tabcabin/ui'
 import { useEffect, useRef, useState } from 'react'
 import type { MessageKey } from '@/i18n'
 import { translate } from '@/i18n/translate'

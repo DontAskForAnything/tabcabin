@@ -8,7 +8,7 @@ import {
   MenuSeparator,
   MenuTrigger,
   toast,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import { ArrowDown, ArrowUp, Ellipsis, Pencil, Trash } from 'lucide-react'
 import type { WorkspaceOverview } from '@/db/overview'
 import { deleteWorkspace, reorderWorkspace, updateWorkspace } from '@/db/repo'

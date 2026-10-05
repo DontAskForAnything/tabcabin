@@ -1,6 +1,6 @@
 import { ChevronDown, Ellipsis, Layers } from 'lucide-react'
-import { countItems } from '@tabhangar/core'
-import { Button, cn, EmojiPickerPopover, IconButton } from '@tabhangar/ui'
+import { countItems } from '@tabcabin/core'
+import { Button, cn, EmojiPickerPopover, IconButton } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 import type { BoardGroup } from '@/db/hooks'
 import { updateGroup } from '@/db/repo'

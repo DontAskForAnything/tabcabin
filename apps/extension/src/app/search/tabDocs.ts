@@ -1,4 +1,4 @@
-import { isSavableUrl } from '@tabhangar/core'
+import { isSavableUrl } from '@tabcabin/core'
 import type { SearchDoc } from '@/db/search'
 import type { Translate } from '@/i18n'
 import type { OpenTab } from '../panel/useOpenTabs'

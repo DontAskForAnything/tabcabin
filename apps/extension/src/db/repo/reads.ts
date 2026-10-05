@@ -4,7 +4,7 @@ import {
   type Item,
   sortByPosition,
   type Workspace,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { db } from '../db'
 import { live } from './commit'
 

@@ -1,4 +1,4 @@
-import { Button, Input, Modal } from '@tabhangar/ui'
+import { Button, Input, Modal } from '@tabcabin/ui'
 import { Plus, Search } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useOverview } from '@/db/overview'

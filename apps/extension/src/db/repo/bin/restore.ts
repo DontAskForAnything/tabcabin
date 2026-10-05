@@ -7,7 +7,7 @@ import {
   positionAtEnd,
   put,
   touch,
-} from '@tabhangar/core'
+} from '@tabcabin/core'
 import { loadRow } from '../../apply'
 import { db } from '../../db'
 import { clock, commit, mustGet } from '../commit'

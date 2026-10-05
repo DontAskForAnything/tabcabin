@@ -1,4 +1,4 @@
-import { isSavableUrl } from '@tabhangar/core'
+import { isSavableUrl } from '@tabcabin/core'
 import { useMemo } from 'react'
 import { usePanel } from './panelStore'
 import { useCurrentWindowId, useOpenTabs, useTabGroups } from './useOpenTabs'

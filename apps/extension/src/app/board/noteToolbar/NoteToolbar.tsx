@@ -1,5 +1,5 @@
-import { NOTE_COLORS } from '@tabhangar/core'
-import { EmojiPickerPanel, Popover, PopoverContent, PopoverTrigger, toast } from '@tabhangar/ui'
+import { NOTE_COLORS } from '@tabcabin/core'
+import { EmojiPickerPanel, Popover, PopoverContent, PopoverTrigger, toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import {
   Bell,

@@ -1,4 +1,4 @@
-import { Button, Kbd, Modal } from '@tabhangar/ui'
+import { Button, Kbd, Modal } from '@tabcabin/ui'
 import { Fragment } from 'react'
 import { useT } from '@/i18n'
 import { formatShortcut } from '@/lib/keys'

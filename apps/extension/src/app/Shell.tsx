@@ -1,4 +1,4 @@
-import { Skeleton } from '@tabhangar/ui'
+import { Skeleton } from '@tabcabin/ui'
 import { useEffect } from 'react'
 import { useUi } from '@/state/ui'
 import { BoardView } from './board/BoardView'

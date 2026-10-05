@@ -64,7 +64,7 @@ yours (needs Node 24 and pnpm):
 cd /path/to/tabhangar            # on your computer
 echo 'WXT_SYNC_SERVER=https://tabs.example.com' > apps/extension/.env
 pnpm install
-pnpm --filter @tabhangar/extension build
+pnpm --filter @tabcabin/extension build
 ```
 
 Load `apps/extension/.output/chrome-mv3` in `chrome://extensions` (Developer mode → **Load
@@ -188,7 +188,7 @@ Node.js 22+ and pnpm are enough:
 
 ```bash
 pnpm install
-pnpm --filter @tabhangar/server build
+pnpm --filter @tabcabin/server build
 cd apps/server
 DATA_DIR=/var/lib/tabhangar ADMIN_USERNAME=me ADMIN_PASSWORD='…' node dist/main.js
 ```

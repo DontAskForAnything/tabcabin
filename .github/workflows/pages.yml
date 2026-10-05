@@ -29,8 +29,8 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --filter @tabhangar/landing...
-      - run: pnpm --filter @tabhangar/landing build
+      - run: pnpm install --frozen-lockfile --filter @tabcabin/landing...
+      - run: pnpm --filter @tabcabin/landing build
         env:
           SITE_URL: ${{ inputs.site_url }}
       - uses: actions/configure-pages@v6

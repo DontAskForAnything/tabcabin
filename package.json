@@ -1,5 +1,5 @@
 {
-  "name": "tabhangar",
+  "name": "tabcabin",
   "private": true,
   "version": "0.1.0",
   "description": "Self-hosted tab manager: kanban boards and collections for your tabs, notes and to-dos.",
@@ -9,16 +9,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev:ext": "pnpm --filter @tabhangar/extension dev",
+    "dev:ext": "pnpm --filter @tabcabin/extension dev",
     "build": "pnpm -r --if-present build",
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "pnpm -r --if-present test",
-    "build:ext": "pnpm --filter @tabhangar/extension build",
-    "zip:ext": "pnpm --filter @tabhangar/extension zip",
-    "e2e": "pnpm --filter @tabhangar/server build && pnpm --filter @tabhangar/extension build:e2e && pnpm --filter @tabhangar/extension e2e"
+    "build:ext": "pnpm --filter @tabcabin/extension build",
+    "zip:ext": "pnpm --filter @tabcabin/extension zip",
+    "e2e": "pnpm --filter @tabcabin/server build && pnpm --filter @tabcabin/extension build:e2e && pnpm --filter @tabcabin/extension e2e"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

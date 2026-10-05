@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { IconButton } from '@tabhangar/ui'
+import { IconButton } from '@tabcabin/ui'
 import { useMemo, useState } from 'react'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'

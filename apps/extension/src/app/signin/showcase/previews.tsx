@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { cn } from '@tabhangar/ui'
+import { cn } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 
 /* Static, decorative pieces of a board for the sign-in page (not the real board components). */

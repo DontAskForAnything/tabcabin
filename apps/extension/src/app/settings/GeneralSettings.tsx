@@ -1,4 +1,4 @@
-import { SegmentedControl } from '@tabhangar/ui'
+import { SegmentedControl } from '@tabcabin/ui'
 import { type Locale, useT } from '@/i18n'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'

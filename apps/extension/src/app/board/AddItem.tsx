@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react'
-import { Textarea } from '@tabhangar/ui'
+import { Textarea } from '@tabcabin/ui'
 import { useState } from 'react'
 import { useT } from '@/i18n'
 import type { BoardActions } from './actions'

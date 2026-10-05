@@ -8,8 +8,8 @@ import {
   NOTE_MAX_LENGTH,
   type SortMode,
   withProtocol,
-} from '@tabhangar/core'
-import { toast } from '@tabhangar/ui'
+} from '@tabcabin/core'
+import { toast } from '@tabcabin/ui'
 import { useMemo } from 'react'
 import type { BoardGroup, BoardItem } from '@/db/hooks'
 import * as repo from '@/db/repo'

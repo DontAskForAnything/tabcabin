@@ -1,6 +1,6 @@
 import { Bell, Pencil, Trash } from 'lucide-react'
-import { displayHost } from '@tabhangar/core'
-import { cn, Favicon, IconButton } from '@tabhangar/ui'
+import { displayHost } from '@tabcabin/core'
+import { cn, Favicon, IconButton } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'

@@ -1,4 +1,4 @@
-import { type Bundle, bundleStats, importTabExtend, isBackup, isBookmarksHtml, isOneTabExport, isTabExtendExport, isTobyExport, isUrlList, type Outline, outlineLinkCount, outlineToBundle, parseBackup, parseBookmarksHtml, parseToby, parseUrlList, positionsAtEnd, puts, remapBundle } from '@tabhangar/core'
+import { type Bundle, bundleStats, importTabExtend, isBackup, isBookmarksHtml, isOneTabExport, isTabExtendExport, isTobyExport, isUrlList, type Outline, outlineLinkCount, outlineToBundle, parseBackup, parseBookmarksHtml, parseToby, parseUrlList, positionsAtEnd, puts, remapBundle } from '@tabcabin/core'
 import { applyChanges } from '@/db/apply'
 import { getWorkspaces } from '@/db/repo'
 

@@ -8,7 +8,7 @@ import {
   MenuSubContent,
   MenuSubTrigger,
   MenuTrigger,
-} from '@tabhangar/ui'
+} from '@tabcabin/ui'
 import {
   AppWindow,
   ArrowDownAZ,

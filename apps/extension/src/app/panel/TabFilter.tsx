@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import { IconButton, Input, Kbd } from '@tabhangar/ui'
+import { IconButton, Input, Kbd } from '@tabcabin/ui'
 import { useEffect, useRef } from 'react'
 import { useT } from '@/i18n'
 import { isTyping } from '@/lib/keys'

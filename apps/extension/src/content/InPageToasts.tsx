@@ -1,5 +1,5 @@
 import { Check, Info, X } from 'lucide-react'
-import { toastClasses } from '@tabhangar/ui'
+import { toastClasses } from '@tabcabin/ui'
 import { AnimatePresence, motion } from 'motion/react'
 import { useSyncExternalStore } from 'react'
 import type { ToastMessage } from '@/messages'

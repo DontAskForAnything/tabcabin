@@ -1,5 +1,5 @@
 import { ChevronDown, X } from 'lucide-react'
-import { IconButton, Menu, MenuContent, MenuTrigger } from '@tabhangar/ui'
+import { IconButton, Menu, MenuContent, MenuTrigger } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { closeTabs } from '@/lib/tabs'
 import type { ActiveContext } from '../../useActive'

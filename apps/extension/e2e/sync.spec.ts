@@ -19,7 +19,7 @@ let server: ChildProcess | undefined
 let dataDir = ''
 
 test.beforeAll(async () => {
-  dataDir = mkdtempSync(join(tmpdir(), 'tabhangar-server-'))
+  dataDir = mkdtempSync(join(tmpdir(), 'tabcabin-server-'))
   if (!process.env.SYNC_SERVER)
     server = spawn(process.execPath, [serverMain], {
       env: {
@@ -48,13 +48,13 @@ test.afterAll(() => {
   if (dataDir) rmSync(dataDir, { recursive: true, force: true })
 })
 
-declare const tabhangar: { db: { meta: { put(row: object): Promise<unknown> } } }
+declare const tabcabin: { db: { meta: { put(row: object): Promise<unknown> } } }
 
 async function openBoard(context: BrowserContext): Promise<Page> {
   // Point the test build at the server of this test.
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
   await worker.evaluate(
-    (server) => tabhangar.db.meta.put({ key: 'test.syncServer', value: server }),
+    (server) => tabcabin.db.meta.put({ key: 'test.syncServer', value: server }),
     SERVER,
   )
   const page = await context.newPage()

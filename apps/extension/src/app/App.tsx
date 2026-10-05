@@ -38,7 +38,7 @@ export function App({ surface }: { surface: Surface }) {
   useEffect(() => {
     // Wake the background so it pulls changes made on other computers.
     if (typeof browser !== 'undefined' && browser.runtime?.id)
-      void browser.runtime.sendMessage({ type: 'tabhangar:sync-now' }).catch(() => undefined)
+      void browser.runtime.sendMessage({ type: 'tabcabin:sync-now' }).catch(() => undefined)
   }, [])
 
   useEffect(() => {

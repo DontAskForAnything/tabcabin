@@ -7,7 +7,7 @@ import { getSettings } from '@/settings/settings'
 import { appUrl, hasNotifications } from '@/lib/browser'
 import { setDueReminders } from './badge'
 
-const ALARM = 'tabhangar:reminders'
+const ALARM = 'tabcabin:reminders'
 const PREFIX = 'reminder:'
 /** More due reminders than this are announced with one summary notification. */
 const MAX_NOTIFICATIONS = 3

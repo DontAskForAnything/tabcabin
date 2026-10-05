@@ -29,7 +29,7 @@ test('exports a workspace as JSON and imports it again', async ({ context, exten
     page.waitForEvent('download'),
     dialog.getByRole('button', { name: 'JSON' }).click(),
   ])
-  expect(download.suggestedFilename()).toMatch(/^tabhangar-personal-\d{4}-\d{2}-\d{2}\.json$/)
+  expect(download.suggestedFilename()).toMatch(/^tabcabin-personal-\d{4}-\d{2}-\d{2}\.json$/)
   const path = await download.path()
   const backup = JSON.parse(readFileSync(path, 'utf8'))
   expect(backup).toMatchObject({ format: 'tabhangar', version: 1 })

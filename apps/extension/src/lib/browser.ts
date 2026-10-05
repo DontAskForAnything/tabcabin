@@ -17,7 +17,7 @@ export function faviconUrl(pageUrl: string | null | undefined, size = 64): strin
   return url.toString()
 }
 
-/** The TabHangar page, optionally opening a view (`#reminders`, `#bin`). */
+/** The TabCabin page, optionally opening a view (`#reminders`, `#bin`). */
 export function appUrl(view?: string): string {
   return extensionUrl(`/newtab.html${view ? `#${view}` : ''}`)
 }

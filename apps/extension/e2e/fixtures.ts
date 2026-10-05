@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.output/chrome-mv3-e2e')
 
 /** Browser profiles of a test run; e2e/teardown.ts removes what is left when the run ends. */
-export const PROFILES_DIR = join(tmpdir(), 'tabhangar-e2e')
+export const PROFILES_DIR = join(tmpdir(), 'tabcabin-e2e')
 
 /** A fresh browser profile with the built extension loaded (run `pnpm build:e2e` first). */
 export async function launchExtension(): Promise<BrowserContext> {

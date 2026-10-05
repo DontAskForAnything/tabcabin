@@ -5,7 +5,7 @@ import { type BrowserContext, type Page, type Worker } from '@playwright/test'
 import { expect, test } from './fixtures'
 
 declare const chrome: typeof browser
-declare const tabhangar: {
+declare const tabcabin: {
   handleMenuClick: (info: object, tab: object) => Promise<void>
   togglePopover: (tab: object) => Promise<void>
 }
@@ -70,7 +70,7 @@ test('saves the page from the context menu, shows a toast and undoes it', async 
   const ids = await findIds(sw)
   const tab = await tabFor(sw, 'https://site.test/article')
   await sw.evaluate(
-    ({ id, tab }) => tabhangar.handleMenuClick({ menuItemId: `save|g|${id}` }, tab),
+    ({ id, tab }) => tabcabin.handleMenuClick({ menuItemId: `save|g|${id}` }, tab),
     { id: ids.welcome, tab },
   )
   await expect(page.getByText('Saved to 👋 Welcome')).toBeVisible()
@@ -98,7 +98,7 @@ test('saves a text selection as a note with its source', async ({ context, exten
   const tab = await tabFor(sw, 'https://site.test/article')
   await sw.evaluate(
     ({ id, tab }) =>
-      tabhangar.handleMenuClick(
+      tabcabin.handleMenuClick(
         { menuItemId: `note|g|${id}`, selectionText: 'Use the .backup command' },
         tab,
       ),
@@ -116,7 +116,7 @@ test('closes the tab and saves it into a new group', async ({ context, extension
   const ids = await findIds(sw)
   const tab = await tabFor(sw, 'https://site.test/article')
   await sw.evaluate(
-    ({ id, tab }) => tabhangar.handleMenuClick({ menuItemId: `close|n|${id}` }, tab),
+    ({ id, tab }) => tabcabin.handleMenuClick({ menuItemId: `close|n|${id}` }, tab),
     { id: ids.today, tab },
   )
   await expect.poll(() => page.isClosed()).toBe(true)
@@ -132,8 +132,8 @@ test('saves the page with a note from the popover', async ({ context, extensionI
   const page = await serveArticle(context)
   const sw = await worker(context)
   const tab = await tabFor(sw, 'https://site.test/article')
-  await sw.evaluate((tab) => tabhangar.togglePopover(tab), tab)
-  const popover = page.getByRole('dialog', { name: 'TabHangar' })
+  await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = page.getByRole('dialog', { name: 'TabCabin' })
   await expect(popover).toBeVisible()
   await popover.getByRole('textbox').fill('Read the cron section')
   await popover.getByRole('button', { name: /Quick links/ }).click()
@@ -171,7 +171,7 @@ test('shows the page favicon for a saved page', async ({ context, extensionId })
   const tab = await tabFor(sw, 'https://iconic.test/page')
   const { welcome } = await findIds(sw)
   await sw.evaluate(
-    ({ id, tab }) => tabhangar.handleMenuClick({ menuItemId: `save|g|${id}` }, tab),
+    ({ id, tab }) => tabcabin.handleMenuClick({ menuItemId: `save|g|${id}` }, tab),
     { id: welcome, tab },
   )
   const link = board

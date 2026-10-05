@@ -11,7 +11,7 @@ export function usePopoverData(page: PageInfo) {
 
   useEffect(() => {
     void browser.runtime
-      .sendMessage({ type: 'tabhangar:popover-data', url: page.url })
+      .sendMessage({ type: 'tabcabin:popover-data', url: page.url })
       .then((response: PopoverData) => {
         setData(response)
         setWorkspaceId(response.activeWorkspaceId)

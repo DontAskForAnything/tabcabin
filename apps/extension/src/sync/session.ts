@@ -2,13 +2,13 @@ import { type SignedIn, type SyncClient } from './client'
 import { firstSync, localHasData } from './firstSync'
 import { type Account, setAccount } from './state'
 
-/** Names the session on the server, e.g. "TabHangar · Windows". */
+/** Names the session on the server, e.g. "TabCabin · Windows". */
 export function deviceLabel(): string {
   const platform =
     (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ||
     navigator.platform ||
     'browser'
-  return `TabHangar · ${platform}`
+  return `TabCabin · ${platform}`
 }
 
 export interface PendingChoice {

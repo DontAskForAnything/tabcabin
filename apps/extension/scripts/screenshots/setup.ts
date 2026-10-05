@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { demoBundle } from './demo-data'
 
 declare const chrome: typeof browser
-declare const tabhangar: { db: Dexie }
+declare const tabcabin: { db: Dexie }
 
 const here = dirname(fileURLToPath(import.meta.url))
 export const extensionPath = resolve(here, '../../.output/chrome-mv3-e2e')
@@ -32,7 +32,7 @@ export async function launch(
   /** Folder for a WebM recording of every page. */
   recordVideoDir?: string,
 ): Promise<{ context: BrowserContext; worker: Worker }> {
-  const profile = mkdtempSync(join(tmpdir(), 'tabhangar-shots-'))
+  const profile = mkdtempSync(join(tmpdir(), 'tabcabin-shots-'))
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium',
     headless: true,
@@ -80,7 +80,7 @@ export async function loadDemo(worker: Worker, theme: 'light' | 'dark') {
   const research = bundle.categories.find((c) => c.name === 'Research')!.id
   await worker.evaluate(
     async ({ bundle, settings }) => {
-      const db = tabhangar.db
+      const db = tabcabin.db
       await db.transaction('rw', db.tables, async () => {
         await Promise.all(db.tables.map((table) => table.clear()))
         await db.table('meta').put({ key: 'seeded', value: true })

@@ -11,13 +11,13 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
   zip: {
-    artifactTemplate: 'tabhangar-{{version}}-{{browser}}.zip',
+    artifactTemplate: 'tabcabin-{{version}}-{{browser}}.zip',
   },
   vite: () => ({
     plugins: [
       tailwindcss(),
       thirdPartyLicenses({
-        product: 'TabHangar',
+        product: 'TabCabin',
         extraFiles: [require.resolve('emojibase-data/package.json')],
       }),
     ],
@@ -54,7 +54,7 @@ export default defineConfig({
     ],
     optional_permissions: mode === 'e2e' ? [] : OPTIONAL_PERMISSIONS,
     action: {
-      default_title: 'TabHangar',
+      default_title: 'TabCabin',
     },
     commands: {
       _execute_action: {

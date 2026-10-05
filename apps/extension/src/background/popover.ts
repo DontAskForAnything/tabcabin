@@ -88,11 +88,11 @@ export async function togglePopover(tab: Browser.tabs.Tab) {
   }
   try {
     const pong = await browser.tabs.sendMessage(tab.id, {
-      type: 'tabhangar:ping',
+      type: 'tabcabin:ping',
       target: 'popover',
     })
     if (pong === 'pong') {
-      await browser.tabs.sendMessage(tab.id, { type: 'tabhangar:popover-toggle' })
+      await browser.tabs.sendMessage(tab.id, { type: 'tabcabin:popover-toggle' })
       return
     }
   } catch {
@@ -112,10 +112,10 @@ export function handlePopoverMessage(
   message: RuntimeMessage,
   sender: Browser.runtime.MessageSender,
 ): Promise<unknown> | null {
-  if (message.type === 'tabhangar:popover-data') return popoverData(message.url)
-  if (message.type === 'tabhangar:open-app')
+  if (message.type === 'tabcabin:popover-data') return popoverData(message.url)
+  if (message.type === 'tabcabin:open-app')
     return browser.tabs.create({ url: browser.runtime.getURL('/newtab.html') }).then(() => true)
-  if (message.type === 'tabhangar:popover-save') {
+  if (message.type === 'tabcabin:popover-save') {
     return (async () => {
       const saved = await saveToGroup(message.target, {
         kind: 'link',

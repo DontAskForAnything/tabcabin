@@ -15,7 +15,7 @@ if (admin) console.log(`Created the first account: ${admin.username}`)
 const app = createApp({ db, config })
 
 const server = serve({ fetch: app.fetch, port: config.port, hostname: config.host }, (info) => {
-  console.log(`TabHangar server listening on http://${info.address}:${info.port}`)
+  console.log(`TabCabin server listening on http://${info.address}:${info.port}`)
 })
 
 function shutdown(signal: string) {

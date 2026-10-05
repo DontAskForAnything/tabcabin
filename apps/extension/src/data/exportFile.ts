@@ -37,8 +37,8 @@ export async function buildExport(
   const date = now.toISOString().slice(0, 10)
   const name =
     workspaceIds && bundle.workspaces.length === 1
-      ? `tabhangar-${slug(bundle.workspaces[0]!.name)}-${date}`
-      : `tabhangar-${date}`
+      ? `tabcabin-${slug(bundle.workspaces[0]!.name)}-${date}`
+      : `tabcabin-${date}`
   if (format === 'json')
     return {
       filename: `${name}.json`,

@@ -18,7 +18,7 @@ interface MetaRow {
   value: unknown
 }
 
-class TabHangarDB extends Dexie {
+class TabCabinDB extends Dexie {
   workspaces!: EntityTable<Workspace, 'id'>
   categories!: EntityTable<Category, 'id'>
   groups!: EntityTable<Group, 'id'>
@@ -43,7 +43,7 @@ class TabHangarDB extends Dexie {
   }
 }
 
-export const db = new TabHangarDB()
+export const db = new TabCabinDB()
 
 export const tables = {
   workspace: () => db.workspaces,

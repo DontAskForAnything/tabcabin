@@ -41,12 +41,12 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!isRuntimeMessage(message)) return undefined
-    if (message.type === 'tabhangar:sync-now') {
+    if (message.type === 'tabcabin:sync-now') {
       void syncEngine.syncNow()
       syncEngine.startLive()
       return undefined
     }
-    if (message.type === 'tabhangar:undo') {
+    if (message.type === 'tabcabin:undo') {
       void runUndo(message.undoId)
       return undefined
     }
@@ -64,6 +64,6 @@ export default defineBackground(() => {
 
   // Hooks for end-to-end tests (menus and the toolbar button can't be clicked from Playwright).
   Object.assign(globalThis, {
-    tabhangar: { handleMenuClick, togglePopover, rebuildMenus, checkReminders, db },
+    tabcabin: { handleMenuClick, togglePopover, rebuildMenus, checkReminders, db },
   })
 })

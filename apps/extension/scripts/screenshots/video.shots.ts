@@ -11,7 +11,7 @@ const OUT = resolve(here, '../../../landing/public/demo.webm')
 
 test('demo video', async () => {
   test.setTimeout(240_000)
-  const dir = mkdtempSync(join(tmpdir(), 'tabhangar-video-'))
+  const dir = mkdtempSync(join(tmpdir(), 'tabcabin-video-'))
   const { context, worker } = await launch(1, { width: 1280, height: 800 }, dir)
   await context.addInitScript(CURSOR)
   await openTabs(context, worker)

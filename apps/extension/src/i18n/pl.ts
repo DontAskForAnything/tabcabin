@@ -2,7 +2,7 @@ import type { MessageKey } from './en'
 import type { Message } from './types'
 
 export const pl: Record<MessageKey, Message> = {
-  'app.name': 'TabHangar',
+  'app.name': 'TabCabin',
   'common.cancel': 'Anuluj',
   'common.close': 'Zamknij',
   'common.delete': 'Usuń',
@@ -41,7 +41,7 @@ export const pl: Record<MessageKey, Message> = {
   'seed.task1': 'Przeciągnij kartę z lewego panelu do grupy',
   'seed.task2': 'Naciśnij ⌘K, żeby wszystko przeszukać',
   'seed.task3': 'Wypróbuj widok Kolekcje',
-  'seed.doneTask': 'Zainstaluj TabHangar',
+  'seed.doneTask': 'Zainstaluj TabCabin',
   'seed.welcomeNote':
     'Grupy mieszczą linki, notatki i zadania.\n• Kliknij notatkę, żeby ją edytować\n• Wpisz /todo, żeby zrobić z niej zadanie\n• Przeciągaj elementy między grupami',
   'seed.tipNote': 'Wskazówka: przytrzymaj link nad innym, żeby ułożyć je obok siebie',
@@ -283,13 +283,13 @@ export const pl: Record<MessageKey, Message> = {
   'search.bookmarksDenied': 'Nie przyznano dostępu do zakładek',
   'search.tabInWindow': 'Otwarta karta · {window}',
   'search.bookmarkPath': 'Zakładki › {folder}',
-  'menu.savePage': 'Zapisz stronę w TabHangar',
-  'menu.closeAndSave': 'Zamknij kartę i zapisz w TabHangar',
-  'menu.saveLink': 'Zapisz link w TabHangar',
+  'menu.savePage': 'Zapisz stronę w TabCabin',
+  'menu.closeAndSave': 'Zamknij kartę i zapisz w TabCabin',
+  'menu.saveLink': 'Zapisz link w TabCabin',
   'menu.saveSelection': 'Zapisz zaznaczenie jako notatkę',
-  'menu.saveImage': 'Zapisz obrazek w TabHangar',
+  'menu.saveImage': 'Zapisz obrazek w TabCabin',
   'menu.newGroup': '＋ Nowa grupa',
-  'menu.openApp': 'Otwórz TabHangar',
+  'menu.openApp': 'Otwórz TabCabin',
   'toast.saved': 'Zapisano w {group}',
   'toast.noteSaved': 'Notatka zapisana w {group}',
   'toast.imageSaved': 'Obrazek zapisany w {group}',
@@ -349,9 +349,9 @@ export const pl: Record<MessageKey, Message> = {
   'settings.clearDataHint':
     'Usuwa wszystkie przestrzenie, grupy, linki, notatki i przypomnienia z tej przeglądarki. Jeśli chcesz kopię, najpierw zrób eksport.',
   'settings.clearConfirm':
-    'Usunąć wszystko, co TabHangar zapisał w tej przeglądarce? Tego nie da się cofnąć.',
+    'Usunąć wszystko, co TabCabin zapisał w tej przeglądarce? Tego nie da się cofnąć.',
   'settings.clearButton': 'Usuń wszystko',
-  'settings.version': 'TabHangar {version}',
+  'settings.version': 'TabCabin {version}',
   'settings.licenses': 'Licencje bibliotek',
   'transfer.export': 'Eksport',
   'transfer.exportHint':
@@ -364,7 +364,7 @@ export const pl: Record<MessageKey, Message> = {
   'transfer.exported': 'Zapisano {file}',
   'transfer.import': 'Import z pliku',
   'transfer.importHint':
-    'Kopie TabHangar, eksporty z Toby i tabExtend, pliki zakładek i listy linków (OneTab). Wszystko trafia do nowych przestrzeni.',
+    'Kopie TabCabin, eksporty z Toby i tabExtend, pliki zakładek i listy linków (OneTab). Wszystko trafia do nowych przestrzeni.',
   'transfer.chooseFile': 'Wybierz plik…',
   'transfer.imported': {
     one: 'Zaimportowano {count} przestrzeń',
@@ -420,7 +420,7 @@ export const pl: Record<MessageKey, Message> = {
   'bookmarks.empty': 'Brak folderów z linkami',
   'bookmarks.allow': 'Zezwól na dostęp',
   'bookmarks.allowHint':
-    'TabHangar potrzebuje zgody na odczyt zakładek. Nic nie opuszcza przeglądarki.',
+    'TabCabin potrzebuje zgody na odczyt zakładek. Nic nie opuszcza przeglądarki.',
   'common.dismiss': 'Zamknij powiadomienie',
   'emoji.search': 'Szukaj emoji',
   'emoji.empty': 'Nie znaleziono emoji',
@@ -472,7 +472,7 @@ export const pl: Record<MessageKey, Message> = {
   'sync.error.email_not_verified': 'Google nie potwierdził adresu e-mail tego konta.',
   'sync.error.google_failed': 'Logowanie przez Google się nie udało. Spróbuj ponownie za chwilę.',
   'sync.error.invalid_code': 'Logowanie trwało za długo. Spróbuj jeszcze raz.',
-  'sync.error.permission': 'TabHangar potrzebuje zgody, żeby otworzyć okno logowania Google.',
+  'sync.error.permission': 'TabCabin potrzebuje zgody, żeby otworzyć okno logowania Google.',
   'sync.error.generic': 'Coś poszło nie tak ({code})',
   'sync.sessionExpired': 'Sesja wygasła. Zaloguj się ponownie, żeby dalej synchronizować.',
   'sync.choiceTitle': 'Ta przeglądarka ma już tablice',
@@ -519,7 +519,7 @@ export const pl: Record<MessageKey, Message> = {
   'signin.openBoards': 'Otwórz tablice',
   'signin.noServerTitle': 'Synchronizacja nie jest skonfigurowana',
   'signin.noServerText':
-    'Ta wersja TabHangar została zbudowana bez serwera synchronizacji. Wszystko działa offline; żeby synchronizować komputery, zbuduj ją z adresem swojego serwera.',
+    'Ta wersja TabCabin została zbudowana bez serwera synchronizacji. Wszystko działa offline; żeby synchronizować komputery, zbuduj ją z adresem swojego serwera.',
   'signin.headline': 'Twoje karty na każdym komputerze.',
   'signin.lead':
     'Tablice, notatki i zadania idą za Tobą z przeglądarki do przeglądarki. Zaloguj się raz, a synchronizacja dzieje się sama.',
@@ -566,10 +566,10 @@ export const pl: Record<MessageKey, Message> = {
     'Powiadomienia systemowe są wyłączone — zaległe przypomnienia widać na ikonie rozszerzenia.',
   'reminders.notificationsOn': 'Włącz',
   'reminders.badgeTitle': {
-    one: 'TabHangar · {count} przypomnienie',
-    few: 'TabHangar · {count} przypomnienia',
-    many: 'TabHangar · {count} przypomnień',
-    other: 'TabHangar · {count} przypomnienia',
+    one: 'TabCabin · {count} przypomnienie',
+    few: 'TabCabin · {count} przypomnienia',
+    many: 'TabCabin · {count} przypomnień',
+    other: 'TabCabin · {count} przypomnienia',
   },
   'reminders.notifyMany': {
     one: '{count} przypomnienie',

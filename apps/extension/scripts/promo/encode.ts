@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 // Same folder as in dir.ts (kept inline: this file runs directly in Node).
-const PROMO_DIR = process.env.PROMO_DIR ?? join(tmpdir(), 'tabhangar-promo')
+const PROMO_DIR = process.env.PROMO_DIR ?? join(tmpdir(), 'tabcabin-promo')
 const here = dirname(fileURLToPath(import.meta.url))
 const publicDir = join(here, '../../../landing/public')
 const ffmpeg = process.env.FFMPEG ?? 'ffmpeg'

@@ -2,7 +2,7 @@ import { type BrowserContext, type Page, type Worker } from '@playwright/test'
 import { expect, test } from './fixtures'
 
 declare const chrome: typeof browser
-declare const tabhangar: {
+declare const tabcabin: {
   checkReminders: () => Promise<void>
   db: {
     reminders: {
@@ -86,13 +86,13 @@ test('announces due reminders on the toolbar and marks them done', async ({
 
   // Make the reminder due now.
   await sw.evaluate(() =>
-    tabhangar.db.reminders.toCollection().modify({ dueAt: Date.now() - 60_000 }),
+    tabcabin.db.reminders.toCollection().modify({ dueAt: Date.now() - 60_000 }),
   )
   await expect
     .poll(() => sw.evaluate((tabId) => chrome.action.getBadgeText({ tabId }), tabId))
     .toBe('1')
   await expect
-    .poll(() => sw.evaluate(async () => (await tabhangar.db.reminders.toArray())[0]?.firedAt))
+    .poll(() => sw.evaluate(async () => (await tabcabin.db.reminders.toArray())[0]?.firedAt))
     .not.toBeNull()
 
   const bell = page.getByRole('button', { name: 'Reminders' })

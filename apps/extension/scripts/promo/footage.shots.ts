@@ -7,7 +7,7 @@ import { ARTICLE, extensionPath, loadDemo, openApp, openTabs } from '../screensh
 import { PROMO_DIR } from './dir'
 
 declare const chrome: typeof browser
-declare const tabhangar: { togglePopover: (tab: object) => Promise<void> }
+declare const tabcabin: { togglePopover: (tab: object) => Promise<void> }
 
 /**
  * Records the scripted tour as sharp JPEG frames (1920×1200) with timestamps and the start
@@ -18,7 +18,7 @@ test('promo footage', async () => {
   const dir = join(PROMO_DIR, 'footage')
   rmSync(dir, { recursive: true, force: true })
   mkdirSync(dir, { recursive: true })
-  const profile = mkdtempSync(join(tmpdir(), 'tabhangar-footage-'))
+  const profile = mkdtempSync(join(tmpdir(), 'tabcabin-footage-'))
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium',
     headless: true,
@@ -72,8 +72,8 @@ test('promo footage', async () => {
   const tab = await worker.evaluate(
     async () => (await chrome.tabs.query({ url: 'https://journal.example.dev/*' }))[0]!,
   )
-  await worker.evaluate((tab) => tabhangar.togglePopover(tab), tab)
-  const popover = article.getByRole('dialog', { name: 'TabHangar' })
+  await worker.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = article.getByRole('dialog', { name: 'TabCabin' })
   await expect(popover).toBeVisible()
   await article.waitForTimeout(500)
   await popover

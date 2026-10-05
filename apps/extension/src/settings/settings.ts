@@ -36,7 +36,7 @@ export interface Settings {
   notificationsAsked: boolean
 }
 
-/** The browser's language when TabHangar speaks it, English otherwise. */
+/** The browser's language when TabCabin speaks it, English otherwise. */
 function browserLocale(): Settings['locale'] {
   const language = typeof navigator === 'undefined' ? '' : navigator.language
   return /^pl\b/i.test(language) ? 'pl' : 'en'

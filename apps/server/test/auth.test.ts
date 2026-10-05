@@ -158,7 +158,7 @@ describe('accounts', () => {
   it('backs up the database from the command line', async () => {
     const { db, sqlite } = testApp()
     await createUser(db, { username: 'michal', password: 'correct horse' })
-    const file = join(mkdtempSync(join(tmpdir(), 'tabhangar-backup-')), 'copy.db')
+    const file = join(mkdtempSync(join(tmpdir(), 'tabcabin-backup-')), 'copy.db')
     const out: string[] = []
     const io = {
       readPassword: async () => '',

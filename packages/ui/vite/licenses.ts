@@ -20,7 +20,7 @@ export function thirdPartyLicenses({
   let outDir = ''
   extraFiles.forEach(add)
   return {
-    name: 'tabhangar:third-party-licenses',
+    name: 'tabcabin:third-party-licenses',
     apply: 'build' as const,
     configResolved(config: { root: string; build: { outDir: string } }) {
       outDir = resolve(config.root, config.build.outDir)

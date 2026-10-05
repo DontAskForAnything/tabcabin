@@ -46,7 +46,7 @@ export class ApiError extends Error {
 
 type Fetch = typeof fetch
 
-/** Thin client for the TabHangar server API. */
+/** Thin client for the TabCabin server API. */
 export class SyncClient {
   constructor(
     readonly serverUrl: string,

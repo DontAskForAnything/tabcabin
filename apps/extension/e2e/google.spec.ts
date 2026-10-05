@@ -49,7 +49,7 @@ function fakeGoogle(): Server {
 }
 
 test.beforeAll(async () => {
-  dataDir = mkdtempSync(join(tmpdir(), 'tabhangar-server-'))
+  dataDir = mkdtempSync(join(tmpdir(), 'tabcabin-server-'))
   google = fakeGoogle()
   server = spawn(process.execPath, [serverMain], {
     env: {
@@ -84,13 +84,13 @@ test.afterAll(() => {
   google?.close()
 })
 
-declare const tabhangar: { db: { meta: { put(row: object): Promise<unknown> } } }
+declare const tabcabin: { db: { meta: { put(row: object): Promise<unknown> } } }
 
 /** Opens the sign-in page of a test build pointed at this test's server. */
 async function openSignIn(context: BrowserContext, extensionId: string) {
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
   await worker.evaluate(
-    (server) => tabhangar.db.meta.put({ key: 'test.syncServer', value: server }),
+    (server) => tabcabin.db.meta.put({ key: 'test.syncServer', value: server }),
     SERVER,
   )
   const page = await context.newPage()

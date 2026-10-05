@@ -2,7 +2,7 @@
 export type ToastTone = 'success' | 'error' | 'info'
 
 export interface ToastMessage {
-  type: 'tabhangar:toast'
+  type: 'tabcabin:toast'
   title: string
   description?: string
   tone: ToastTone
@@ -13,26 +13,26 @@ export interface ToastMessage {
 }
 
 interface UndoMessage {
-  type: 'tabhangar:undo'
+  type: 'tabcabin:undo'
   undoId: string
 }
 
 interface PingMessage {
-  type: 'tabhangar:ping'
+  type: 'tabcabin:ping'
   target: 'toast' | 'popover'
 }
 
 interface TogglePopoverMessage {
-  type: 'tabhangar:popover-toggle'
+  type: 'tabcabin:popover-toggle'
 }
 
 interface PopoverDataRequest {
-  type: 'tabhangar:popover-data'
+  type: 'tabcabin:popover-data'
   url: string
 }
 
 export interface PopoverSaveRequest {
-  type: 'tabhangar:popover-save'
+  type: 'tabcabin:popover-save'
   page: { url: string; title: string; favIconUrl: string | null }
   target: { groupId: string } | { newGroupIn: string; title: string }
   note: { text: string; color: string | null; todo: boolean } | null
@@ -43,11 +43,11 @@ export interface PopoverSaveRequest {
 
 /** Ask the background to synchronize now (e.g. when a board page opens). */
 interface SyncNowRequest {
-  type: 'tabhangar:sync-now'
+  type: 'tabcabin:sync-now'
 }
 
 interface OpenAppRequest {
-  type: 'tabhangar:open-app'
+  type: 'tabcabin:open-app'
 }
 
 export type RuntimeMessage =
@@ -65,6 +65,6 @@ export function isRuntimeMessage(value: unknown): value is RuntimeMessage {
     typeof value === 'object' &&
     value !== null &&
     typeof (value as { type?: unknown }).type === 'string' &&
-    (value as { type: string }).type.startsWith('tabhangar:')
+    (value as { type: string }).type.startsWith('tabcabin:')
   )
 }

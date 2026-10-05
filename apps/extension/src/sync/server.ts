@@ -3,7 +3,7 @@ import { db } from '@/db/db'
 import { normalizeServerUrl } from './state'
 
 /*
- * The sync server is part of the build, not a setting: official builds sync with the TabHangar
+ * The sync server is part of the build, not a setting: official builds sync with the TabCabin
  * server, and self-hosters build the extension with their own address in apps/extension/.env:
  *
  *   WXT_SYNC_SERVER=https://tabs.example.com

@@ -30,7 +30,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
 
   useEffect(() => textarea.current?.focus(), [])
 
-  // The page's own language and theme don't matter: the popover follows TabHangar's.
+  // The page's own language and theme don't matter: the popover follows TabCabin's.
   const t = (key: MessageKey, params?: Record<string, string | number>) =>
     translate(data?.locale ?? 'en', key, params)
   const dark =
@@ -41,7 +41,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
     if (!target || status === 'saving') return
     setStatus('saving')
     const request: PopoverSaveRequest = {
-      type: 'tabhangar:popover-save',
+      type: 'tabcabin:popover-save',
       page,
       target,
       note: note.trim() ? { text: note, color, todo } : null,
@@ -65,7 +65,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
     <div className={cn('font-sans', dark && 'dark')}>
       <div
         role="dialog"
-        aria-label="TabHangar"
+        aria-label="TabCabin"
         onKeyDown={(event) => {
           if (event.key === 'Escape') onClose()
           if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) void save()
@@ -123,7 +123,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => void browser.runtime.sendMessage({ type: 'tabhangar:open-app' })}
+                  onClick={() => void browser.runtime.sendMessage({ type: 'tabcabin:open-app' })}
                   className="h-[42px] flex-1 rounded-xl bg-subtle text-[13.5px] font-semibold text-ink"
                 >
                   {t('menu.openApp')}

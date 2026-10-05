@@ -1,5 +1,5 @@
 /** Lets the docked note toolbar insert text (e.g. an emoji) at the caret of the note being edited. */
-const EVENT = 'tabhangar:note-insert'
+const EVENT = 'tabcabin:note-insert'
 
 export function insertIntoNote(text: string) {
   window.dispatchEvent(new CustomEvent(EVENT, { detail: text }))

@@ -65,7 +65,7 @@ export function InPageToasts() {
               <button
                 type="button"
                 onClick={() => {
-                  void browser.runtime.sendMessage({ type: 'tabhangar:undo', undoId: entry.undoId })
+                  void browser.runtime.sendMessage({ type: 'tabcabin:undo', undoId: entry.undoId })
                   dismiss(entry.id)
                 }}
                 className={toastClasses.action}

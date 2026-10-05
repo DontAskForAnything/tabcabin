@@ -7,7 +7,7 @@ import { chromium, expect, test, type Page } from '@playwright/test'
 import { ARTICLE, launch, loadDemo, openApp, openTabs } from './setup'
 
 declare const chrome: typeof browser
-declare const tabhangar: { togglePopover: (tab: object) => Promise<void> }
+declare const tabcabin: { togglePopover: (tab: object) => Promise<void> }
 
 const here = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(here, '../../../../docs/chrome-web-store')
@@ -50,8 +50,8 @@ test('store screenshots (1280×800)', async () => {
       const tab = await worker.evaluate(
         async () => (await chrome.tabs.query({ url: 'https://journal.example.dev/*' }))[0]!,
       )
-      await worker.evaluate((tab) => tabhangar.togglePopover(tab), tab)
-      await expect(article.getByRole('dialog', { name: 'TabHangar' })).toBeVisible()
+      await worker.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+      await expect(article.getByRole('dialog', { name: 'TabCabin' })).toBeVisible()
       await article.waitForTimeout(600)
       await shot(article, '4-save-popover')
     } else {
@@ -92,7 +92,7 @@ test('store promo images', async () => {
     base(
       `<div style="height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 40px;gap:14px">
         <div class="logo" style="width:64px;height:64px">${logo}</div>
-        <h1 style="font-size:44px">TabHangar</h1>
+        <h1 style="font-size:44px">TabCabin</h1>
         <p style="font-size:19px;line-height:1.35">A calm home for your tabs, links,<br>notes and to-dos.</p>
       </div>`,
       440,
@@ -110,7 +110,7 @@ test('store promo images', async () => {
     base(
       `<div style="position:absolute;left:84px;top:0;bottom:0;width:480px;display:flex;flex-direction:column;justify-content:center;gap:20px">
         <div class="logo" style="width:84px;height:84px">${logo}</div>
-        <h1 style="font-size:68px">TabHangar</h1>
+        <h1 style="font-size:68px">TabCabin</h1>
         <p style="font-size:26px;line-height:1.35">Boards for your tabs, links,<br>notes and to-dos.<br>Local-first, open source<br>and self-hostable.</p>
       </div>
       <img src="data:image/png;base64,${board}" style="position:absolute;left:620px;top:70px;width:960px;border-radius:18px;box-shadow:0 40px 90px -20px rgb(15 8 70 / .6), 0 0 0 1px rgb(255 255 255 / .15)">`,
@@ -139,7 +139,7 @@ test('social preview image for the website (1200×630)', async () => {
       `<div style="position:absolute;left:72px;top:0;bottom:0;width:520px;display:flex;flex-direction:column;justify-content:center;gap:18px">
         <div style="display:flex;align-items:center;gap:14px">
           <div class="logo" style="width:56px;height:56px">${logo}</div>
-          <span style="font-size:30px;font-weight:650;letter-spacing:-0.02em">TabHangar</span>
+          <span style="font-size:30px;font-weight:650;letter-spacing:-0.02em">TabCabin</span>
         </div>
         <h1 style="font-size:58px;line-height:1.04">Your tabs,<br>parked calmly</h1>
         <p style="font-size:23px;line-height:1.4;white-space:nowrap">Open-source tab manager.<br>Kanban boards, notes, reminders.<br>Self-hosted sync.</p>

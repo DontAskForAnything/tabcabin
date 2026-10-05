@@ -1,7 +1,7 @@
 import type { Message } from './types'
 
 export const en = {
-  'app.name': 'TabHangar',
+  'app.name': 'TabCabin',
   'common.cancel': 'Cancel',
   'common.close': 'Close',
   'common.delete': 'Delete',
@@ -25,7 +25,7 @@ export const en = {
   'seed.task1': 'Drag a tab from the left panel into a group',
   'seed.task2': 'Press ⌘K to search everything',
   'seed.task3': 'Try the Collections view',
-  'seed.doneTask': 'Install TabHangar',
+  'seed.doneTask': 'Install TabCabin',
   'seed.welcomeNote':
     'Groups hold links, notes and to-dos.\n• Click a note to edit it\n• Type /todo to turn it into a task\n• Drag items between groups',
   'seed.tipNote': 'Tip: hold a link over another one to stack them side by side',
@@ -225,13 +225,13 @@ export const en = {
   'search.bookmarksDenied': 'Bookmark access was not granted',
   'search.tabInWindow': 'Open tab · {window}',
   'search.bookmarkPath': 'Bookmarks › {folder}',
-  'menu.savePage': 'Save page to TabHangar',
-  'menu.closeAndSave': 'Close tab and save to TabHangar',
-  'menu.saveLink': 'Save link to TabHangar',
+  'menu.savePage': 'Save page to TabCabin',
+  'menu.closeAndSave': 'Close tab and save to TabCabin',
+  'menu.saveLink': 'Save link to TabCabin',
   'menu.saveSelection': 'Save selection as a note',
-  'menu.saveImage': 'Save image to TabHangar',
+  'menu.saveImage': 'Save image to TabCabin',
   'menu.newGroup': '＋ New group',
-  'menu.openApp': 'Open TabHangar',
+  'menu.openApp': 'Open TabCabin',
   'toast.saved': 'Saved to {group}',
   'toast.noteSaved': 'Note saved to {group}',
   'toast.imageSaved': 'Image saved to {group}',
@@ -291,9 +291,9 @@ export const en = {
   'settings.clearDataHint':
     'Removes every workspace, group, link, note and reminder from this browser. Export first if you want a copy.',
   'settings.clearConfirm':
-    'Delete everything TabHangar stored in this browser? This can’t be undone.',
+    'Delete everything TabCabin stored in this browser? This can’t be undone.',
   'settings.clearButton': 'Delete everything',
-  'settings.version': 'TabHangar {version}',
+  'settings.version': 'TabCabin {version}',
   'settings.licenses': 'Third-party licenses',
   'transfer.export': 'Export',
   'transfer.exportHint': 'JSON can be imported again; the bookmarks file works in any browser.',
@@ -305,7 +305,7 @@ export const en = {
   'transfer.exported': 'Saved {file}',
   'transfer.import': 'Import from a file',
   'transfer.importHint':
-    'TabHangar backups, Toby and tabExtend exports, bookmark files and link lists (OneTab). Everything goes into new workspaces.',
+    'TabCabin backups, Toby and tabExtend exports, bookmark files and link lists (OneTab). Everything goes into new workspaces.',
   'transfer.chooseFile': 'Choose file…',
   'transfer.imported': { one: 'Imported {count} workspace', other: 'Imported {count} workspaces' },
   'transfer.importedDetails': '{groups} groups · {items} items',
@@ -335,7 +335,7 @@ export const en = {
   'bookmarks.empty': 'No bookmark folders with links',
   'bookmarks.allow': 'Allow access',
   'bookmarks.allowHint':
-    'TabHangar needs your permission to read bookmarks. Nothing leaves your browser.',
+    'TabCabin needs your permission to read bookmarks. Nothing leaves your browser.',
   'common.dismiss': 'Dismiss',
   'emoji.search': 'Search emoji',
   'emoji.empty': 'No emoji found',
@@ -389,7 +389,7 @@ export const en = {
   'sync.error.email_not_verified': 'Google hasn’t verified the email address of this account.',
   'sync.error.google_failed': 'Signing in with Google didn’t work. Try again in a moment.',
   'sync.error.invalid_code': 'The sign-in took too long. Please try again.',
-  'sync.error.permission': 'TabHangar needs your permission to open the Google sign-in window.',
+  'sync.error.permission': 'TabCabin needs your permission to open the Google sign-in window.',
   'sync.error.generic': 'Something went wrong ({code})',
   'sync.sessionExpired': 'Your session ended. Sign in again to keep syncing.',
   'sync.choiceTitle': 'This browser already has boards',
@@ -430,7 +430,7 @@ export const en = {
   'signin.openBoards': 'Open my boards',
   'signin.noServerTitle': 'Sync isn’t set up',
   'signin.noServerText':
-    'This copy of TabHangar was built without a sync server. Everything works offline; to sync between computers, build it with your server’s address.',
+    'This copy of TabCabin was built without a sync server. Everything works offline; to sync between computers, build it with your server’s address.',
   'signin.headline': 'Your tabs, on every computer.',
   'signin.lead':
     'Boards, notes and to-dos follow you from browser to browser. Sign in once, and syncing happens on its own.',
@@ -474,8 +474,8 @@ export const en = {
     'Desktop notifications are off — due reminders show on the toolbar icon.',
   'reminders.notificationsOn': 'Turn on',
   'reminders.badgeTitle': {
-    one: 'TabHangar · {count} reminder due',
-    other: 'TabHangar · {count} reminders due',
+    one: 'TabCabin · {count} reminder due',
+    other: 'TabCabin · {count} reminders due',
   },
   'reminders.notifyMany': { one: '{count} reminder due', other: '{count} reminders due' },
   'reminders.everyWeek': 'Every {days}',

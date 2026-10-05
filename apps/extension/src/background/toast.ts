@@ -12,7 +12,7 @@ export async function runUndo(undoId: string) {
 
 async function ensureToastScript(tabId: number): Promise<boolean> {
   try {
-    const pong = await browser.tabs.sendMessage(tabId, { type: 'tabhangar:ping', target: 'toast' })
+    const pong = await browser.tabs.sendMessage(tabId, { type: 'tabcabin:ping', target: 'toast' })
     if (pong === 'pong') return true
   } catch {
     // not injected yet
@@ -46,7 +46,7 @@ export async function showToast(
   }
   const { locale, theme } = await getSettings()
   const message: ToastMessage = {
-    type: 'tabhangar:toast',
+    type: 'tabcabin:toast',
     title: toast.title,
     description: toast.description,
     tone: toast.tone,

@@ -22,7 +22,7 @@ async function updateBadge(tabId: number, url: string | undefined) {
   await Promise.all([
     browser.action.setBadgeBackgroundColor({ tabId, color: due ? DUE : ACCENT }),
     browser.action.setBadgeText({ tabId, text: count > 0 ? String(count) : '' }),
-    browser.action.setTitle({ tabId, title: due ? dueTitle : 'TabHangar' }),
+    browser.action.setTitle({ tabId, title: due ? dueTitle : 'TabCabin' }),
   ]).catch(() => undefined)
 }
 

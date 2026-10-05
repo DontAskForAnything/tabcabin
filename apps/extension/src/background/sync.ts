@@ -3,7 +3,7 @@ import { db } from '@/db/db'
 import { SyncEngine } from '@/sync/engine'
 import { getAccount } from '@/sync/state'
 
-const ALARM = 'tabhangar:sync'
+const ALARM = 'tabcabin:sync'
 
 export const syncEngine = new SyncEngine()
 

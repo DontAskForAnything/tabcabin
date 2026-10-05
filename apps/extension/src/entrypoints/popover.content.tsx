@@ -9,16 +9,16 @@ export default defineContentScript({
   registration: 'runtime',
   cssInjectionMode: 'manual',
   async main(ctx) {
-    const flag = window as unknown as { __tabhangarPopover?: boolean }
-    if (flag.__tabhangarPopover) return
-    flag.__tabhangarPopover = true
+    const flag = window as unknown as { __tabcabinPopover?: boolean }
+    if (flag.__tabcabinPopover) return
+    flag.__tabcabinPopover = true
 
     const favicon = document.querySelector<HTMLLinkElement>('link[rel~="icon"]')?.href ?? null
     const page = { url: location.href, title: document.title, favIconUrl: favicon }
 
     let mounted = false
     const ui = await createShadowRootUi<Root>(ctx, {
-      name: 'tabhangar-popover',
+      name: 'tabcabin-popover',
       css: contentCss,
       position: 'inline',
       anchor: 'html',
@@ -44,11 +44,11 @@ export default defineContentScript({
 
     browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       if (!isRuntimeMessage(message)) return undefined
-      if (message.type === 'tabhangar:ping' && message.target === 'popover') {
+      if (message.type === 'tabcabin:ping' && message.target === 'popover') {
         sendResponse('pong')
         return undefined
       }
-      if (message.type === 'tabhangar:popover-toggle') toggle()
+      if (message.type === 'tabcabin:popover-toggle') toggle()
       return undefined
     })
   },

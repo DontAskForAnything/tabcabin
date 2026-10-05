@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { ARTICLE, launch, loadDemo, openApp, openTabs, OUT } from './setup'
 
 declare const chrome: typeof browser
-declare const tabhangar: { togglePopover: (tab: object) => Promise<void> }
+declare const tabcabin: { togglePopover: (tab: object) => Promise<void> }
 
 const shot = (page: Page, name: string) => page.screenshot({ path: join(OUT, `${name}.png`) })
 
@@ -50,8 +50,8 @@ for (const theme of ['light', 'dark'] as const) {
       const tab = await worker.evaluate(
         async () => (await chrome.tabs.query({ url: 'https://journal.example.dev/*' }))[0]!,
       )
-      await worker.evaluate((tab) => tabhangar.togglePopover(tab), tab)
-      await expect(article.getByRole('dialog', { name: 'TabHangar' })).toBeVisible()
+      await worker.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+      await expect(article.getByRole('dialog', { name: 'TabCabin' })).toBeVisible()
       await article.waitForTimeout(600)
       await shot(article, 'popover')
     }

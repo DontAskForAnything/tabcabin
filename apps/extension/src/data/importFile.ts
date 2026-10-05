@@ -23,7 +23,7 @@ export interface ImportNames {
 }
 
 /**
- * Imports a file into new workspaces: a TabHangar backup, a tabExtend or Toby JSON export, a
+ * Imports a file into new workspaces: a TabCabin backup, a tabExtend or Toby JSON export, a
  * bookmarks HTML file (browsers, Toby, Raindrop…) or a plain list of links (OneTab, Toby TXT).
  */
 export async function importFile(

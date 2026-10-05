@@ -124,7 +124,7 @@ const logoTile = el(
   `<div class="layer" style="left:880px;top:300px;width:160px;height:160px">${LOGO}</div>`,
 )
 const logoName = el(
-  `<div class="big layer" style="top:500px;font-size:120px">${words('TabHangar', 120)}</div>`,
+  `<div class="big layer" style="top:500px;font-size:120px">${words('TabCabin', 120)}</div>`,
 )
 const tagline = el(
   `<div class="big layer" style="top:660px;font-size:46px;font-weight:500;letter-spacing:-0.02em;color:rgb(255 255 255 / .82)">${words('Your tabs, parked calmly.', 46)}</div>`,
@@ -156,7 +156,7 @@ const browser = el(
       <div class="lights"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
       <div class="tab"><span class="tab-icon"></span><span class="tab-title"></span><span class="tab-x">×</span></div>
       <span class="newtab">+</span>
-      <div class="callout layer">← Every new tab opens TabHangar</div>
+      <div class="callout layer">← Every new tab opens TabCabin</div>
     </div>
     <div class="toolbar">
       ${ICON.back}${ICON.forward}${ICON.reload}
@@ -341,7 +341,7 @@ const values = ['No account.', 'No tracking.', 'Open source.'].map((text, i) =>
 const endLogo = el(
   `<div class="layer" style="left:890px;top:250px;width:140px;height:140px">${LOGO}</div>`,
 )
-const endName = el(`<div class="big layer" style="top:420px;font-size:110px">TabHangar</div>`)
+const endName = el(`<div class="big layer" style="top:420px;font-size:110px">TabCabin</div>`)
 const endTag = el(
   `<div class="big layer" style="top:560px;font-size:42px;font-weight:500;letter-spacing:-0.02em;color:rgb(255 255 255 / .82)">Your tabs, parked calmly.</div>`,
 )
@@ -349,7 +349,7 @@ const endPill = el(
   `<div class="layer" style="left:0;right:0;top:665px;text-align:center"><span class="pill">Free browser extension · Chrome · Edge · Brave</span></div>`,
 )
 const endUrl = el(
-  `<div class="big layer" style="top:790px;font-size:26px;font-weight:500;color:rgb(255 255 255 / .6)">github.com/DontAskForAnything/tabhangar</div>`,
+  `<div class="big layer" style="top:790px;font-size:26px;font-weight:500;color:rgb(255 255 255 / .6)">github.com/DontAskForAnything/tabcabin</div>`,
 )
 
 // ---------- timeline ----------

@@ -9,12 +9,12 @@ export default defineContentScript({
   registration: 'runtime',
   cssInjectionMode: 'manual',
   async main(ctx) {
-    const flag = window as unknown as { __tabhangarToast?: boolean }
-    if (flag.__tabhangarToast) return
-    flag.__tabhangarToast = true
+    const flag = window as unknown as { __tabcabinToast?: boolean }
+    if (flag.__tabcabinToast) return
+    flag.__tabcabinToast = true
 
     const ui = await createShadowRootUi(ctx, {
-      name: 'tabhangar-toast',
+      name: 'tabcabin-toast',
       css: contentCss,
       position: 'inline',
       anchor: 'html',
@@ -32,11 +32,11 @@ export default defineContentScript({
 
     browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       if (!isRuntimeMessage(message)) return undefined
-      if (message.type === 'tabhangar:ping' && message.target === 'toast') {
+      if (message.type === 'tabcabin:ping' && message.target === 'toast') {
         sendResponse('pong')
         return undefined
       }
-      if (message.type === 'tabhangar:toast') pushToast(message as ToastMessage)
+      if (message.type === 'tabcabin:toast') pushToast(message as ToastMessage)
       return undefined
     })
   },

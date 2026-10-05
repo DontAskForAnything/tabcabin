@@ -8,7 +8,7 @@ on:
       site_url:
         description: Public address of the site (used for canonical links and the sitemap)
         required: true
-        default: https://dontaskforanything.github.io/tabhangar
+        default: https://dontaskforanything.github.io/tabcabin
 
 permissions:
   contents: read

@@ -36,7 +36,7 @@ reload Caddy. It compresses responses, caches fingerprinted assets for a year an
 1. Make the repository public (or use a plan that allows Pages for private repositories).
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 3. **Actions → Pages → Run workflow**, enter the site address (for example
-   `https://dontaskforanything.github.io/tabhangar` or your custom domain).
+   `https://dontaskforanything.github.io/tabcabin` or your custom domain).
 
 The workflow ([`.github/workflows/pages.yml`](../.github/workflows/pages.yml)) only runs when started
 by hand. For a custom domain, add it under **Settings → Pages** and point a `CNAME` record at

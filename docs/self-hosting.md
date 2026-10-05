@@ -15,7 +15,7 @@ What you need:
 
 ```bash
 sudo mkdir -p /opt/tabhangar && sudo chown "$USER" /opt/tabhangar
-git clone https://github.com/DontAskForAnything/tabhangar.git /opt/tabhangar
+git clone https://github.com/DontAskForAnything/tabcabin.git /opt/tabhangar
 cd /opt/tabhangar
 ```
 

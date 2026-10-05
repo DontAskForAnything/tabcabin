@@ -1,4 +1,4 @@
-export const repo = 'https://github.com/DontAskForAnything/tabhangar'
+export const repo = 'https://github.com/DontAskForAnything/tabcabin'
 export const releases = `${repo}/releases/latest`
 export const selfHostingGuide = `${repo}/blob/main/docs/self-hosting.md`
 

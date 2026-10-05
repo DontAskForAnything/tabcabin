@@ -87,7 +87,7 @@ docker compose --profile caddy up -d
 TabHangar is not in the Chrome Web Store yet.
 
 **From a release** — download `tabhangar-<version>-chrome.zip` from
-[Releases](https://github.com/DontAskForAnything/tabhangar/releases), unzip it, open
+[Releases](https://github.com/DontAskForAnything/tabcabin/releases), unzip it, open
 `chrome://extensions`, turn on **Developer mode** and choose **Load unpacked** → the unzipped folder.
 
 **From source**

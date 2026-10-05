@@ -67,5 +67,5 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabhangar/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/DontAskForAnything/tabhangar/releases/tag/v0.1.0
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/DontAskForAnything/tabcabin/releases/tag/v0.1.0

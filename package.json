@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.1.0",
   "description": "Self-hosted tab manager: kanban boards and collections for your tabs, notes and to-dos.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DontAskForAnything/tabcabin.git"
+  },
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.10.1",
   "engines": {

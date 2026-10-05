@@ -8,9 +8,9 @@ export function Showcase() {
   return (
     <aside className="relative hidden flex-col justify-between overflow-hidden bg-[linear-gradient(160deg,#245541,#1f4a3a_55%,#183b2e)] p-12 text-[#f4ead5] lg:flex">
       <div className="pointer-events-none absolute -top-40 -left-40 size-[520px] rounded-full bg-[radial-gradient(closest-side,rgb(244_234_213/0.1),transparent)]" />
-      <div className="relative flex items-center gap-3 text-[20px] font-semibold tracking-[-0.01em]">
+      <div className="relative flex items-center gap-3 font-display text-[24px] font-bold tracking-[-0.02em]">
         <CabinMark size={44} tone="cream" />
-        TabHangar
+        TabCabin
       </div>
 
       <div className="relative mx-auto h-[300px] w-full max-w-[520px]" aria-hidden>
@@ -33,7 +33,7 @@ export function Showcase() {
       </div>
 
       <div className="relative">
-        <h2 className="text-[36px] leading-[1.1] font-semibold tracking-[-0.03em]">
+        <h2 className="font-display text-[38px] leading-[1.08] font-bold tracking-[-0.025em]">
           {t('signin.headline')}
         </h2>
         <p className="mt-3 max-w-[440px] text-[15px] leading-relaxed text-[#f4ead5]/80">

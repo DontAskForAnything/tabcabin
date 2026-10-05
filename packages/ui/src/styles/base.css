@@ -11,6 +11,8 @@
   --font-sans:
     'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
+  /* The wordmark and display headings (loaded by styles.css, falls back to the UI font). */
+  --font-display: 'Bricolage Grotesque Variable', var(--font-sans);
 }
 
 @theme inline {

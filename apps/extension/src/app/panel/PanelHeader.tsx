@@ -16,7 +16,7 @@ export function PanelHeader({
   return (
     <div className="flex items-center gap-2.5 px-1">
       <CabinMark size={34} />
-      <span className="flex-1 text-[16px] font-semibold tracking-[-0.02em]">TabHangar</span>
+      <span className="flex-1 font-display text-[18px] font-bold tracking-[-0.02em]">TabCabin</span>
       <IconButton
         label={pinned ? t('panel.unpin') : t('panel.pin')}
         icon={pinned ? <PinOff size={15} /> : <Pin size={15} />}

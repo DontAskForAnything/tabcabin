@@ -32,7 +32,7 @@ test('exports a workspace as JSON and imports it again', async ({ context, exten
   expect(download.suggestedFilename()).toMatch(/^tabcabin-personal-\d{4}-\d{2}-\d{2}\.json$/)
   const path = await download.path()
   const backup = JSON.parse(readFileSync(path, 'utf8'))
-  expect(backup).toMatchObject({ format: 'tabhangar', version: 1 })
+  expect(backup).toMatchObject({ format: 'tabcabin', version: 1 })
   expect(backup.groups.length).toBeGreaterThan(2)
 
   await dialog.getByLabel('Import from a file').setInputFiles(path)

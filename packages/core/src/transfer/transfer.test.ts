@@ -82,8 +82,21 @@ describe('backup', () => {
     expect(remapped.reminders[0]!.itemId).toBe(remapped.items.find((i) => i.title === 'A <b>')!.id)
   })
 
+  it('writes the TabCabin format and still reads backups made under the old name', () => {
+    const all = sample()
+    const backup = createBackup(collectBundle(all, [all.workspaces[0]!.id]), new Date(clock.now))
+    expect(backup.format).toBe('tabcabin')
+    const old = JSON.parse(JSON.stringify({ ...backup, format: 'tabhangar' }))
+    expect(isBackup(old)).toBe(true)
+    expect(parseBackup(old).items).toHaveLength(backup.items.length)
+  })
+
   it('rejects files that are not backups', () => {
-    expect(() => parseBackup({ format: 'tabhangar', version: 1 })).toThrow(/Invalid backup/)
+    expect(() => parseBackup({ format: 'tabcabin', version: 1 })).toThrow(/Invalid backup/)
+    expect(() => parseBackup({ ...sample(), format: 'other', version: 1 })).toThrow(
+      /Invalid backup/,
+    )
+    expect(isBackup({ format: 'other' })).toBe(false)
     expect(isBackup([1, 2])).toBe(false)
   })
 })

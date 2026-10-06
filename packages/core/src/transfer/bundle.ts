@@ -22,11 +22,15 @@ export interface Bundle {
   reminders: Reminder[]
 }
 
-export const BACKUP_FORMAT = 'tabhangar'
+export const BACKUP_FORMAT = 'tabcabin'
+/** Backups made before the app was renamed to TabCabin; they import the same way. */
+const LEGACY_FORMATS = ['tabhangar'] as const
 export const BACKUP_VERSION = 1
 
+const formats = [BACKUP_FORMAT, ...LEGACY_FORMATS] as const
+
 export const backupSchema = z.object({
-  format: z.literal(BACKUP_FORMAT),
+  format: z.enum(formats),
   version: z.number().int().min(1).max(BACKUP_VERSION),
   exportedAt: z.string(),
   workspaces: z.array(workspaceSchema),
@@ -69,7 +73,7 @@ export function isBackup(value: unknown): boolean {
   return (
     typeof value === 'object' &&
     value !== null &&
-    (value as { format?: unknown }).format === BACKUP_FORMAT
+    (formats as readonly unknown[]).includes((value as { format?: unknown }).format)
   )
 }
 

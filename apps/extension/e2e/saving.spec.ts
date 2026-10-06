@@ -31,7 +31,7 @@ async function worker(context: BrowserContext): Promise<Worker> {
 async function findIds(sw: Worker) {
   return sw.evaluate(async () => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('tabhangar')
+      const request = indexedDB.open('tabcabin')
       request.onsuccess = () => resolve(request.result)
       request.onerror = () => reject(request.error)
     })

@@ -1,5 +1,6 @@
 import type { Category, EntityType, Group, Item, Reminder, Workspace } from '@tabcabin/core'
 import { Dexie, type EntityTable, type Table } from 'dexie'
+import { moveLegacyDatabase } from './legacy'
 
 export interface OutboxEntry {
   entity: EntityType
@@ -28,7 +29,7 @@ class TabCabinDB extends Dexie {
   meta!: EntityTable<MetaRow, 'key'>
   outbox!: Table<OutboxEntry, [EntityType, string]>
 
-  constructor(name = 'tabhangar') {
+  constructor(name = 'tabcabin') {
     super(name)
     this.version(1).stores({
       workspaces: 'id, position, deletedAt',
@@ -40,6 +41,13 @@ class TabCabinDB extends Dexie {
       meta: 'key',
       outbox: '[entity+id], queuedAt',
     })
+    // Data saved under the old app name moves over before the first query runs.
+    this.on('ready', (vip) =>
+      moveLegacyDatabase(vip).then(
+        () => undefined,
+        (error: unknown) => console.warn('Could not move the old database', error),
+      ),
+    )
   }
 }
 

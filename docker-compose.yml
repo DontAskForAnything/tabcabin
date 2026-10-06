@@ -1,12 +1,12 @@
-# TabHangar sync server. Quick start (see docs/self-hosting.md):
+# TabCabin sync server. Quick start (see docs/self-hosting.md):
 #   cp .env.example .env   # set DOMAIN and the first account
 #   docker compose --profile caddy up -d
 services:
-  tabhangar:
+  tabcabin:
     build:
       context: .
       dockerfile: apps/server/Dockerfile
-    image: tabhangar-server:latest
+    image: tabcabin-server:latest
     restart: unless-stopped
     environment:
       PUBLIC_URL: https://${DOMAIN:-tabs.example.com}
@@ -23,17 +23,17 @@ services:
       SIGNUPS_PER_IP_PER_DAY: ${SIGNUPS_PER_IP_PER_DAY:-5}
       MAX_RECORDS_PER_USER: ${MAX_RECORDS_PER_USER:-100000}
     volumes:
-      - tabhangar-data:/data
+      - tabcabin-data:/data
     # Only reachable from this machine; Caddy (below or on the host) serves it over HTTPS.
     ports:
-      - '127.0.0.1:${TABHANGAR_PORT:-8787}:8787'
+      - '127.0.0.1:${TABCABIN_PORT:-8787}:8787'
 
   # Optional HTTPS reverse proxy with automatic certificates: `docker compose --profile caddy up -d`
   caddy:
     image: caddy:2
     profiles: [caddy]
     restart: unless-stopped
-    depends_on: [tabhangar]
+    depends_on: [tabcabin]
     environment:
       DOMAIN: ${DOMAIN:-tabs.example.com}
     ports:
@@ -46,6 +46,6 @@ services:
       - caddy-config:/config
 
 volumes:
-  tabhangar-data:
+  tabcabin-data:
   caddy-data:
   caddy-config:

@@ -1,7 +1,7 @@
 # Serve the landing page from the same server as the sync server.
-# Build it with SITE_URL set, copy apps/landing/dist to /srv/tabhangar-site, then add:
-tabhangar.example.com {
-	root * /srv/tabhangar-site
+# Build it with SITE_URL set, copy apps/landing/dist to /srv/tabcabin-site, then add:
+tabcabin.example.com {
+	root * /srv/tabcabin-site
 	encode zstd gzip
 	file_server
 	# Fingerprinted assets never change.

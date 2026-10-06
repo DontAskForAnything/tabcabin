@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Build from the repository root:  docker build -f apps/server/Dockerfile -t tabhangar-server .
+# Build from the repository root:  docker build -f apps/server/Dockerfile -t tabcabin-server .
 
 FROM node:24-slim AS build
 WORKDIR /repo
@@ -29,8 +29,8 @@ RUN npm install --omit=dev --no-save --no-package-lock \
     && rm -rf deps src binding.gyp \
     && find prebuilds -type f ! -name "linux-$(node -p process.arch).node" -delete \
     && cd /app \
-    && printf '#!/bin/sh\nexec node /app/dist/cli.js "$@"\n' > /usr/local/bin/tabhangar \
-    && chmod +x /usr/local/bin/tabhangar \
+    && printf '#!/bin/sh\nexec node /app/dist/cli.js "$@"\n' > /usr/local/bin/tabcabin \
+    && chmod +x /usr/local/bin/tabcabin \
     && mkdir -p /data && chown node:node /data
 COPY --from=build /repo/apps/server/dist ./dist
 USER node

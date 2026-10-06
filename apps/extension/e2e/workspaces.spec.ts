@@ -24,7 +24,7 @@ test('creates a workspace and switches with the keyboard', async ({ context, ext
   await dialog.getByPlaceholder('Find a workspace or category').focus()
   await page.keyboard.press('Enter')
   await expect(page.getByRole('button', { name: 'Switch workspace' })).toContainText('Side project')
-  await expect(page.getByText('This category is empty')).toBeVisible()
+  await expect(page.getByText('Nothing here yet')).toBeVisible()
   await page.keyboard.press('Control+o')
   await page.keyboard.press('ArrowUp')
   await page.keyboard.press('Enter')

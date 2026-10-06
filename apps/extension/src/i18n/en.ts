@@ -25,7 +25,7 @@ export const en = {
   'seed.task1': 'Drag a tab from the left panel into a group',
   'seed.task2': 'Press ⌘K to search everything',
   'seed.task3': 'Try the Collections view',
-  'seed.doneTask': 'Install TabCabin',
+  'seed.doneTask': 'Move into TabCabin',
   'seed.welcomeNote':
     'Groups hold links, notes and to-dos.\n• Click a note to edit it\n• Type /todo to turn it into a task\n• Drag items between groups',
   'seed.tipNote': 'Tip: hold a link over another one to stack them side by side',
@@ -141,7 +141,7 @@ export const en = {
   'panel.openTabs': 'Open tabs',
   'panel.filter': 'Filter open tabs',
   'panel.window': 'Window {n} · {count} tabs',
-  'empty.category': 'This category is empty',
+  'empty.category': 'Nothing here yet',
   'empty.categoryHint': 'Create a group to start collecting links, notes and to-dos.',
   'restored.group': 'Restored items',
   'toast.undo': 'Undo',
@@ -431,7 +431,7 @@ export const en = {
   'signin.noServerTitle': 'Sync isn’t set up',
   'signin.noServerText':
     'This copy of TabCabin was built without a sync server. Everything works offline; to sync between computers, build it with your server’s address.',
-  'signin.headline': 'Your tabs, on every computer.',
+  'signin.headline': 'Your cabin, on every computer.',
   'signin.lead':
     'Boards, notes and to-dos follow you from browser to browser. Sign in once, and syncing happens on its own.',
   'signin.cardLinks': '5 links',

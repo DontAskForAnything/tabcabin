@@ -64,7 +64,7 @@ test('adds a category and switches with number keys', async ({ context, extensio
   await input.fill('Ideas')
   await input.press('Enter')
   await expect(page.getByRole('tab', { name: 'Ideas' })).toHaveAttribute('aria-selected', 'true')
-  await expect(page.getByText('This category is empty')).toBeVisible()
+  await expect(page.getByText('Nothing here yet')).toBeVisible()
   await page.keyboard.press('1')
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
 })

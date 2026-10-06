@@ -41,7 +41,7 @@ export const pl: Record<MessageKey, Message> = {
   'seed.task1': 'Przeciągnij kartę z lewego panelu do grupy',
   'seed.task2': 'Naciśnij ⌘K, żeby wszystko przeszukać',
   'seed.task3': 'Wypróbuj widok Kolekcje',
-  'seed.doneTask': 'Zainstaluj TabCabin',
+  'seed.doneTask': 'Wprowadź się do TabCabin',
   'seed.welcomeNote':
     'Grupy mieszczą linki, notatki i zadania.\n• Kliknij notatkę, żeby ją edytować\n• Wpisz /todo, żeby zrobić z niej zadanie\n• Przeciągaj elementy między grupami',
   'seed.tipNote': 'Wskazówka: przytrzymaj link nad innym, żeby ułożyć je obok siebie',
@@ -172,7 +172,7 @@ export const pl: Record<MessageKey, Message> = {
   'panel.openTabs': 'Otwarte karty',
   'panel.filter': 'Filtruj otwarte karty',
   'panel.window': 'Okno {n} · {count} kart',
-  'empty.category': 'Ta kategoria jest pusta',
+  'empty.category': 'Jeszcze nic tu nie ma',
   'empty.categoryHint': 'Utwórz grupę i zacznij zbierać linki, notatki i zadania.',
   'restored.group': 'Przywrócone',
   'toast.undo': 'Cofnij',
@@ -520,7 +520,7 @@ export const pl: Record<MessageKey, Message> = {
   'signin.noServerTitle': 'Synchronizacja nie jest skonfigurowana',
   'signin.noServerText':
     'Ta wersja TabCabin została zbudowana bez serwera synchronizacji. Wszystko działa offline; żeby synchronizować komputery, zbuduj ją z adresem swojego serwera.',
-  'signin.headline': 'Twoje karty na każdym komputerze.',
+  'signin.headline': 'Twój domek na każdym komputerze.',
   'signin.lead':
     'Tablice, notatki i zadania idą za Tobą z przeglądarki do przeglądarki. Zaloguj się raz, a synchronizacja dzieje się sama.',
   'signin.cardLinks': '5 linków',

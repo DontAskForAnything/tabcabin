@@ -1,7 +1,11 @@
 {
-  "extName": { "message": "TabCabin" },
-  "extDescription": {
-    "message": "Boards for your tabs, links, notes and to-dos — right in your new tab. Optional self-hosted sync."
+  "extName": {
+    "message": "TabCabin"
   },
-  "cmdSaveCurrentPage": { "message": "Save the current page" }
+  "extDescription": {
+    "message": "A calm cabin for your tabs: boards for tabs, links, notes and to-dos in every new tab. Private, works offline."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Save the current page"
+  }
 }

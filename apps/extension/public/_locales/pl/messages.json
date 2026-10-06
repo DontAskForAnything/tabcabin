@@ -1,7 +1,11 @@
 {
-  "extName": { "message": "TabCabin" },
-  "extDescription": {
-    "message": "Tablice na karty, linki, notatki i zadania — prosto w nowej karcie. Opcjonalna synchronizacja z własnym serwerem."
+  "extName": {
+    "message": "TabCabin"
   },
-  "cmdSaveCurrentPage": { "message": "Zapisz bieżącą stronę" }
+  "extDescription": {
+    "message": "Spokojny domek dla Twoich kart: tablice na karty, linki, notatki i zadania w każdej nowej karcie. Prywatnie, offline."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Zapisz bieżącą stronę"
+  }
 }

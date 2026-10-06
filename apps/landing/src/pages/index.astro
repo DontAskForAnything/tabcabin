@@ -56,9 +56,9 @@ const faqSchema = {
 const filmSchema = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
-  name: 'TabHangar in under a minute',
+  name: 'TabCabin in under a minute',
   description:
-    'A short film about the TabHangar browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync through your own server.',
+    'A short film about the TabCabin browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync through your own server.',
   thumbnailUrl: new URL('/promo-poster.jpg', Astro.site).toString(),
   contentUrl: new URL('/promo.mp4', Astro.site).toString(),
   uploadDate: '2026-10-08',
@@ -67,8 +67,8 @@ const filmSchema = {
 ---
 
 <Layout
-  title="TabHangar — open-source tab manager with kanban boards and self-hosted sync"
-  description="Turn your new tab into kanban boards for tabs, links, notes and to-dos. Free, open-source Chrome extension that works offline, with optional sync through your own server."
+  title="TabCabin — a calm, open-source tab manager with kanban boards and self-hosted sync"
+  description="A calm cabin for your tabs: TabCabin turns every new tab into kanban boards for tabs, links, notes and to-dos. A free, open-source Chrome extension that works offline, with optional sync through your own server."
   schema={[faqSchema, filmSchema]}
 >
   <Nav />
@@ -86,23 +86,23 @@ const filmSchema = {
           <span class="rounded-full bg-accent px-2 py-0.5 text-[12px] font-semibold text-on-accent">
             New
           </span>
-          Self-hosted sync is here
+          Sync between your computers is here
           <Icon name="ArrowRight" size={14} class="text-ink-3" />
         </a>
         <h1
           class="mx-auto max-w-4xl text-[44px] leading-[1.02] font-semibold tracking-[-0.04em] text-balance sm:text-[72px]"
           data-reveal="0.05"
         >
-          Your tabs, parked <span class="shimmer">calmly</span>
+          A <span class="shimmer">calm</span> cabin for your tabs
         </h1>
         <p
           class="mx-auto mt-6 max-w-2xl text-[18px] leading-relaxed text-balance text-ink-2 sm:text-[20px]"
           data-reveal="0.12"
         >
-          An <span class="whitespace-nowrap">open-source</span> tab manager that turns the new tab
-          page into kanban boards for tabs, links, notes and{' '}
-          <span class="whitespace-nowrap">to-dos</span>. Works offline. Syncs through a server you
-          own.
+          An <span class="whitespace-nowrap">open-source</span> tab manager that turns every new tab
+          into quiet boards for your tabs, links, notes and{' '}
+          <span class="whitespace-nowrap">to-dos</span>. Works offline, no account needed. Syncs
+          through a server you own.
         </p>
         <div class="mt-9 flex flex-wrap items-center justify-center gap-3" data-reveal="0.2">
           <a
@@ -144,7 +144,7 @@ const filmSchema = {
           Small details, everywhere
         </h2>
         <p class="mx-auto mt-4 max-w-2xl text-center text-[17px] text-ink-2" data-reveal="0.05">
-          Built by someone who keeps thirty tabs open “for later” — and wanted somewhere nice to put
+          Built by someone who keeps thirty tabs open “for later” — and wanted a calm place to keep
           them.
         </p>
         <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-spotlight>
@@ -180,7 +180,7 @@ const filmSchema = {
           </p>
           <ul class="mt-6 flex flex-col gap-2.5 text-[15px] text-ink-2">
             {[
-              'Login and password, sign-up off by default',
+              'Google or username and password, sign-up off by default',
               'Live updates, offline edits merge when you reconnect',
               'Docker images for amd64 and arm64 (a Raspberry Pi is enough)',
               'No telemetry, no third-party services',
@@ -250,7 +250,7 @@ const filmSchema = {
           Keep the thoughts.
         </h2>
         <p class="mx-auto mt-5 max-w-xl text-[17px] text-ink-2">
-          Free and open source. Install it in a minute, sync it when you are ready.
+          Free and open source. Move in within a minute, sync when you are ready.
         </p>
         <div class="mt-9 flex flex-wrap justify-center gap-3">
           <a

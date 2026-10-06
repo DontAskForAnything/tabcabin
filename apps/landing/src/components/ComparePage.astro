@@ -20,8 +20,8 @@ interface Props {
 }
 
 const { name, slug, intro, about, rows, betterFit, whySwitch, moving } = Astro.props
-const title = `${name} alternative: TabHangar, an open-source tab manager with self-hosted sync`
-const description = `Comparing ${name} and TabHangar: boards, notes, reminders, privacy and sync. TabHangar is a free, open-source ${name} alternative you can self-host.`
+const title = `${name} alternative: TabCabin, an open-source tab manager with self-hosted sync`
+const description = `Comparing ${name} and TabCabin: boards, notes, reminders, privacy and sync. TabCabin is a free, open-source ${name} alternative you can self-host.`
 ---
 
 <Layout
@@ -60,7 +60,7 @@ const description = `Comparing ${name} and TabHangar: boards, notes, reminders, 
 
     <div class="mt-12 overflow-hidden rounded-[18px] bg-card shadow-card" data-reveal="0.1">
       <table class="w-full text-left text-[15px]">
-        <caption class="sr-only">{name}compared with TabHangar</caption>
+        <caption class="sr-only">{name}compared with TabCabin</caption>
         <thead class="bg-subtle text-[13.5px] text-ink-2">
           <tr>
             <th class="px-5 py-3.5 font-semibold" scope="col">
@@ -70,7 +70,7 @@ const description = `Comparing ${name} and TabHangar: boards, notes, reminders, 
               {name}
             </th>
             <th class="px-5 py-3.5 font-semibold text-accent-ink" scope="col">
-              TabHangar
+              TabCabin
             </th>
           </tr>
         </thead>
@@ -107,7 +107,7 @@ const description = `Comparing ${name} and TabHangar: boards, notes, reminders, 
 
     <div class="mt-16 grid gap-10 md:grid-cols-2">
       <section data-reveal>
-        <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Why people pick TabHangar</h2>
+        <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Why people pick TabCabin</h2>
         <ul class="mt-4 flex flex-col gap-3 text-[15.5px] leading-relaxed text-ink-2">
           {whySwitch.map((point) => (
             <li class="flex gap-2.5">
@@ -147,7 +147,7 @@ const description = `Comparing ${name} and TabHangar: boards, notes, reminders, 
         href={releases}
         class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-glow hover:brightness-110"
       >
-        <Icon name="Download" size={17} /> Get TabHangar
+        <Icon name="Download" size={17} /> Get TabCabin
       </a>
     </section>
 

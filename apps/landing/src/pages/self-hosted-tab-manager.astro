@@ -35,7 +35,7 @@ const faqs = [
   ],
   [
     'What happens when I am offline?',
-    'TabHangar keeps working from the browser’s local database. Changes wait in a queue and are sent when the server is reachable again.',
+    'TabCabin keeps working from the browser’s local database. Changes wait in a queue and are sent when the server is reachable again.',
   ],
   [
     'Can several people use one server?',
@@ -45,8 +45,8 @@ const faqs = [
 ---
 
 <Layout
-  title="Self-hosted tab manager with sync — TabHangar"
-  description="Run your own tab sync server with Docker: SQLite, automatic HTTPS with Caddy, backups and live updates. TabHangar is a free, open-source, self-hosted tab manager for Chrome."
+  title="Self-hosted tab manager with sync — TabCabin"
+  description="Run your own tab sync server with Docker: SQLite, automatic HTTPS with Caddy, backups and live updates. TabCabin is a free, open-source, self-hosted tab manager for Chrome."
   path="/self-hosted-tab-manager"
   breadcrumbs={[['Self-hosted tab manager', '/self-hosted-tab-manager']]}
   schema={[
@@ -77,9 +77,9 @@ const faqs = [
         A self-hosted tab manager that syncs every browser you use
       </h1>
       <p class="mt-6 max-w-3xl text-[18px] leading-relaxed text-ink-2" data-reveal="0.1">
-        Most tab managers keep your saved pages in their cloud. TabHangar keeps them in your
-        browser, and when you want them everywhere, it syncs through a small server you run yourself
-        — on a VPS, a home server or a Raspberry Pi.
+        Most tab managers keep your saved pages in their cloud. TabCabin keeps them in your browser,
+        and when you want them everywhere, it syncs through a small server you run yourself — on a
+        VPS, a home server or a Raspberry Pi.
       </p>
       <div class="mt-8 flex flex-wrap gap-3" data-reveal="0.15">
         <a
@@ -123,7 +123,7 @@ const faqs = [
           {[
             'Point a domain at your server and copy <code>.env.example</code> to <code>.env</code> with the domain and your first account.',
             'Run <code>docker compose --profile caddy up -d</code>. Caddy gets a certificate, the server creates the database and your account.',
-            'In TabHangar open <strong>Settings → Account &amp; sync</strong>, enter the address and sign in. Choose whether to keep this browser’s boards or use the server’s.',
+            'In TabCabin open <strong>Settings → Account &amp; sync</strong>, enter the address and sign in. Choose whether to keep this browser’s boards or use the server’s.',
             'Sign in on your other browsers. Changes appear everywhere within seconds; offline edits are sent when you reconnect.',
           ].map((step, index) => (
             <li class="flex gap-4" data-reveal={index * 0.05}>
@@ -163,7 +163,7 @@ const faqs = [
       <p class="mt-10 text-[15px] text-ink-2">
         Comparing tools? See{' '}
         <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">
-          TabHangar vs OneTab, Toby and Workona
+          TabCabin vs OneTab, Toby and Workona
         </a>
         .
       </p>

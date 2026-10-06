@@ -5,13 +5,13 @@ import { repo } from '../site'
 const lines = [
   { kind: 'comment', text: '# on your server' },
   { kind: 'cmd', text: `git clone ${repo}.git` },
-  { kind: 'cmd', text: 'cd tabhangar && cp .env.example .env' },
+  { kind: 'cmd', text: 'cd tabcabin && cp .env.example .env' },
   { kind: 'comment', text: '# set DOMAIN and the first account, then' },
   { kind: 'cmd', text: 'docker compose --profile caddy up -d' },
-  { kind: 'out', text: '✔ Container tabhangar-tabhangar-1  Started' },
-  { kind: 'out', text: '✔ Container tabhangar-caddy-1      Started' },
+  { kind: 'out', text: '✔ Container tabcabin-tabcabin-1  Started' },
+  { kind: 'out', text: '✔ Container tabcabin-caddy-1      Started' },
   { kind: 'cmd', text: 'curl https://tabs.example.com/health' },
-  { kind: 'out', text: '{"ok":true,"name":"tabhangar","version":"0.1.0"}' },
+  { kind: 'out', text: '{"ok":true,"name":"tabcabin","version":"0.1.0"}' },
 ]
 ---
 
@@ -23,7 +23,7 @@ const lines = [
     <span class="size-3 rounded-full bg-[#ff5f57]"></span>
     <span class="size-3 rounded-full bg-[#febc2e]"></span>
     <span class="size-3 rounded-full bg-[#28c840]"></span>
-    <span class="ml-3 font-mono text-[12px] text-white/45">~/tabhangar</span>
+    <span class="ml-3 font-mono text-[12px] text-white/45">~/tabcabin</span>
   </div>
   <div class="min-h-[300px] overflow-x-auto p-5 font-mono leading-[1.8] text-[#e6e8ee]">
     {lines.map((line) => (

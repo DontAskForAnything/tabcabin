@@ -12,8 +12,8 @@ export interface FaqItem {
 
 export const faq: FaqItem[] = [
   {
-    q: 'Is TabHangar free?',
-    a: 'Yes. TabHangar is open source under the MIT license, with no paid tier and no limits on how many tabs, groups or workspaces you keep.',
+    q: 'Is TabCabin free?',
+    a: 'Yes. TabCabin is open source under the MIT license, with no paid tier and no limits on how many tabs, groups or workspaces you keep.',
   },
   {
     q: 'Do I need an account or a server?',
@@ -25,12 +25,12 @@ export const faq: FaqItem[] = [
   },
   {
     q: 'How is it different from OneTab, Toby or Workona?',
-    a: 'TabHangar combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud.',
-    html: 'TabHangar combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud. See the <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">comparisons</a>.',
+    a: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud.',
+    html: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud. See the <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">comparisons</a>.',
   },
   {
     q: 'Can I import my existing tabs and bookmarks?',
-    a: 'Yes: TabHangar backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
+    a: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
   },
   {
     q: 'Which browsers are supported?',

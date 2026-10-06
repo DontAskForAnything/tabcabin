@@ -1,9 +1,9 @@
 import { mkdirSync } from 'node:fs'
-import { join } from 'node:path'
 import { createInterface } from 'node:readline'
 import { runCommand } from './commands'
 import { loadConfig } from './config'
 import { openDatabase } from './db/client'
+import { databaseFile } from './db/file'
 import { migrationsFolder } from './paths'
 
 /** Reads a password without echoing it, or the first line of piped input. */
@@ -48,7 +48,7 @@ function readPassword(prompt: string): Promise<string> {
 
 const config = loadConfig()
 mkdirSync(config.dataDir, { recursive: true })
-const { db, sqlite } = openDatabase(join(config.dataDir, 'tabhangar.db'), migrationsFolder())
+const { db, sqlite } = openDatabase(databaseFile(config.dataDir), migrationsFolder())
 const code = await runCommand(db, process.argv.slice(2), {
   readPassword,
   print: (line) => console.log(line),

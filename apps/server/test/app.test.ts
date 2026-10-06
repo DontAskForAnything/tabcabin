@@ -42,7 +42,7 @@ describe('app', () => {
     const { app } = testApp()
     const res = await app.request('/health')
     expect(res.status).toBe(200)
-    expect(await res.json()).toMatchObject({ ok: true, name: 'tabhangar' })
+    expect(await res.json()).toMatchObject({ ok: true, name: 'tabcabin' })
   })
 
   it('allows extension origins only', async () => {

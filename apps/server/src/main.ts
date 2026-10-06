@@ -1,15 +1,15 @@
 import { serve } from '@hono/node-server'
 import { mkdirSync } from 'node:fs'
-import { join } from 'node:path'
 import { createApp } from './app'
 import { loadConfig } from './config'
 import { openDatabase } from './db/client'
+import { databaseFile } from './db/file'
 import { migrationsFolder } from './paths'
 import { ensureAdmin } from './users'
 
 const config = loadConfig()
 mkdirSync(config.dataDir, { recursive: true })
-const { db, sqlite } = openDatabase(join(config.dataDir, 'tabhangar.db'), migrationsFolder())
+const { db, sqlite } = openDatabase(databaseFile(config.dataDir), migrationsFolder())
 const admin = await ensureAdmin(db, config.admin)
 if (admin) console.log(`Created the first account: ${admin.username}`)
 const app = createApp({ db, config })

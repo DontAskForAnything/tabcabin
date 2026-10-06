@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SyncClient } from './client'
+import { isSyncServer } from './serverName'
 
 export type Health =
   | { state: 'checking' | 'down' }
@@ -17,7 +18,7 @@ export function useServerHealth(serverUrl: string | null | undefined): Health {
       .then((res) => {
         if (cancelled) return
         setHealth(
-          res.name === 'tabhangar'
+          isSyncServer(res.name)
             ? {
                 state: 'ok',
                 version: res.version,

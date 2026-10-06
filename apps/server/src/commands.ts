@@ -1,7 +1,7 @@
 import type { Db } from './db/client'
 import { createUser, deleteUser, listUsers, setEmail, setPassword, UserError } from './users'
 
-const USAGE = `Usage: tabhangar <command>
+const USAGE = `Usage: tabcabin <command>
 
   create-user <username> [--admin] [--email <address>]
                                      create an account (asks for the password)
@@ -13,7 +13,7 @@ const USAGE = `Usage: tabhangar <command>
   backup <file>                      write a consistent copy of the database to <file>
 
 The password is read from standard input when it is not a terminal, e.g.
-  echo 'secret password' | tabhangar create-user michal`
+  echo 'secret password' | tabcabin create-user michal`
 
 export interface CommandIo {
   readPassword: (prompt: string) => Promise<string>

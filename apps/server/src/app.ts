@@ -52,7 +52,7 @@ export function createApp({
     db.get(sql`select 1`)
     return c.json({
       ok: true,
-      name: 'tabhangar',
+      name: 'tabcabin',
       version: pkg.version,
       // Lets the extension offer only the sign-in options this server has.
       auth: { password: true, google: config.google !== null, signup: config.allowSignup },

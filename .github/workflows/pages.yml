@@ -1,14 +1,15 @@
 # Publishes the landing page to GitHub Pages. Runs only when started by hand
 # (Actions → Pages → Run workflow) after Pages is enabled in the repository settings.
+# The site address comes from the input, or else from the SITE_URL repository variable.
 name: Pages
 
 on:
   workflow_dispatch:
     inputs:
       site_url:
-        description: Public address of the site (used for canonical links and the sitemap)
-        required: true
-        default: https://dontaskforanything.github.io/tabcabin
+        description: Public address of the site (empty = the SITE_URL repository variable)
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -32,7 +33,7 @@ jobs:
       - run: pnpm install --frozen-lockfile --filter @tabcabin/landing...
       - run: pnpm --filter @tabcabin/landing build
         env:
-          SITE_URL: ${{ inputs.site_url }}
+          SITE_URL: ${{ inputs.site_url || vars.SITE_URL }}
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

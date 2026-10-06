@@ -3,16 +3,17 @@ import { db } from '@/db/db'
 import { normalizeServerUrl } from './state'
 
 /*
- * The sync server is part of the build, not a setting: official builds sync with the TabCabin
- * server, and self-hosters build the extension with their own address in apps/extension/.env:
+ * The sync server is part of the build, not a setting. Whoever builds the extension sets the
+ * address in apps/extension/.env (or as the WXT_SYNC_SERVER variable of the GitHub "Build"
+ * workflow):
  *
  *   WXT_SYNC_SERVER=https://tabs.example.com
  *
- * An empty value builds the extension without sync.
+ * Without it the extension is built without sync and works offline only.
  */
 const DEFAULT_SYNC_SERVER = ''
 
-const configured = import.meta.env.WXT_SYNC_SERVER ?? DEFAULT_SYNC_SERVER
+const configured = import.meta.env.WXT_SYNC_SERVER || DEFAULT_SYNC_SERVER
 const BUILD_SYNC_SERVER = normalizeServerUrl(configured)
 
 /** End-to-end tests point the test build at the server they start (meta `test.syncServer`). */

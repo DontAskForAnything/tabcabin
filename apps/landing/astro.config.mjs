@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config'
 import { createRequire } from 'node:module'
 
 // Set SITE_URL to the real address when deploying (used for canonical links, Open Graph and the sitemap).
-const site = process.env.SITE_URL ?? 'https://tabs.example.com'
+const site = process.env.SITE_URL || 'https://tabs.example.com'
 
 export default defineConfig({
   site,

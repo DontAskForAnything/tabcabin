@@ -53,7 +53,7 @@ for (const lockup of lockups) {
   h1 { font-size: 104px; font-weight: 700; letter-spacing: -0.025em; line-height: 0.9; color: ${lockup.text} }
   p { margin-top: 14px; font-size: 30px; font-weight: 500; letter-spacing: -0.01em; color: ${lockup.tagline} }
 </style>
-${mark(lockup.logo)}<div><h1>TabCabin</h1><p>A quiet cabin for your tabs.</p></div>`)
+${mark(lockup.logo)}<div><h1>TabCabin</h1><p>A calm cabin for your tabs.</p></div>`)
     await page.evaluate(() => document.fonts.ready)
     await page.screenshot({ path: join(OUT, `${lockup.name}.png`) })
   })

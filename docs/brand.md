@@ -1,6 +1,6 @@
 # TabCabin brand guide
 
-TabCabin is a quiet cabin for your tabs. The look is calm and grown-up: black, white and pine
+TabCabin is a calm cabin for your tabs. The look is quiet and grown-up: black, white and pine
 green, with one soft cream for the logo. Nothing shouts.
 
 ![TabCabin logo with the wordmark](brand/lockup-light.png)
@@ -94,12 +94,15 @@ soft and low; a dragged card lifts with a pine border.
 
 Calm, warm and short. Say what happens in plain words people already use.
 
-- **Tagline:** "A quiet cabin for your tabs." In Polish: "Spokojny domek dla Twoich kart."
-- **One-liner:** "TabCabin turns every new tab into calm boards for your tabs, links, notes and
+- **Tagline:** "A calm cabin for your tabs." In Polish: "Spokojny domek dla Twoich kart."
+- **Headline on the website:** "A _calm_ cabin for your tabs", with "calm" in pine.
+- **One-liner:** "TabCabin turns every new tab into quiet boards for your tabs, links, notes and
   to-dos — on your computer, synced when you sign in."
 - **Store title:** "TabCabin – Tab Manager, Boards & Notes".
-- **Short description (≤ 132 characters):** "A quiet cabin for your tabs: calm boards for tabs,
-  links, notes and to-dos in every new tab. Private, works offline."
+- **Short description (≤ 132 characters):** "A calm cabin for your tabs: boards for tabs, links,
+  notes and to-dos in every new tab. Private, works offline."
+- **Small lines that fit the voice:** "Close the tabs. Keep the thoughts." · "Every tab gets a
+  place to stay." · "Your cabin, on every computer." · "Back to the cabin."
 
 Do:
 

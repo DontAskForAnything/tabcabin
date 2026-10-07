@@ -16,7 +16,7 @@ const lines = [
 ---
 
 <div
-  class="overflow-hidden rounded-[18px] bg-[#111318] text-[13.5px] shadow-pop ring-1 ring-white/10"
+  class="overflow-hidden rounded-[18px] bg-[#0f1110] text-[13.5px] shadow-pop ring-1 ring-white/10"
   data-terminal
 >
   <div class="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
@@ -25,14 +25,14 @@ const lines = [
     <span class="size-3 rounded-full bg-[#28c840]"></span>
     <span class="ml-3 font-mono text-[12px] text-white/45">~/tabcabin</span>
   </div>
-  <div class="min-h-[300px] overflow-x-auto p-5 font-mono leading-[1.8] text-[#e6e8ee]">
+  <div class="min-h-[300px] overflow-x-auto p-5 font-mono leading-[1.8] text-[#f2f4f2]">
     {lines.map((line) => (
       <div class="term-line whitespace-pre" data-kind={line.kind} data-text={line.text}>
-        {line.kind === 'cmd' && <span class="text-[#8b7cf8]">$ </span>}
+        {line.kind === 'cmd' && <span class="text-[#6db592]">$ </span>}
         <span
           class:list={[
             line.kind === 'comment' && 'text-white/40',
-            line.kind === 'out' && 'text-[#34d399]',
+            line.kind === 'out' && 'text-[#f4ead5]',
           ]}
           data-typed
         >

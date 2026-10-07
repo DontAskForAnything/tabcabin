@@ -36,7 +36,7 @@ html {
   border-radius: inherit;
   background: radial-gradient(
     360px circle at var(--x, -999px) var(--y, -999px),
-    rgb(124 108 246 / 0.16),
+    color-mix(in srgb, var(--accent) 12%, transparent),
     transparent 60%
   );
   opacity: 0;
@@ -53,7 +53,7 @@ html {
   padding: 1px;
   background: radial-gradient(
     260px circle at var(--x, -999px) var(--y, -999px),
-    rgb(124 108 246 / 0.55),
+    color-mix(in srgb, var(--accent) 50%, transparent),
     transparent 60%
   );
   mask:
@@ -63,9 +63,14 @@ html {
   pointer-events: none;
 }
 
-/* Slowly shifting accent on the hero word. */
+/* Slowly shifting accent on the hero word: pine with a soft light passing through. */
 .shimmer {
-  background: linear-gradient(100deg, var(--accent) 20%, #b06ab3 45%, var(--accent) 70%);
+  background: linear-gradient(
+    100deg,
+    var(--accent) 20%,
+    color-mix(in srgb, var(--accent) 55%, var(--cream)) 45%,
+    var(--accent) 70%
+  );
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -85,4 +90,12 @@ html {
     linear-gradient(to bottom, var(--line) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Headings use the display face of the wordmark; body text stays in Geist. */
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-display);
+  }
 }

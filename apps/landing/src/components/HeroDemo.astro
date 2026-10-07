@@ -4,6 +4,8 @@
  * tab into a group, writes a to-do, ticks another and sets a reminder, then starts over.
  * Designed at 1120×620 and scaled to fit; with reduced motion it stays still.
  */
+import Logo from './Logo.astro'
+
 const tabs = [
   { id: 'drag', letter: 'F', color: '#0f9d8a', title: 'Designing calm software – Field notes' },
   { letter: 'G', color: '#24292f', title: 'Pull requests · GitHub' },
@@ -42,10 +44,8 @@ const later = [
       <div class="demo-content flex h-[584px]">
         <!-- open tabs panel -->
         <aside class="flex w-[232px] shrink-0 flex-col gap-2.5 border-r border-line bg-panel p-3.5">
-          <div class="flex items-center gap-2 pb-1 text-[14px] font-semibold">
-            <span class="flex size-7 items-center justify-center rounded-lg bg-accent text-[13px] text-white">
-              ⌂
-            </span>
+          <div class="flex items-center gap-2 pb-1 font-display text-[15px] font-bold tracking-[-0.02em]">
+            <Logo size={28} />
             TabCabin
           </div>
           <div class="rounded-[10px] bg-card px-2.5 py-1.5 text-[11.5px] font-medium shadow-tile">
@@ -76,7 +76,9 @@ const later = [
               🚀 Side project
             </span>
             <span class="flex gap-0.5 rounded-[11px] bg-subtle-2 p-[3px] text-[12px] font-medium">
-              <span class="rounded-[8px] bg-accent px-3 py-1 font-semibold text-white">Today</span>
+              <span class="rounded-[8px] bg-accent px-3 py-1 font-semibold text-on-accent">
+                Today
+              </span>
               <span class="px-3 py-1 text-ink-2">Research</span>
               <span class="px-3 py-1 text-ink-2">Reading</span>
             </span>
@@ -104,7 +106,7 @@ const later = [
               </header>
               <div class="flex flex-col gap-1.5 text-[12.5px]">
                 <div class="flex items-center gap-2">
-                  <span class="flex size-[17px] items-center justify-center rounded-[5px] bg-accent text-[10px] text-white">
+                  <span class="flex size-[17px] items-center justify-center rounded-[5px] bg-accent text-[10px] text-on-accent">
                     ✓
                   </span>
                   <span class="flex-1 rounded-[9px] bg-subtle px-2.5 py-1.5 text-ink-3 line-through">
@@ -251,7 +253,7 @@ const later = [
 
       <!-- toast -->
       <div class="demo-toast absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-[12px] bg-raised px-3 py-2 text-[12.5px] font-medium opacity-0 shadow-pop">
-        <span class="flex size-[18px] items-center justify-center rounded-[6px] bg-success text-[10px] text-white">
+        <span class="flex size-[18px] items-center justify-center rounded-[6px] bg-success text-[10px] text-on-accent">
           ✓
         </span>
         Tab saved to 📚 Read later
@@ -424,7 +426,7 @@ const later = [
         void animate(ghost, { opacity: 0, scale: 0.96 }, { duration: 0.18 })
         void animate(
           saved,
-          { opacity: [0, 1], backgroundColor: ['rgb(124 108 246 / 0.25)', 'rgb(124 108 246 / 0)'] },
+          { opacity: [0, 1], backgroundColor: ['rgb(31 74 58 / 0.18)', 'rgb(31 74 58 / 0)'] },
           { duration: 1.2 },
         )
         $('[data-later-count]').textContent = '4'

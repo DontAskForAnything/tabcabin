@@ -1,23 +1,23 @@
 <div align="center">
 
-<img src="apps/extension/assets/logo.svg" width="72" height="72" alt="" />
+<img src="docs/brand/logo.svg" width="76" height="76" alt="" />
 
-# TabHangar
+# TabCabin
 
-**A calm home for your tabs.** TabHangar replaces the new tab page with boards where you park
-tabs, links, notes and to-dos — and keeps them in sync between your computers when you sign in.
+**A calm cabin for your tabs.** TabCabin turns every new tab into quiet boards for your tabs,
+links, notes and to-dos — on your computer, and in sync between your computers when you sign in.
 
-![License: MIT](https://img.shields.io/badge/license-MIT-5B4BE0)
-![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-5B4BE0)
+![License: MIT](https://img.shields.io/badge/license-MIT-1F4A3A)
+![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-1F4A3A)
 
-<img src="docs/screenshots/board-light.png" alt="TabHangar board with groups of links, notes and to-dos next to the open tabs panel" />
+<img src="docs/screenshots/board-light.png" alt="TabCabin board with groups of links, notes and to-dos next to the open tabs panel" />
 
 </div>
 
 ## Why
 
-Tabs pile up because closing them feels like losing them. TabHangar gives every tab a place to
-land: drag it into a group, add a note, set a reminder, close it. Everything is one new tab away,
+Tabs pile up because closing them feels like losing them. TabCabin gives every tab a place to
+stay: drag it into a group, add a note, set a reminder, close it. Everything is one new tab away,
 searchable, and works offline. No account needed, no tracking and no subscription.
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
@@ -53,7 +53,7 @@ searchable, and works offline. No account needed, no tracking and no subscriptio
 
 - Light and dark themes, compact density, English and Polish
 - Rebindable keyboard shortcuts and a cheat sheet on `?`
-- **Import** TabHangar backups, **Toby** and **tabExtend** exports, bookmark files (Chrome, Firefox, Safari, Raindrop), OneTab lists, Chrome bookmark folders and your most visited sites
+- **Import** TabCabin backups, **Toby** and **tabExtend** exports, bookmark files (Chrome, Firefox, Safari, Raindrop), OneTab lists, Chrome bookmark folders and your most visited sites
 - **Export** a workspace or everything as JSON, a bookmarks file or CSV
 
 <table>
@@ -75,7 +75,7 @@ live. Without an account everything stays in your browser.
 
 **Your own server** — run the small sync server on your machine or a VPS (Docker, SQLite, automatic
 HTTPS with Caddy, optional Google sign-in, limits for public servers) and build the extension with
-its address in `apps/extension/.env`. See [docs/self-hosting.md](docs/self-hosting.md).
+its address. See [docs/self-hosting.md](docs/self-hosting.md).
 
 ```bash
 cp .env.example .env    # domain, first account, sign-up rules
@@ -84,9 +84,9 @@ docker compose --profile caddy up -d
 
 ## Install
 
-TabHangar is not in the Chrome Web Store yet.
+TabCabin is not in the Chrome Web Store yet.
 
-**From a release** — download `tabhangar-<version>-chrome.zip` from
+**From a release** — download `tabcabin-<version>-chrome.zip` from
 [Releases](https://github.com/DontAskForAnything/tabcabin/releases), unzip it, open
 `chrome://extensions`, turn on **Developer mode** and choose **Load unpacked** → the unzipped folder.
 
@@ -100,11 +100,25 @@ pnpm build:ext   # → apps/extension/.output/chrome-mv3
 Then load `apps/extension/.output/chrome-mv3` with **Load unpacked**. Works in Chrome, Edge, Brave and
 other Chromium browsers.
 
+**With your own addresses** — the sync server and the website address are set when you build, never
+in the code:
+
+| Variable          | Used by                      | Example                    |
+| ----------------- | ---------------------------- | -------------------------- |
+| `WXT_SYNC_SERVER` | the extension (sync server)  | `https://tabs.example.com` |
+| `SITE_URL`        | the website (links, sitemap) | `https://example.com`      |
+
+Put them in `apps/extension/.env` / your shell, or set them once as repository variables on GitHub
+(**Settings → Secrets and variables → Actions → Variables**) and run the manual **Build** workflow,
+which uploads the extension zip and the website as downloads. Without `WXT_SYNC_SERVER` the extension
+is built without sync and works offline only.
+
 ## Privacy
 
-Your data lives in the browser's IndexedDB and never leaves it. TabHangar has no analytics, no
-accounts and no servers of its own; the only things it loads from the web are the icons and images of
-pages you saved. Permissions it asks for:
+Your data lives in the browser's IndexedDB. It only leaves the browser when you sign in, and then
+only to the sync server the extension was built with. TabCabin has no analytics and no tracking; apart
+from sync, the only things it loads from the web are the icons and images of pages you saved.
+Permissions it asks for:
 
 | Permission                                            | Why                                                                                           |
 | ----------------------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -147,7 +161,8 @@ pnpm zip:ext        # store-ready zip in apps/extension/.output
 ```
 
 The screenshots in this README are generated from demo data with
-`pnpm --filter @tabcabin/extension screenshots`.
+`pnpm --filter @tabcabin/extension screenshots`. Logos, colours, type and voice are described in the
+[brand guide](docs/brand.md).
 
 The promo film (`apps/landing/public/promo.mp4`) and its stills in [`docs/promo/`](docs/promo) are
 rendered with `pnpm --filter @tabcabin/extension promo` (needs ffmpeg). Every frame is drawn from a
@@ -161,7 +176,8 @@ apps/extension      Chrome extension (WXT, React): new tab, side panel, backgrou
 apps/server         self-hosted sync server (Hono, SQLite, Drizzle) and its Docker image
 packages/core       data model, ordering, reminders, import/export — no browser APIs, fully unit tested
 packages/ui         design system: tokens, Tailwind theme, accessible components on Radix
-docs/               architecture, data model, screenshots, promo stills
+apps/landing        website (Astro): home, self-hosting, comparisons, privacy, the film
+docs/               architecture, data model, brand guide and logos, screenshots, promo stills
 ```
 
 Read more in [docs/architecture.md](docs/architecture.md) and [docs/data-model.md](docs/data-model.md).
@@ -175,8 +191,9 @@ axe-core
 ## Roadmap
 
 - [x] Local-first Chrome extension (board, collections, panel, saving, search, reminders, bin, import/export)
-- [x] Self-hosted sync server — Docker image with login and password, live sync between browsers
-- [ ] Landing page and Chrome Web Store listing
+- [x] Self-hosted sync server — Docker image, Google or password sign-in, live sync between browsers
+- [x] Website with comparison pages, a privacy page and the film
+- [ ] Chrome Web Store listing
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version.
 

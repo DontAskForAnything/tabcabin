@@ -8,12 +8,19 @@ and `robots.txt`. It has no server-side code, so any static host works.
 
 ```bash
 pnpm install
-SITE_URL=https://tabhangar.example.com pnpm --filter @tabcabin/landing build
+SITE_URL=https://tabcabin.example.com pnpm --filter @tabcabin/landing build
 # → apps/landing/dist
 ```
 
 `SITE_URL` is the address the site will live at. It is used for canonical links, Open Graph tags,
-structured data, the sitemap and `robots.txt`, so set it for every production build.
+structured data, the sitemap and `robots.txt`, so set it for every production build. The address is
+never written into the code: without `SITE_URL` the build uses the placeholder
+`https://tabs.example.com`.
+
+To build on GitHub, add `SITE_URL` once as a repository variable (**Settings → Secrets and variables →
+Actions → Variables**) and run **Actions → Build → Run workflow**: the built site (and the extension
+zip, with `WXT_SYNC_SERVER`) is attached to the run as a download. The **Pages** workflow below uses
+the same variable when you leave its address field empty.
 
 Preview locally with `pnpm --filter @tabcabin/landing preview`.
 
@@ -23,12 +30,12 @@ If the sync server already runs behind Caddy (see [self-hosting.md](self-hosting
 can serve the site:
 
 ```bash
-SITE_URL=https://tabhangar.example.com pnpm --filter @tabcabin/landing build
-rsync -a --delete apps/landing/dist/ you@server:/srv/tabhangar-site/
+SITE_URL=https://tabcabin.example.com pnpm --filter @tabcabin/landing build
+rsync -a --delete apps/landing/dist/ you@server:/srv/tabcabin-site/
 ```
 
 Add the block from [`deploy/Caddyfile.landing.example`](../deploy/Caddyfile.landing.example) for your domain
-(or merge it into `deploy/Caddyfile` and mount `/srv/tabhangar-site` into the `caddy` container), then
+(or merge it into `deploy/Caddyfile` and mount `/srv/tabcabin-site` into the `caddy` container), then
 reload Caddy. It compresses responses, caches fingerprinted assets for a year and serves the 404 page.
 
 ## Option B — GitHub Pages
@@ -36,7 +43,8 @@ reload Caddy. It compresses responses, caches fingerprinted assets for a year an
 1. Make the repository public (or use a plan that allows Pages for private repositories).
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 3. **Actions → Pages → Run workflow**, enter the site address (for example
-   `https://dontaskforanything.github.io/tabcabin` or your custom domain).
+   `https://dontaskforanything.github.io/tabcabin` or your custom domain), or leave it empty to use
+   the `SITE_URL` repository variable.
 
 The workflow ([`.github/workflows/pages.yml`](../.github/workflows/pages.yml)) only runs when started
 by hand. For a custom domain, add it under **Settings → Pages** and point a `CNAME` record at

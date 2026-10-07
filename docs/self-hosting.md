@@ -1,7 +1,7 @@
 # Self-hosting the sync server
 
-The TabHangar extension works without a server, and the official build syncs through the TabHangar
-server. Run your own when you want your boards on hardware you control, for yourself, your family or
+The TabCabin extension works without a server and syncs through whichever server it was built with.
+Run your own when you want your boards on hardware you control, for yourself, your family or
 anyone you let in. The server is a single small container with an SQLite database; a 1 vCPU /
 512 MB VPS is plenty for a household.
 
@@ -14,9 +14,9 @@ What you need:
 ## 1. Get the code
 
 ```bash
-sudo mkdir -p /opt/tabhangar && sudo chown "$USER" /opt/tabhangar
-git clone https://github.com/DontAskForAnything/tabcabin.git /opt/tabhangar
-cd /opt/tabhangar
+sudo mkdir -p /opt/tabcabin && sudo chown "$USER" /opt/tabcabin
+git clone https://github.com/DontAskForAnything/tabcabin.git /opt/tabcabin
+cd /opt/tabcabin
 ```
 
 ## 2. Configure
@@ -50,7 +50,7 @@ certificate for `DOMAIN` automatically. Check it from your computer:
 
 ```bash
 curl https://tabs.example.com/health
-# {"ok":true,"name":"tabhangar","version":"0.1.0"}
+# {"ok":true,"name":"tabcabin","version":"0.1.0"}
 ```
 
 After the first start, remove `ADMIN_PASSWORD` from `.env`.
@@ -61,7 +61,7 @@ The sync server is part of the extension build, so nobody has to type an address
 yours (needs Node 24 and pnpm):
 
 ```bash
-cd /path/to/tabhangar            # on your computer
+cd /path/to/tabcabin             # on your computer
 echo 'WXT_SYNC_SERVER=https://tabs.example.com' > apps/extension/.env
 pnpm install
 pnpm --filter @tabcabin/extension build
@@ -69,6 +69,12 @@ pnpm --filter @tabcabin/extension build
 
 Load `apps/extension/.output/chrome-mv3` in `chrome://extensions` (Developer mode → **Load
 unpacked**), or `pnpm zip:ext` for a zip to share with your family.
+
+**Building on GitHub instead:** in your copy of the repository open **Settings → Secrets and
+variables → Actions → Variables** and add `WXT_SYNC_SERVER` (your server, e.g.
+`https://tabs.example.com`) and, for the website, `SITE_URL`. Then run **Actions → Build → Run
+workflow**; the extension zip and the website are attached to the run as downloads. The addresses
+stay out of the code, so the same repository can be built for any server.
 
 Then click **Sign in** in the top bar of a new tab. If the browser already has boards and so does the
 account, choose **Keep both** or **Use the server's data**. From then on syncing runs by itself:
@@ -79,7 +85,7 @@ every change is sent right away and changes from other computers arrive live.
 Optional, but nicer for people who don't want another password.
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) → create a project.
-2. **APIs & Services → OAuth consent screen**: user type **External**, app name "TabHangar", your
+2. **APIs & Services → OAuth consent screen**: user type **External**, app name "TabCabin", your
    support e-mail. Scopes: only `openid`, `email` and `profile` (no verification needed for these).
    Then **Publish app** so it is not limited to test users.
 3. **Credentials → Create credentials → OAuth client ID** → type **Web application** → authorized
@@ -91,7 +97,7 @@ Who can come in with Google:
 
 - everyone, when `ALLOW_SIGNUP=true`;
 - addresses and domains listed in `SIGNUP_EMAILS` (e.g. `ola@gmail.com,@studio.dev`);
-- existing users whose address you set: `tabhangar set-email michal michal@gmail.com`. Their
+- existing users whose address you set: `tabcabin set-email michal michal@gmail.com`. Their
   password keeps working too.
 
 Optionally, set `EXTENSION_IDS` to the id of your extension build (from `chrome://extensions`) so
@@ -109,13 +115,13 @@ full, the extension says so and keeps new things locally until there is room aga
 The image includes a small command-line tool:
 
 ```bash
-docker compose exec tabhangar tabhangar list-users
-docker compose exec tabhangar tabhangar create-user anna          # asks for a password
-docker compose exec tabhangar tabhangar create-user anna --admin
-docker compose exec tabhangar tabhangar create-user anna --email anna@gmail.com  # can also use Google
-docker compose exec tabhangar tabhangar set-email anna anna@gmail.com           # link Google later
-docker compose exec tabhangar tabhangar reset-password anna      # also signs out every device
-docker compose exec tabhangar tabhangar delete-user anna         # deletes the account and its data
+docker compose exec tabcabin tabcabin list-users
+docker compose exec tabcabin tabcabin create-user anna          # asks for a password
+docker compose exec tabcabin tabcabin create-user anna --admin
+docker compose exec tabcabin tabcabin create-user anna --email anna@gmail.com  # can also use Google
+docker compose exec tabcabin tabcabin set-email anna anna@gmail.com           # link Google later
+docker compose exec tabcabin tabcabin reset-password anna      # also signs out every device
+docker compose exec tabcabin tabcabin delete-user anna         # deletes the account and its data
 ```
 
 ## Backups
@@ -130,7 +136,7 @@ and keeps the newest seven:
 Run it every night with cron (`crontab -e`):
 
 ```cron
-15 3 * * * /opt/tabhangar/deploy/backup.sh >> /var/log/tabhangar-backup.log 2>&1
+15 3 * * * /opt/tabcabin/deploy/backup.sh >> /var/log/tabcabin-backup.log 2>&1
 ```
 
 `BACKUP_DIR` and `KEEP` change the folder and the number of copies. Copy the backups off the server
@@ -139,10 +145,10 @@ from time to time (for example with `rsync` or your VPS provider's snapshots).
 ### Restore
 
 ```bash
-docker compose stop tabhangar
-docker compose cp backups/tabhangar-YYYYMMDD-HHMMSS.db tabhangar:/data/tabhangar.db
-docker compose run --rm --user root tabhangar sh -c 'rm -f /data/tabhangar.db-wal /data/tabhangar.db-shm && chown node:node /data/tabhangar.db'
-docker compose start tabhangar
+docker compose stop tabcabin
+docker compose cp backups/tabcabin-YYYYMMDD-HHMMSS.db tabcabin:/data/tabcabin.db
+docker compose run --rm --user root tabcabin sh -c 'rm -f /data/tabcabin.db-wal /data/tabcabin.db-shm && chown node:node /data/tabcabin.db'
+docker compose start tabcabin
 ```
 
 Devices pick up the restored state on their next sync.
@@ -150,12 +156,29 @@ Devices pick up the restored state on their next sync.
 ## Updating
 
 ```bash
-cd /opt/tabhangar
+cd /opt/tabcabin
 git pull
 docker compose --profile caddy up -d --build
 ```
 
 Database migrations run automatically when the server starts.
+
+### Upgrading from TabHangar
+
+TabCabin used to be called TabHangar. The server renames an old `tabhangar.db` to `tabcabin.db` by
+itself, but Docker Compose now names the service, image and volume `tabcabin`, so a server started
+before the rename keeps its data in the old volume. Copy it over once, before starting the new
+version (the old volume is usually `tabhangar_tabhangar-data`; `docker volume ls` shows it):
+
+```bash
+docker compose down
+docker volume create tabcabin_tabcabin-data
+docker run --rm -v tabhangar_tabhangar-data:/from -v tabcabin_tabcabin-data:/to alpine cp -a /from/. /to/
+docker compose --profile caddy up -d --build
+```
+
+The new volume name assumes the folder is called `tabcabin` (Compose prefixes volumes with the
+folder name). Extensions built before the rename keep syncing: the server answers to both names.
 
 ## Already running a reverse proxy?
 
@@ -190,7 +213,7 @@ Node.js 22+ and pnpm are enough:
 pnpm install
 pnpm --filter @tabcabin/server build
 cd apps/server
-DATA_DIR=/var/lib/tabhangar ADMIN_USERNAME=me ADMIN_PASSWORD='…' node dist/main.js
+DATA_DIR=/var/lib/tabcabin ADMIN_USERNAME=me ADMIN_PASSWORD='…' node dist/main.js
 ```
 
 Run it as a service (systemd, pm2…) and put an HTTPS proxy in front of it.
@@ -203,9 +226,9 @@ Run it as a service (systemd, pm2…) and put an HTTPS proxy in front of it.
 | Certificate errors                    | The domain must resolve to this server before the first start; Caddy retries automatically                       |
 | Changes appear only after a minute    | The proxy buffers responses — disable buffering for `/events` (see above)                                        |
 | "Too many attempts" when signing in   | Wait 15 minutes, or restart the container to clear the counters                                                  |
-| "This Google account can't join"      | Signup is off: add the address to `SIGNUP_EMAILS` or run `tabhangar set-email <user> <address>`                  |
+| "This Google account can't join"      | Signup is off: add the address to `SIGNUP_EMAILS` or run `tabcabin set-email <user> <address>`                   |
 | Google shows `redirect_uri_mismatch`  | The OAuth client needs exactly `https://<DOMAIN>/auth/google/callback` and `PUBLIC_URL` must match `DOMAIN`      |
-| Forgot the password                   | `docker compose exec tabhangar tabhangar reset-password <name>`                                                  |
+| Forgot the password                   | `docker compose exec tabcabin tabcabin reset-password <name>`                                                    |
 
 ## What is stored
 

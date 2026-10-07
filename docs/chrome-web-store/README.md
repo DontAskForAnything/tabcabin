@@ -1,6 +1,6 @@
 # Chrome Web Store submission
 
-Everything needed to publish TabHangar in the
+Everything needed to publish TabCabin in the
 [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole). Nothing here is
 published automatically.
 
@@ -8,7 +8,7 @@ published automatically.
 
 ```bash
 pnpm install
-pnpm zip:ext            # → apps/extension/.output/tabhangar-<version>-chrome.zip
+pnpm zip:ext            # → apps/extension/.output/tabcabin-<version>-chrome.zip
 ```
 
 Upload that zip as the item package. Bump `version` in `apps/extension/package.json` for every new
@@ -29,11 +29,11 @@ demo favicons). Stills from the promo film for social posts are in [`../promo/`]
 
 ## Store listing
 
-**Item name:** TabHangar
+**Item name / title:** TabCabin – Tab Manager, Boards & Notes
 
-**Summary** (max. 132 characters):
+**Summary** (max. 132 characters, also the manifest description):
 
-> Boards for your tabs, links, notes and to-dos in every new tab. Save pages, set reminders, search everything. Local-first.
+> A calm cabin for your tabs: boards for tabs, links, notes and to-dos in every new tab. Private, works offline.
 
 **Category:** Productivity → Workflow & planning
 
@@ -42,9 +42,9 @@ demo favicons). Stills from the promo film for social posts are in [`../promo/`]
 ### Description (English)
 
 ```text
-TabHangar turns your new tab page into a calm home for everything you want to keep: tabs, links, notes and to-dos, organized in boards.
+TabCabin is a calm cabin for your tabs. Every new tab becomes a quiet set of boards for the things you want to keep: tabs, links, notes and to-dos.
 
-Too many tabs open because closing them feels like losing them? Drag a tab into a group, add a note, set a reminder, close it. It's one new tab away whenever you need it.
+Too many tabs open because closing them feels like losing them? Drag a tab into a group, add a note, set a reminder, close it. It waits for you one new tab away.
 
 ORGANIZE
 • Boards with categories and groups — big emoji headers, resizable columns
@@ -65,22 +65,24 @@ FIND AND REMEMBER
 • Reminders — one-time, weekly or monthly — with desktop notifications
 • Undo for every change, and a bin to restore what you deleted
 
+ON ALL YOUR COMPUTERS
+• Sign in with Google (or a username and password) and your boards stay in sync between computers
+• Changes arrive live; without signing in everything stays in this browser
+
 MAKE IT YOURS
 • Light and dark theme, compact layout, English and Polish
 • Rebindable keyboard shortcuts
-• Import from a TabHangar backup, a tabExtend JSON export, Chrome bookmark folders or your most visited sites
+• Import from TabCabin backups, Toby, tabExtend, OneTab lists, bookmark files, Chrome bookmark folders or your most visited sites
 • Export as JSON, a bookmarks file or CSV
 
 PRIVATE BY DESIGN
-Your data stays in your browser. No account, no analytics, no ads. TabHangar has no access to the pages you visit unless you click it on one. It's open source (MIT).
-
-Coming next: optional sync between computers through a server you host yourself.
+No analytics, no ads, no tracking. TabCabin has no access to the pages you visit unless you click it on one. Your boards leave the browser only when you sign in to sync. It's open source (MIT).
 ```
 
 ### Description (Polish)
 
 ```text
-TabHangar zamienia stronę nowej karty w spokojne miejsce na wszystko, co chcesz zachować: karty, linki, notatki i zadania, ułożone na tablicach.
+TabCabin to spokojny domek dla Twoich kart. Każda nowa karta staje się cichym zestawem tablic na to, co chcesz zachować: karty, linki, notatki i zadania.
 
 Masz otwarte za dużo kart, bo zamknięcie ich to jak ich zgubienie? Przeciągnij kartę do grupy, dodaj notatkę, ustaw przypomnienie i zamknij. Wszystko czeka w nowej karcie.
 
@@ -103,24 +105,26 @@ SZUKANIE I PRZYPOMNIENIA
 • Przypomnienia jednorazowe, co tydzień lub co miesiąc — z powiadomieniami
 • Cofanie każdej zmiany i kosz z przywracaniem
 
+NA WSZYSTKICH KOMPUTERACH
+• Zaloguj się przez Google (albo nazwą użytkownika i hasłem), a tablice zostaną zsynchronizowane między komputerami
+• Zmiany przychodzą na żywo; bez logowania wszystko zostaje w tej przeglądarce
+
 PO TWOJEMU
 • Motyw jasny i ciemny, widok kompaktowy, polski i angielski
 • Własne skróty klawiszowe
-• Import z kopii TabHangar, eksportu JSON z tabExtend, folderów zakładek Chrome i najczęściej odwiedzanych stron
+• Import z kopii TabCabin, Toby, tabExtend, list OneTab, plików zakładek, folderów zakładek Chrome i najczęściej odwiedzanych stron
 • Eksport do JSON, pliku zakładek lub CSV
 
 PRYWATNIE
-Dane zostają w Twojej przeglądarce. Bez konta, bez analityki, bez reklam. TabHangar nie ma dostępu do odwiedzanych stron, dopóki go na nich nie klikniesz. Kod jest otwarty (MIT).
-
-Wkrótce: opcjonalna synchronizacja między komputerami przez serwer, który hostujesz sam.
+Bez analityki, bez reklam, bez śledzenia. TabCabin nie ma dostępu do odwiedzanych stron, dopóki go na nich nie klikniesz. Tablice opuszczają przeglądarkę tylko wtedy, gdy zalogujesz się do synchronizacji. Kod jest otwarty (MIT).
 ```
 
 ## Privacy practices tab
 
 ### Single purpose
 
-> TabHangar replaces the new tab page with a board where the user saves and organizes tabs, links,
-> notes and to-dos, and finds them again.
+> TabCabin replaces the new tab page with a board where the user saves and organizes tabs, links,
+> notes and to-dos, finds them again and, after signing in, keeps them in sync between computers.
 
 ### Permission justifications
 
@@ -129,7 +133,7 @@ Wkrótce: opcjonalna synchronizacja między komputerami przez serwer, który hos
 | `tabs`                        | Lists the user's open tabs in the side panel of the board so they can be saved, focused or closed, and reads the URL and title of a tab when the user saves it.         |
 | `tabGroups`                   | Shows Chrome tab groups in the open tabs panel and lets the user save a whole tab group as a group of links.                                                            |
 | `storage`, `unlimitedStorage` | Stores the user's boards, notes and settings locally in IndexedDB; collections of saved links can exceed the default quota.                                             |
-| `contextMenus`                | Adds "Save page / link / selection / image to TabHangar" to the right-click menu.                                                                                       |
+| `contextMenus`                | Adds "Save page / link / selection / image to TabCabin" to the right-click menu.                                                                                        |
 | `activeTab`, `scripting`      | After the user clicks the toolbar button, shortcut or context menu, shows the save popover or a confirmation toast on that one page. No host permissions are requested. |
 | `favicon`                     | Shows website icons next to saved links using the browser's favicon cache.                                                                                              |
 | `alarms`                      | Fires the user's reminders at the time they set.                                                                                                                        |
@@ -137,6 +141,7 @@ Wkrótce: opcjonalna synchronizacja między komputerami przez serwer, który hos
 | `bookmarks` (optional)        | Requested only when the user searches bookmarks or imports bookmark folders.                                                                                            |
 | `topSites` (optional)         | Requested only when the user adds a group of their most visited sites.                                                                                                  |
 | `notifications` (optional)    | Requested when the user sets a reminder, to show it as a desktop notification.                                                                                          |
+| `identity` (optional)         | Requested only when the user chooses "Continue with Google" on the sign-in page, to open Google's sign-in window.                                                       |
 
 ### Remote code
 
@@ -144,7 +149,16 @@ Wkrótce: opcjonalna synchronizacja między komputerami przez serwer, który hos
 
 ### Data usage
 
-Tick **none** of the data types (TabHangar does not collect or transmit user data), then certify:
+It depends on the build:
+
+- **Built without a sync server** (no `WXT_SYNC_SERVER`): tick **none** of the data types, nothing
+  leaves the browser.
+- **Built with a sync server:** when a user signs in, their boards (titles and addresses of saved
+  pages, notes, reminders) and their account (username, or e-mail with Google sign-in) go to that
+  server, only to sync them. Tick **Personally identifiable information** (e-mail address) and
+  **Web history** (addresses of saved pages), and describe them as used for the sync feature only.
+
+Then certify:
 
 - [x] I do not sell or transfer user data to third parties, outside of the approved use cases
 - [x] I do not use or transfer user data for purposes that are unrelated to my item's single purpose
@@ -152,13 +166,13 @@ Tick **none** of the data types (TabHangar does not collect or transmit user dat
 
 ### Privacy policy URL
 
-Use the privacy page of the landing site, e.g. `https://tabs.example.com/privacy` (replace with the real
-domain once the landing page is deployed).
+Use the privacy page of the website, `https://<SITE_URL>/privacy` — the address you build the site
+with (see [../landing.md](../landing.md)).
 
 ## Submission checklist
 
 1. Developer account registered (one-time fee) and verified email.
-2. **Items → New item** → upload `tabhangar-<version>-chrome.zip`.
+2. **Items → New item** → upload `tabcabin-<version>-chrome.zip` (built with your `WXT_SYNC_SERVER`).
 3. **Store listing:** paste the summary and description, upload the icon, screenshots and promo tiles,
    set category and languages; add the Polish description under **Add localized listing**.
 4. **Privacy practices:** paste the single purpose and permission justifications, answer "no remote

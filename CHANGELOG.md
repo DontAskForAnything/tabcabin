@@ -6,6 +6,25 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Renamed to TabCabin, new look
+
+TabHangar is now **TabCabin — a calm cabin for your tabs**: a cabin logo, a black, white, pine and
+cream palette, Bricolage Grotesque for the wordmark and headings, and calmer words throughout the
+extension, the website and the docs. A brand guide lives in `docs/brand.md`.
+
+Nothing to do when updating — existing data moves over by itself:
+
+- The extension copies boards, settings, pending sync changes and the signed-in account from the old
+  `tabhangar` database into `tabcabin` the first time it starts, then removes the old one
+- Backups now say `format: "tabcabin"`; backups made under the old name still import
+- The sync server renames an existing `tabhangar.db` to `tabcabin.db` on start and reports itself as
+  `tabcabin` (the extension accepts both)
+- Docker: the Compose service, image and volume are now called `tabcabin` and the admin command is
+  `tabcabin` (for example `docker compose exec tabcabin tabcabin list-users`). If you ran the server
+  before, see "Upgrading from TabHangar" in `docs/self-hosting.md` to keep your volume
+- A manual **Build** workflow builds the extension and the website with your own addresses from
+  repository variables (`WXT_SYNC_SERVER`, `SITE_URL`)
+
 ### Added
 
 - Self-hosted sync server: accounts with scrypt passwords and sessions, login rate limiting,

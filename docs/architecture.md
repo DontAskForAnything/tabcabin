@@ -1,6 +1,6 @@
 # Architecture
 
-TabHangar is a pnpm monorepo with five TypeScript packages:
+TabCabin is a pnpm monorepo with five TypeScript packages:
 
 ```
 packages/core      pure domain logic — runs anywhere (extension, server, tests)

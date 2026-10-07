@@ -73,7 +73,7 @@ Exports (`Settings → Data → Export → JSON`) look like this:
 
 ```json
 {
-  "format": "tabhangar",
+  "format": "tabcabin",
   "version": 1,
   "exportedAt": "2026-10-07T12:00:00.000Z",
   "workspaces": [],
@@ -84,16 +84,17 @@ Exports (`Settings → Data → Export → JSON`) look like this:
 }
 ```
 
+Backups made before the app was renamed say `"format": "tabhangar"` and import the same way.
 Only live rows are exported. On import the file is validated with the same Zod schemas, every id is
 replaced (so a file can be imported next to existing data, even twice) and the workspaces are added
 at the end of the list.
 
 ## tabExtend import
 
-TabHangar can import JSON exports from tabExtend (`{ categories, tabData }`, or the older plain
+TabCabin can import JSON exports from tabExtend (`{ categories, tabData }`, or the older plain
 array of groups) into a new workspace:
 
-| tabExtend                                                          | TabHangar                                      |
+| tabExtend                                                          | TabCabin                                       |
 | ------------------------------------------------------------------ | ---------------------------------------------- |
 | category (`tabIndex` order)                                        | category                                       |
 | group (`categoryID`, `title`, `emoji`, `collapsed`, `customWidth`) | group (unknown categories go to the first one) |

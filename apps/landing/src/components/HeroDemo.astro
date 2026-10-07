@@ -468,7 +468,7 @@ const later = [
         await click()
         check.style.background = 'var(--accent)'
         check.style.borderColor = 'var(--accent)'
-        check.style.color = '#fff'
+        check.style.color = 'var(--on-accent)'
         void animate(check, { scale: [0.7, 1] }, { type: 'spring', stiffness: 500, damping: 15 })
         const text = todo.querySelector<HTMLElement>('.demo-todo-text')!
         text.classList.add('line-through', 'text-ink-3')
@@ -492,14 +492,20 @@ const later = [
       running = false
     }
 
+    // The loop starts a moment after the page has loaded, so it never delays the first paint.
+    const start = () =>
+      setTimeout(() => {
+        new IntersectionObserver(
+          ([entry]) => {
+            visible = !!entry?.isIntersecting
+            if (visible) void play()
+          },
+          { threshold: 0.35 },
+        ).observe(root)
+      }, 800)
     if (!reduced) {
-      new IntersectionObserver(
-        ([entry]) => {
-          visible = !!entry?.isIntersecting
-          if (visible) void play()
-        },
-        { threshold: 0.35 },
-      ).observe(root)
+      if (document.readyState === 'complete') start()
+      else addEventListener('load', start, { once: true })
     }
   }
 </script>

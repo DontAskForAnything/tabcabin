@@ -16,25 +16,26 @@ import { repo } from '../site'
       <h1 class="text-[38px] leading-tight font-semibold tracking-[-0.03em] text-ink sm:text-[46px]">
         Privacy policy
       </h1>
-      <p class="text-[14px] text-ink-3">Last updated: September 2026</p>
+      <p class="text-[14px] text-ink-3">Last updated: October 2026</p>
 
       <p>
-        TabCabin is an open-source browser extension and an optional sync server you can run
-        yourself. This policy explains what happens with your data. In short: it stays with you.
+        TabCabin is an open-source browser extension and an optional sync server. This policy
+        explains what happens with your data. In short: it stays with you, and it only travels to
+        sync your own computers when you sign in.
       </p>
 
       <h2>What the extension stores</h2>
       <p>
         The things you save — page titles and addresses, notes, to-dos, images, reminders — and your
         settings are stored in your browser's local storage (IndexedDB). They never leave your
-        browser unless you turn on sync with a server you choose.
+        browser unless you sign in to sync them.
       </p>
 
       <h2>What we collect</h2>
       <p>Nothing. TabCabin has no analytics, no advertising, no tracking and no crash reporting.</p>
       <ul>
         <li>We do not sell, share or transfer any data to third parties.</li>
-        <li>There are no TabCabin accounts or servers run by us.</li>
+        <li>Without signing in there is no account and nothing is sent to any server.</li>
         <li>Your data is not used for any purpose other than showing your boards to you.</li>
       </ul>
 
@@ -42,7 +43,7 @@ import { repo } from '../site'
       <p>
         To show what you saved, the extension loads website icons and images from the websites they
         belong to. Website icons are taken from the browser's own icon cache when possible. No other
-        requests are made, except to your sync server if you connect one.
+        requests are made, except to the sync server once you sign in.
       </p>
 
       <h2>Permissions</h2>
@@ -66,21 +67,29 @@ import { repo } from '../site'
           <strong>Bookmarks and top sites</strong> (optional) — only when you search bookmarks or
           import them; read locally, never sent anywhere.
         </li>
+        <li>
+          <strong>Identity</strong> (optional) — only when you choose “Continue with Google”, to
+          open Google's sign-in window.
+        </li>
       </ul>
 
       <h2>Optional sync</h2>
       <p>
-        If you enter a server address in Settings → Account & sync, your boards are sent to that
-        server so your other browsers can download them. The server is software you (or someone you
-        trust) run; it stores your username, a scrypt hash of your password, hashed session tokens
-        and the data you sync. Whoever runs the server is responsible for it. You can sign out at
-        any time; your data stays in the browser.
+        When you sign in, your boards are sent to the sync server this copy of TabCabin was built
+        with, so your other computers can download them. The server stores your username (or, with
+        Google sign-in, your e-mail address and Google account id), a scrypt hash of your password
+        if you use one, hashed session tokens and the data you sync — nothing else, and it is never
+        used for anything but syncing. Anyone can also run the server themselves and build the
+        extension for it. You can sign out at any time; your data stays in the browser.
       </p>
 
       <h2>Deleting your data</h2>
       <ul>
         <li>In the extension: Settings → Data → Delete all data, or uninstall the extension.</li>
-        <li>On a sync server: the server owner can delete your account and all of its data.</li>
+        <li>
+          On the sync server: ask the person who runs it (open an issue in the repository for the
+          official one) and your account and all of its data are deleted.
+        </li>
       </ul>
 
       <h2>Children</h2>

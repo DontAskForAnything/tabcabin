@@ -123,7 +123,7 @@ const faqs = [
           {[
             'Point a domain at your server and copy <code>.env.example</code> to <code>.env</code> with the domain and your first account.',
             'Run <code>docker compose --profile caddy up -d</code>. Caddy gets a certificate, the server creates the database and your account.',
-            'In TabCabin open <strong>Settings → Account &amp; sync</strong>, enter the address and sign in. Choose whether to keep this browser’s boards or use the server’s.',
+            'Build the extension with your address (<code>WXT_SYNC_SERVER</code>, or the Build workflow on GitHub), click <strong>Sign in</strong> in a new tab and choose whether to keep this browser’s boards or use the server’s.',
             'Sign in on your other browsers. Changes appear everywhere within seconds; offline edits are sent when you reconnect.',
           ].map((step, index) => (
             <li class="flex gap-4" data-reveal={index * 0.05}>

@@ -25,6 +25,17 @@ Nothing to do when updating — existing data moves over by itself:
 - A manual **Build** workflow builds the extension and the website with your own addresses from
   repository variables (`WXT_SYNC_SERVER`, `SITE_URL`)
 
+### New website look
+
+- The home page opens on a forest valley with a small cabin; in the dark theme it is night, with
+  stars, a lit window and fireflies, and switching the theme plays a short sunset
+- Contour lines behind the self-hosting section, an etched forest above the footer and a faint
+  paper grain over the whole site
+- A new 404 page: a signpost made of browser tabs that link back to the site
+- The background grid, glows, shimmering headline and cursor spotlights are gone
+- The top bar is clear over the page and gets its background once you scroll; it now stays at the
+  top on long pages
+
 ### Added
 
 - Self-hosted sync server: accounts with scrypt passwords and sessions, login rate limiting,

@@ -4,6 +4,20 @@
 `/alternatives/`, the privacy policy (`/privacy`, needed for the Chrome Web Store listing), a sitemap
 and `robots.txt`. It has no server-side code, so any static host works.
 
+## Drawings
+
+The forest scenes are inline SVG generated at build time, so no drawing code reaches the browser:
+
+- `src/lib/landscape.ts` — seeded random numbers, ground lines, spruces, forests, mountains,
+  stars; `src/lib/contours.ts` — contour lines.
+- `src/components/scene/` — `Valley` and `Sky` (home page header), `Cabin`, `Contours`
+  (self-hosting section), `Etching` (above the footer, `<Footer scenery={false} />` turns it
+  off), `LostTrail` and `TabSign` (404).
+- `src/styles/scene.css` — the day and night colours (registered custom properties, so a theme
+  switch animates) and the small animations, which start after the page has loaded.
+
+See "Illustrations" in [brand.md](brand.md) for the rules.
+
 ## Build
 
 ```bash

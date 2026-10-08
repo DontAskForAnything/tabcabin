@@ -90,6 +90,23 @@ there, so never darken the house.
 Radii are 6 (chips), 10 (rows, inputs, buttons), 14 (cards), 20 (panels) and pill. Shadows are
 soft and low; a dragged card lifts with a pine border.
 
+## Illustrations
+
+The website draws its own forest: a valley with mountains, rows of spruces and the cabin at the
+top of the home page, a contour map behind the self-hosting section, an etching above the footer
+and a signpost of tabs on the 404 page. The drawings are generated from a seed when the site is
+built, so every build grows the same trees.
+
+- Only pine tints, cream and black. Far rows are paler, near rows darker, with mist at the foot of
+  each row.
+- The light theme is a calm morning with a low sun. The dark theme is the same place at night:
+  moon, stars, a lit window and fireflies. Switching the theme plays a short sunset.
+- The cabin is the logo's cabin, chimney on the right, with smoke rising.
+- Motion is slow and small (smoke, birds, stars), starts a moment after the page has loaded and
+  stays off when someone prefers less motion.
+- A faint paper grain lies over the whole site.
+- No background grids, glows, gradient text or cursor spotlights.
+
 ## Voice
 
 Calm, warm and short. Say what happens in plain words people already use.

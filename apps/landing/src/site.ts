@@ -21,7 +21,7 @@ export interface FaqItem {
 export const faq: FaqItem[] = [
   {
     q: 'Is TabCabin free?',
-    a: 'Yes. TabCabin is open source under the MIT license, with no paid tier and no limits on how many tabs, groups or workspaces you keep.',
+    a: 'Yes. The extension is free and open source under the MIT license, with no limits on how many tabs, groups or workspaces you keep. Running your own sync server is free too.',
   },
   {
     q: 'Do I need an account or a server?',

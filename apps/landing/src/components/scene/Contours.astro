@@ -4,12 +4,15 @@
  * fifth one heavier, a few heights, and the cabin at the top. The map starts 260 px above the
  * section and fades in under the one before it and out before the next, so it never ends at a
  * hard edge.
+ *
+ * The map is drawn at a fixed size around the page's centre line (it does not scale with the
+ * window), so the cabin always sits in the gap above the terminal, inside the content width.
  */
 import { contour, contourPoint } from '../../lib/contours'
 import { round } from '../../lib/landscape'
 
 const hills = [
-  { cx: 1150, cy: 410, rings: 22, wobble: [0.22, 0.15] as [number, number], top: 1240 },
+  { cx: 1150, cy: 320, rings: 22, wobble: [0.22, 0.15] as [number, number], top: 1240 },
   { cx: 250, cy: 960, rings: 9, wobble: [0.4, 0.3] as [number, number], top: 980 },
 ]
 const lines = hills.flatMap((hill) =>
@@ -26,33 +29,43 @@ const labels = [5, 10, 15].map((level) => {
 })
 ---
 
-<svg
-  class="contours pointer-events-none absolute inset-x-0 -top-[260px] bottom-0 -z-10 h-[calc(100%+260px)] w-full"
-  viewBox="0 0 1440 1060"
-  preserveAspectRatio="xMaxYMin slice"
+<div
+  class="contours pointer-events-none absolute inset-x-0 -top-[260px] bottom-0 -z-10 overflow-hidden"
   aria-hidden="true"
 >
-  {lines.map((line) => (
-    <path
-      d={line.d}
-      fill="none"
-      stroke-width={line.index ? 1.4 : 1}
-      style={`stroke: var(${line.index ? '--contour-index' : '--contour'})`}
-    />
-  ))}
-  {labels.map((label) => (
-    <text x={label.x} y={label.y} text-anchor="middle" class="fill-ink-4 text-[10.5px] font-medium">
-      {label.text}
-    </text>
-  ))}
-  <g class="contours-mark" transform={`translate(${big.cx} ${big.cy + 4})`}>
-    <path d="M-12 -10 0 -20 12 -10 V2 H-12Z" class="fill-accent"></path>
-    <rect x="4.5" y="-22" width="4" height="9" class="fill-accent"></rect>
-    <text x="20" y="1" class="fill-ink-3 text-[12px] font-semibold">
-      Your cabin
-    </text>
-  </g>
-</svg>
+  <svg
+    class="absolute top-0 left-1/2 -ml-[720px]"
+    width="1440"
+    height="1060"
+    viewBox="0 0 1440 1060"
+  >
+    {lines.map((line) => (
+      <path
+        d={line.d}
+        fill="none"
+        stroke-width={line.index ? 1.4 : 1}
+        style={`stroke: var(${line.index ? '--contour-index' : '--contour'})`}
+      />
+    ))}
+    {labels.map((label) => (
+      <text
+        x={label.x}
+        y={label.y}
+        text-anchor="middle"
+        class="fill-ink-4 text-[10.5px] font-medium"
+      >
+        {label.text}
+      </text>
+    ))}
+    <g class="contours-mark" transform={`translate(${big.cx} ${big.cy + 4})`}>
+      <path d="M-12 -10 0 -20 12 -10 V2 H-12Z" class="fill-accent"></path>
+      <rect x="4.5" y="-22" width="4" height="9" class="fill-accent"></rect>
+      <text x="-20" y="1" text-anchor="end" class="fill-ink-3 text-[12px] font-semibold">
+        Your cabin
+      </text>
+    </g>
+  </svg>
+</div>
 
 <style>
   .contours {

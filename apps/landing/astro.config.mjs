@@ -15,7 +15,7 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
       thirdPartyLicenses({
-        product: 'The TabHangar website',
+        product: 'The TabCabin website',
         // Icons are inlined into the HTML at build time and motion only re-exports its parts, so
         // neither shows up in the client bundle on its own.
         extraFiles: ['lucide-static', 'motion'].map((name) =>

@@ -82,6 +82,13 @@ const front =
     })
     .join('') + land(frontGround, width, height)
 
+// They fly low over the mountains, below the buttons and the text.
+const birds = [
+  { x: 0, y: 150, scale: 1, bob: '0s', flap: '0s' },
+  { x: -24, y: 162, scale: 0.8, bob: '-1.1s', flap: '-0.25s' },
+  { x: -46, y: 156, scale: 0.7, bob: '-2.3s', flap: '-0.4s' },
+]
+
 /** Mist that thickens towards the foot of each row. */
 const mists = [
   { id: 'valley-mist-1', y: 120, h: 140, alpha: 0.95 },
@@ -112,13 +119,17 @@ const mists = [
       <stop offset="0" style="stop-color: var(--canvas); stop-opacity: 0"></stop>
       <stop offset="1" style="stop-color: var(--canvas)"></stop>
     </linearGradient>
+    <!-- Layers drift down while the page scrolls; nothing may show below the drawing's foot. -->
+    <clipPath id="valley-horizon">
+      <rect x="-400" y="-600" width="2080" height="1040"></rect>
+    </clipPath>
     <radialGradient id="valley-firefly">
       <stop offset="0" stop-color="#F4EAD5" stop-opacity="0.55"></stop>
       <stop offset="1" stop-color="#F4EAD5" stop-opacity="0"></stop>
     </radialGradient>
   </defs>
 
-  <g>
+  <g clip-path="url(#valley-horizon)">
     <g data-depth="0.5">
       <g class="scene-sun">
         <circle cx="1012" cy="104" r="92" opacity="0.35" style="fill: var(--scene-sun)"></circle>
@@ -126,18 +137,20 @@ const mists = [
       </g>
     </g>
     <g class="scene-by-day">
+      <!-- A small flock: each bird keeps its place (outer group), bobs gently (middle) and
+           flaps (the path), so the CSS animations never replace the position. -->
       <g class="scene-birds">
-        <path d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0" class="scene-wing" transform="translate(0 60)"></path>
-        <path
-          d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0"
-          class="scene-wing"
-          transform="translate(26 74) scale(0.8)"
-        ></path>
-        <path
-          d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0"
-          class="scene-wing"
-          transform="translate(-30 82) scale(0.7)"
-        ></path>
+        {birds.map((bird) => (
+          <g transform={`translate(${bird.x} ${bird.y}) scale(${bird.scale})`}>
+            <g class="scene-bob" style={`animation-delay:${bird.bob}`}>
+              <path
+                d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0"
+                class="scene-wing"
+                style={`animation-delay:${bird.flap}`}
+              />
+            </g>
+          </g>
+        ))}
       </g>
     </g>
     <g data-depth="0.42">

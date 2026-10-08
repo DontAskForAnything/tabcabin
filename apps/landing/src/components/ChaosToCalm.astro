@@ -108,6 +108,8 @@ const groups = [
   @media (max-width: 767px) {
     .chaos {
       padding: 6rem 0;
+      /* Scattered tabs may reach past the screen edge; the page must not scroll sideways. */
+      overflow-x: clip;
     }
   }
 </style>
@@ -119,13 +121,14 @@ const groups = [
   const wide = matchMedia('(min-width: 768px)').matches
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 
+  // Deterministic "random" so the scatter looks the same on every visit.
+  let seed = 7
+  const random = () => {
+    seed = (seed * 16807) % 2147483647
+    return seed / 2147483647
+  }
+
   if (section && wide && !reduced) {
-    // Deterministic "random" so the scatter looks the same on every visit.
-    let seed = 7
-    const random = () => {
-      seed = (seed * 16807) % 2147483647
-      return seed / 2147483647
-    }
     const board = section.querySelector<HTMLElement>('.chaos-board')!
     const chips = section.querySelectorAll<HTMLElement>('[data-chaos-chip]')
     const boardBox = board.getBoundingClientRect()
@@ -152,6 +155,31 @@ const groups = [
       scroll(animate(card, { opacity: [0, 0, 1], scale: [0.96, 0.96, 1] }), {
         target: section,
         offset: ['start start', '78% end'],
+      })
+    })
+  } else if (section && !reduced) {
+    // Phones show the groups one under another: each group gathers its own scattered tabs while
+    // it rises from the bottom of the screen to the upper third.
+    section.querySelectorAll<HTMLElement>('.chaos-board > div').forEach((group) => {
+      const width = group.getBoundingClientRect().width
+      group.querySelectorAll<HTMLElement>('[data-chaos-chip]').forEach((chip) => {
+        const settle = animate(
+          chip,
+          {
+            x: [(random() - 0.5) * width * 0.9, 0],
+            y: [(random() - 0.5) * 140, 0],
+            rotate: [(random() - 0.5) * 30, 0],
+            boxShadow: ['var(--shadow-lift)', 'var(--shadow-tile)'],
+          },
+          { ease: [0.3, 0, 0.2, 1] },
+        )
+        scroll(settle, { target: group, offset: ['start end', 'start 0.35'] })
+      })
+      group.querySelectorAll<HTMLElement>('[data-chaos-card]').forEach((card) => {
+        scroll(animate(card, { opacity: [0, 0, 1], scale: [0.96, 0.96, 1] }), {
+          target: group,
+          offset: ['start end', 'start 0.3'],
+        })
       })
     })
   }

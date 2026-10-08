@@ -183,7 +183,10 @@
   animation: scene-drift 52s linear infinite;
 }
 .scene-awake:not(.dark) .scene-wing {
-  animation: scene-flap 0.9s ease-in-out infinite alternate;
+  animation: scene-flap 0.55s ease-in-out infinite alternate;
+}
+.scene-awake:not(.dark) .scene-bob {
+  animation: scene-bob 3.2s ease-in-out infinite alternate;
 }
 
 @keyframes scene-twinkle {
@@ -241,7 +244,12 @@
 }
 @keyframes scene-flap {
   to {
-    transform: scaleY(0.35);
+    transform: scaleY(-0.45);
+  }
+}
+@keyframes scene-bob {
+  to {
+    transform: translateY(-4px);
   }
 }
 @keyframes scene-wisp {

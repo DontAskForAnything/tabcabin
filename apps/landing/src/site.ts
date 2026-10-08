@@ -1,6 +1,14 @@
 export const repo = 'https://github.com/DontAskForAnything/tabcabin'
 export const releases = `${repo}/releases/latest`
 export const selfHostingGuide = `${repo}/blob/main/docs/self-hosting.md`
+export const changelog = `${repo}/blob/main/CHANGELOG.md`
+
+/** Tools with a comparison page under /alternatives/ (each ends with a guide for moving over). */
+export const comparisons = [
+  { name: 'OneTab', slug: 'onetab' },
+  { name: 'Toby', slug: 'toby' },
+  { name: 'Workona', slug: 'workona' },
+]
 
 export interface FaqItem {
   q: string
@@ -17,29 +25,30 @@ export const faq: FaqItem[] = [
   },
   {
     q: 'Do I need an account or a server?',
-    a: 'No. The extension works fully offline and keeps everything in your browser. A server is only needed if you want to sync between computers.',
+    a: 'No. The extension works fully offline and keeps everything in your browser. Sign in only when you want the same boards on more than one computer; you never need a server of your own.',
   },
   {
     q: 'Where is my data stored?',
-    a: 'In your browser (IndexedDB), and — if you turn on sync — in an SQLite database on the server you run. Nothing is sent anywhere else and there is no telemetry.',
+    a: 'In your browser (IndexedDB). When you sign in to sync, a copy is kept on the TabCabin sync server, or on your own server if you run one. Nothing is sent anywhere else and there is no telemetry.',
   },
   {
     q: 'How is it different from OneTab, Toby or Workona?',
-    a: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud.',
-    html: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, and syncs through your own server instead of a vendor cloud. See the <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">comparisons</a>.',
+    a: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, works without an account, and lets you run the sync server yourself.',
+    html: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, works without an account, and lets you run the sync server yourself. See the <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">comparisons</a>.',
   },
   {
     q: 'Can I import my existing tabs and bookmarks?',
     a: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
+    html: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV. Step by step: moving from <a class="font-medium text-accent-ink hover:underline" href="/alternatives/toby#moving">Toby</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/onetab#moving">OneTab</a> or <a class="font-medium text-accent-ink hover:underline" href="/alternatives/workona#moving">Workona</a>.',
   },
   {
     q: 'Which browsers are supported?',
     a: 'Chrome and other Chromium browsers such as Edge, Brave and Vivaldi. The board also opens in Chrome’s side panel.',
   },
   {
-    q: 'What do I need to run the sync server?',
-    a: 'Docker and a domain. A small VPS or a Raspberry Pi is plenty; the guide covers HTTPS, accounts, backups and updates.',
-    html: 'Docker and a domain. A small VPS or a Raspberry Pi is plenty; the <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager">self-hosting overview</a> and the step-by-step guide cover HTTPS, accounts, backups and updates.',
+    q: 'Can I run the sync server myself?',
+    a: 'Yes, if you want your data only on your own machine. You need Docker and a domain; a small VPS or a Raspberry Pi is plenty. You then build the extension with your server’s address, and the guide covers HTTPS, accounts, backups and updates.',
+    html: 'Yes, if you want your data only on your own machine. You need Docker and a domain; a small VPS or a Raspberry Pi is plenty. You then build the extension with your server’s address. The <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager">self-hosting overview</a> and the step-by-step guide cover HTTPS, accounts, backups and updates.',
   },
 ]
 

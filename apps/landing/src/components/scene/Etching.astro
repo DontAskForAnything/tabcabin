@@ -68,7 +68,8 @@ const layers = [
       [1244, 96],
       [1290, 140],
     ]
-      .map(([x, tall]) => spruce(x!, 206, tall!, tall! * 0.44))
+      // Standing at 196 so the trunks end on the bottom line (the drawing may overflow).
+      .map(([x, tall]) => spruce(x!, 196, tall!, tall! * 0.44))
       .join(''),
     hatch: 'etch-densest',
   },
@@ -82,8 +83,9 @@ const hatches = [
 const rings = Array.from({ length: 5 }, (_, i) => ({ r: 9 + i * 5, opacity: round(1 - i * 0.16) }))
 ---
 
+<!-- Overflow stays visible, so on wide screens the moon and peaks are not cut off at the top. -->
 <svg
-  class="block h-full w-full text-[var(--etch)]"
+  class="block h-full w-full overflow-visible text-[var(--etch)]"
   viewBox={`0 0 ${width} ${height}`}
   preserveAspectRatio="xMidYMax slice"
   aria-hidden="true"

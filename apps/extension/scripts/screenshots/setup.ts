@@ -29,23 +29,14 @@ const OPEN_TABS: [string, string][] = [
 export async function launch(
   scale = 1,
   viewport = { width: 1440, height: 900 },
-  /** Folder for a WebM recording of every page. */
-  recordVideoDir?: string,
 ): Promise<{ context: BrowserContext; worker: Worker }> {
   const profile = mkdtempSync(join(tmpdir(), 'tabcabin-shots-'))
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium',
     headless: true,
-    // Recordings capture the real window, so size the window instead of emulating a viewport
-    // (144 px is what the headless window keeps for itself).
-    ...(recordVideoDir
-      ? { viewport: null, recordVideo: { dir: recordVideoDir, size: viewport } }
-      : { viewport, deviceScaleFactor: scale }),
-    args: [
-      `--disable-extensions-except=${extensionPath}`,
-      `--load-extension=${extensionPath}`,
-      ...(recordVideoDir ? [`--window-size=${viewport.width},${viewport.height + 144}`] : []),
-    ],
+    viewport,
+    deviceScaleFactor: scale,
+    args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
   })
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
   context.on('close', () => rmSync(profile, { recursive: true, force: true }))

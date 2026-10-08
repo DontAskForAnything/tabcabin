@@ -94,7 +94,7 @@ const groups = [
 <style>
   @media (min-width: 768px) {
     .chaos {
-      height: 210vh;
+      height: 250vh;
     }
     .chaos-sticky {
       position: sticky;
@@ -145,12 +145,13 @@ const groups = [
         },
         { ease: [0.3, 0, 0.2, 1] },
       )
-      scroll(settle, { target: section, offset: ['start start', '55% end'] })
+      // The tabs settle over about 80vh of scrolling, then the groups hold still for a while.
+      scroll(settle, { target: section, offset: ['start start', '72% end'] })
     })
     section.querySelectorAll<HTMLElement>('[data-chaos-card]').forEach((card) => {
       scroll(animate(card, { opacity: [0, 0, 1], scale: [0.96, 0.96, 1] }), {
         target: section,
-        offset: ['start start', '60% end'],
+        offset: ['start start', '78% end'],
       })
     })
   }

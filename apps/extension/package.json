@@ -16,7 +16,6 @@
     "build:e2e": "wxt build --mode e2e",
     "screenshots": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts readme demo",
     "store-assets": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts store",
-    "demo-video": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts video",
     "promo": "wxt build --mode e2e && playwright test -c playwright.screenshots.config.ts promo/footage promo/render && node --experimental-strip-types scripts/promo/encode.ts"
   },
   "dependencies": {

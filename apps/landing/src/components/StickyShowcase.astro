@@ -6,35 +6,48 @@ import popover from '../../../../docs/screenshots/popover.png'
 import reminders from '../../../../docs/screenshots/reminders.png'
 import search from '../../../../docs/screenshots/search.png'
 import { nb } from '../site'
+import BrowserWindow from './BrowserWindow.astro'
+
+const ARTICLE = {
+  page: 'article' as const,
+  title: 'Designing calm software · Field notes',
+  url: 'journal.example.dev/calm-software',
+}
+const NEW_TAB = { page: 'newtab' as const, title: 'New Tab', url: undefined }
 
 const steps = [
   {
     image: board,
     kicker: 'Board',
+    tab: NEW_TAB,
     title: 'Every tab gets a place to stay',
     text: 'Categories across the top, groups as columns with big emoji headers. Links, notes, to-dos, images and stacks live side by side — and everything is drag and drop.',
   },
   {
     image: collections,
     kicker: 'Collections',
+    tab: NEW_TAB,
     title: 'Or see it all as cards',
     text: 'Switch any category to wide panels of link tiles. Same data, calmer overview — open a whole group with one click.',
   },
   {
     image: popover,
     kicker: 'Capture',
+    tab: ARTICLE,
     title: 'Save without leaving the page',
     text: 'Ctrl+Shift+S opens a small popover: add a sticky note, pick the group, set a reminder, close the tab. The right-click menu saves links, images and selected text.',
   },
   {
     image: search,
     kicker: 'Search',
+    tab: NEW_TAB,
     title: 'Find anything in a keystroke',
     text: 'Ctrl+K searches titles, addresses and notes across workspaces, open tabs and bookmarks, then jumps straight to the result on your board.',
   },
   {
     image: reminders,
     kicker: 'Reminders',
+    tab: NEW_TAB,
     title: 'Come back to what matters',
     text: 'One-time, weekly or monthly reminders on any link or to-do, with desktop notifications, snooze and a due count on the toolbar icon.',
   },
@@ -59,7 +72,12 @@ const steps = [
             class="mt-4 max-w-md text-[16.5px] leading-relaxed text-ink-2"
             set:html={nb(step.text)}
           />
-          <div class="mt-8 overflow-hidden rounded-[16px] shadow-pop ring-1 ring-line lg:hidden">
+          <BrowserWindow
+            page={step.tab.page}
+            title={step.tab.title}
+            url={step.tab.url}
+            class="mt-8 lg:hidden"
+          >
             <Image
               src={step.image}
               alt=""
@@ -67,28 +85,33 @@ const steps = [
               sizes="100vw"
               class="block w-full"
             />
-          </div>
+          </BrowserWindow>
         </li>
       ))}
     </ol>
     <div class="hidden lg:block">
-      <div class="sticky top-[14vh] aspect-[1440/900] w-full">
-        {steps.map((step, index) => (
-          <div
-            class="showcase-shot absolute inset-0 overflow-hidden rounded-[18px] shadow-pop ring-1 ring-line"
-            data-shot={index}
-            style={index === 0 ? '' : 'opacity:0'}
-          >
-            <Image
-              src={step.image}
-              alt={step.title}
-              widths={[900, 1300]}
-              sizes="(min-width: 1180px) 700px, 60vw"
-              class="block h-full w-full object-cover object-left-top"
-            />
-          </div>
-        ))}
-      </div>
+      <BrowserWindow class="sticky top-[14vh]">
+        <div class="relative aspect-[1440/900] w-full">
+          {steps.map((step, index) => (
+            <div
+              class="showcase-shot absolute inset-0"
+              data-shot={index}
+              data-page={step.tab.page}
+              data-title={step.tab.title}
+              data-url={step.tab.url ?? ''}
+              style={index === 0 ? '' : 'opacity:0'}
+            >
+              <Image
+                src={step.image}
+                alt={step.title}
+                widths={[900, 1300]}
+                sizes="(min-width: 1180px) 700px, 60vw"
+                class="block h-full w-full object-cover object-left-top"
+              />
+            </div>
+          ))}
+        </div>
+      </BrowserWindow>
     </div>
   </div>
 </section>
@@ -100,6 +123,20 @@ const steps = [
   if (root) {
     const shots = [...root.querySelectorAll<HTMLElement>('[data-shot]')]
     const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')]
+    const browser = root.querySelector<HTMLElement>('.hidden [data-browser]')
+    const urlBox = browser?.querySelector<HTMLElement>('[data-browser-url]')
+    const placeholder = urlBox?.innerHTML ?? ''
+    /** The tab title, icon and address follow the page on screen. */
+    const showPage = (shot: HTMLElement) => {
+      if (!browser || !urlBox) return
+      const { page, title, url } = shot.dataset
+      browser.querySelector('[data-browser-title]')!.textContent = title ?? ''
+      browser.querySelectorAll<HTMLElement>('[data-browser-icon]').forEach((icon) => {
+        icon.hidden = icon.dataset.browserIcon !== page
+      })
+      if (url) urlBox.textContent = url
+      else urlBox.innerHTML = placeholder
+    }
     let active = 0
     const show = (index: number) => {
       if (index === active) return
@@ -107,7 +144,10 @@ const steps = [
       const next = shots[index]
       active = index
       if (previous) void animate(previous, { opacity: 0, scale: 0.985 }, { duration: 0.35 })
-      if (next) void animate(next, { opacity: [0, 1], scale: [1.015, 1] }, { duration: 0.45 })
+      if (next) {
+        showPage(next)
+        void animate(next, { opacity: [0, 1], scale: [1.015, 1] }, { duration: 0.45 })
+      }
       steps.forEach((step, i) => step.classList.toggle('is-active', i === index))
     }
     steps[0]?.classList.add('is-active')

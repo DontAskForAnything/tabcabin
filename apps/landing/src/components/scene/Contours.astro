@@ -1,14 +1,16 @@
 ---
 /**
  * A piece of a hiking map behind the self-hosting section: contour lines around a hill, every
- * fifth one heavier, a few heights, and the cabin at the top.
+ * fifth one heavier, a few heights, and the cabin at the top. The map starts 260 px above the
+ * section and fades in under the one before it and out before the next, so it never ends at a
+ * hard edge.
  */
 import { contour, contourPoint } from '../../lib/contours'
 import { round } from '../../lib/landscape'
 
 const hills = [
-  { cx: 1150, cy: 150, rings: 18, wobble: [0.22, 0.15] as [number, number], top: 1240 },
-  { cx: 250, cy: 700, rings: 8, wobble: [0.4, 0.3] as [number, number], top: 980 },
+  { cx: 1150, cy: 410, rings: 22, wobble: [0.22, 0.15] as [number, number], top: 1240 },
+  { cx: 250, cy: 960, rings: 9, wobble: [0.4, 0.3] as [number, number], top: 980 },
 ]
 const lines = hills.flatMap((hill) =>
   Array.from({ length: hill.rings }, (_, i) => ({
@@ -25,9 +27,9 @@ const labels = [5, 10, 15].map((level) => {
 ---
 
 <svg
-  class="contours pointer-events-none absolute inset-0 -z-10 h-full w-full"
-  viewBox="0 0 1440 800"
-  preserveAspectRatio="xMidYMid slice"
+  class="contours pointer-events-none absolute inset-x-0 -top-[260px] bottom-0 -z-10 h-[calc(100%+260px)] w-full"
+  viewBox="0 0 1440 1060"
+  preserveAspectRatio="xMaxYMin slice"
   aria-hidden="true"
 >
   {lines.map((line) => (
@@ -43,7 +45,7 @@ const labels = [5, 10, 15].map((level) => {
       {label.text}
     </text>
   ))}
-  <g transform={`translate(${big.cx} ${big.cy + 4})`}>
+  <g class="contours-mark" transform={`translate(${big.cx} ${big.cy + 4})`}>
     <path d="M-12 -10 0 -20 12 -10 V2 H-12Z" class="fill-accent"></path>
     <rect x="4.5" y="-22" width="4" height="9" class="fill-accent"></rect>
     <text x="20" y="1" class="fill-ink-3 text-[12px] font-semibold">
@@ -54,6 +56,18 @@ const labels = [5, 10, 15].map((level) => {
 
 <style>
   .contours {
-    mask-image: radial-gradient(ellipse 70% 90% at 78% 25%, #000 35%, transparent 100%);
+    mask-image:
+      linear-gradient(to bottom, transparent, #000 320px, #000 calc(100% - 220px), transparent),
+      radial-gradient(ellipse 75% 85% at 78% 40%, #000 35%, transparent 100%);
+    mask-composite: intersect;
+  }
+  /* On narrow screens the text runs over the map: keep the lines quieter and drop the marker. */
+  @media (max-width: 1023px) {
+    .contours {
+      opacity: 0.55;
+    }
+    .contours-mark {
+      display: none;
+    }
   }
 </style>

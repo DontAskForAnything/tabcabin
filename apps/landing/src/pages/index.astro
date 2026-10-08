@@ -1,7 +1,7 @@
 ---
 import ChaosToCalm from '../components/ChaosToCalm.astro'
 import Contours from '../components/scene/Contours.astro'
-import DemoVideo from '../components/DemoVideo.astro'
+import FilmSection from '../components/FilmSection.astro'
 import Footer from '../components/Footer.astro'
 import GitHubMark from '../components/GitHubMark.astro'
 import HeroDemo from '../components/HeroDemo.astro'
@@ -61,7 +61,7 @@ const filmSchema = {
   '@type': 'VideoObject',
   name: 'TabCabin in under a minute',
   description:
-    'A short film about the TabCabin browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync through your own server.',
+    'A short film about the TabCabin browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync between computers.',
   thumbnailUrl: new URL('/promo-poster.jpg', Astro.site).toString(),
   contentUrl: new URL('/promo.mp4', Astro.site).toString(),
   uploadDate: '2026-10-08',
@@ -70,8 +70,8 @@ const filmSchema = {
 ---
 
 <Layout
-  title="TabCabin — a calm, open-source tab manager with kanban boards and self-hosted sync"
-  description="A calm cabin for your tabs: TabCabin turns every new tab into kanban boards for tabs, links, notes and to-dos. A free, open-source Chrome extension that works offline, with optional sync through your own server."
+  title="TabCabin — a calm, open-source tab manager with kanban boards and sync"
+  description="A calm cabin for your tabs: TabCabin turns every new tab into kanban boards for tabs, links, notes and to-dos. A free, open-source Chrome extension that works offline, syncs your computers when you sign in, and can run on your own server."
   schema={[faqSchema, filmSchema]}
 >
   <Nav />
@@ -93,8 +93,8 @@ const filmSchema = {
           <p class="mx-auto mt-6 max-w-2xl text-[18px] leading-relaxed text-balance text-ink-2 sm:text-[20px]">
             An <span class="whitespace-nowrap">open-source</span> tab manager that turns every new
             tab into quiet boards for your tabs, links, notes and{' '}
-            <span class="whitespace-nowrap">to-dos</span>. Works offline, no account needed. Syncs
-            through a server you own.
+            <span class="whitespace-nowrap">to-dos</span>. Works offline, no account needed. Sign in
+            to sync your computers, or run your own server.
           </p>
           <div class="mt-9 flex flex-wrap items-center justify-center gap-3" data-reveal="0.2">
             <a
@@ -131,7 +131,7 @@ const filmSchema = {
 
     <StickyShowcase />
 
-    <DemoVideo />
+    <FilmSection />
 
     <!-- Feature grid -->
     <section id="features" class="scroll-mt-20 border-y border-line bg-panel/60 py-24">
@@ -161,19 +161,21 @@ const filmSchema = {
     </section>
 
     <!-- Self-host -->
-    <section id="self-host" class="relative isolate scroll-mt-20 overflow-hidden py-28">
+    <section id="self-host" class="relative scroll-mt-20 py-28">
       <Contours />
       <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-2">
-        <div data-reveal>
+        <div class="min-w-0" data-reveal>
           <span class="text-[13px] font-semibold tracking-[0.08em] text-accent-ink uppercase">
-            Self-hosted sync
+            Or run your own
           </span>
           <h2 class="mt-3 text-[34px] leading-tight font-semibold tracking-[-0.03em] sm:text-[42px]">
             Your server. Your data. Every browser in sync.
           </h2>
           <p class="mt-5 text-[16.5px] leading-relaxed text-ink-2">
-            One small container with an SQLite database. Caddy gets the HTTPS certificate, a backup
-            script keeps seven nightly copies, and changes reach your other computers in seconds.
+            Sync works as soon as you sign in. If you would rather keep everything on your own
+            machine, run the sync server yourself: one small container with an SQLite database.
+            Caddy gets the HTTPS certificate, a backup script keeps seven nightly copies, and you
+            build the extension with your server’s address.
           </p>
           <ul class="mt-6 flex flex-col gap-2.5 text-[15px] text-ink-2">
             {[
@@ -197,7 +199,7 @@ const filmSchema = {
             How self-hosting works <Icon name="ArrowRight" size={16} />
           </a>
         </div>
-        <div data-reveal="0.1">
+        <div class="min-w-0" data-reveal="0.1">
           <Terminal />
         </div>
       </div>

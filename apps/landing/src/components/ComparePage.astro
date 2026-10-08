@@ -3,7 +3,7 @@ import Footer from './Footer.astro'
 import Icon from './Icon.astro'
 import Nav from './Nav.astro'
 import Layout from '../layouts/Layout.astro'
-import { releases } from '../site'
+import { comparisons, releases } from '../site'
 
 type Cell = true | false | string
 
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const { name, slug, intro, about, rows, betterFit, whySwitch, moving } = Astro.props
-const title = `${name} alternative: TabCabin, an open-source tab manager with self-hosted sync`
+const title = `${name} alternative: TabCabin, a free, open-source tab manager you can self-host`
 const description = `Comparing ${name} and TabCabin: boards, notes, reminders, privacy and sync. TabCabin is a free, open-source ${name} alternative you can self-host.`
 ---
 
@@ -136,8 +136,12 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
       </section>
     </div>
 
-    <section class="mt-16 rounded-[20px] bg-panel p-8 ring-1 ring-line" data-reveal>
-      <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Moving your tabs over</h2>
+    <section
+      id="moving"
+      class="mt-16 scroll-mt-24 rounded-[20px] bg-panel p-8 ring-1 ring-line"
+      data-reveal
+    >
+      <h2 class="text-[24px] font-semibold tracking-[-0.02em]">Moving your tabs from {name}</h2>
       <ol class="mt-4 flex list-decimal flex-col gap-2.5 pl-5 text-[15.5px] leading-relaxed text-ink-2">
         {moving.map((step) => (
           <li set:html={step} />
@@ -153,6 +157,19 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
 
     <p class="mt-12 text-[15px] text-ink-2">
       See also:
+      {comparisons
+        .filter((other) => other.slug !== slug)
+        .map((other) => (
+          <>
+            <a
+              class="font-medium text-accent-ink hover:underline"
+              href={`/alternatives/${other.slug}`}
+            >
+              {other.name} alternative
+            </a>{' '}
+            ·{' '}
+          </>
+        ))}
       <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">
         all comparisons
       </a>{' '}

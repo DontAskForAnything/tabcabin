@@ -90,8 +90,9 @@ const mists = [
 ]
 ---
 
+<!-- Overflow stays visible: on wide screens the sun and peaks reach above the box (behind the text). -->
 <svg
-  class="block h-full w-full"
+  class="block h-full w-full overflow-visible"
   viewBox={`0 0 ${width} ${height}`}
   preserveAspectRatio="xMidYMax slice"
   aria-hidden="true"

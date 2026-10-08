@@ -10,8 +10,12 @@ const tools = [
     'onetab',
     'Collapse tabs into a list — or give them a board with notes and reminders.',
   ],
-  ['Toby', 'toby', 'Collections of tabs, plus kanban boards and sync through your own server.'],
-  ['Workona', 'workona', 'Workspaces without an account, limits or a vendor cloud.'],
+  [
+    'Toby',
+    'toby',
+    'Collections of tabs, plus kanban boards, notes and reminders, without an account.',
+  ],
+  ['Workona', 'workona', 'Workspaces without an account or limits, free and open source.'],
 ]
 ---
 
@@ -31,7 +35,7 @@ const tools = [
     </h1>
     <p class="mt-6 max-w-2xl text-[18px] leading-relaxed text-ink-2" data-reveal="0.05">
       TabCabin is a free, open-source tab manager with kanban boards, notes, reminders and optional
-      self-hosted sync. Here is how it stacks up against tools you may already use.
+      sync you can also host yourself. Here is how it stacks up against tools you may already use.
     </p>
     <div class="mt-12 grid gap-4 sm:grid-cols-3">
       {tools.map(([name, slug, text], index) => (

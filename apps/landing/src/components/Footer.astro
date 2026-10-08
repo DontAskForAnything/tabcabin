@@ -1,5 +1,5 @@
 ---
-import { repo, selfHostingGuide } from '../site'
+import { changelog, comparisons, repo, selfHostingGuide } from '../site'
 import Logo from './Logo.astro'
 import Etching from './scene/Etching.astro'
 
@@ -8,35 +8,81 @@ interface Props {
   scenery?: boolean
 }
 const { scenery = true } = Astro.props
+
+// Every page links to every guide and comparison, so readers (and search engines) can find them.
+const columns: [string, [string, string][]][] = [
+  [
+    'Product',
+    [
+      ['Features', '/#features'],
+      ['Self-host', '/#self-host'],
+      ['Questions', '/#faq'],
+      ['Privacy', '/privacy'],
+    ],
+  ],
+  [
+    'Compare',
+    [
+      ...comparisons.map(({ name, slug }): [string, string] => [
+        `${name} alternative`,
+        `/alternatives/${slug}`,
+      ]),
+      ['All comparisons', '/alternatives/'],
+    ],
+  ],
+  [
+    'Guides',
+    [
+      ...comparisons.map(({ name, slug }): [string, string] => [
+        `Moving from ${name}`,
+        `/alternatives/${slug}#moving`,
+      ]),
+      ['Self-hosted tab manager', '/self-hosted-tab-manager'],
+    ],
+  ],
+  [
+    'Project',
+    [
+      ['GitHub', repo],
+      ['Self-hosting guide', selfHostingGuide],
+      ['Changelog', changelog],
+      ['Licenses', '/third-party-licenses.txt'],
+    ],
+  ],
+]
 ---
 
 <footer>
   {scenery && (
-    <div class="h-[clamp(110px,15.6vw,200px)]">
+    <div class="h-[clamp(110px,15.6vw,200px)] overflow-x-clip">
       <Etching />
     </div>
   )}
   <div class="border-t border-line">
-    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 text-[14px] text-ink-3 sm:flex-row sm:items-center">
-      <div class="flex items-center gap-2.5 font-display text-[16px] font-bold tracking-[-0.02em] text-ink">
-        <Logo size={24} />
-        TabCabin
+    <div class="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-5 pt-12 pb-10 text-[14px] text-ink-3 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
+      <div class="col-span-2 flex flex-col gap-3 lg:col-span-1">
+        <a
+          href="/"
+          class="flex items-center gap-2.5 font-display text-[17px] font-bold tracking-[-0.02em] text-ink"
+        >
+          <Logo size={26} />
+          TabCabin
+        </a>
+        <p class="max-w-[220px] leading-relaxed">A calm cabin for your tabs.</p>
+        <p>Open source under the MIT license · © 2026 Michał</p>
       </div>
-      <p class="sm:flex-1">Open source under the MIT license · © 2026 Michał</p>
-      <div class="flex gap-5">
-        <a href={repo} class="hover:text-ink">
-          GitHub
-        </a>
-        <a href={selfHostingGuide} class="hover:text-ink">
-          Self-hosting
-        </a>
-        <a href="/privacy" class="hover:text-ink">
-          Privacy
-        </a>
-        <a href="/third-party-licenses.txt" class="hover:text-ink">
-          Licenses
-        </a>
-      </div>
+      {columns.map(([title, links]) => (
+        <nav aria-label={title} class="flex flex-col gap-2.5">
+          <h2 class="font-sans text-[12.5px] font-semibold tracking-[0.08em] text-ink-2 uppercase">
+            {title}
+          </h2>
+          {links.map(([label, href]) => (
+            <a href={href} class="w-fit hover:text-ink">
+              {label}
+            </a>
+          ))}
+        </nav>
+      ))}
     </div>
   </div>
 </footer>

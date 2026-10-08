@@ -35,6 +35,12 @@ Nothing to do when updating — existing data moves over by itself:
 - The background grid, glows, shimmering headline and cursor spotlights are gone
 - The top bar is clear over the page and gets its background once you scroll; it now stays at the
   top on long pages
+- "See it in under a minute" plays the film (muted until you turn the sound on) instead of the
+  screen recording, and the screenshots next to the features sit in a Chrome window that follows
+  the page shown
+- The wording on the website is clearer about sync: it works as soon as you sign in, and running
+  your own server is an option
+- The footer links every comparison and every "moving from" guide
 
 ### Added
 

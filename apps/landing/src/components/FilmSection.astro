@@ -1,8 +1,5 @@
 ---
-import { getImage } from 'astro:assets'
-import poster from '../../../../docs/screenshots/board-light.png'
-
-const posterImage = await getImage({ src: poster, width: 1280, format: 'webp' })
+/** The promo film inline: it plays muted while on screen; the controls turn the music on. */
 ---
 
 <section class="py-24" id="demo">
@@ -12,25 +9,25 @@ const posterImage = await getImage({ src: poster, width: 1280, format: 'webp' })
         See it in under a minute
       </h2>
       <p class="mt-4 text-[17px] text-ink-2" data-reveal="0.05">
-        A real recording of the extension: saving a tab, adding a{' '}
-        <span class="whitespace-nowrap">to-do</span>, searching, the collections view, reminders and
-        the dark theme.
+        Dragging tabs into groups, saving any page with a note,{' '}
+        <span class="whitespace-nowrap">to-dos</span>, search, collections, reminders, the dark
+        theme and sync. Turn the sound on for the music.
       </p>
     </div>
     <div
-      class="mt-12 overflow-hidden rounded-[22px] bg-card shadow-pop ring-1 ring-line"
+      class="mt-12 overflow-hidden rounded-[22px] bg-black shadow-pop ring-1 ring-line"
       data-reveal="0.1"
     >
       <video
-        class="block aspect-[16/10] w-full"
-        src="/demo.webm"
-        poster={posterImage.src}
+        class="block aspect-video w-full"
+        src="/promo.mp4"
+        poster="/promo-poster.jpg"
         muted
         loop
         playsinline
         controls
         preload="none"
-        aria-label="Demo of TabCabin"
+        aria-label="TabCabin film"
         data-autoplay-video
       ></video>
     </div>
@@ -38,7 +35,7 @@ const posterImage = await getImage({ src: poster, width: 1280, format: 'webp' })
 </section>
 
 <script>
-  // Load and play only while the video is on screen (and never when motion is reduced).
+  // Load and play only while the film is on screen (and never when motion is reduced).
   const video = document.querySelector<HTMLVideoElement>('[data-autoplay-video]')
   if (video && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     new IntersectionObserver(

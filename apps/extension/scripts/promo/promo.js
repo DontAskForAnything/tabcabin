@@ -17,7 +17,21 @@ const random = () => {
   return seed / 2147483647
 }
 
-const LOGO = `<svg viewBox="0 0 128 128" width="100%" height="100%"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7f71f2"/><stop offset="1" stop-color="#5040d6"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="30" fill="url(#lg)"/><g transform="translate(24 27) scale(3.333)" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V11a9 9 0 0 1 18 0v9"/><path d="M7 20v-6h10v6"/><path d="M7 17h10"/></g></svg>`
+/** The cabin logo; `id` marks the parts that the intro draws one by one. */
+const cabin = ({ tile = '#1F4A3A', house = '#F4EAD5', id = '' } = {}) =>
+  `<svg viewBox="0 0 128 128" width="100%" height="100%" ${id ? `id="${id}"` : ''}>` +
+  `<rect class="logo-tile" width="128" height="128" rx="30" fill="${tile}"/>` +
+  `<path class="logo-chimney" d="M79 45 V31 a3 3 0 0 1 3 -3 H87 a3 3 0 0 1 3 3 V53 Z" fill="${house}"/>` +
+  `<path class="logo-roof" pathLength="1" d="M24 64 L64 30 L104 64" fill="none" stroke="${house}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>` +
+  `<path class="logo-tab3" d="M52 77 V72 a3 3 0 0 1 3 -3 H73 a3 3 0 0 1 3 3 V77 Z" fill="${house}"/>` +
+  `<path class="logo-tab2" d="M47 85 V79 a4 4 0 0 1 4 -4 H77 a4 4 0 0 1 4 4 V85 Z" fill="${house}" stroke="${tile}" stroke-width="3.5"/>` +
+  `<path class="logo-tab1" d="M42 100 V92 a8 8 0 0 1 8 -8 H78 a8 8 0 0 1 8 8 V100 Z" fill="${house}" stroke="${tile}" stroke-width="3.5"/>` +
+  `<path class="logo-walls" pathLength="1" d="M34 104 V58 M94 104 V58" fill="none" stroke="${house}" stroke-width="9" stroke-linecap="round"/>` +
+  `<path class="logo-floor" pathLength="1" d="M28 104 H100" fill="none" stroke="${house}" stroke-width="9" stroke-linecap="round"/>` +
+  `</svg>`
+const LOGO = cabin()
+/** On the pine background the cream tile stands out (variant B of the brand guide). */
+const CREAM_LOGO = { tile: '#F4EAD5', house: '#1F4A3A' }
 
 const stage = document.getElementById('stage')
 const el = (html) => {
@@ -50,9 +64,9 @@ const revealWords = (node, t, start, stagger = 0.11, duration = 0.55) =>
 // ---------- background ----------
 
 const orbs = [
-  ['#7c6cf6', 620, 0.55],
-  ['#b06ab3', 520, 0.35],
-  ['#2fb6a0', 480, 0.22],
+  ['#2f6b52', 620, 0.55],
+  ['#6db592', 520, 0.22],
+  ['#f4ead5', 480, 0.1],
 ].map(([color, size, alpha]) => {
   const node = document.createElement('div')
   node.className = 'orb'
@@ -112,22 +126,23 @@ const chips = TABS.map(([letter, color, title, group], i) => {
   }
 })
 const headline = el(
-  `<div class="big layer" style="top:410px;font-size:118px;text-shadow:0 10px 50px rgb(10 5 40 / .7)">${words('Forty tabs open.', 118)}</div>`,
+  `<div class="big layer" style="top:410px;font-size:124px;text-shadow:0 10px 50px rgb(2 12 8 / .7)">${words('40 tabs open?', 124)}</div>`,
 )
 const again = el(
-  `<div class="big layer" style="top:560px;font-size:118px;color:#c9c1ff;text-shadow:0 10px 50px rgb(10 5 40 / .7)">${words('Again.', 118)}</div>`,
+  `<div class="big layer" style="top:565px;font-size:104px;color:#f4ead5;text-shadow:0 10px 50px rgb(2 12 8 / .7)">${words('Give them a cabin.', 104)}</div>`,
 )
 
 // ---------- scene 2: logo ----------
 
 const logoTile = el(
-  `<div class="layer" style="left:880px;top:300px;width:160px;height:160px">${LOGO}</div>`,
+  `<div class="layer" style="left:880px;top:300px;width:160px;height:160px;filter:drop-shadow(0 24px 40px rgb(2 12 8 / .5))">${cabin({ ...CREAM_LOGO, id: 'build' })}</div>`,
 )
+const part = (name) => logoTile.querySelector(`.logo-${name}`)
 const logoName = el(
-  `<div class="big layer" style="top:500px;font-size:120px">${words('TabCabin', 120)}</div>`,
+  `<div class="big layer" style="top:500px;font-size:124px">${words('TabCabin', 124)}</div>`,
 )
 const tagline = el(
-  `<div class="big layer" style="top:660px;font-size:46px;font-weight:500;letter-spacing:-0.02em;color:rgb(255 255 255 / .82)">${words('Your tabs, parked calmly.', 46)}</div>`,
+  `<div class="big layer plain" style="top:660px;font-size:46px;font-weight:500;color:rgb(244 234 213 / .85)">${words('A calm cabin for your tabs.', 46)}</div>`,
 )
 
 const logoPill = el(
@@ -205,7 +220,7 @@ const SCENES = [
     mark: 'drag',
     until: 'todo',
     start: 3 * BAR,
-    title: 'Drag tabs into groups',
+    title: 'Drag tabs into groups.',
     sub: 'Saved and closed in one move.',
   },
   {
@@ -213,29 +228,29 @@ const SCENES = [
     until: 'capture-end',
     page: 'article',
     start: 5 * BAR,
-    title: 'Save any page you are on',
-    sub: '<kbd>Ctrl Shift S</kbd> adds a note, a group and a reminder.',
+    title: 'Save any page in one click.',
+    sub: 'Or press <kbd>Ctrl Shift S</kbd> to add a note, a group and a reminder.',
     speed: 2.3,
   },
   {
     mark: 'todo',
     until: 'search',
     start: 7 * BAR,
-    title: 'Notes and to-dos next to your links',
+    title: 'Notes and to-dos next to your links.',
     sub: 'Type <kbd>/todo</kbd> and press Enter.',
   },
   {
     mark: 'search',
     until: 'collections',
     start: 9 * BAR,
-    title: 'Find anything in a keystroke',
-    sub: '<kbd>Ctrl K</kbd> searches every workspace, open tab and bookmark.',
+    title: 'Find anything with <kbd>⌘K</kbd>',
+    sub: 'Or <kbd>Ctrl K</kbd>: every workspace, open tab and bookmark.',
   },
   {
     mark: 'collections',
     until: 'reminders',
     start: 11 * BAR,
-    title: 'Boards or collections',
+    title: 'Boards or collections.',
     sub: 'Pick the view that fits each category.',
     speed: 1.6,
   },
@@ -243,15 +258,15 @@ const SCENES = [
     mark: 'reminders',
     until: 'dark',
     start: 13 * BAR,
-    title: 'Reminders that bring you back',
+    title: 'Reminders when it matters.',
     sub: 'One-time, weekly or monthly — with notifications.',
   },
   {
     mark: 'dark',
     until: 'end',
     start: 15 * BAR,
-    title: 'Easy on the eyes',
-    sub: 'Light, dark and compact layouts.',
+    title: 'Light and dark.',
+    sub: 'And a compact layout for smaller screens.',
   },
 ].map((scene, i) => ({ ...scene, n: String(i + 1).padStart(2, '0') }))
 const FOOTAGE_START = SCENES[0].start
@@ -298,10 +313,10 @@ async function showFrame(scene, local, duration) {
 // ---------- scene 9: sync ----------
 
 const syncTitle = el(
-  `<div class="big layer" style="top:120px;font-size:76px">${words('Sync through your own server', 76)}</div>`,
+  `<div class="big layer" style="top:120px;font-size:80px">${words('In sync on all your computers.', 80)}</div>`,
 )
 const syncSub = el(
-  `<div class="big layer" style="top:228px;font-size:30px;font-weight:500;letter-spacing:-0.01em;color:rgb(255 255 255 / .75)">Docker · SQLite · automatic HTTPS — no vendor cloud.</div>`,
+  `<div class="big layer plain" style="top:232px;font-size:30px;font-weight:500;color:rgb(244 234 213 / .78)">Sign in with Google — or run the server yourself.</div>`,
 )
 const left = el(
   `<div class="window layer" style="left:180px;top:356px"><img src="/shots/board-light.png" alt=""></div>`,
@@ -312,44 +327,44 @@ const right = el(
 const lineL = el(`<div class="line layer" style="left:800px;width:80px"></div>`)
 const lineR = el(`<div class="line layer" style="left:1040px;width:80px"></div>`)
 const server = el(
-  `<div id="server" class="layer"><svg width="74" height="74" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></div>`,
+  `<div id="server" class="layer"><svg width="74" height="74" viewBox="0 0 24 24" fill="none" stroke="#1f4a3a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></div>`,
 )
 const serverLabel = el(
-  `<div class="big layer" style="top:660px;font-size:22px;font-weight:500;color:rgb(255 255 255 / .7)">tabs.your-domain.com</div>`,
+  `<div class="big layer plain" style="top:660px;font-size:22px;font-weight:500;color:rgb(244 234 213 / .7)">Your sync server</div>`,
 )
 const labelL = el(
-  `<div class="layer" style="left:180px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(255 255 255 / .7)">Laptop</div>`,
+  `<div class="layer" style="left:180px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(244 234 213 / .7)">Laptop</div>`,
 )
 const labelR = el(
-  `<div class="layer" style="left:1120px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(255 255 255 / .7)">Desktop</div>`,
+  `<div class="layer" style="left:1120px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(244 234 213 / .7)">Desktop</div>`,
 )
 const packets = [0, 1, 2].map(() => el(`<div class="packet layer" style="left:0;top:0"></div>`))
 const synced = el(
-  `<div class="layer pill" style="left:1290px;top:310px;font-size:20px;padding:10px 18px;background:#34d399;color:#04291c;border:0">✓ Synced</div>`,
+  `<div class="layer pill" style="left:1290px;top:310px;font-size:20px;padding:10px 18px;background:#6db592;color:#0f1110;border:0">✓ Synced</div>`,
 )
 
 // ---------- scene 10: values ----------
 
-const values = ['No account.', 'No tracking.', 'Open source.'].map((text, i) =>
+const values = ['No account needed.', 'No tracking.', 'Open source.'].map((text, i) =>
   el(
-    `<div class="big layer" style="top:${300 + i * 150}px;font-size:110px;${i === 2 ? 'color:#c9c1ff' : ''}">${words(text, 110)}</div>`,
+    `<div class="big layer" style="top:${300 + i * 150}px;font-size:110px;${i === 2 ? 'color:#f4ead5' : ''}">${words(text, 110)}</div>`,
   ),
 )
 
 // ---------- scene 11: end card ----------
 
 const endLogo = el(
-  `<div class="layer" style="left:890px;top:250px;width:140px;height:140px">${LOGO}</div>`,
+  `<div class="layer" style="left:890px;top:250px;width:140px;height:140px;filter:drop-shadow(0 24px 40px rgb(2 12 8 / .5))">${cabin(CREAM_LOGO)}</div>`,
 )
-const endName = el(`<div class="big layer" style="top:420px;font-size:110px">TabCabin</div>`)
+const endName = el(`<div class="big layer" style="top:420px;font-size:116px">TabCabin</div>`)
 const endTag = el(
-  `<div class="big layer" style="top:560px;font-size:42px;font-weight:500;letter-spacing:-0.02em;color:rgb(255 255 255 / .82)">Your tabs, parked calmly.</div>`,
+  `<div class="big layer plain" style="top:560px;font-size:42px;font-weight:500;color:rgb(244 234 213 / .85)">A calm cabin for your tabs.</div>`,
 )
 const endPill = el(
   `<div class="layer" style="left:0;right:0;top:665px;text-align:center"><span class="pill">Free browser extension · Chrome · Edge · Brave</span></div>`,
 )
 const endUrl = el(
-  `<div class="big layer" style="top:790px;font-size:26px;font-weight:500;color:rgb(255 255 255 / .6)">github.com/DontAskForAnything/tabcabin</div>`,
+  `<div class="big layer plain" style="top:790px;font-size:26px;font-weight:500;color:rgb(244 234 213 / .6)">github.com/DontAskForAnything/tabcabin</div>`,
 )
 
 // ---------- timeline ----------
@@ -394,19 +409,40 @@ window.seek = async (t) => {
   set(headline, { o: 1 - headOut, y: -40 * headOut })
   set(again, { o: 1 - headOut, y: -40 * headOut })
 
-  // Scene 2: logo.
-  const logoIn = easeBack(prog(t, 5.0, 5.6))
+  // Scene 2: the tabs fly into a tile and the cabin is built: roof, floor and walls are drawn,
+  // the three tabs slide in from the front to the back, and the chimney goes up last.
+  const logoIn = easeBack(prog(t, 4.95, 5.45))
   const logoOut = easeInOut(prog(t, 6.75, 7.25))
   set(logoTile, {
     s: logoIn * (1 - 0.3 * logoOut),
-    o: prog(t, 5.0, 5.2) * (1 - logoOut),
+    o: prog(t, 4.95, 5.1) * (1 - logoOut),
     y: -120 * logoOut,
   })
-  revealWords(logoName, t, 5.3, 0.1, 0.5)
-  revealWords(tagline, t, 5.75, 0.06, 0.5)
-  set(logoName, { o: t < 5.2 ? 0 : 1 - logoOut, y: -120 * logoOut })
-  set(tagline, { o: t < 5.6 ? 0 : 1 - logoOut, y: -120 * logoOut })
-  const pillIn = easeOut(prog(t, 5.95, 6.35))
+  const draw = (name, from, to) => {
+    const p = easeInOut(prog(t, from, to))
+    const node = part(name)
+    node.style.strokeDasharray = '1 1'
+    node.style.strokeDashoffset = String(1 - p)
+    node.style.opacity = p > 0 ? '1' : '0'
+  }
+  draw('roof', 5.05, 5.4)
+  draw('floor', 5.15, 5.4)
+  draw('walls', 5.25, 5.55)
+  ;['tab1', 'tab2', 'tab3'].forEach((name, i) => {
+    const from = 5.45 + i * 0.1
+    const node = part(name)
+    node.style.opacity = String(prog(t, from, from + 0.08))
+    node.style.transform = `translateY(${(1 - easeBack(prog(t, from, from + 0.3))) * 24}px)`
+  })
+  const chimney = part('chimney')
+  chimney.style.transformOrigin = '50% 100%'
+  chimney.style.transform = `scaleY(${easeBack(prog(t, 5.85, 6.1))})`
+  chimney.style.opacity = t < 5.85 ? '0' : '1'
+  revealWords(logoName, t, 5.75, 0.1, 0.45)
+  revealWords(tagline, t, 6.0, 0.05, 0.45)
+  set(logoName, { o: t < 5.7 ? 0 : 1 - logoOut, y: -120 * logoOut })
+  set(tagline, { o: t < 5.95 ? 0 : 1 - logoOut, y: -120 * logoOut })
+  const pillIn = easeOut(prog(t, 6.2, 6.5))
   set(logoPill, { o: pillIn * (1 - logoOut), y: (1 - pillIn) * 20 - 120 * logoOut })
 
   // Footage scenes in a browser window with captions.

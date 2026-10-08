@@ -7,8 +7,10 @@ import { PROMO_DIR } from './dir'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '../../../..')
-const font = createRequire(join(root, 'packages/ui/package.json')).resolve(
-  '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2',
+const fonts = createRequire(join(root, 'packages/ui/package.json'))
+const font = fonts.resolve('@fontsource-variable/geist/files/geist-latin-wght-normal.woff2')
+const display = fonts.resolve(
+  '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2',
 )
 const FPS = 30
 
@@ -16,6 +18,7 @@ const files: Record<string, () => Buffer> = {
   '/promo.html': () => readFileSync(join(here, 'promo.html')),
   '/promo.js': () => readFileSync(join(here, 'promo.js')),
   '/font/geist.woff2': () => readFileSync(font),
+  '/font/bricolage.woff2': () => readFileSync(display),
 }
 const types: Record<string, string> = {
   html: 'text/html',

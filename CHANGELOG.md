@@ -41,6 +41,9 @@ Nothing to do when updating — existing data moves over by itself:
 - The wording on the website is clearer about sync: it works as soon as you sign in, and running
   your own server is an option
 - The footer links every comparison and every "moving from" guide
+- The film is set in the forest valley from the website: morning at the start, the sun sets
+  during the dark-theme scene, and it ends at night by the cabin. Sound effects are cut to the
+  picture (tabs landing, the logo, scene changes, sync, the end card), with a quiet wind and fire
 
 ### Added
 

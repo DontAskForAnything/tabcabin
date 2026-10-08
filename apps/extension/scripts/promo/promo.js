@@ -61,20 +61,134 @@ const revealWords = (node, t, start, stagger = 0.11, duration = 0.55) =>
     w.style.filter = p < 1 ? `blur(${(1 - p) * 10}px)` : ''
   })
 
-// ---------- background ----------
+// ---------- background: a day in the valley ----------
 
-const orbs = [
-  ['#2f6b52', 620, 0.55],
-  ['#6db592', 520, 0.22],
-  ['#f4ead5', 480, 0.1],
-].map(([color, size, alpha]) => {
-  const node = document.createElement('div')
-  node.className = 'orb'
-  // A soft gradient instead of a blur filter: it looks the same and renders far faster.
-  node.style.cssText += `width:${size}px;height:${size}px;background:radial-gradient(closest-side,${color},transparent);opacity:${alpha * 1.6}`
-  document.getElementById('orbs').append(node)
-  return node
-})
+/** Colours for morning (n = 0) and night (n = 1), the same as on the website. */
+const PALETTE = {
+  'sky-top': ['#f2eee5', '#0b0e0c'],
+  'sky-bottom': ['#eedfc2', '#17281f'],
+  sun: ['#e9d6ae', '#e9d6ae'],
+  mountain: ['#d6d4bf', '#1e3129'],
+  far: ['#b8bdaa', '#182920'],
+  middle: ['#94a28f', '#13211a'],
+  near: ['#637d6c', '#0f1a14'],
+  front: ['#1f4a3a', '#0a120e'],
+  cabin: ['#1f4a3a', '#0e1813'],
+  roof: ['#143326', '#1b2e25'],
+  glass: ['#c9d3c6', '#f4ead5'],
+  smoke: ['#7e907f', '#cfc8b6'],
+  ink: ['#0f1110', '#faf6ee'],
+  'ink-2': ['#3a3f3c', '#cfc8b6'],
+  'accent-ink': ['#1f4a3a', '#8fcbad'],
+  'chrome-frame': ['#dee1e6', '#1f2023'],
+  'chrome-surface': ['#ffffff', '#35363a'],
+  'chrome-omnibox': ['#f1f3f4', '#202124'],
+  'chrome-text': ['#1f1f1f', '#e8eaed'],
+  'chrome-icon': ['#5f6368', '#c4c7c5'],
+  'chrome-line': ['#d3d6da', '#2a2b2e'],
+}
+/** Text and the things behind text switch at once in the middle of the sunset (the caption fades
+    out around it), so captions never turn grey on grey. */
+const TEXT = new Set(['ink', 'ink-2', 'accent-ink', 'veil', 'soft', 'soft-line', 'glow'])
+/** Translucent colours: [r, g, b, alpha] by day and at night. */
+const SOFT = {
+  veil: [
+    [242, 238, 229, 0.9],
+    [11, 16, 13, 0.78],
+  ],
+  soft: [
+    [250, 246, 238, 0.85],
+    [244, 234, 213, 0.12],
+  ],
+  'soft-line': [
+    [31, 74, 58, 0.2],
+    [244, 234, 213, 0.22],
+  ],
+  glow: [
+    [242, 238, 229, 0.95],
+    [2, 12, 8, 0.7],
+  ],
+}
+const hex = (color) => [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16))
+const mixHex = (a, b, n) => {
+  const [x, y] = [hex(a), hex(b)]
+  return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], n))).join(' ')})`
+}
+/** Morning until the "Light and dark" scene, then the sun sets during it. */
+const nightAt = (t) => easeInOut(prog(t, 36.6, 40.4))
+const root = document.documentElement
+function paint(n) {
+  const flip = prog(n, 0.49, 0.51)
+  const at = (name) => (TEXT.has(name) ? flip : n)
+  for (const [name, [day, night]] of Object.entries(PALETTE))
+    root.style.setProperty(`--${name}`, mixHex(day, night, at(name)))
+  for (const [name, [day, night]] of Object.entries(SOFT)) {
+    const [r, g, b, a] = day.map((v, i) => lerp(v, night[i], at(name)))
+    root.style.setProperty(
+      `--${name}`,
+      `rgb(${Math.round(r)} ${Math.round(g)} ${Math.round(b)} / ${a.toFixed(3)})`,
+    )
+  }
+}
+
+/** The valley drawing (see valley.ts), loaded before the first frame. */
+const valley = { node: document.getElementById('valley'), layers: [], puffs: [], flies: [] }
+async function loadValley() {
+  valley.node.innerHTML = await (await fetch('/valley.svg')).text()
+  const svg = valley.node.querySelector('svg')
+  valley.layers = [...svg.querySelectorAll('[data-depth]')]
+  valley.puffs = [...svg.querySelectorAll('.v-puff')]
+  valley.flies = [...svg.querySelectorAll('.v-fly')]
+  for (const id of ['stars', 'moon', 'sun', 'window', 'window-glow'])
+    valley[id] = svg.getElementById(`v-${id}`)
+  valley.cabin = { x: Number(svg.dataset.cabinX), y: Number(svg.dataset.cabinY) }
+}
+/** Smoke that curls up from a chimney: `count` puffs, one cycle every `period` seconds. */
+const puffAt = (t, k, count, period) => {
+  const p = (t / period + k / count) % 1
+  return { p, o: p < 0.15 ? (p / 0.15) * 0.45 : 0.45 * (1 - (p - 0.15) / 0.85) }
+}
+function moveValley(t, n, footage) {
+  // Camera: a slow push towards the cabin, closer during the app scenes, and back out at night.
+  const back = easeInOut(prog(t, 48, 51))
+  const zoom =
+    1 + 0.05 * prog(t, 0, 4.6) + 0.14 * easeInOut(prog(t, 4.6, 7.2)) + 0.08 * prog(t, 7.2, 48)
+  const scale = lerp(zoom, 1.04, back)
+  const svg = valley.node.querySelector('svg')
+  svg.style.transformOrigin = `${valley.cabin.x}px ${valley.cabin.y}px`
+  svg.style.transform = `scale(${scale.toFixed(4)})`
+  valley.layers.forEach((layer) => {
+    const depth = Number(layer.dataset.depth)
+    layer.setAttribute(
+      'transform',
+      `translate(${(-t * 1.1 * depth).toFixed(1)} ${(footage * 30 * depth).toFixed(1)})`,
+    )
+  })
+  valley.node.style.filter = footage > 0.01 ? `blur(${(footage * 7).toFixed(2)}px)` : ''
+  document.getElementById('veil').style.opacity = String(footage)
+  valley.sun.setAttribute('transform', `translate(0 ${(n * 420).toFixed(1)})`)
+  valley.moon.setAttribute('transform', `translate(0 ${((1 - n) * 220).toFixed(1)})`)
+  valley.moon.style.opacity = String(n)
+  valley.stars.style.opacity = String(n)
+  valley.window.style.opacity = String(n)
+  valley['window-glow'].style.opacity = String(n)
+  valley.puffs.forEach((puff, k) => {
+    const { p, o } = puffAt(t, k, valley.puffs.length, 6)
+    puff.setAttribute(
+      'transform',
+      `translate(${(-p * 32 + Math.sin(p * 6 + k) * 3).toFixed(1)} ${(-p * 72).toFixed(1)}) scale(${(0.6 + 2.6 * p).toFixed(2)})`,
+    )
+    puff.style.transformOrigin = '12.5px -50px'
+    puff.style.opacity = o.toFixed(3)
+  })
+  valley.flies.forEach((fly) => {
+    const phase = Number(fly.dataset.phase)
+    const x = Number(fly.dataset.x) + Math.sin(t * 0.9 + phase) * 14
+    const y = Number(fly.dataset.y) + Math.cos(t * 0.7 + phase) * 10
+    fly.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`)
+    fly.style.opacity = (n * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 2.4 + phase)))).toFixed(3)
+  })
+}
 
 // ---------- scene 1: chaos ----------
 
@@ -126,23 +240,23 @@ const chips = TABS.map(([letter, color, title, group], i) => {
   }
 })
 const headline = el(
-  `<div class="big layer" style="top:410px;font-size:124px;text-shadow:0 10px 50px rgb(2 12 8 / .7)">${words('40 tabs open?', 124)}</div>`,
+  `<div class="big layer" style="top:410px;font-size:124px;text-shadow:0 8px 44px var(--glow)">${words('40 tabs open?', 124)}</div>`,
 )
 const again = el(
-  `<div class="big layer" style="top:565px;font-size:104px;color:#f4ead5;text-shadow:0 10px 50px rgb(2 12 8 / .7)">${words('Give them a cabin.', 104)}</div>`,
+  `<div class="big layer" style="top:565px;font-size:104px;color:var(--accent-ink);text-shadow:0 8px 44px var(--glow)">${words('Give them a cabin.', 104)}</div>`,
 )
 
 // ---------- scene 2: logo ----------
 
 const logoTile = el(
-  `<div class="layer" style="left:880px;top:300px;width:160px;height:160px;filter:drop-shadow(0 24px 40px rgb(2 12 8 / .5))">${cabin({ ...CREAM_LOGO, id: 'build' })}</div>`,
+  `<div class="layer" style="left:880px;top:300px;width:160px;height:160px;filter:drop-shadow(0 24px 40px rgb(31 74 58 / .35))">${cabin({ id: 'build' })}</div>`,
 )
 const part = (name) => logoTile.querySelector(`.logo-${name}`)
 const logoName = el(
   `<div class="big layer" style="top:500px;font-size:124px">${words('TabCabin', 124)}</div>`,
 )
 const tagline = el(
-  `<div class="big layer plain" style="top:660px;font-size:46px;font-weight:500;color:rgb(244 234 213 / .85)">${words('A calm cabin for your tabs.', 46)}</div>`,
+  `<div class="big layer plain" style="top:660px;font-size:46px;font-weight:500;color:var(--ink-2)">${words('A calm cabin for your tabs.', 46)}</div>`,
 )
 
 const logoPill = el(
@@ -152,18 +266,18 @@ const logoPill = el(
 // ---------- scenes 3–9: footage in a browser window ----------
 
 const ICON = {
-  back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4c7c5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+  back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
   forward:
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6f7378" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
   reload:
-    '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4c7c5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>',
+    '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>',
   puzzle:
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4c7c5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 4.6a2 2 0 0 0-3.4 1.4V7H8a1 1 0 0 0-1 1v4H6a2 2 0 1 0 0 4h1v4a1 1 0 0 0 1 1h4v-1a2 2 0 1 1 4 0v1h4a1 1 0 0 0 1-1v-4h-1a2 2 0 1 1 0-4h1V8a1 1 0 0 0-1-1h-4V6a2 2 0 0 0-.6-1.4z"/></svg>',
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 4.6a2 2 0 0 0-3.4 1.4V7H8a1 1 0 0 0-1 1v4H6a2 2 0 1 0 0 4h1v4a1 1 0 0 0 1 1h4v-1a2 2 0 1 1 4 0v1h4a1 1 0 0 0 1-1v-4h-1a2 2 0 1 1 0-4h1V8a1 1 0 0 0-1-1h-4V6a2 2 0 0 0-.6-1.4z"/></svg>',
   globe:
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4c7c5" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  tune: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c4c7c5" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  tune: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
   search:
-    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>',
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>',
 }
 const browser = el(
   `<div id="browser" class="layer">
@@ -316,7 +430,7 @@ const syncTitle = el(
   `<div class="big layer" style="top:120px;font-size:80px">${words('In sync on all your computers.', 80)}</div>`,
 )
 const syncSub = el(
-  `<div class="big layer plain" style="top:232px;font-size:30px;font-weight:500;color:rgb(244 234 213 / .78)">Sign in with Google — or run the server yourself.</div>`,
+  `<div class="big layer plain" style="top:232px;font-size:30px;font-weight:500;color:var(--ink-2)">Sign in with Google — or run the server yourself.</div>`,
 )
 const left = el(
   `<div class="window layer" style="left:180px;top:356px"><img src="/shots/board-light.png" alt=""></div>`,
@@ -330,13 +444,13 @@ const server = el(
   `<div id="server" class="layer"><svg width="74" height="74" viewBox="0 0 24 24" fill="none" stroke="#1f4a3a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></div>`,
 )
 const serverLabel = el(
-  `<div class="big layer plain" style="top:660px;font-size:22px;font-weight:500;color:rgb(244 234 213 / .7)">Your sync server</div>`,
+  `<div class="big layer plain" style="top:660px;font-size:22px;font-weight:500;color:var(--ink-2)">Sync server</div>`,
 )
 const labelL = el(
-  `<div class="layer" style="left:180px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(244 234 213 / .7)">Laptop</div>`,
+  `<div class="layer" style="left:180px;top:800px;width:620px;text-align:center;font-size:22px;color:var(--ink-2)">Laptop</div>`,
 )
 const labelR = el(
-  `<div class="layer" style="left:1120px;top:800px;width:620px;text-align:center;font-size:22px;color:rgb(244 234 213 / .7)">Desktop</div>`,
+  `<div class="layer" style="left:1120px;top:800px;width:620px;text-align:center;font-size:22px;color:var(--ink-2)">Desktop</div>`,
 )
 const packets = [0, 1, 2].map(() => el(`<div class="packet layer" style="left:0;top:0"></div>`))
 const synced = el(
@@ -347,7 +461,7 @@ const synced = el(
 
 const values = ['No account needed.', 'No tracking.', 'Open source.'].map((text, i) =>
   el(
-    `<div class="big layer" style="top:${300 + i * 150}px;font-size:110px;${i === 2 ? 'color:#f4ead5' : ''}">${words(text, 110)}</div>`,
+    `<div class="big layer" style="top:${300 + i * 150}px;font-size:110px;${i === 2 ? 'color:var(--accent-ink)' : ''}">${words(text, 110)}</div>`,
   ),
 )
 
@@ -356,15 +470,21 @@ const values = ['No account needed.', 'No tracking.', 'Open source.'].map((text,
 const endLogo = el(
   `<div class="layer" style="left:890px;top:250px;width:140px;height:140px;filter:drop-shadow(0 24px 40px rgb(2 12 8 / .5))">${cabin(CREAM_LOGO)}</div>`,
 )
+/** Smoke from the end logo's chimney (logo at 890, 250, 140 px; chimney top at 84.5 / 28 of 128). */
+const endSmoke = Array.from({ length: 8 }, () =>
+  el(
+    `<div class="layer" style="left:${890 + (84.5 / 128) * 140 - 14}px;top:${250 + (28 / 128) * 140 - 14}px;width:28px;height:28px;border-radius:50%;background:radial-gradient(closest-side, rgb(244 234 213 / .6), transparent)"></div>`,
+  ),
+)
 const endName = el(`<div class="big layer" style="top:420px;font-size:116px">TabCabin</div>`)
 const endTag = el(
-  `<div class="big layer plain" style="top:560px;font-size:42px;font-weight:500;color:rgb(244 234 213 / .85)">A calm cabin for your tabs.</div>`,
+  `<div class="big layer plain" style="top:560px;font-size:42px;font-weight:500;color:var(--ink-2)">A calm cabin for your tabs.</div>`,
 )
 const endPill = el(
   `<div class="layer" style="left:0;right:0;top:665px;text-align:center"><span class="pill">Free browser extension · Chrome · Edge · Brave</span></div>`,
 )
 const endUrl = el(
-  `<div class="big layer plain" style="top:790px;font-size:26px;font-weight:500;color:rgb(244 234 213 / .6)">github.com/DontAskForAnything/tabcabin</div>`,
+  `<div class="big layer plain" style="top:790px;font-size:26px;font-weight:500;color:var(--ink-2)">github.com/DontAskForAnything/tabcabin</div>`,
 )
 
 // ---------- timeline ----------
@@ -372,11 +492,13 @@ const endUrl = el(
 window.DURATION = 22 * BAR
 
 window.seek = async (t) => {
-  // Background drift.
-  orbs.forEach((orb, i) => {
-    const a = t * (0.12 + i * 0.05) + i * 2
-    orb.style.transform = `translate(${960 - 300 + Math.cos(a) * (520 - i * 90)}px, ${540 - 300 + Math.sin(a * 1.3) * (300 - i * 40)}px)`
-  })
+  // The valley: time of day, camera, smoke and fireflies. The app scenes blur it a little.
+  const night = nightAt(t)
+  paint(night)
+  const footage =
+    easeOut(prog(t, FOOTAGE_START - 0.6, FOOTAGE_START + 0.4)) *
+    (1 - easeInOut(prog(t, FOOTAGE_END - 0.2, FOOTAGE_END + 0.6)))
+  moveValley(t, night, footage)
 
   // Scene 1: scattered tabs drift, headline, then the tabs settle into groups.
   const settle = easeInOut(prog(t, 3.3, 4.6))
@@ -480,7 +602,9 @@ window.seek = async (t) => {
       caption.querySelector('h2').innerHTML = keepWhole(scene.title)
       caption.querySelector('p').innerHTML = keepWhole(scene.sub)
     }
-    set(caption, { o: capIn * (1 - capOut), y: (1 - capIn) * 40 - capOut * 30 })
+    // The caption steps aside while its colours switch from day to night.
+    const dip = 1 - Math.sin(Math.PI * prog(nightAt(t), 0.3, 0.7))
+    set(caption, { o: capIn * (1 - capOut) * dip, y: (1 - capIn) * 40 - capOut * 30 })
   } else {
     set(caption, { o: 0 })
   }
@@ -542,12 +666,23 @@ window.seek = async (t) => {
     y: (1 - easeOut(prog(t, E0 + 1.2, E0 + 1.8))) * 20,
   })
   set(endUrl, { o: easeOut(prog(t, E0 + 1.6, E0 + 2.2)) * endFade })
+  const smokeOn = prog(t, E0 + 0.6, E0 + 1.4) * endFade
+  endSmoke.forEach((puff, k) => {
+    const { p, o } = puffAt(t, k, endSmoke.length, 4.5)
+    set(puff, {
+      x: -p * 46 + Math.sin(p * 5 + k) * 5,
+      y: -p * 150,
+      s: 0.6 + 2.4 * p,
+      o: o * smokeOn * 1.6,
+    })
+  })
   document.getElementById('stage').style.opacity = String(t > E0 ? endFade : 1)
 
   if (pending) await pending
 }
 
 window.ready = (async () => {
+  await loadValley()
   await document.fonts.ready
   await loadFootage()
   await Promise.all([...document.images].map((img) => img.decode().catch(() => undefined)))

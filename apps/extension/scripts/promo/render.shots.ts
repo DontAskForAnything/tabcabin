@@ -4,6 +4,7 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { PROMO_DIR } from './dir'
+import { valleySvg } from './valley'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '../../../..')
@@ -19,12 +20,14 @@ const files: Record<string, () => Buffer> = {
   '/promo.js': () => readFileSync(join(here, 'promo.js')),
   '/font/geist.woff2': () => readFileSync(font),
   '/font/bricolage.woff2': () => readFileSync(display),
+  '/valley.svg': () => Buffer.from(valleySvg()),
 }
 const types: Record<string, string> = {
   html: 'text/html',
   js: 'text/javascript',
   json: 'application/json',
   woff2: 'font/woff2',
+  svg: 'image/svg+xml',
   jpg: 'image/jpeg',
   png: 'image/png',
 }

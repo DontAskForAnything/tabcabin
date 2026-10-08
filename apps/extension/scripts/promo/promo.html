@@ -25,30 +25,32 @@
         overflow: hidden;
         background: #0b100e;
         font-family: Geist, system-ui, sans-serif;
-        color: #faf6ee;
+        color: var(--ink);
         -webkit-font-smoothing: antialiased;
       }
       .layer {
         position: absolute;
         will-change: transform, opacity;
       }
+      /* The valley from the website. promo.js sets the colours for the time of day on :root. */
       #bg {
         position: absolute;
         inset: 0;
-        background: radial-gradient(120% 120% at 15% 10%, #2a5f4a 0%, #1f4a3a 38%, #0f1110 100%);
+        background: linear-gradient(to bottom, var(--sky-top) 8%, var(--sky-bottom) 72%);
       }
-      #grid {
+      #valley {
         position: absolute;
         inset: 0;
-        background-image:
-          linear-gradient(to right, rgb(244 234 213 / 0.05) 1px, transparent 1px),
-          linear-gradient(to bottom, rgb(244 234 213 / 0.05) 1px, transparent 1px);
-        background-size: 64px 64px;
-        mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 30%, transparent 100%);
       }
-      .orb {
+      #valley > svg {
+        display: block;
+        overflow: visible;
+      }
+      /* Keeps the captions readable over the valley during the app scenes. */
+      #veil {
         position: absolute;
-        border-radius: 50%;
+        inset: 0;
+        background: linear-gradient(90deg, var(--veil) 0%, var(--veil) 22%, transparent 52%);
       }
       .chip {
         position: absolute;
@@ -83,8 +85,9 @@
         width: 380px;
         height: 470px;
         border-radius: 28px;
-        background: rgb(244 234 213 / 0.08);
-        border: 1px solid rgb(244 234 213 / 0.18);
+        background: rgb(255 253 248 / 0.62);
+        border: 1px solid rgb(31 74 58 / 0.14);
+        box-shadow: 0 30px 60px -30px rgb(31 74 58 / 0.35);
       }
       .card-head {
         position: absolute;
@@ -121,8 +124,7 @@
         display: inline-block;
         will-change: transform, opacity, filter;
       }
-      /* A browser window in Chrome's dark theme: it stays calm next to the app's own dialogs
-         and matches the dark scene. */
+      /* A Chrome window: light by day, dark at night (colours from promo.js). */
       #browser {
         position: absolute;
         left: 560px;
@@ -131,10 +133,10 @@
         height: 888px;
         border-radius: 16px;
         overflow: hidden;
-        background: #1f2023;
+        background: var(--chrome-frame);
         box-shadow:
-          0 60px 120px -30px rgb(2 10 6 / 0.8),
-          0 0 0 1px rgb(244 234 213 / 0.14);
+          0 60px 120px -30px rgb(2 10 6 / 0.6),
+          0 0 0 1px var(--chrome-line);
         transform-origin: 50% 50%;
       }
       .tabstrip {
@@ -143,7 +145,7 @@
         height: 42px;
         align-items: flex-end;
         padding-left: 16px;
-        background: #1f2023;
+        background: var(--chrome-frame);
       }
       .lights {
         display: flex;
@@ -164,8 +166,8 @@
         gap: 9px;
         padding: 0 12px;
         border-radius: 10px 10px 0 0;
-        background: #35363a;
-        color: #e8eaed;
+        background: var(--chrome-surface);
+        color: var(--chrome-text);
         font-size: 13px;
       }
       .tab-icon {
@@ -182,7 +184,7 @@
       }
       .tab-x,
       .newtab {
-        color: #9aa0a6;
+        color: var(--chrome-icon);
         font-size: 17px;
       }
       .newtab {
@@ -196,8 +198,9 @@
         align-items: center;
         gap: 16px;
         padding: 0 14px;
-        background: #35363a;
-        border-bottom: 1px solid #2a2b2e;
+        background: var(--chrome-surface);
+        border-bottom: 1px solid var(--chrome-line);
+        color: var(--chrome-icon);
       }
       .toolbar svg {
         flex: none;
@@ -210,12 +213,12 @@
         gap: 10px;
         padding: 0 14px;
         border-radius: 17px;
-        background: #202124;
-        color: #e8eaed;
+        background: var(--chrome-omnibox);
+        color: var(--chrome-text);
         font-size: 14px;
       }
       .omnibox .placeholder {
-        color: #9aa0a6;
+        color: var(--chrome-icon);
       }
       .ext {
         position: relative;
@@ -254,8 +257,8 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: #8ab4f8;
-        color: #202124;
+        background: #1f4a3a;
+        color: #faf6ee;
         font-size: 13px;
         font-weight: 700;
       }
@@ -269,8 +272,8 @@
         gap: 8px;
         padding: 0 14px;
         border-radius: 15px;
-        background: #f4ead5;
-        color: #0f1110;
+        background: #1f4a3a;
+        color: #faf6ee;
         font-size: 14px;
         font-weight: 600;
         white-space: nowrap;
@@ -298,7 +301,7 @@
         font-size: 20px;
         font-weight: 650;
         letter-spacing: 0.14em;
-        color: #8fcbad;
+        color: var(--accent-ink);
         text-transform: uppercase;
       }
       #caption h2 {
@@ -313,14 +316,14 @@
         margin-top: 18px;
         font-size: 25px;
         line-height: 1.4;
-        color: rgb(244 234 213 / 0.78);
+        color: var(--ink-2);
       }
       kbd {
         display: inline-block;
         padding: 0 10px;
         border-radius: 10px;
-        background: rgb(244 234 213 / 0.14);
-        border: 1px solid rgb(244 234 213 / 0.25);
+        background: var(--soft);
+        border: 1px solid var(--soft-line);
         font: inherit;
         line-height: 1.2;
       }
@@ -376,8 +379,8 @@
         gap: 12px;
         padding: 14px 26px;
         border-radius: 999px;
-        background: rgb(244 234 213 / 0.12);
-        border: 1px solid rgb(244 234 213 / 0.2);
+        background: var(--soft);
+        border: 1px solid var(--soft-line);
         font-size: 24px;
         font-weight: 550;
       }
@@ -385,8 +388,8 @@
   </head>
   <body>
     <div id="bg"></div>
-    <div id="grid"></div>
-    <div id="orbs"></div>
+    <div id="valley"></div>
+    <div id="veil"></div>
     <div id="stage"></div>
     <script type="module" src="/promo.js"></script>
   </body>

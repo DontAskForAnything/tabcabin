@@ -1,11 +1,14 @@
 /**
  * Original soundtrack for the promo video, synthesized from scratch (no samples, no third-party
  * music). 100 BPM, 22 bars = 52.8 s: pad intro, a lift into the logo at bar 3, a soft groove
- * under the feature scenes, a breakdown, and a ringing final chord.
+ * under the feature scenes, a breakdown, and a ringing final chord. Sound effects cut to the
+ * picture (sfx.ts) and a quiet wind and fire (ambience.ts) are mixed in.
  *
  * Run: node --experimental-strip-types scripts/promo/music.ts <out.wav>
  */
 import { writeFileSync } from 'node:fs'
+import { addForest } from './ambience.ts'
+import { addSfx } from './sfx.ts'
 
 const RATE = 48_000
 const BPM = 100
@@ -260,6 +263,9 @@ const dr = right.slice()
 delay(left, dr, BEAT * 0.75, 0.35, 0.22)
 delay(right, dl, BEAT * 0.75, 0.35, 0.22)
 
+// Sound effects cut to the picture (after the delay, so they do not echo on the beat).
+addSfx(left, right, RATE)
+
 /** Small Schroeder reverb for air. */
 function reverb(input: Float32Array, out: Float32Array, wet: number, offset: number) {
   const combs = [1557, 1617, 1491, 1422].map((c) => ({
@@ -292,6 +298,7 @@ const rl = left.slice()
 const rr = right.slice()
 reverb(rl, left, 0.35, 0)
 reverb(rr, right, 0.35, 23)
+addForest(left, right, RATE)
 
 // Fade in/out and soft-limit.
 let peak = 0

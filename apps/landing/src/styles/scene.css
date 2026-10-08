@@ -1,0 +1,251 @@
+/*
+ * Colours of the forest drawings. Light is a calm morning, dark is the night. The colours are
+ * registered so a theme switch plays as a short sunset or sunrise instead of a jump.
+ */
+@property --scene-night {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+@property --scene-sky-top {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f2eee5;
+}
+@property --scene-sky-bottom {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #eedfc2;
+}
+@property --scene-mountain {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #d6d4bf;
+}
+@property --scene-far {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #b8bdaa;
+}
+@property --scene-middle {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #94a28f;
+}
+@property --scene-near {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #637d6c;
+}
+@property --scene-front {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1f4a3a;
+}
+@property --scene-cabin {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1f4a3a;
+}
+@property --scene-roof {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #143326;
+}
+@property --scene-glass {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #c9d3c6;
+}
+@property --scene-smoke {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #7e907f;
+}
+
+:root {
+  --scene-night: 0;
+  --scene-sky-top: #f2eee5;
+  --scene-sky-bottom: #eedfc2;
+  --scene-sun: #e9d6ae;
+  --scene-mountain: #d6d4bf;
+  --scene-far: #b8bdaa;
+  --scene-middle: #94a28f;
+  --scene-near: #637d6c;
+  --scene-front: #1f4a3a;
+  --scene-cabin: #1f4a3a;
+  --scene-roof: #143326;
+  --scene-glass: #c9d3c6;
+  --scene-smoke: #7e907f;
+  --scene-path: #d9cfb6;
+  --scene-post: #173a2d;
+  --contour: #ddd6c7;
+  --contour-index: #c9c1b0;
+  --etch: #1f4a3a;
+  --etch-cabin: #1f4a3a;
+  --etch-window: var(--canvas);
+  transition-property:
+    --scene-night, --scene-sky-top, --scene-sky-bottom, --scene-mountain, --scene-far,
+    --scene-middle, --scene-near, --scene-front, --scene-cabin, --scene-roof, --scene-glass,
+    --scene-smoke;
+  transition-duration: 1.6s;
+  transition-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.dark {
+  --scene-night: 1;
+  --scene-sky-top: #0f1110;
+  --scene-sky-bottom: #17281f;
+  --scene-mountain: #1e3129;
+  --scene-far: #182920;
+  --scene-middle: #13211a;
+  --scene-near: #0f1a14;
+  --scene-front: #0a120e;
+  --scene-cabin: #0e1813;
+  --scene-roof: #1b2e25;
+  --scene-glass: #f4ead5;
+  --scene-smoke: #cfc8b6;
+  --scene-path: #1f2f27;
+  --scene-post: #070c09;
+  --contour: #1f2622;
+  --contour-index: #2c3732;
+  --etch: #a9b0a4;
+  --etch-cabin: #0f1110;
+  --etch-window: #f4ead5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition-duration: 0s;
+  }
+}
+
+.scene-sky {
+  background: linear-gradient(
+    to bottom,
+    var(--scene-sky-top) 8%,
+    var(--scene-sky-bottom) calc(100% - 150px),
+    var(--canvas)
+  );
+}
+.scene-by-day {
+  opacity: calc(1 - var(--scene-night));
+}
+.scene-by-night {
+  opacity: var(--scene-night);
+}
+.scene-sun {
+  transform: translateY(calc(var(--scene-night) * 240px));
+}
+.scene-moon {
+  transform: translateY(calc((1 - var(--scene-night)) * 140px));
+  opacity: var(--scene-night);
+}
+
+/* Moving parts. They wake up a moment after the page has loaded (Layout adds .scene-awake), run
+   only in the theme where they can be seen, use no filters (those would repaint every frame), and
+   never start when the visitor prefers less motion. */
+.scene-star {
+  fill: var(--cream);
+}
+.scene-puff {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.scene-wing {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.scene-wisp {
+  stroke-dasharray: 3 4;
+}
+.scene-awake .scene-puff {
+  animation: scene-puff 8s linear infinite;
+}
+.scene-awake .scene-wisp {
+  animation: scene-wisp 2.4s linear infinite;
+}
+.scene-awake.dark .scene-twinkle {
+  animation: scene-twinkle 4s ease-in-out infinite;
+}
+.scene-awake.dark .scene-firefly {
+  animation:
+    scene-fly 9s ease-in-out infinite alternate,
+    scene-blink 2.6s ease-in-out infinite;
+}
+.scene-awake:not(.dark) .scene-birds {
+  animation: scene-drift 52s linear infinite;
+}
+.scene-awake:not(.dark) .scene-wing {
+  animation: scene-flap 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes scene-twinkle {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes scene-puff {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.42;
+  }
+  60% {
+    opacity: 0.22;
+  }
+  100% {
+    transform: translate(calc(var(--rise, 96px) * -0.45), calc(var(--rise, 96px) * -1)) scale(3.2);
+    opacity: 0;
+  }
+}
+@keyframes scene-fly {
+  33% {
+    transform: translate(14px, -10px);
+  }
+  66% {
+    transform: translate(-8px, -18px);
+  }
+  100% {
+    transform: translate(10px, 6px);
+  }
+}
+@keyframes scene-blink {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes scene-drift {
+  from {
+    transform: translateX(-140px);
+  }
+  to {
+    transform: translateX(1440px);
+  }
+}
+@keyframes scene-flap {
+  to {
+    transform: scaleY(0.35);
+  }
+}
+@keyframes scene-wisp {
+  to {
+    stroke-dashoffset: -14;
+  }
+}

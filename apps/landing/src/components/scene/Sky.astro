@@ -1,0 +1,48 @@
+---
+/** The night sky behind the hero: stars and a crescent moon. Hidden by day. */
+import { seeded, stars } from '../../lib/landscape'
+
+interface Props {
+  id: string
+  seed?: number
+  moon?: { x: number; y: number }
+}
+const { id, seed = 3, moon = { x: 1060, y: 122 } } = Astro.props
+const points = stars(seeded(seed), 150, { x: 0, y: 40, width: 1280, height: 620 })
+---
+
+<svg
+  class="pointer-events-none absolute inset-0 h-full w-full"
+  viewBox="0 0 1280 900"
+  preserveAspectRatio="xMidYMin slice"
+  aria-hidden="true"
+>
+  <defs>
+    <radialGradient id={`${id}-moonlight`}>
+      <stop offset="0" stop-color="#F4EAD5" stop-opacity="0.14"></stop>
+      <stop offset="0.45" stop-color="#F4EAD5" stop-opacity="0.06"></stop>
+      <stop offset="1" stop-color="#F4EAD5" stop-opacity="0"></stop>
+    </radialGradient>
+    <mask id={`${id}-crescent`}>
+      <rect x={moon.x - 60} y={moon.y - 60} width="120" height="120" fill="#fff"></rect>
+      <circle cx={moon.x + 10} cy={moon.y - 7} r="22" fill="#000"></circle>
+    </mask>
+  </defs>
+  <g class="scene-by-night">
+    {points.map((star, i) => (
+      <circle
+        cx={star.x}
+        cy={star.y}
+        r={star.r}
+        class={i % 3 ? 'scene-star' : 'scene-star scene-twinkle'}
+        style={
+          i % 3 ? undefined : `animation-delay:${star.delay};animation-duration:${star.duration}`
+        }
+      />
+    ))}
+  </g>
+  <g class="scene-moon">
+    <circle cx={moon.x} cy={moon.y} r="80" fill={`url(#${id}-moonlight)`}></circle>
+    <circle cx={moon.x} cy={moon.y} r="24" fill="#F4EAD5" mask={`url(#${id}-crescent)`}></circle>
+  </g>
+</svg>

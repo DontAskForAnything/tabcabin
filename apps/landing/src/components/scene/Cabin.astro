@@ -1,0 +1,54 @@
+---
+/**
+ * The logo's cabin as a small building in a drawing (SVG group), standing on the ground at x, y.
+ * By night the window is lit and glows; smoke always rises from the chimney.
+ */
+interface Props {
+  x: number
+  y: number
+  scale?: number
+  id: string
+}
+const { x, y, scale = 1, id } = Astro.props
+const puffs = Array.from({ length: 8 }, (_, i) => `${-i}s`)
+---
+
+<g transform={`translate(${x} ${y}) scale(${scale})`}>
+  <radialGradient id={`${id}-glow`}>
+    <stop offset="0" stop-color="#F4EAD5" stop-opacity="0.35"></stop>
+    <stop offset="0.45" stop-color="#F4EAD5" stop-opacity="0.16"></stop>
+    <stop offset="1" stop-color="#F4EAD5" stop-opacity="0"></stop>
+  </radialGradient>
+  <radialGradient id={`${id}-puff`}>
+    <stop offset="0" style="stop-color: var(--scene-smoke); stop-opacity: 0.9"></stop>
+    <stop offset="1" style="stop-color: var(--scene-smoke); stop-opacity: 0"></stop>
+  </radialGradient>
+  <g class="scene-by-night">
+    <circle cx="-9" cy="-13" r="34" fill={`url(#${id}-glow)`}></circle>
+  </g>
+  <rect x="9" y="-46" width="7" height="16" style="fill: var(--scene-cabin)"></rect>
+  <path d="M-24 -24 L0 -42 L24 -24 L24 0 L-24 0 Z" style="fill: var(--scene-cabin)"></path>
+  <path
+    d="M-29 -21 L0 -45 L29 -21"
+    fill="none"
+    stroke-width="5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    style="stroke: var(--scene-roof)"
+  ></path>
+  <rect x="-15" y="-18" width="12" height="10" rx="1" style="fill: var(--scene-glass)"></rect>
+  <rect x="-15" y="-18" width="12" height="10" rx="1" fill="#F4EAD5" class="scene-by-night"></rect>
+  <rect x="5" y="-15" width="9" height="15" rx="1" style="fill: var(--scene-roof)"></rect>
+  <g style="--rise: 70px">
+    {puffs.map((delay) => (
+      <circle
+        cx="12.5"
+        cy="-50"
+        r="6"
+        fill={`url(#${id}-puff)`}
+        class="scene-puff"
+        style={`animation-delay:${delay}`}
+      />
+    ))}
+  </g>
+</g>

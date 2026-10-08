@@ -1,0 +1,59 @@
+---
+/**
+ * A piece of a hiking map behind the self-hosting section: contour lines around a hill, every
+ * fifth one heavier, a few heights, and the cabin at the top.
+ */
+import { contour, contourPoint } from '../../lib/contours'
+import { round } from '../../lib/landscape'
+
+const hills = [
+  { cx: 1150, cy: 150, rings: 18, wobble: [0.22, 0.15] as [number, number], top: 1240 },
+  { cx: 250, cy: 700, rings: 8, wobble: [0.4, 0.3] as [number, number], top: 980 },
+]
+const lines = hills.flatMap((hill) =>
+  Array.from({ length: hill.rings }, (_, i) => ({
+    d: contour(hill.cx, hill.cy, 10 + (i + 1) * 17, i + 1, hill.wobble),
+    index: (i + 1) % 5 === 0,
+  })),
+)
+// Heights on the heavier lines, 20 m apart, read off the big hill.
+const big = hills[0]!
+const labels = [5, 10, 15].map((level) => {
+  const [x, y] = contourPoint(big.cx, big.cy, 10 + level * 17, level, big.wobble, 2.5)
+  return { x: round(x), y: round(y), text: String(big.top - level * 20) }
+})
+---
+
+<svg
+  class="contours pointer-events-none absolute inset-0 -z-10 h-full w-full"
+  viewBox="0 0 1440 800"
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+>
+  {lines.map((line) => (
+    <path
+      d={line.d}
+      fill="none"
+      stroke-width={line.index ? 1.4 : 1}
+      style={`stroke: var(${line.index ? '--contour-index' : '--contour'})`}
+    />
+  ))}
+  {labels.map((label) => (
+    <text x={label.x} y={label.y} text-anchor="middle" class="fill-ink-4 text-[10.5px] font-medium">
+      {label.text}
+    </text>
+  ))}
+  <g transform={`translate(${big.cx} ${big.cy + 4})`}>
+    <path d="M-12 -10 0 -20 12 -10 V2 H-12Z" class="fill-accent"></path>
+    <rect x="4.5" y="-22" width="4" height="9" class="fill-accent"></rect>
+    <text x="20" y="1" class="fill-ink-3 text-[12px] font-semibold">
+      Your cabin
+    </text>
+  </g>
+</svg>
+
+<style>
+  .contours {
+    mask-image: radial-gradient(ellipse 70% 90% at 78% 25%, #000 35%, transparent 100%);
+  }
+</style>

@@ -1,0 +1,183 @@
+---
+/**
+ * The forest as an old etching above the footer: hatched mountains and spruces, a moon of thin
+ * rings and the cabin with a lit window. Nearer layers hide the hatching behind them with masks,
+ * so the page's paper grain shows through everywhere.
+ */
+import { forest, mountains, round, ridge, seeded, spruce } from '../../lib/landscape'
+
+const width = 1280
+const height = 200
+const rand = seeded(61)
+const cabinX = 640
+const cabinGround = 166
+
+const layers = [
+  {
+    id: 'mountains',
+    d: mountains(
+      [
+        [-20, 122],
+        [150, 82],
+        [300, 112],
+        [430, 66],
+        [560, 106],
+        [700, 94],
+        [860, 60],
+        [1000, 98],
+        [1140, 74],
+        [1300, 112],
+      ],
+      height,
+      rand,
+    ),
+    hatch: 'etch-sparse',
+  },
+  {
+    id: 'far',
+    d: forest({
+      width,
+      bottom: height,
+      y: ridge({ base: 140, amp: 6, phase: 0.7 }),
+      rand,
+      gap: 13,
+      min: 14,
+      max: 26,
+    }),
+    hatch: 'etch-medium',
+  },
+  {
+    id: 'near',
+    d: forest({
+      width,
+      bottom: height,
+      y: ridge({ base: 170, amp: 6, phase: 2.9, pin: { x: cabinX, y: cabinGround, reach: 54 } }),
+      rand,
+      gap: 24,
+      min: 30,
+      max: 60,
+      skip: (x) => Math.abs(x - cabinX) < 38,
+    }),
+    hatch: 'etch-dense',
+  },
+  {
+    id: 'front',
+    d: [
+      [-6, 120],
+      [34, 86],
+      [1244, 96],
+      [1290, 140],
+    ]
+      .map(([x, tall]) => spruce(x!, 206, tall!, tall! * 0.44))
+      .join(''),
+    hatch: 'etch-densest',
+  },
+]
+const hatches = [
+  { id: 'etch-sparse', gap: 4.2, weight: 0.55, angle: 0 },
+  { id: 'etch-medium', gap: 3, weight: 0.7, angle: 0 },
+  { id: 'etch-dense', gap: 2.2, weight: 0.75, angle: -35 },
+  { id: 'etch-densest', gap: 1.8, weight: 0.9, angle: 35 },
+]
+const rings = Array.from({ length: 5 }, (_, i) => ({ r: 9 + i * 5, opacity: round(1 - i * 0.16) }))
+---
+
+<svg
+  class="block h-full w-full text-[var(--etch)]"
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio="xMidYMax slice"
+  aria-hidden="true"
+>
+  <defs>
+    {hatches.map((hatch) => (
+      <pattern
+        id={hatch.id}
+        width={hatch.gap}
+        height={hatch.gap}
+        patternUnits="userSpaceOnUse"
+        patternTransform={`rotate(${hatch.angle})`}
+      >
+        <line
+          x1="0"
+          y1={hatch.gap / 2}
+          x2={hatch.gap}
+          y2={hatch.gap / 2}
+          stroke="currentColor"
+          stroke-width={hatch.weight}
+        />
+      </pattern>
+    ))}
+    {layers.map((layer) => (
+      <path id={`etch-${layer.id}`} d={layer.d} />
+    ))}
+    {layers.map((layer, i) => (
+      <mask
+        id={`etch-behind-${layer.id}`}
+        maskUnits="userSpaceOnUse"
+        x="-40"
+        y="-40"
+        width="1360"
+        height="280"
+      >
+        <rect x="-40" y="-40" width="1360" height="280" fill="#fff" />
+        {layers.slice(i + 1).map((nearer) => (
+          <use href={`#etch-${nearer.id}`} fill="#000" />
+        ))}
+      </mask>
+    ))}
+    <mask
+      id="etch-behind-moon"
+      maskUnits="userSpaceOnUse"
+      x="-40"
+      y="-40"
+      width="1360"
+      height="280"
+    >
+      <rect x="-40" y="-40" width="1360" height="280" fill="#fff"></rect>
+      {layers.map((layer) => (
+        <use href={`#etch-${layer.id}`} fill="#000" />
+      ))}
+    </mask>
+  </defs>
+
+  <g mask="url(#etch-behind-moon)">
+    {rings.map((ring, i) => (
+      <circle
+        cx="1060"
+        cy="66"
+        r={ring.r}
+        fill="none"
+        stroke="currentColor"
+        stroke-width={i ? 0.5 : 1}
+        opacity={ring.opacity}
+      />
+    ))}
+  </g>
+  {layers.map((layer) => (
+    <g mask={`url(#etch-behind-${layer.id})`}>
+      <use
+        href={`#etch-${layer.id}`}
+        fill={`url(#${layer.hatch})`}
+        stroke="currentColor"
+        stroke-width="0.8"
+        stroke-linejoin="round"
+      />
+    </g>
+  ))}
+  <g transform={`translate(${cabinX} ${cabinGround + 1})`}>
+    <path
+      d="M6 -27 V-40 H12 V-22 M-21 -18 0 -35 21 -18 V0 H-21Z"
+      stroke="currentColor"
+      stroke-width="0.8"
+      style="fill: var(--etch-cabin)"
+    ></path>
+    <rect x="-8" y="-13" width="10" height="8" style="fill: var(--etch-window)"></rect>
+    <path
+      d="M9 -43 c-5 -5 5 -7 0 -13 c-4 -4 4 -7 1 -12"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="0.8"
+      class="scene-wisp"
+    ></path>
+  </g>
+</svg>

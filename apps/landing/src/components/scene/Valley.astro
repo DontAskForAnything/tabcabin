@@ -1,0 +1,215 @@
+---
+/**
+ * The hero landscape: mountains, three rows of spruces in morning mist and a small cabin with
+ * smoke. In the dark theme it is night: the sun sets, the window lights up, fireflies come out.
+ * Layers drift at different speeds while the page scrolls.
+ */
+import { forest, land, mountains, round, ridge, seeded, spruce } from '../../lib/landscape'
+import Cabin from './Cabin.astro'
+
+const width = 1280
+const height = 440
+const rand = seeded(11)
+
+const range = mountains(
+  [
+    [-20, 200],
+    [60, 168],
+    [120, 132],
+    [172, 152],
+    [232, 110],
+    [300, 158],
+    [362, 142],
+    [430, 186],
+    [520, 204],
+    [610, 214],
+    [700, 208],
+    [790, 192],
+    [862, 168],
+    [930, 134],
+    [992, 100],
+    [1046, 120],
+    [1104, 84],
+    [1168, 128],
+    [1230, 110],
+    [1300, 150],
+  ],
+  height,
+  rand,
+)
+const far = forest({
+  width,
+  bottom: height,
+  y: ridge({ base: 246, amp: 9, phase: 1.3 }),
+  rand,
+  gap: 11,
+  min: 15,
+  max: 28,
+})
+const cabinX = 858
+const cabinY = ridge({ base: 286, amp: 12, phase: 2.7 })(cabinX)
+const middle = forest({
+  width,
+  bottom: height,
+  y: ridge({ base: 286, amp: 12, phase: 2.7, pin: { x: cabinX, y: cabinY, reach: 70 } }),
+  rand,
+  gap: 17,
+  min: 26,
+  max: 46,
+  skip: (x) => Math.abs(x - cabinX) < 34,
+})
+const near = forest({
+  width,
+  bottom: height,
+  y: ridge({ base: 332, amp: 16, phase: 4.2 }),
+  rand,
+  gap: 26,
+  min: 44,
+  max: 80,
+})
+const fireflies = Array.from({ length: 14 }, (_, i) => ({
+  x: round(i % 2 ? 1180 + rand() * 90 : 20 + rand() * 90),
+  y: round(240 + rand() * 150),
+  delay: `${(-rand() * 9).toFixed(1)}s, ${(-rand() * 3).toFixed(1)}s`,
+}))
+const frontRand = seeded(5)
+const frontGround = ridge({ base: 422, amp: 8, phase: 0.4 })
+const front =
+  [-30, 22, 70, 118, 1150, 1196, 1240, 1290]
+    .map((x) => {
+      const tall = 170 + frontRand() * 120
+      return spruce(x, frontGround(x) + 6, tall, tall * 0.42)
+    })
+    .join('') + land(frontGround, width, height)
+
+/** Mist that thickens towards the foot of each row. */
+const mists = [
+  { id: 'valley-mist-1', y: 120, h: 140, alpha: 0.95 },
+  { id: 'valley-mist-2', y: 236, h: 68, alpha: 0.75 },
+  { id: 'valley-mist-3', y: 292, h: 56, alpha: 0.55 },
+]
+---
+
+<svg
+  class="block h-full w-full"
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio="xMidYMax slice"
+  aria-hidden="true"
+  data-valley
+>
+  <defs>
+    {mists.map((mist) => (
+      <linearGradient id={mist.id} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" style="stop-color: var(--scene-sky-bottom); stop-opacity: 0" />
+        <stop
+          offset="1"
+          style={`stop-color: var(--scene-sky-bottom); stop-opacity: ${mist.alpha}`}
+        />
+      </linearGradient>
+    ))}
+    <linearGradient id="valley-fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--canvas); stop-opacity: 0"></stop>
+      <stop offset="1" style="stop-color: var(--canvas)"></stop>
+    </linearGradient>
+    <radialGradient id="valley-firefly">
+      <stop offset="0" stop-color="#F4EAD5" stop-opacity="0.55"></stop>
+      <stop offset="1" stop-color="#F4EAD5" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  <g>
+    <g data-depth="0.5">
+      <g class="scene-sun">
+        <circle cx="1012" cy="104" r="92" opacity="0.35" style="fill: var(--scene-sun)"></circle>
+        <circle cx="1012" cy="104" r="58" style="fill: var(--scene-sun)"></circle>
+      </g>
+    </g>
+    <g class="scene-by-day">
+      <g class="scene-birds">
+        <path d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0" class="scene-wing" transform="translate(0 60)"></path>
+        <path
+          d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0"
+          class="scene-wing"
+          transform="translate(26 74) scale(0.8)"
+        ></path>
+        <path
+          d="M-9 0 Q-4 -5 0 0 Q4 -5 9 0"
+          class="scene-wing"
+          transform="translate(-30 82) scale(0.7)"
+        ></path>
+      </g>
+    </g>
+    <g data-depth="0.42">
+      <path d={range} style="fill: var(--scene-mountain)"></path>
+      <rect
+        x="-20"
+        y={mists[0]!.y}
+        width="1320"
+        height={mists[0]!.h}
+        fill={`url(#${mists[0]!.id})`}
+      ></rect>
+    </g>
+    <g data-depth="0.32">
+      <path d={far} style="fill: var(--scene-far)"></path>
+      <rect
+        x="-20"
+        y={mists[1]!.y}
+        width="1320"
+        height={mists[1]!.h}
+        fill={`url(#${mists[1]!.id})`}
+      ></rect>
+    </g>
+    <g data-depth="0.22">
+      <path d={middle} style="fill: var(--scene-middle)"></path>
+      <Cabin x={cabinX} y={Math.round(cabinY + 1)} scale={1.15} id="valley-cabin" />
+      <rect
+        x="-20"
+        y={mists[2]!.y}
+        width="1320"
+        height={mists[2]!.h}
+        fill={`url(#${mists[2]!.id})`}
+      ></rect>
+    </g>
+    <g data-depth="0.12">
+      <path d={near} style="fill: var(--scene-near)"></path>
+      <g class="scene-by-night">
+        {fireflies.map((fly) => (
+          <g transform={`translate(${fly.x} ${fly.y})`}>
+            <g class="scene-firefly" style={`animation-delay:${fly.delay}`}>
+              <circle r="6" fill="url(#valley-firefly)" />
+              <circle r="1.6" fill="#EEF3C9" />
+            </g>
+          </g>
+        ))}
+      </g>
+    </g>
+    <path d={front} style="fill: var(--scene-front)"></path>
+  </g>
+  <rect x="-20" y="370" width="1320" height="72" fill="url(#valley-fade)"></rect>
+</svg>
+
+<script>
+  // Far layers lag behind while the page scrolls (only near the top and when motion is welcome).
+  const valley = document.querySelector<SVGSVGElement>('[data-valley]')
+  if (valley && document.documentElement.classList.contains('motion-ok')) {
+    const layers = [...valley.querySelectorAll<SVGGElement>('[data-depth]')]
+    let pending = false
+    const update = () => {
+      pending = false
+      const box = valley.getBoundingClientRect()
+      const scale = Math.max(box.width / 1280, box.height / 440)
+      const offset = Math.min(window.scrollY, 900) / Math.max(scale, 0.3)
+      for (const layer of layers)
+        layer.style.translate = `0 ${(offset * Number(layer.dataset.depth)).toFixed(1)}px`
+    }
+    addEventListener(
+      'scroll',
+      () => {
+        if (pending) return
+        pending = true
+        requestAnimationFrame(update)
+      },
+      { passive: true },
+    )
+  }
+</script>

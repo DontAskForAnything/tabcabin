@@ -1,0 +1,74 @@
+---
+/**
+ * A sign on the 404 signpost, shaped and labelled like a browser tab, as a link. The arrow says
+ * which way the page lies.
+ */
+import Logo from '../Logo.astro'
+
+interface Props {
+  href: string
+  label: string
+  x: number
+  y: number
+  width: number
+  /** Degrees, around the nail. */
+  tilt: number
+  nail: [number, number]
+  arrow?: 'left' | 'right'
+}
+const { href, label, x, y, width, tilt, nail, arrow } = Astro.props
+const height = 46
+---
+
+<a href={href} class="tab-sign">
+  <g transform={`rotate(${tilt} ${nail[0]} ${nail[1]})`}>
+    <rect x={x} y={y} width={width} height={height} rx="11" class="tab-sign-board"></rect>
+    <g transform={`translate(${x + 14} ${y + height / 2 - 9})`}>
+      <Logo size={18} />
+    </g>
+    <text x={x + 42} y={y + height / 2 + 5.5} class="tab-sign-label">
+      {arrow === 'left' ? `← ${label}` : label}
+    </text>
+    {arrow === 'right' && (
+      <path
+        d={`M${x + width - 30} ${y + height / 2} h14 m-5 -5 l5 5 l-5 5`}
+        fill="none"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="tab-sign-arrow"
+      />
+    )}
+  </g>
+</a>
+
+<style>
+  .tab-sign {
+    cursor: pointer;
+    outline: none;
+  }
+  .tab-sign-board {
+    fill: #faf6ee;
+    stroke: rgb(15 17 16 / 0.12);
+    stroke-width: 1;
+    filter: drop-shadow(0 6px 10px rgb(15 17 16 / 0.18));
+    transition: fill 0.2s;
+  }
+  .tab-sign:hover .tab-sign-board {
+    fill: #ffffff;
+  }
+  .tab-sign:focus-visible .tab-sign-board {
+    stroke: var(--accent);
+    stroke-width: 3;
+  }
+  .tab-sign-label {
+    fill: #1f4a3a;
+    font:
+      600 15px 'Geist Variable',
+      system-ui,
+      sans-serif;
+  }
+  .tab-sign-arrow {
+    stroke: #1f4a3a;
+  }
+</style>

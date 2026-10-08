@@ -1,8 +1,9 @@
 ---
 import Footer from '../components/Footer.astro'
 import Icon from '../components/Icon.astro'
-import Logo from '../components/Logo.astro'
 import Nav from '../components/Nav.astro'
+import LostTrail from '../components/scene/LostTrail.astro'
+import Sky from '../components/scene/Sky.astro'
 import Layout from '../layouts/Layout.astro'
 ---
 
@@ -12,18 +13,29 @@ import Layout from '../layouts/Layout.astro'
   path="/404"
 >
   <Nav />
-  <main class="mx-auto flex max-w-xl flex-col items-center px-5 py-28 text-center">
-    <Logo size={72} />
-    <h1 class="mt-6 font-display text-[38px] font-bold tracking-[-0.025em]">Nobody lives here</h1>
-    <p class="mt-4 text-[17px] text-ink-2">
-      The page you are looking for does not exist — maybe it was never saved.
-    </p>
-    <a
-      href="/"
-      class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-glow hover:brightness-110"
-    >
-      Back to the cabin <Icon name="ArrowRight" size={16} />
-    </a>
+  <main class="scene-sky relative isolate -mt-16 overflow-hidden sm:h-[clamp(640px,100svh,880px)]">
+    <Sky id="lost-sky" seed={9} moon={{ x: 1110, y: 170 }} />
+    <div class="relative z-10 pt-24 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:top-[136px] sm:pt-0">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="max-w-[600px] sm:pointer-events-auto">
+          <h1 class="text-[40px] leading-none font-bold tracking-[-0.04em] sm:text-[68px]">
+            Nobody lives here
+          </h1>
+          <p class="mt-4 max-w-[460px] text-[17px] leading-relaxed text-ink-2 sm:mt-5 sm:text-[19px]">
+            This trail doesn’t lead anywhere. The cabin is just down the path.
+          </p>
+          <a
+            href="/"
+            class="mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile transition hover:brightness-110 sm:mt-7"
+          >
+            <Icon name="ArrowLeft" size={18} /> Back to the cabin
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="relative mt-4 h-[300px] sm:static sm:mt-0 sm:h-auto">
+      <LostTrail />
+    </div>
   </main>
-  <Footer />
+  <Footer scenery={false} />
 </Layout>

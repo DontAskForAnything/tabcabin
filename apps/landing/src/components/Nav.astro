@@ -5,7 +5,11 @@ import Logo from './Logo.astro'
 import { repo } from '../site'
 ---
 
-<header class="sticky top-0 z-30 border-b border-line/70 bg-canvas/80 backdrop-blur-xl">
+<!-- Clear over the page at the top; gets its own background once the page scrolls. -->
+<header
+  class="sticky top-0 z-30 border-b border-transparent transition-[background-color,border-color] duration-300 data-[scrolled]:border-line/70 data-[scrolled]:bg-canvas/80 data-[scrolled]:backdrop-blur-xl"
+  data-nav
+>
   <nav class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5" aria-label="Main">
     <a
       href="/"
@@ -47,6 +51,11 @@ import { repo } from '../site'
 </header>
 
 <script>
+  const header = document.querySelector<HTMLElement>('[data-nav]')
+  const markScrolled = () => header?.toggleAttribute('data-scrolled', window.scrollY > 8)
+  markScrolled()
+  addEventListener('scroll', markScrolled, { passive: true })
+
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const dark = document.documentElement.classList.toggle('dark')
     try {

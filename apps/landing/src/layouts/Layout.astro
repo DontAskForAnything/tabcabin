@@ -1,4 +1,6 @@
 ---
+import bricolage from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url'
+import geist from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url'
 import '../styles/global.css'
 
 interface Props {
@@ -38,6 +40,9 @@ const structuredData = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <!-- The headline and body fonts arrive with the page, so the hero does not jump when they swap in. -->
+    <link rel="preload" href={bricolage} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geist} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -97,6 +102,14 @@ const structuredData = {
     <script>
       import { animate, inView } from 'motion'
 
+      // The drawings (smoke, birds, stars) start moving a moment after the page has loaded.
+      if (document.documentElement.classList.contains('motion-ok')) {
+        const wake = () =>
+          setTimeout(() => document.documentElement.classList.add('scene-awake'), 1000)
+        if (document.readyState === 'complete') wake()
+        else addEventListener('load', wake, { once: true })
+      }
+
       // Fade sections in as they scroll into view (only when motion is welcome).
       if (document.documentElement.classList.contains('motion-ok')) {
         document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
@@ -113,55 +126,6 @@ const structuredData = {
           )
         })
       }
-
-      // Headings marked with data-words rise word by word.
-      if (document.documentElement.classList.contains('motion-ok')) {
-        document.querySelectorAll<HTMLElement>('[data-words]').forEach((heading) => {
-          const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT)
-          const texts: Text[] = []
-          while (walker.nextNode()) texts.push(walker.currentNode as Text)
-          for (const text of texts) {
-            const fragment = document.createDocumentFragment()
-            for (const part of text.data.split(/(\s+)/)) {
-              if (!part.trim()) {
-                fragment.append(part)
-                continue
-              }
-              const word = document.createElement('span')
-              word.className = 'inline-block will-change-transform'
-              word.style.opacity = '0'
-              word.textContent = part
-              fragment.append(word)
-            }
-            text.replaceWith(fragment)
-          }
-          const words = heading.querySelectorAll<HTMLElement>('span.inline-block')
-          inView(
-            heading,
-            () => {
-              words.forEach((word, i) => {
-                void animate(
-                  word,
-                  { opacity: [0, 1], y: [24, 0], filter: ['blur(6px)', 'blur(0px)'] },
-                  { duration: 0.6, delay: i * 0.07, ease: [0.2, 0.7, 0.2, 1] },
-                )
-              })
-            },
-            { amount: 0.6 },
-          )
-        })
-      }
-
-      // Soft light that follows the cursor over cards.
-      document.querySelectorAll<HTMLElement>('[data-spotlight]').forEach((area) => {
-        area.addEventListener('pointermove', (event) => {
-          for (const card of area.querySelectorAll<HTMLElement>('.spotlight')) {
-            const box = card.getBoundingClientRect()
-            card.style.setProperty('--x', `${event.clientX - box.left}px`)
-            card.style.setProperty('--y', `${event.clientY - box.top}px`)
-          }
-        })
-      })
     </script>
   </body>
 </html>

@@ -1,12 +1,31 @@
 @import '@tabcabin/ui/styles.css';
+@import './scene.css';
 
 @source '../';
+
+/* A faint paper grain over the whole page: darker specks by day, light ones by night. It is one
+   fixed layer, so scrolling never repaints it. */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .12 0 0 0 0 .1 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .96 0 0 0 0 .92 0 0 0 0 .84 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
 html body {
   font-size: 16px;
   background: var(--canvas);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background-image: var(--grain);
+  will-change: transform;
 }
 
 html {
@@ -23,79 +42,16 @@ html {
   opacity: 0;
 }
 
-/* Cards that glow where the cursor is (see Layout). */
-.spotlight {
-  position: relative;
-  isolation: isolate;
-}
-.spotlight::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(
-    360px circle at var(--x, -999px) var(--y, -999px),
-    color-mix(in srgb, var(--accent) 12%, transparent),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-[data-spotlight]:hover .spotlight::before {
-  opacity: 1;
-}
-.spotlight::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: radial-gradient(
-    260px circle at var(--x, -999px) var(--y, -999px),
-    color-mix(in srgb, var(--accent) 50%, transparent),
-    transparent 60%
-  );
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Slowly shifting accent on the hero word: pine with a soft light passing through. */
-.shimmer {
-  background: linear-gradient(
-    100deg,
-    var(--accent) 20%,
-    color-mix(in srgb, var(--accent) 55%, var(--cream)) 45%,
-    var(--accent) 70%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer-move 7s ease-in-out infinite alternate;
-}
-@keyframes shimmer-move {
-  to {
-    background-position: 100% 0;
-  }
-}
-
-/* Faint grid behind the hero. */
-.hero-grid {
-  background-image:
-    linear-gradient(to right, var(--line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
-}
-
 /* Headings use the display face of the wordmark; body text stays in Geist. */
 @layer base {
   h1,
   h2 {
     font-family: var(--font-display);
+  }
+  /* The app's styles pin the page to the window height; the site scrolls as a whole, so the
+     sticky top bar stays with it. */
+  html,
+  body {
+    height: auto;
   }
 }

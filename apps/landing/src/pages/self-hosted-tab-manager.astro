@@ -84,7 +84,7 @@ const faqs = [
       <div class="mt-8 flex flex-wrap gap-3" data-reveal="0.15">
         <a
           href={selfHostingGuide}
-          class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-glow hover:brightness-110"
+          class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile hover:brightness-110"
         >
           Read the step-by-step guide <Icon name="ArrowRight" size={17} />
         </a>
@@ -98,12 +98,9 @@ const faqs = [
     </section>
 
     <section class="mx-auto grid max-w-6xl gap-10 px-5 pb-20 lg:grid-cols-[1fr_1.1fr]">
-      <div class="grid gap-4 sm:grid-cols-2" data-spotlight>
+      <div class="grid gap-4 sm:grid-cols-2">
         {parts.map(([title, text], index) => (
-          <article
-            class="spotlight rounded-[18px] bg-card p-6 shadow-card"
-            data-reveal={index * 0.05}
-          >
+          <article class="rounded-[18px] bg-card p-6 shadow-card" data-reveal={index * 0.05}>
             <h2 class="text-[17px] font-semibold">{title}</h2>
             <p class="mt-2 text-[14.5px] leading-relaxed text-ink-2">{text}</p>
           </article>

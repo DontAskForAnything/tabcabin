@@ -1,13 +1,19 @@
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { afterAll, describe, expect, it } from 'vitest'
 import { openDatabase } from '../src/db/client'
 import { databaseFile } from '../src/db/file'
 import { migrationsFolder } from '../src/paths'
 import { createUser, listUsers } from '../src/users'
 
-const dataDir = () => mkdtempSync(join(tmpdir(), 'tabcabin-data-'))
+const dirs: string[] = []
+const dataDir = () => {
+  const dir = mkdtempSync(join(tmpdir(), 'tabcabin-data-'))
+  dirs.push(dir)
+  return dir
+}
+afterAll(() => dirs.forEach((dir) => rmSync(dir, { recursive: true, force: true })))
 
 describe('database file', () => {
   it('uses tabcabin.db in the data folder', () => {

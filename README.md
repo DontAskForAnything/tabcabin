@@ -19,7 +19,7 @@ computers when you sign in.
 
 Tabs pile up because closing them feels like losing them. TabCabin gives every tab a place to
 stay: drag it into a group, add a note, set a reminder, close it. Everything is one new tab away,
-searchable, and works offline. No account needed, no tracking and no subscription.
+searchable, and works offline. No account needed and no tracking.
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
 
@@ -130,6 +130,7 @@ Permissions it asks for:
 | `alarms`                                              | Fire reminders on time                                                                        |
 | `sidePanel`                                           | Open the board in the side panel                                                              |
 | `bookmarks`, `topSites`, `notifications` _(optional)_ | Asked only when you use bookmark search/import, most visited sites or desktop notifications   |
+| `identity` _(optional)_                               | Asked only when you choose **Continue with Google**, to open Google's sign-in window          |
 
 The extension has **no host permissions**: it cannot read pages unless you invoke it on one.
 

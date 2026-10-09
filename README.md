@@ -4,8 +4,9 @@
 
 # TabCabin
 
-**A calm cabin for your tabs.** TabCabin turns every new tab into quiet boards for your tabs,
-links, notes and to-dos — on your computer, and in sync between your computers when you sign in.
+**A calm cabin for your tabs.** TabCabin is a **Chrome extension** that turns every new tab into
+quiet boards for your tabs, links, notes and to-dos — on your computer, and in sync between your
+computers when you sign in.
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-1F4A3A)
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-1F4A3A)

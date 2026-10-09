@@ -8,7 +8,7 @@ All notable changes to this project are documented here. The format follows
 
 ## [1.2.0] — 2026-10-09
 
-Sync between your computers, a new name and a new look.
+A new name and a new look, more imports and smoother saving from pages.
 
 ### Renamed to TabCabin, new look
 

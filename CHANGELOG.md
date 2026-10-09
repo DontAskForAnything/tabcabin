@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-10-09
+
+Sync between your computers, a new name and a new look.
+
 ### Renamed to TabCabin, new look
 
 TabHangar is now **TabCabin — a calm cabin for your tabs**: a cabin logo, a black, white, pine and
@@ -106,5 +110,6 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...v1.2.0
 [0.1.0]: https://github.com/DontAskForAnything/tabcabin/releases/tag/v0.1.0

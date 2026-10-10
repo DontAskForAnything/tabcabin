@@ -30,21 +30,49 @@ async function wait(page: Page, ms: number) {
   await page.waitForTimeout(ms * pace)
 }
 
-export async function glide(page: Page, x: number, y: number, ms = 700) {
+/** Moves the mouse along `path` (t from 0 to 1), one step per 16 scripted milliseconds. */
+async function follow(page: Page, path: (t: number) => { x: number; y: number }, ms: number) {
   const steps = Math.max(8, Math.round(ms / 16))
-  const from = glidedTo.get(page)
-  glidedTo.set(page, { x, y })
-  if (pace === 1 || !from) {
-    await page.mouse.move(x, y, { steps })
-    return
-  }
-  // Slowed down: one step per 16 scripted milliseconds, on a clock.
   const start = Date.now()
   for (let i = 1; i <= steps; i++) {
-    await page.mouse.move(from.x + ((x - from.x) * i) / steps, from.y + ((y - from.y) * i) / steps)
+    const { x, y } = path(i / steps)
+    await page.mouse.move(x, y)
     const rest = start + (i * ms * pace) / steps - Date.now()
     if (rest > 0) await page.waitForTimeout(rest)
   }
+}
+
+export async function glide(page: Page, x: number, y: number, ms = 700) {
+  const from = glidedTo.get(page)
+  glidedTo.set(page, { x, y })
+  if (pace === 1 || !from) {
+    await page.mouse.move(x, y, { steps: Math.max(8, Math.round(ms / 16)) })
+    return
+  }
+  // Slowed down: on a clock, so every step gets painted.
+  await follow(page, (t) => ({ x: from.x + (x - from.x) * t, y: from.y + (y - from.y) * t }), ms)
+}
+
+/**
+ * Moves the mouse like a hand does: along a curve that bows `bend` pixels upwards, starting
+ * slowly, speeding up and slowing down again before (x, y).
+ */
+async function swoop(page: Page, x: number, y: number, ms: number, bend = 30) {
+  const from = glidedTo.get(page)
+  if (!from) return glide(page, x, y, ms)
+  glidedTo.set(page, { x, y })
+  const control = { x: (from.x + x) / 2, y: (from.y + y) / 2 - 2 * bend }
+  await follow(
+    page,
+    (t) => {
+      const s = (1 - Math.cos(Math.PI * t)) / 2
+      return {
+        x: (1 - s) ** 2 * from.x + 2 * (1 - s) * s * control.x + s ** 2 * x,
+        y: (1 - s) ** 2 * from.y + 2 * (1 - s) * s * control.y + s ** 2 * y,
+      }
+    },
+    ms,
+  )
 }
 
 export async function center(page: Page, locator: ReturnType<Page['locator']>) {
@@ -52,18 +80,29 @@ export async function center(page: Page, locator: ReturnType<Page['locator']>) {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2, box }
 }
 
-/** Drags an open tab into "Read later"; it is saved and closed. */
-export async function dragTab(page: Page) {
+/**
+ * Drags an open tab into "Read later"; it is saved and closed. `smooth` (the demo GIF) carries it
+ * along one eased curve; the film keeps its straight glides.
+ */
+export async function dragTab(page: Page, { smooth = false } = {}) {
   const tab = page.getByRole('button', { name: 'Service Worker API – MDN' }).first()
   const from = await center(page, tab)
-  await glide(page, from.x - 40, from.y, 900)
-  await page.mouse.down()
-  const add = await center(
-    page,
-    page.getByRole('region', { name: 'Read later' }).getByRole('button', { name: 'Note or link' }),
-  )
-  await glide(page, (from.x + add.x) / 2, from.y - 60, 500)
-  await glide(page, add.x, add.box.y - 12, 700)
+  const target = page
+    .getByRole('region', { name: 'Read later' })
+    .getByRole('button', { name: 'Note or link' })
+  if (smooth) {
+    await swoop(page, from.x - 40, from.y, 1000)
+    await page.mouse.down()
+    await wait(page, 250)
+    const add = await center(page, target)
+    await swoop(page, add.x, add.box.y - 12, 2000, 40)
+  } else {
+    await glide(page, from.x - 40, from.y, 900)
+    await page.mouse.down()
+    const add = await center(page, target)
+    await glide(page, (from.x + add.x) / 2, from.y - 60, 500)
+    await glide(page, add.x, add.box.y - 12, 700)
+  }
   await wait(page, 500)
   await page.mouse.up()
   await wait(page, 1600)

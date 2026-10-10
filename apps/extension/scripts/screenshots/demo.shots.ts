@@ -69,7 +69,7 @@ test('demo animation', async () => {
   const stop = await record(page, frames)
   try {
     await page.waitForTimeout(600 * SLOW)
-    await dragTab(page)
+    await dragTab(page, { smooth: true })
     await addTodo(page)
     await search(page)
     await openCollections(page)

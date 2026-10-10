@@ -1,115 +1,84 @@
-import { writeFileSync } from 'node:fs'
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { test, type Page } from '@playwright/test'
-import gifenc from 'gifenc'
-import { PNG } from 'pngjs'
-import { launch, loadDemo, openApp, openTabs, OUT } from './setup'
+import { chromium, expect, test, type Page } from '@playwright/test'
+import { encodeGif, type Frame } from './gif'
+import { CURSOR, addTodo, dragTab, glide, openCollections, search, setPace } from './session'
+import { extensionPath, loadDemo, openApp, openTabs, OUT } from './setup'
+import { slowAnimations, slowDown } from './slow-motion'
 
-const { applyPalette, GIFEncoder, quantize } = gifenc
+const FPS = 25
+/** The tour runs this many times slower while recording (see `slow-motion.ts`). */
+const SLOW = 4
 
-/** Screenshots taken back to back while the demo runs. */
-class Recorder {
-  private frames: { png: Buffer; at: number }[] = []
-  private running: Promise<void> | null = null
-  private active = false
-
-  start(page: Page) {
-    this.active = true
-    this.running = (async () => {
-      while (this.active) {
-        const started = Date.now()
-        this.frames.push({ png: await page.screenshot(), at: started })
-        const rest = 90 - (Date.now() - started)
-        if (rest > 0) await page.waitForTimeout(rest)
-      }
-    })()
-  }
-
-  async stop() {
-    this.active = false
-    await this.running
-  }
-
-  /** Encodes the frames as a looping GIF, merging identical consecutive frames. */
-  toGif(holdLastMs = 1800): Uint8Array {
-    const gif = GIFEncoder()
-    const merged: { png: Buffer; delay: number }[] = []
-    this.frames.forEach((frame, i) => {
-      const next = this.frames[i + 1]
-      const delay = next ? next.at - frame.at : holdLastMs
-      const last = merged.at(-1)
-      if (last && last.png.equals(frame.png)) last.delay += delay
-      else merged.push({ png: frame.png, delay })
-    })
-    for (const frame of merged) {
-      const { data, width, height } = PNG.sync.read(frame.png)
-      const palette = quantize(data, 256)
-      gif.writeFrame(applyPalette(data, palette), width, height, {
-        palette,
-        delay: Math.max(20, frame.delay),
-      })
-    }
-    gif.finish()
-    return gif.bytes()
+/**
+ * Screencasts `page` into `frames` until the returned function is called. Chrome sends a frame
+ * whenever the page paints; times are scripted milliseconds, and only the last frame painted in
+ * each GIF frame's slot is kept.
+ */
+async function record(page: Page, frames: Frame[]) {
+  const cdp = await page.context().newCDPSession(page)
+  const slot = 1000 / FPS
+  let start: number | null = null
+  cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
+    const now = (metadata.timestamp ?? Date.now() / 1000) * 1000
+    start ??= now
+    const frame = { png: Buffer.from(data, 'base64'), at: (now - start) / SLOW }
+    const last = frames.at(-1)
+    if (last && Math.ceil(last.at / slot) === Math.ceil(frame.at / slot)) frames.pop()
+    frames.push(frame)
+    void cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => undefined)
+  })
+  await cdp.send('Page.startScreencast', { format: 'png' })
+  return async () => {
+    await cdp.send('Page.stopScreencast')
+    await cdp.detach()
   }
 }
 
-async function dragTo(page: Page, from: string, to: string) {
-  const source = (await page.getByRole('button', { name: from }).first().boundingBox())!
-  // Drop just above the group's "Note or link" row, at the end of its list.
-  const target = (await page
-    .getByRole('region', { name: to })
-    .getByRole('button', { name: 'Note or link' })
-    .boundingBox())!
-  await page.mouse.move(source.x + 60, source.y + source.height / 2)
-  await page.mouse.down()
-  const end = { x: target.x + target.width / 2, y: target.y - 12 }
-  const steps = 28
-  for (let i = 1; i <= steps; i++) {
-    const t = i / steps
-    const ease = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2
-    await page.mouse.move(
-      source.x + 60 + (end.x - source.x - 60) * ease,
-      source.y + source.height / 2 + (end.y - source.y - source.height / 2) * ease,
-    )
-    await page.waitForTimeout(16)
-  }
-  await page.waitForTimeout(350)
-  await page.mouse.up()
-}
-
+/** The start of the scripted tour (drag a tab, add a to-do, search, collections) as a GIF. */
 test('demo animation', async () => {
-  test.setTimeout(180_000)
-  const { context, worker } = await launch(2 / 3, { width: 1440, height: 900 })
+  test.setTimeout(300_000)
+  const profile = mkdtempSync(join(tmpdir(), 'tabcabin-shots-'))
+  const context = await chromium.launchPersistentContext(profile, {
+    channel: 'chromium',
+    headless: true,
+    // Screencasts capture the real window, so size the window: this one holds a 1440×900 page
+    // drawn at 2/3 scale (960×600 pixels).
+    viewport: null,
+    args: [
+      `--disable-extensions-except=${extensionPath}`,
+      `--load-extension=${extensionPath}`,
+      '--window-size=1437,1041',
+      '--force-device-scale-factor=0.6666667',
+    ],
+  })
+  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  await context.addInitScript(CURSOR)
   await openTabs(context, worker)
   await loadDemo(worker, 'light')
+  await slowDown(context, SLOW)
   const page = await openApp(context, worker)
   await page.bringToFront()
-  const recorder = new Recorder()
-  recorder.start(page)
-  await page.waitForTimeout(900)
+  expect(await page.evaluate(() => [innerWidth, innerHeight])).toEqual([1440, 900])
+  await slowAnimations(page, SLOW)
+  await glide(page, 900, 600)
+  await page.waitForTimeout(800)
 
-  await dragTo(page, 'Service Worker API – MDN', 'Read later')
-  await page.waitForTimeout(1100)
+  const frames: Frame[] = []
+  const stop = await record(page, frames)
+  try {
+    await page.waitForTimeout(600 * SLOW)
+    await dragTab(page)
+    await addTodo(page)
+    await search(page)
+    await openCollections(page)
+  } finally {
+    await stop()
+    setPace(1)
+  }
 
-  const launchWeek = page.getByRole('region', { name: 'Launch week' })
-  await launchWeek.getByRole('button', { name: 'Note or link' }).click()
-  await page.keyboard.type('Ask beta testers for feedback /todo', { delay: 45 })
-  await page.keyboard.press('Enter')
-  await page.keyboard.press('Escape')
-  await page.waitForTimeout(900)
-
-  await page.keyboard.press('Control+k')
-  await page.waitForTimeout(300)
-  await page.keyboard.type('drizzle', { delay: 90 })
-  await page.waitForTimeout(700)
-  await page.keyboard.press('Control+Enter')
-  await page.waitForTimeout(1600)
-
-  await page.getByRole('tab', { name: 'Research' }).click()
-  await page.waitForTimeout(1500)
-  await recorder.stop()
-
-  writeFileSync(join(OUT, 'demo.gif'), recorder.toGif())
+  writeFileSync(join(OUT, 'demo.gif'), encodeGif(frames, { fps: FPS, holdLastMs: 800 }))
   await context.close()
+  rmSync(profile, { recursive: true, force: true })
 })

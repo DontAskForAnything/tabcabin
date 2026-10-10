@@ -17,10 +17,19 @@ declare module 'gifenc' {
         index: Uint8Array,
         width: number,
         height: number,
-        options?: { palette?: Palette; delay?: number; repeat?: number },
+        options?: {
+          palette?: Palette
+          delay?: number
+          repeat?: number
+          transparent?: boolean
+          transparentIndex?: number
+          dispose?: number
+        },
       ): void
       finish(): void
       bytes(): Uint8Array
+      /** The bytes written so far, without copying them. */
+      bytesView(): Uint8Array
     }
   }
   export default gifenc

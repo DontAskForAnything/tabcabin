@@ -15,8 +15,36 @@ export const CURSOR = `
   })
 `
 
+/**
+ * Real milliseconds per scripted millisecond. Recordings on a slow machine raise it and slow the
+ * page down to match (see `slow-motion.ts`), so every step of a glide gets painted.
+ */
+let pace = 1
+const glidedTo = new WeakMap<Page, { x: number; y: number }>()
+
+export function setPace(value: number) {
+  pace = value
+}
+
+async function wait(page: Page, ms: number) {
+  await page.waitForTimeout(ms * pace)
+}
+
 export async function glide(page: Page, x: number, y: number, ms = 700) {
-  await page.mouse.move(x, y, { steps: Math.max(8, Math.round(ms / 16)) })
+  const steps = Math.max(8, Math.round(ms / 16))
+  const from = glidedTo.get(page)
+  glidedTo.set(page, { x, y })
+  if (pace === 1 || !from) {
+    await page.mouse.move(x, y, { steps })
+    return
+  }
+  // Slowed down: one step per 16 scripted milliseconds, on a clock.
+  const start = Date.now()
+  for (let i = 1; i <= steps; i++) {
+    await page.mouse.move(from.x + ((x - from.x) * i) / steps, from.y + ((y - from.y) * i) / steps)
+    const rest = start + (i * ms * pace) / steps - Date.now()
+    if (rest > 0) await page.waitForTimeout(rest)
+  }
 }
 
 export async function center(page: Page, locator: ReturnType<Page['locator']>) {
@@ -24,14 +52,8 @@ export async function center(page: Page, locator: ReturnType<Page['locator']>) {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2, box }
 }
 
-/**
- * The scripted tour used for the demo and the promo footage: save a tab by dragging it,
- * add and tick to-dos, search, switch to collections, open reminders, go dark.
- * `mark` is called when each part starts.
- */
-export async function playSession(page: Page, mark: (name: string) => unknown = () => undefined) {
-  await mark('drag')
-  // 1. Drag an open tab into "Read later"; it is saved and closed.
+/** Drags an open tab into "Read later"; it is saved and closed. */
+export async function dragTab(page: Page) {
   const tab = page.getByRole('button', { name: 'Service Worker API – MDN' }).first()
   const from = await center(page, tab)
   await glide(page, from.x - 40, from.y, 900)
@@ -42,64 +64,68 @@ export async function playSession(page: Page, mark: (name: string) => unknown = 
   )
   await glide(page, (from.x + add.x) / 2, from.y - 60, 500)
   await glide(page, add.x, add.box.y - 12, 700)
-  await page.waitForTimeout(500)
+  await wait(page, 500)
   await page.mouse.up()
-  await page.waitForTimeout(1600)
+  await wait(page, 1600)
+}
 
-  await mark('todo')
-  // 2. Add a to-do in "Launch week".
+/** Adds a to-do in "Launch week" and ticks another one. */
+export async function addTodo(page: Page) {
   const launchWeek = page.getByRole('region', { name: 'Launch week' })
   const note = await center(page, launchWeek.getByRole('button', { name: 'Note or link' }))
   await glide(page, note.x, note.y, 800)
   await page.mouse.click(note.x, note.y)
-  await page.keyboard.type('Ask beta testers for feedback /todo', { delay: 55 })
+  await page.keyboard.type('Ask beta testers for feedback /todo', { delay: 55 * pace })
   await page.keyboard.press('Enter')
   await page.keyboard.press('Escape')
-  await page.waitForTimeout(700)
+  await wait(page, 700)
 
-  // 3. Tick a to-do.
   const check = await center(page, launchWeek.getByRole('checkbox').nth(1))
   await glide(page, check.x, check.y, 700)
   await page.mouse.click(check.x, check.y)
-  await page.waitForTimeout(1100)
+  await wait(page, 1100)
+}
 
-  await mark('search')
-  // 4. Search and jump to the result.
+/** Searches with ⌘K and jumps to the result. */
+export async function search(page: Page) {
   await glide(page, 820, 500, 500)
   await page.keyboard.press('Control+k')
-  await page.waitForTimeout(500)
-  await page.keyboard.type('drizzle', { delay: 120 })
-  await page.waitForTimeout(900)
+  await wait(page, 500)
+  await page.keyboard.type('drizzle', { delay: 120 * pace })
+  await wait(page, 900)
   await page.keyboard.press('Control+Enter')
-  await page.waitForTimeout(2000)
+  await wait(page, 2000)
+}
 
-  await mark('collections')
-  // 5. Collections view of another category.
+/** Switches to the collections view of another category. */
+export async function openCollections(page: Page) {
   const research = await center(page, page.getByRole('tab', { name: 'Research' }))
   await glide(page, research.x, research.y, 800)
   await page.mouse.click(research.x, research.y)
-  await page.waitForTimeout(2200)
+  await wait(page, 2200)
+}
 
-  await mark('reminders')
-  // 6. Reminders.
+/** Opens the reminders and closes them again. */
+async function openReminders(page: Page) {
   const bell = await center(page, page.getByRole('button', { name: 'Reminders' }))
   await glide(page, bell.x, bell.y, 800)
   await page.mouse.click(bell.x, bell.y)
-  await page.waitForTimeout(2600)
+  await wait(page, 2600)
   await page.keyboard.press('Escape')
+}
 
-  await mark('dark')
-  // 7. Dark theme.
+/** Goes back to "Today" and switches to the dark theme. */
+async function goDark(page: Page) {
   const today = await center(page, page.getByRole('tab', { name: 'Today' }))
   await glide(page, today.x, today.y, 700)
   await page.mouse.click(today.x, today.y)
-  await page.waitForTimeout(600)
+  await wait(page, 600)
   const more = await center(page, page.getByRole('button', { name: 'More' }).first())
   await glide(page, more.x, more.y, 700)
   await page.mouse.click(more.x, more.y)
   const theme = await center(page, page.getByRole('menuitem', { name: 'Theme' }))
   await glide(page, theme.x, theme.y, 400)
-  await page.waitForTimeout(400)
+  await wait(page, 400)
   const dark = await center(page, page.getByRole('menuitem', { name: 'Dark' }))
   // Move right into the submenu first, then down, so it stays open.
   await glide(page, dark.x, theme.y, 300)
@@ -107,6 +133,26 @@ export async function playSession(page: Page, mark: (name: string) => unknown = 
   await page.mouse.click(dark.x, dark.y)
   await glide(page, 760, 560, 700)
   await expect(page.locator('html')).toHaveClass(/dark/)
-  await page.waitForTimeout(2500)
+  await wait(page, 2500)
+}
+
+/**
+ * The scripted tour of the promo footage: save a tab by dragging it, add and tick to-dos,
+ * search, switch to collections, open reminders, go dark. The demo GIF plays the first parts.
+ * `mark` is called when each part starts.
+ */
+export async function playSession(page: Page, mark: (name: string) => unknown = () => undefined) {
+  await mark('drag')
+  await dragTab(page)
+  await mark('todo')
+  await addTodo(page)
+  await mark('search')
+  await search(page)
+  await mark('collections')
+  await openCollections(page)
+  await mark('reminders')
+  await openReminders(page)
+  await mark('dark')
+  await goDark(page)
   await mark('end')
 }

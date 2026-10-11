@@ -1,20 +1,26 @@
-import { chromium, expect, test, type Page } from '@playwright/test'
+import { chromium, test, type Page } from '@playwright/test'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { CURSOR, center, glide, playSession } from '../screenshots/session'
+import { CURSOR, glide, setPace, wait } from '../screenshots/session'
 import { ARTICLE, extensionPath, loadDemo, openApp, openTabs } from '../screenshots/setup'
+import { slowAnimations, slowDown } from '../screenshots/slow-motion'
 import { PROMO_DIR } from './dir'
+import { playTour, savePage } from './tour'
 
-declare const chrome: typeof browser
-declare const tabcabin: { togglePopover: (tab: object) => Promise<void> }
+const FPS = 60
+/**
+ * The tour runs this many times slower while recording (see `slow-motion.ts`): 16 on a small
+ * 2-core box; a fast machine may need less (PROMO_SLOW). Every slot of a drag must get a frame.
+ */
+const SLOW = Number(process.env.PROMO_SLOW ?? 16)
 
 /**
- * Records the scripted tour as sharp JPEG frames (1920×1200) with timestamps and the start
- * time of every part, for the promo video renderer.
+ * Records the scripted tour as sharp JPEG frames (1920×1200, 60 fps) with timestamps and the
+ * start time of every part, for the promo video renderer. Times are scripted seconds.
  */
 test('promo footage', async () => {
-  test.setTimeout(240_000)
+  test.setTimeout(30 * 60_000)
   const dir = join(PROMO_DIR, 'footage')
   rmSync(dir, { recursive: true, force: true })
   mkdirSync(dir, { recursive: true })
@@ -38,90 +44,80 @@ test('promo footage', async () => {
 
   const frames: { file: string; t: number }[] = []
   const marks: { name: string; t: number }[] = []
-  const mark = (name: string) => marks.push({ name, t: Date.now() / 1000 })
-  /** Screencasts `page` into the shared frame list until the returned function is called. */
+  let start: number | null = null
+  /** Scripted seconds since the first frame, from a real time in seconds. */
+  const scripted = (seconds: number) => (seconds - (start ??= seconds)) / SLOW
+  const mark = (name: string) => marks.push({ name, t: scripted(Date.now() / 1000) })
+  /**
+   * Screencasts `page` into the shared frame list until the returned function is called. Chrome
+   * sends a frame whenever the page paints; only the last one painted in each film frame's slot
+   * is kept. Frames are timed when they arrive: their own timestamps sometimes go backwards.
+   */
   async function record(page: Page) {
     const cdp = await context.newCDPSession(page)
-    cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
+    let held: { data: string; t: number } | null = null
+    const keep = () => {
+      if (!held) return
       const file = `f${String(frames.length).padStart(5, '0')}.jpg`
-      writeFileSync(join(dir, file), Buffer.from(data, 'base64'))
-      frames.push({ file, t: metadata.timestamp ?? Date.now() / 1000 })
+      writeFileSync(join(dir, file), Buffer.from(held.data, 'base64'))
+      frames.push({ file, t: held.t })
+      held = null
+    }
+    cdp.on('Page.screencastFrame', ({ data, sessionId }) => {
+      const t = scripted(Date.now() / 1000)
+      if (held && Math.ceil(held.t * FPS) !== Math.ceil(t * FPS)) keep()
+      held = { data, t }
       void cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => undefined)
     })
     await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92 })
     return async () => {
       await cdp.send('Page.stopScreencast')
+      keep()
       await cdp.detach()
     }
   }
 
-  // 1. Saving an article with the popover.
-  await context.route('https://journal.example.dev/**', (route) =>
-    route.fulfill({ contentType: 'text/html; charset=utf-8', body: ARTICLE }),
-  )
-  const article = await context.newPage()
-  await article.goto('https://journal.example.dev/calm-software')
-  await article.bringToFront()
-  await article.mouse.move(520, 420)
-  await article.waitForTimeout(800)
-  let stop = await record(article)
-  await article.waitForTimeout(400)
-  mark('capture')
-  await glide(article, 640, 330, 600)
-  await article.waitForTimeout(300)
-  const tab = await worker.evaluate(
-    async () => (await chrome.tabs.query({ url: 'https://journal.example.dev/*' }))[0]!,
-  )
-  await worker.evaluate((tab) => tabcabin.togglePopover(tab), tab)
-  const popover = article.getByRole('dialog', { name: 'TabCabin' })
-  await expect(popover).toBeVisible()
-  await article.waitForTimeout(500)
-  await popover
-    .getByRole('textbox')
-    .pressSequentially('Share with the team on Friday', { delay: 55 })
-  await article.waitForTimeout(250)
-  for (const name of ['Yellow', 'Tomorrow', 'Save']) {
-    const target = await center(article, popover.getByRole('button', { name, exact: true }))
-    await glide(article, target.x, target.y, 450)
-    await article.mouse.click(target.x, target.y)
-    await article.waitForTimeout(350)
+  await slowDown(context, SLOW)
+  try {
+    // 1. Saving an article with the popover.
+    await context.route('https://journal.example.dev/**', (route) =>
+      route.fulfill({ contentType: 'text/html; charset=utf-8', body: ARTICLE }),
+    )
+    const article = await context.newPage()
+    await article.goto('https://journal.example.dev/calm-software')
+    await article.bringToFront()
+    await slowAnimations(article, SLOW)
+    await glide(article, 520, 420)
+    await wait(article, 800)
+    let stop = await record(article)
+    await wait(article, 400)
+    mark('capture')
+    await savePage(article, worker)
+    mark('capture-end')
+    await stop()
+    await article.close()
+
+    // 2. The tour of the new tab page, with fresh demo data.
+    await loadDemo(worker, 'light')
+    const page = await openApp(context, worker)
+    await page.bringToFront()
+    await slowAnimations(page, SLOW)
+    await glide(page, 900, 600)
+    await wait(page, 800)
+    stop = await record(page)
+    await wait(page, 600)
+    await playTour(page, mark)
+    await stop()
+
+    const size = await page.evaluate(() => [innerWidth, innerHeight, devicePixelRatio])
+    writeFileSync(join(dir, 'index.json'), JSON.stringify({ size, frames, marks }, null, 1))
+    console.warn(
+      `footage: ${frames.length} frames, viewport ${size.join('×')}`,
+      marks.map((m) => `${m.name}@${m.t.toFixed(2)}`).join(' '),
+    )
+  } finally {
+    setPace(1)
+    await context.close()
+    rmSync(profile, { recursive: true, force: true })
   }
-  // End on the confirmation, before the popover closes itself.
-  await expect(popover.getByText(/Saved to/)).toBeVisible()
-  await article.waitForTimeout(500)
-  mark('capture-end')
-  await stop()
-  await article.close()
-
-  // 2. The tour of the new tab page, with fresh demo data.
-  await loadDemo(worker, 'light')
-  const page = await openApp(context, worker)
-  await page.bringToFront()
-  await page.mouse.move(900, 600)
-  await page.waitForTimeout(800)
-  stop = await record(page)
-  await page.waitForTimeout(600)
-  await playSession(page, mark)
-  await stop()
-
-  const size = await page.evaluate(() => [innerWidth, innerHeight, devicePixelRatio])
-  const start = frames[0]?.t ?? 0
-  writeFileSync(
-    join(dir, 'index.json'),
-    JSON.stringify(
-      {
-        size,
-        frames: frames.map((f) => ({ file: f.file, t: f.t - start })),
-        marks: marks.map((m) => ({ name: m.name, t: m.t - start })),
-      },
-      null,
-      1,
-    ),
-  )
-  console.warn(
-    `footage: ${frames.length} frames, viewport ${size.join('×')}`,
-    marks.map((m) => `${m.name}@${(m.t - start).toFixed(1)}`).join(' '),
-  )
-  await context.close()
-  rmSync(profile, { recursive: true, force: true })
 })

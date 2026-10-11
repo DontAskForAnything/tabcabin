@@ -1,18 +1,10 @@
 /**
- * Sound effects cut to the picture: pops as tabs land, whooshes on transitions, plinks while the
+ * Sound effects cut to the picture: pops as tabs land, whooshes as they fly, plinks while the
  * cabin is built, an impact for the logo and each value line, and dings when the laptop and the
- * desktop sync. Synthesized like the music (no samples).
- *
- * The cue times follow the film's timeline in promo.js (BAR = 2.4 s; the app scenes start on
- * bars 3, 5, 7 … 15 and end on bar 17). Change them together.
+ * desktop sync. The screens change without a sound. Synthesized like the music (no samples). The
+ * cue times follow timeline.ts.
  */
-
-const BAR = 2.4
-const FOOTAGE_START = 3 * BAR
-const FOOTAGE_END = 17 * BAR
-const SYNC = 17 * BAR
-const VALUES = 19 * BAR
-const END_CARD = 20 * BAR
+import { END_CARD, FOOTAGE_START, SYNC, VALUES } from './timeline.ts'
 
 export function addSfx(left: Float32Array, right: Float32Array, rate: number) {
   let seed = 777
@@ -104,12 +96,8 @@ export function addSfx(left: Float32Array, right: Float32Array, rate: number) {
   parts.forEach((at, i) => plink(at, notes[i]!, 0.11, (i - 3) * 0.15))
   pop(6.2, 86, 0.07)
 
-  // 3. Into the browser, then a whoosh at every scene change.
-  whoosh(FOOTAGE_START - 0.45, 0.6, 0.85, -0.4, 0.4)
+  // 3. The browser window.
   pop(FOOTAGE_START + 0.5, 88, 0.07, 0.3)
-  for (let scene = 1; scene < 7; scene++)
-    whoosh(FOOTAGE_START + scene * 2 * BAR - 0.3, 0.5, 0.7, 0.5, -0.5)
-  whoosh(FOOTAGE_END - 0.35, 0.6, 0.8, -0.4, 0.4)
 
   // 4. Sync: each change leaves the laptop with a blip and lands on the desktop with a ding.
   pop(SYNC + 0.5, 74, 0.1)
@@ -122,7 +110,6 @@ export function addSfx(left: Float32Array, right: Float32Array, rate: number) {
 
   // 5. One hit for each value, then the end card.
   for (let i = 0; i < 3; i++) impact(VALUES + 0.1 + i * 0.65, 0.35)
-  whoosh(END_CARD - 0.35, 0.45, 0.4, 0, 0)
   impact(END_CARD, 0.5)
   for (const at of [END_CARD + 1.2, END_CARD + 1.6]) pop(at, 86, 0.05)
 }

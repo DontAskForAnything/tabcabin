@@ -87,8 +87,8 @@ const PALETTE = {
   'chrome-icon': ['#5f6368', '#c4c7c5'],
   'chrome-line': ['#d3d6da', '#2a2b2e'],
 }
-/** Text and the things behind text switch at once in the middle of the sunset (the caption fades
-    out around it), so captions never turn grey on grey. */
+/** Text and the things behind text switch as fast as the app does, so captions never turn grey
+    on grey. */
 const TEXT = new Set(['ink', 'ink-2', 'accent-ink', 'veil', 'soft', 'soft-line', 'glow'])
 /** Translucent colours: [r, g, b, alpha] by day and at night. */
 const SOFT = {
@@ -114,11 +114,12 @@ const mixHex = (a, b, n) => {
   const [x, y] = [hex(a), hex(b)]
   return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], n))).join(' ')})`
 }
-/** Morning until the "Light and dark" scene, then the sun sets during it. */
-const nightAt = (t) => easeInOut(prog(t, 36.6, 40.4))
+/** Morning until the app turns dark in the "Light and dark" scene; the sun sets right then. */
+const nightAt = (t) => easeInOut(prog(t, NIGHT, NIGHT + 0.6))
+/** The app's own switch takes 0.15 s. */
+const flipAt = (t) => easeOut(prog(t, NIGHT, NIGHT + 0.15))
 const root = document.documentElement
-function paint(n) {
-  const flip = prog(n, 0.49, 0.51)
+function paint(n, flip) {
   const at = (name) => (TEXT.has(name) ? flip : n)
   for (const [name, [day, night]] of Object.entries(PALETTE))
     root.style.setProperty(`--${name}`, mixHex(day, night, at(name)))
@@ -150,9 +151,9 @@ const puffAt = (t, k, count, period) => {
 }
 function moveValley(t, n, footage) {
   // Camera: a slow push towards the cabin, closer during the app scenes, and back out at night.
-  const back = easeInOut(prog(t, 48, 51))
+  const back = easeInOut(prog(t, END_CARD, END_CARD + 3))
   const zoom =
-    1 + 0.05 * prog(t, 0, 4.6) + 0.14 * easeInOut(prog(t, 4.6, 7.2)) + 0.08 * prog(t, 7.2, 48)
+    1 + 0.05 * prog(t, 0, 4.6) + 0.14 * easeInOut(prog(t, 4.6, 7.2)) + 0.08 * prog(t, 7.2, END_CARD)
   const scale = lerp(zoom, 1.04, back)
   const svg = valley.node.querySelector('svg')
   svg.style.transformOrigin = `${valley.cabin.x}px ${valley.cabin.y}px`
@@ -297,7 +298,6 @@ const browser = el(
     <div class="screen"><img id="footage" alt=""></div>
   </div>`,
 )
-const footage = document.getElementById('footage')
 const callout = browser.querySelector('.callout')
 const ring = browser.querySelector('.ring')
 const PAGES = {
@@ -329,11 +329,12 @@ const caption = el(
 const keepWhole = (text) => text.replace(/(\S+-\S+)/g, '<span style="white-space:nowrap">$1</span>')
 
 const BAR = 2.4
+/** The app scenes and their lengths in bars (sfx.ts and music.ts follow them). */
 const SCENES = [
   {
     mark: 'drag',
-    until: 'todo',
-    start: 3 * BAR,
+    until: 'drag-end',
+    bars: 2,
     title: 'Drag tabs into groups.',
     sub: 'Saved and closed in one move.',
   },
@@ -341,84 +342,92 @@ const SCENES = [
     mark: 'capture',
     until: 'capture-end',
     page: 'article',
-    start: 5 * BAR,
+    bars: 2,
     title: 'Save any page in one click.',
     sub: 'Or press <kbd>Ctrl Shift S</kbd> to add a note, a group and a reminder.',
-    speed: 2.3,
   },
   {
     mark: 'todo',
     until: 'search',
-    start: 7 * BAR,
+    bars: 2,
     title: 'Notes and to-dos next to your links.',
     sub: 'Type <kbd>/todo</kbd> and press Enter.',
   },
   {
     mark: 'search',
     until: 'collections',
-    start: 9 * BAR,
+    bars: 1.5,
     title: 'Find anything with <kbd>⌘K</kbd>',
     sub: 'Or <kbd>Ctrl K</kbd>: every workspace, open tab and bookmark.',
   },
   {
     mark: 'collections',
     until: 'reminders',
-    start: 11 * BAR,
+    bars: 1.5,
     title: 'Boards or collections.',
-    sub: 'Pick the view that fits each category.',
-    speed: 1.6,
+    sub: 'Pick a view for each category.',
   },
   {
     mark: 'reminders',
     until: 'dark',
-    start: 13 * BAR,
+    bars: 1.5,
     title: 'Reminders when it matters.',
-    sub: 'One-time, weekly or monthly — with notifications.',
+    sub: 'One-time, weekly or monthly.',
   },
   {
     mark: 'dark',
     until: 'end',
-    start: 15 * BAR,
+    bars: 1.5,
     title: 'Light and dark.',
     sub: 'And a compact layout for smaller screens.',
   },
-].map((scene, i) => ({ ...scene, n: String(i + 1).padStart(2, '0') }))
+].reduce((scenes, scene, i) => {
+  const start = scenes.at(-1)?.end ?? 4 * BAR
+  const n = String(i + 1).padStart(2, '0')
+  return [...scenes, { ...scene, n, start, end: start + scene.bars * BAR }]
+}, [])
 const FOOTAGE_START = SCENES[0].start
-const FOOTAGE_END = 17 * BAR
+const FOOTAGE_END = SCENES.at(-1).end
+const SYNC_START = FOOTAGE_END
+const VALUES_START = SYNC_START + 2 * BAR
+const END_CARD = VALUES_START + BAR
+const DARK = SCENES.at(-1)
+/** When the app turns dark (set from the footage). */
+let NIGHT = DARK.start
 
 let index = null
-/** Per scene: frames on a compressed clock where idle pauses are shortened. */
+/** Per scene: its frames, timed from the start of its part of the tour. */
 let tracks = []
 async function loadFootage() {
   index = await (await fetch('/footage/index.json')).json()
   const markTime = (name) => index.marks.find((m) => m.name === name).t
+  NIGHT = DARK.start + markTime('night') - markTime(DARK.mark)
   tracks = SCENES.map((scene) => {
     const from = markTime(scene.mark)
     const to = markTime(scene.until)
-    const frames = index.frames.filter((f) => f.t >= from - 0.05 && f.t < to)
-    let clock = 0
-    const timed = frames.map((f, k) => {
-      if (k > 0) clock += Math.min(f.t - frames[k - 1].t, 0.16)
-      return { file: f.file, c: clock }
-    })
-    return { frames: timed, total: clock }
+    // The frame on screen when the part starts, then everything painted during it.
+    const first = index.frames.findLastIndex((f) => f.t <= from)
+    const last = index.frames.findLastIndex((f) => f.t < to)
+    return index.frames
+      .slice(Math.max(0, first), last + 1)
+      .map((f, k) => ({ file: f.file, c: k === 0 ? 0 : f.t - from }))
   })
 }
 
-let currentSrc = ''
-async function showFrame(scene, local, duration) {
+const footage = document.getElementById('footage')
+let shownSrc = ''
+/** Shows the frame of `scene` at `local` seconds into it; one scene cuts straight to the next. */
+async function showFrame(scene, local) {
   const track = tracks[scene]
-  if (!track || track.frames.length === 0) return
-  const speed = SCENES[scene].speed ?? Math.max(1, track.total / (duration - 0.5))
-  const target = Math.max(0, local - 0.15) * speed
-  let frame = track.frames[0]
-  for (const f of track.frames) {
-    if (f.c <= target) frame = f
+  if (!track || track.length === 0) return
+  let frame = track[0]
+  for (const f of track) {
+    if (f.c <= local) frame = f
     else break
   }
   const src = `/footage/${frame.file}`
-  if (src !== currentSrc) {
-    currentSrc = src
+  if (src !== shownSrc) {
+    shownSrc = src
     footage.src = src
     await footage.decode().catch(() => undefined)
   }
@@ -470,12 +479,6 @@ const values = ['No account needed.', 'No tracking.', 'Open source.'].map((text,
 const endLogo = el(
   `<div class="layer" style="left:890px;top:250px;width:140px;height:140px;filter:drop-shadow(0 24px 40px rgb(2 12 8 / .5))">${cabin(CREAM_LOGO)}</div>`,
 )
-/** Smoke from the end logo's chimney (logo at 890, 250, 140 px; chimney top at 84.5 / 28 of 128). */
-const endSmoke = Array.from({ length: 8 }, () =>
-  el(
-    `<div class="layer" style="left:${890 + (84.5 / 128) * 140 - 14}px;top:${250 + (28 / 128) * 140 - 14}px;width:28px;height:28px;border-radius:50%;background:radial-gradient(closest-side, rgb(244 234 213 / .6), transparent)"></div>`,
-  ),
-)
 const endName = el(`<div class="big layer" style="top:420px;font-size:116px">TabCabin</div>`)
 const endTag = el(
   `<div class="big layer plain" style="top:560px;font-size:42px;font-weight:500;color:var(--ink-2)">A calm cabin for your tabs.</div>`,
@@ -489,12 +492,12 @@ const endUrl = el(
 
 // ---------- timeline ----------
 
-window.DURATION = 22 * BAR
+window.DURATION = END_CARD + 2 * BAR
 
 window.seek = async (t) => {
   // The valley: time of day, camera, smoke and fireflies. The app scenes blur it a little.
   const night = nightAt(t)
-  paint(night)
+  paint(night, flipAt(t))
   const footage =
     easeOut(prog(t, FOOTAGE_START - 0.6, FOOTAGE_START + 0.4)) *
     (1 - easeInOut(prog(t, FOOTAGE_END - 0.2, FOOTAGE_END + 0.6)))
@@ -534,7 +537,7 @@ window.seek = async (t) => {
   // Scene 2: the tabs fly into a tile and the cabin is built: roof, floor and walls are drawn,
   // the three tabs slide in from the front to the back, and the chimney goes up last.
   const logoIn = easeBack(prog(t, 4.95, 5.45))
-  const logoOut = easeInOut(prog(t, 6.75, 7.25))
+  const logoOut = easeInOut(prog(t, FOOTAGE_START - 0.45, FOOTAGE_START + 0.05))
   set(logoTile, {
     s: logoIn * (1 - 0.3 * logoOut),
     o: prog(t, 4.95, 5.1) * (1 - logoOut),
@@ -586,32 +589,27 @@ window.seek = async (t) => {
   set(ring, { o: pulse > 0 && pulse < 1 ? 1 - wave : 0, s: 0.8 + wave * 0.9 })
   let pending = null
   if (inFootage) {
-    const i = SCENES.findIndex((s, k) => t >= s.start && t < (SCENES[k + 1]?.start ?? FOOTAGE_END))
-    const sceneIndex = Math.max(0, i)
-    const scene = SCENES[sceneIndex]
-    const end = SCENES[sceneIndex + 1]?.start ?? FOOTAGE_END
+    const scene = SCENES.find((s) => t < s.end) ?? SCENES.at(-1)
     const local = Math.max(0, t - scene.start)
     showPage(scene.page ?? 'newtab')
-    pending = showFrame(sceneIndex, local, end - scene.start)
+    pending = showFrame(SCENES.indexOf(scene), local)
     // Caption.
-    const capIn = easeOut(prog(local, 0.05, 0.6))
-    const capOut = easeInOut(prog(t, end - 0.35, end))
+    const capIn = easeOut(prog(local, 0.05, 0.5))
+    const capOut = easeInOut(prog(t, scene.end - 0.3, scene.end))
     if (caption.dataset.scene !== scene.n) {
       caption.dataset.scene = scene.n
       caption.querySelector('.kicker').textContent = scene.n
       caption.querySelector('h2').innerHTML = keepWhole(scene.title)
       caption.querySelector('p').innerHTML = keepWhole(scene.sub)
     }
-    // The caption steps aside while its colours switch from day to night.
-    const dip = 1 - Math.sin(Math.PI * prog(nightAt(t), 0.3, 0.7))
-    set(caption, { o: capIn * (1 - capOut) * dip, y: (1 - capIn) * 40 - capOut * 30 })
+    set(caption, { o: capIn * (1 - capOut), y: (1 - capIn) * 40 - capOut * 30 })
   } else {
     set(caption, { o: 0 })
   }
 
   // Scene 9: sync between two computers through a server.
-  const S0 = 17 * BAR
-  const S1 = 19 * BAR
+  const S0 = SYNC_START
+  const S1 = VALUES_START
   const syncIn = (d) => easeOut(prog(t, S0 + d, S0 + d + 0.6))
   const syncOut = easeInOut(prog(t, S1 - 0.4, S1))
   revealWords(syncTitle, t, S0 + 0.1, 0.08, 0.5)
@@ -642,15 +640,15 @@ window.seek = async (t) => {
   })
 
   // Scene 10: values.
-  const V0 = 19 * BAR
-  const valuesOut = easeInOut(prog(t, 20 * BAR - 0.3, 20 * BAR))
+  const V0 = VALUES_START
+  const valuesOut = easeInOut(prog(t, END_CARD - 0.3, END_CARD))
   values.forEach((node, i) => {
     revealWords(node, t, V0 + 0.1 + i * 0.65, 0.08, 0.45)
     set(node, { o: t < V0 ? 0 : 1 - valuesOut, y: -30 * valuesOut })
   })
 
   // Scene 11: end card.
-  const E0 = 20 * BAR
+  const E0 = END_CARD
   const endFade = 1 - easeInOut(prog(t, window.DURATION - 0.9, window.DURATION))
   set(endLogo, { o: prog(t, E0, E0 + 0.3) * endFade, s: easeBack(prog(t, E0, E0 + 0.6)) || 0.001 })
   set(endName, {
@@ -666,16 +664,6 @@ window.seek = async (t) => {
     y: (1 - easeOut(prog(t, E0 + 1.2, E0 + 1.8))) * 20,
   })
   set(endUrl, { o: easeOut(prog(t, E0 + 1.6, E0 + 2.2)) * endFade })
-  const smokeOn = prog(t, E0 + 0.6, E0 + 1.4) * endFade
-  endSmoke.forEach((puff, k) => {
-    const { p, o } = puffAt(t, k, endSmoke.length, 4.5)
-    set(puff, {
-      x: -p * 46 + Math.sin(p * 5 + k) * 5,
-      y: -p * 150,
-      s: 0.6 + 2.4 * p,
-      o: o * smokeOn * 1.6,
-    })
-  })
   document.getElementById('stage').style.opacity = String(t > E0 ? endFade : 1)
 
   if (pending) await pending

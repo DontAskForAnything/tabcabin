@@ -13,7 +13,7 @@ const font = fonts.resolve('@fontsource-variable/geist/files/geist-latin-wght-no
 const display = fonts.resolve(
   '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2',
 )
-const FPS = 30
+const FPS = 60
 
 const files: Record<string, () => Buffer> = {
   '/promo.html': () => readFileSync(join(here, 'promo.html')),
@@ -33,7 +33,7 @@ const types: Record<string, string> = {
 }
 
 /**
- * Renders promo.html frame by frame (1920×1080, 30 fps) into PROMO_DIR/frames. Each frame
+ * Renders promo.html frame by frame (1920×1080, 60 fps) into PROMO_DIR/frames. Each frame
  * seeks the timeline explicitly, so the result does not depend on how fast the machine is.
  */
 test('promo frames', async () => {

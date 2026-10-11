@@ -1,10 +1,11 @@
 /**
  * Forest sounds under the music, synthesized like the music itself (no recordings): a soft wind
- * through the whole film and a small crackling fire on the end card.
+ * through the whole film and a small crackling fire on the end card (times from timeline.ts).
  */
+import { END_CARD, SUNSET } from './timeline.ts'
 
-/** Times in seconds that match the film (see promo.js): the end card starts at 48 s. */
-const END_CARD = 48
+/** The wind swells around the sunset. */
+const GUST = [(SUNSET[0] + SUNSET[1]) / 2 - 4, (SUNSET[0] + SUNSET[1]) / 2 + 4] as const
 
 export function addForest(left: Float32Array, right: Float32Array, rate: number) {
   const length = left.length / rate
@@ -34,7 +35,7 @@ export function addForest(left: Float32Array, right: Float32Array, rate: number)
     const cutoff = 0.004 + 0.01 * breath
     lowL += (brownL - lowL) * cutoff * 6
     lowR += (brownR - lowR) * cutoff * 6
-    const gain = (0.08 + 0.06 * breath) * (1 + 0.6 * Math.sin(Math.PI * ramp(t, 35, 43)))
+    const gain = (0.08 + 0.06 * breath) * (1 + 0.6 * Math.sin(Math.PI * ramp(t, ...GUST)))
     left[i]! += lowL * gain
     right[i]! += lowR * gain
   }

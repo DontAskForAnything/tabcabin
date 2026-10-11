@@ -1,20 +1,20 @@
 /**
  * Original soundtrack for the promo video, synthesized from scratch (no samples, no third-party
- * music). 100 BPM, 22 bars = 52.8 s: pad intro, a lift into the logo at bar 3, a soft groove
- * under the feature scenes, a breakdown, and a ringing final chord. Sound effects cut to the
- * picture (sfx.ts) and a quiet wind and fire (ambience.ts) are mixed in.
+ * music). 100 BPM, 21 bars = 50.4 s (timeline.ts): pad intro, a lift into the logo at bar 3, a
+ * soft groove under the feature scenes, a breakdown, and a ringing final chord. Sound effects cut
+ * to the picture (sfx.ts) and a quiet wind and fire (ambience.ts) are mixed in.
  *
  * Run: node --experimental-strip-types scripts/promo/music.ts <out.wav>
  */
 import { writeFileSync } from 'node:fs'
 import { addForest } from './ambience.ts'
 import { addSfx } from './sfx.ts'
+import { BARS, FOOTAGE_END, FOOTAGE_START } from './timeline.ts'
 
 const RATE = 48_000
 const BPM = 100
 const BEAT = 60 / BPM
 const BAR = BEAT * 4
-const BARS = 22
 /** The last two bars ring out on one chord; the bar before them is a breakdown. */
 const FINAL = BARS - 2
 const BREAKDOWN = FINAL - 1
@@ -190,7 +190,11 @@ for (let bar = 0; bar < BARS; bar++) {
   const duration = bar === FINAL ? BAR * 2 : BAR + 0.15
   if (bar === FINAL + 1) break
   pad(barStart(bar), duration, tones, bar < 2 ? 0.8 : 1, (t) =>
-    t < 4.8 ? 0.03 + (t / 4.8) * 0.09 : t > 40.8 ? 0.12 - ((t - 40.8) / 7.2) * 0.09 : 0.12,
+    t < 4.8
+      ? 0.03 + (t / 4.8) * 0.09
+      : t > FOOTAGE_END
+        ? 0.12 - ((t - FOOTAGE_END) / 7.2) * 0.09
+        : 0.12,
   )
 }
 
@@ -220,8 +224,8 @@ for (let bar = 2; bar < BARS; bar++) {
   }
 }
 
-// Groove from bar 4 (index 3); the breakdown bar keeps only hats.
-for (let bar = 3; bar < FINAL; bar++) {
+// Groove under the app scenes; the breakdown bar keeps only hats.
+for (let bar = Math.round(FOOTAGE_START / BAR); bar < FINAL; bar++) {
   const chord = chordAt(bar)
   const t0 = barStart(bar)
   const breakdown = bar === BREAKDOWN

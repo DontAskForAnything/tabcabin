@@ -1,12 +1,20 @@
-import { expect, type Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
-/** Videos do not show the system cursor, so the page draws one that follows the mouse. */
+/**
+ * Videos do not show the system cursor, so the page draws one that follows the mouse. It lives in
+ * the top layer, above popovers such as the extension's in-page one, and goes back on top whenever
+ * another one opens.
+ */
 export const CURSOR = `
   addEventListener('DOMContentLoaded', () => {
     const cursor = document.createElement('div')
-    cursor.style.cssText = 'position:fixed;left:0;top:0;width:22px;height:26px;z-index:2147483647;pointer-events:none;transition:transform .08s;'
+    cursor.style.cssText = 'position:fixed;inset:0 auto auto 0;margin:0;padding:0;border:0;background:none;overflow:visible;width:22px;height:26px;z-index:2147483647;pointer-events:none;transition:transform .08s;'
     cursor.innerHTML = '<svg width="22" height="26" viewBox="0 0 22 26"><path d="M2 2l17 10.5-7.4 1.6L8 22z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>'
+    cursor.popover = 'manual'
     document.documentElement.append(cursor)
+    const raise = () => { try { cursor.hidePopover(); cursor.showPopover() } catch {} }
+    raise()
+    addEventListener('toggle', (e) => { if (e.target !== cursor && e.newState === 'open') raise() }, true)
     let x = -50, y = -50, down = false
     const draw = () => (cursor.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + (down ? 0.85 : 1) + ')')
     addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; draw() }, true)
@@ -26,13 +34,18 @@ export function setPace(value: number) {
   pace = value
 }
 
-async function wait(page: Page, ms: number) {
+export async function wait(page: Page, ms: number) {
   await page.waitForTimeout(ms * pace)
 }
 
-/** Moves the mouse along `path` (t from 0 to 1), one step per 16 scripted milliseconds. */
+/** Types `text` with `ms` scripted milliseconds per key. */
+export async function typeKeys(page: Page, text: string, ms: number) {
+  await page.keyboard.type(text, { delay: ms * pace })
+}
+
+/** Moves the mouse along `path` (t from 0 to 1), one step per 60 fps frame of scripted time. */
 async function follow(page: Page, path: (t: number) => { x: number; y: number }, ms: number) {
-  const steps = Math.max(8, Math.round(ms / 16))
+  const steps = Math.max(8, Math.round((ms * 60) / 1000))
   const start = Date.now()
   for (let i = 1; i <= steps; i++) {
     const { x, y } = path(i / steps)
@@ -54,14 +67,15 @@ export async function glide(page: Page, x: number, y: number, ms = 700) {
 }
 
 /**
- * Moves the mouse like a hand does: along a curve that bows `bend` pixels upwards, starting
- * slowly, speeding up and slowing down again before (x, y).
+ * Moves the mouse like a hand does: along a curve that bows `bend` pixels upwards (less on short
+ * moves), starting slowly, speeding up and slowing down again before (x, y).
  */
-async function swoop(page: Page, x: number, y: number, ms: number, bend = 30) {
+export async function swoop(page: Page, x: number, y: number, ms: number, bend = 30) {
   const from = glidedTo.get(page)
   if (!from) return glide(page, x, y, ms)
   glidedTo.set(page, { x, y })
-  const control = { x: (from.x + x) / 2, y: (from.y + y) / 2 - 2 * bend }
+  const lift = Math.min(bend, Math.hypot(x - from.x, y - from.y) / 8)
+  const control = { x: (from.x + x) / 2, y: (from.y + y) / 2 - 2 * lift }
   await follow(
     page,
     (t) => {
@@ -80,29 +94,18 @@ export async function center(page: Page, locator: ReturnType<Page['locator']>) {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2, box }
 }
 
-/**
- * Drags an open tab into "Read later"; it is saved and closed. `smooth` (the demo GIF) carries it
- * along one eased curve; the film keeps its straight glides.
- */
-export async function dragTab(page: Page, { smooth = false } = {}) {
+/** Drags an open tab into "Read later" along one eased curve; it is saved and closed. */
+export async function dragTab(page: Page) {
   const tab = page.getByRole('button', { name: 'Service Worker API – MDN' }).first()
   const from = await center(page, tab)
+  await swoop(page, from.x - 40, from.y, 1000)
+  await page.mouse.down()
+  await wait(page, 250)
   const target = page
     .getByRole('region', { name: 'Read later' })
     .getByRole('button', { name: 'Note or link' })
-  if (smooth) {
-    await swoop(page, from.x - 40, from.y, 1000)
-    await page.mouse.down()
-    await wait(page, 250)
-    const add = await center(page, target)
-    await swoop(page, add.x, add.box.y - 12, 2000, 40)
-  } else {
-    await glide(page, from.x - 40, from.y, 900)
-    await page.mouse.down()
-    const add = await center(page, target)
-    await glide(page, (from.x + add.x) / 2, from.y - 60, 500)
-    await glide(page, add.x, add.box.y - 12, 700)
-  }
+  const add = await center(page, target)
+  await swoop(page, add.x, add.box.y - 12, 2000, 40)
   await wait(page, 500)
   await page.mouse.up()
   await wait(page, 1600)
@@ -114,7 +117,7 @@ export async function addTodo(page: Page) {
   const note = await center(page, launchWeek.getByRole('button', { name: 'Note or link' }))
   await glide(page, note.x, note.y, 800)
   await page.mouse.click(note.x, note.y)
-  await page.keyboard.type('Ask beta testers for feedback /todo', { delay: 55 * pace })
+  await typeKeys(page, 'Ask beta testers for feedback /todo', 55)
   await page.keyboard.press('Enter')
   await page.keyboard.press('Escape')
   await wait(page, 700)
@@ -130,7 +133,7 @@ export async function search(page: Page) {
   await glide(page, 820, 500, 500)
   await page.keyboard.press('Control+k')
   await wait(page, 500)
-  await page.keyboard.type('drizzle', { delay: 120 * pace })
+  await typeKeys(page, 'drizzle', 120)
   await wait(page, 900)
   await page.keyboard.press('Control+Enter')
   await wait(page, 2000)
@@ -142,56 +145,4 @@ export async function openCollections(page: Page) {
   await glide(page, research.x, research.y, 800)
   await page.mouse.click(research.x, research.y)
   await wait(page, 2200)
-}
-
-/** Opens the reminders and closes them again. */
-async function openReminders(page: Page) {
-  const bell = await center(page, page.getByRole('button', { name: 'Reminders' }))
-  await glide(page, bell.x, bell.y, 800)
-  await page.mouse.click(bell.x, bell.y)
-  await wait(page, 2600)
-  await page.keyboard.press('Escape')
-}
-
-/** Goes back to "Today" and switches to the dark theme. */
-async function goDark(page: Page) {
-  const today = await center(page, page.getByRole('tab', { name: 'Today' }))
-  await glide(page, today.x, today.y, 700)
-  await page.mouse.click(today.x, today.y)
-  await wait(page, 600)
-  const more = await center(page, page.getByRole('button', { name: 'More' }).first())
-  await glide(page, more.x, more.y, 700)
-  await page.mouse.click(more.x, more.y)
-  const theme = await center(page, page.getByRole('menuitem', { name: 'Theme' }))
-  await glide(page, theme.x, theme.y, 400)
-  await wait(page, 400)
-  const dark = await center(page, page.getByRole('menuitem', { name: 'Dark' }))
-  // Move right into the submenu first, then down, so it stays open.
-  await glide(page, dark.x, theme.y, 300)
-  await glide(page, dark.x, dark.y, 300)
-  await page.mouse.click(dark.x, dark.y)
-  await glide(page, 760, 560, 700)
-  await expect(page.locator('html')).toHaveClass(/dark/)
-  await wait(page, 2500)
-}
-
-/**
- * The scripted tour of the promo footage: save a tab by dragging it, add and tick to-dos,
- * search, switch to collections, open reminders, go dark. The demo GIF plays the first parts.
- * `mark` is called when each part starts.
- */
-export async function playSession(page: Page, mark: (name: string) => unknown = () => undefined) {
-  await mark('drag')
-  await dragTab(page)
-  await mark('todo')
-  await addTodo(page)
-  await mark('search')
-  await search(page)
-  await mark('collections')
-  await openCollections(page)
-  await mark('reminders')
-  await openReminders(page)
-  await mark('dark')
-  await goDark(page)
-  await mark('end')
 }

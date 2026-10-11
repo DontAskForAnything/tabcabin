@@ -13,6 +13,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- A new workspace asks for its name and icon first, from the workspace menu and from the
+  workspaces dialog, then opens
 - Creating an account asks for the password twice, so a typo can't lock you out
 - The top bar no longer shows the sync status once you are signed in; "Sign in" still shows while
   signed out, and the status lives in Settings → Account & sync

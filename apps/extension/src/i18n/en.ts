@@ -31,6 +31,8 @@ export const en = {
   'seed.tipNote': 'Tip: hold a link over another one to stack them side by side',
   'workspace.new': 'New workspace',
   'workspace.defaultName': 'Workspace {n}',
+  'workspace.name': 'Name',
+  'workspace.create': 'Create',
   'workspace.switch': 'Switch workspace',
   'workspace.rename': 'Rename workspace',
   'workspace.delete': 'Delete workspace',

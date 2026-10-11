@@ -1,22 +1,13 @@
 import { ChevronDown, LayoutGrid, Plus } from 'lucide-react'
 import { Menu, MenuContent, MenuItem, MenuLabel, MenuSeparator, MenuTrigger } from '@tabcabin/ui'
-import { createWorkspace } from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
-import { setActiveCategory, setActiveWorkspace, type ActiveContext } from '../useActive'
+import { setActiveWorkspace, type ActiveContext } from '../useActive'
 
 export function WorkspaceMenu({ active }: { active: ActiveContext }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
-  const { workspace, workspaces, settings } = active
-
-  const create = async () => {
-    const result = await createWorkspace({
-      name: t('workspace.defaultName', { n: (workspaces?.length ?? 0) + 1 }),
-      categoryName: t('category.defaultName'),
-    })
-    if (settings) await setActiveCategory(settings, result.workspaceId, result.categoryId)
-  }
+  const { workspace, workspaces } = active
 
   return (
     <Menu>
@@ -44,7 +35,7 @@ export function WorkspaceMenu({ active }: { active: ActiveContext }) {
           </MenuItem>
         ))}
         <MenuSeparator />
-        <MenuItem icon={<Plus size={15} />} onSelect={() => void create()}>
+        <MenuItem icon={<Plus size={15} />} onSelect={() => openModal({ type: 'newWorkspace' })}>
           {t('workspace.new')}
         </MenuItem>
         <MenuItem

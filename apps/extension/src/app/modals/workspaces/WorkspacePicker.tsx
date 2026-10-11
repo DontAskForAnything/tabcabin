@@ -2,7 +2,6 @@ import { Button, Input, Modal } from '@tabcabin/ui'
 import { Plus, Search } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useOverview } from '@/db/overview'
-import { createWorkspace } from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { setActiveCategory, type ActiveContext } from '../../useActive'
@@ -12,6 +11,7 @@ import type { Cell } from './cell'
 export function WorkspacePicker({ open, active }: { open: boolean; active: ActiveContext }) {
   const t = useT()
   const close = useUi((s) => s.closeModal)
+  const openModal = useUi((s) => s.openModal)
   const overview = useOverview()
   const [query, setQuery] = useState('')
   const [highlight, setHighlight] = useState<Cell | null>(null)
@@ -77,15 +77,6 @@ export function WorkspacePicker({ open, active }: { open: boolean; active: Activ
     const target = visible[nextWs]!
     const cat = target.categories[Math.min(nextCat, target.categories.length - 1)]
     if (cat) setHighlight({ workspaceId: target.id, categoryId: cat.id })
-  }
-
-  const create = async () => {
-    const result = await createWorkspace({
-      name: t('workspace.defaultName', { n: (overview?.length ?? 0) + 1 }),
-      categoryName: t('category.defaultName'),
-    })
-    setHighlight({ workspaceId: result.workspaceId, categoryId: result.categoryId })
-    setRenaming(result.workspaceId)
   }
 
   return (
@@ -158,7 +149,7 @@ export function WorkspacePicker({ open, active }: { open: boolean; active: Activ
             variant="primary"
             size="sm"
             icon={<Plus size={14} />}
-            onClick={() => void create()}
+            onClick={() => openModal({ type: 'newWorkspace' })}
           >
             {t('workspace.new')}
           </Button>

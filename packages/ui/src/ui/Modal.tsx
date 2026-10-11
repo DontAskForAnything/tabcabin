@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Dialog } from 'radix-ui'
-import { type ReactNode } from 'react'
+import { type ReactNode, type RefObject } from 'react'
 import { cn } from '../lib/cn'
 import { useUiText } from './UiText'
 
@@ -20,6 +20,8 @@ export interface ModalProps {
   className?: string
   /** Called before Escape closes the dialog; `event.preventDefault()` keeps it open. */
   onEscapeKeyDown?: (event: KeyboardEvent) => void
+  /** What gets the focus when the dialog opens (by default its first focusable element). */
+  initialFocus?: RefObject<HTMLElement | null>
 }
 
 const widths = {
@@ -41,6 +43,7 @@ export function Modal({
   placement = 'center',
   className,
   onEscapeKeyDown,
+  initialFocus,
 }: ModalProps) {
   const text = useUiText()
   return (
@@ -67,6 +70,11 @@ export function Modal({
                 asChild
                 forceMount
                 onEscapeKeyDown={onEscapeKeyDown}
+                onOpenAutoFocus={(event) => {
+                  if (!initialFocus?.current) return
+                  event.preventDefault()
+                  initialFocus.current.focus()
+                }}
                 onInteractOutside={(event) => {
                   // Keep the dialog open when the user clicks a toast (e.g. "Undo").
                   const target = event.target as HTMLElement | null

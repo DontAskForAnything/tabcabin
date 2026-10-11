@@ -47,6 +47,8 @@ export const pl: Record<MessageKey, Message> = {
   'seed.tipNote': 'Wskazówka: przytrzymaj link nad innym, żeby ułożyć je obok siebie',
   'workspace.new': 'Nowa przestrzeń',
   'workspace.defaultName': 'Przestrzeń {n}',
+  'workspace.name': 'Nazwa',
+  'workspace.create': 'Utwórz',
   'workspace.switch': 'Zmień przestrzeń',
   'workspace.rename': 'Zmień nazwę przestrzeni',
   'workspace.delete': 'Usuń przestrzeń',

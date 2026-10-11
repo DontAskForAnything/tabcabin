@@ -7,6 +7,7 @@ type ModalState =
   | { type: 'categories' }
   | { type: 'search' }
   | { type: 'workspaces' }
+  | { type: 'newWorkspace' }
   | { type: 'settings'; tab?: SettingsTab }
   | { type: 'bin' }
   | { type: 'bookmarks' }

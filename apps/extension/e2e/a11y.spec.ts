@@ -20,6 +20,8 @@ test('board, dialogs and collections have no serious accessibility problems', as
   context,
   extensionId,
 }) => {
+  // Many audits in a row: give the slower machines some room.
+  test.setTimeout(60_000)
   const page = await context.newPage()
   await page.goto(`chrome-extension://${extensionId}/newtab.html`)
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
@@ -33,6 +35,14 @@ test('board, dialogs and collections have no serious accessibility problems', as
     ['shortcuts', () => page.keyboard.press('?'), 'Keyboard shortcuts'],
     ['bin', () => page.keyboard.press('Control+Shift+Backspace'), 'Bin'],
     ['workspaces', () => page.keyboard.press('Control+o'), 'Workspaces'],
+    [
+      'newWorkspace',
+      async () => {
+        await page.getByRole('button', { name: 'Switch workspace' }).click()
+        await page.getByRole('menuitem', { name: 'New workspace' }).click()
+      },
+      'New workspace',
+    ],
   ]
   for (const [name, open] of dialogs) {
     await open()

@@ -1,3 +1,5 @@
+import { readPixels } from './faviconPixels'
+
 /**
  * The browser's favicon service returns a generic globe for pages it has never seen.
  * We render that reference image once and compare pixels, so unknown sites can use a letter tile instead.
@@ -5,21 +7,12 @@
 let reference: Promise<string | null> | null = null
 
 function fingerprint(img: HTMLImageElement): string | null {
-  try {
-    const canvas = document.createElement('canvas')
-    canvas.width = 16
-    canvas.height = 16
-    const ctx = canvas.getContext('2d', { willReadFrequently: true })
-    if (!ctx) return null
-    ctx.drawImage(img, 0, 0, 16, 16)
-    const data = ctx.getImageData(0, 0, 16, 16).data
-    let hash = 0
-    for (let i = 0; i < data.length; i += 4)
-      hash = (hash * 31 + data[i]! + data[i + 1]! * 7 + data[i + 2]! * 13 + data[i + 3]!) | 0
-    return String(hash)
-  } catch {
-    return null
-  }
+  const data = readPixels(img)
+  if (!data) return null
+  let hash = 0
+  for (let i = 0; i < data.length; i += 4)
+    hash = (hash * 31 + data[i]! + data[i + 1]! * 7 + data[i + 2]! * 13 + data[i + 3]!) | 0
+  return String(hash)
 }
 
 function loadFingerprint(src: string): Promise<string | null> {

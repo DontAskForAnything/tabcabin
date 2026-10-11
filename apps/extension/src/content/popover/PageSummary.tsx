@@ -1,24 +1,12 @@
 import { displayHost } from '@tabcabin/core'
-import { letterTileFor } from '@tabcabin/ui'
+import { Favicon } from '@tabcabin/ui'
 import type { PageInfo } from './types'
 
 /** Icon, title and address of the page. */
 export function PageSummary({ page }: { page: PageInfo }) {
-  const tile = letterTileFor(displayHost(page.url) || page.title)
   return (
     <div className="flex items-center gap-3">
-      {page.favIconUrl ? (
-        <span className="flex size-10 items-center justify-center rounded-[11px] bg-white shadow-tile">
-          <img src={page.favIconUrl} alt="" className="size-[22px]" />
-        </span>
-      ) : (
-        <span
-          className="flex size-10 items-center justify-center rounded-[11px] font-bold shadow-tile"
-          style={{ background: tile.bg, color: tile.fg }}
-        >
-          {tile.letter}
-        </span>
-      )}
+      <Favicon src={page.favIconUrl} seed={displayHost(page.url) || page.title} size="lg" />
       <div className="min-w-0 flex-1">
         <div className="truncate text-[15px] font-semibold">
           {page.title || displayHost(page.url)}

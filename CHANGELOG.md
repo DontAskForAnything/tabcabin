@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows
   GitHub) no longer triggers those shortcuts
 - The open tabs panel no longer shows "0 tabs" for a moment when it is pinned or peeks from the
   icons
+- White site icons (GitHub's when the system is dark) sit on a dark tile instead of vanishing on
+  white, and empty icons fall back to the letter tile
 
 ## [1.2.0] — 2026-10-09
 

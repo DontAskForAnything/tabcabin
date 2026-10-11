@@ -7,10 +7,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 - [ ] Publish the extension in the Chrome Web Store (see
       [`docs/chrome-web-store`](docs/chrome-web-store/README.md))
 
-## Fixes
-
-- [ ] Pinning the side panel shows "0 tabs" for a moment before the open tabs load
-
 ## Polish
 
 - [ ] Ask for the name and icon right away when creating a new workspace

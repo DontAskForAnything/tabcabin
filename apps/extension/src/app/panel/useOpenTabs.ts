@@ -31,20 +31,34 @@ function toOpenTab(tab: Browser.tabs.Tab): OpenTab | null {
   }
 }
 
-/** Live list of tabs in all windows (refreshes on any tab/window event). */
-export function useOpenTabs(): OpenTab[] {
-  const [tabs, setTabs] = useState<OpenTab[]>([])
+// The last answers, kept for the page's lifetime: a panel that mounts again (pinned, peeking
+// from the rail) starts with them instead of an empty list.
+let lastTabs: OpenTab[] | null = null
+let lastWindowId: number | null = null
+let lastGroups: ChromeTabGroup[] = []
+
+/**
+ * Live list of tabs in all windows (refreshes on any tab/window event); `null` until the browser
+ * has answered once.
+ */
+export function useOpenTabs(): OpenTab[] | null {
+  const [tabs, setTabs] = useState(lastTabs)
   useEffect(() => {
     if (!hasTabsApi()) return
     let timer: ReturnType<typeof setTimeout> | null = null
+    let latest = 0
+    const load = async () => {
+      const call = ++latest
+      const all = await browser.tabs.query({})
+      if (call !== latest) return
+      lastTabs = all.map(toOpenTab).filter((tab): tab is OpenTab => tab !== null)
+      setTabs(lastTabs)
+    }
     const refresh = () => {
       if (timer) clearTimeout(timer)
-      timer = setTimeout(async () => {
-        const all = await browser.tabs.query({})
-        setTabs(all.map(toOpenTab).filter((tab): tab is OpenTab => tab !== null))
-      }, 120)
+      timer = setTimeout(() => void load(), 120)
     }
-    refresh()
+    void load()
     const events = [
       browser.tabs.onCreated,
       browser.tabs.onRemoved,
@@ -58,6 +72,7 @@ export function useOpenTabs(): OpenTab[] {
     ]
     for (const event of events) event.addListener(refresh)
     return () => {
+      latest++
       if (timer) clearTimeout(timer)
       for (const event of events) event.removeListener(refresh)
     }
@@ -67,10 +82,13 @@ export function useOpenTabs(): OpenTab[] {
 
 /** Id of the window this page lives in. */
 export function useCurrentWindowId(): number | null {
-  const [id, setId] = useState<number | null>(null)
+  const [id, setId] = useState(lastWindowId)
   useEffect(() => {
     if (!hasTabsApi()) return
-    void browser.windows.getCurrent().then((win) => setId(win.id ?? null))
+    void browser.windows.getCurrent().then((win) => {
+      lastWindowId = win.id ?? null
+      setId(lastWindowId)
+    })
   }, [])
   return id
 }
@@ -85,20 +103,19 @@ export interface ChromeTabGroup {
 
 /** Live list of native browser tab groups. */
 export function useTabGroups(): ChromeTabGroup[] {
-  const [groups, setGroups] = useState<ChromeTabGroup[]>([])
+  const [groups, setGroups] = useState(lastGroups)
   useEffect(() => {
     if (typeof browser === 'undefined' || !browser.tabGroups) return
     const refresh = async () => {
       const all = await browser.tabGroups.query({})
-      setGroups(
-        all.map((g) => ({
-          id: g.id,
-          windowId: g.windowId,
-          title: g.title ?? '',
-          color: g.color,
-          collapsed: g.collapsed,
-        })),
-      )
+      lastGroups = all.map((g) => ({
+        id: g.id,
+        windowId: g.windowId,
+        title: g.title ?? '',
+        color: g.color,
+        collapsed: g.collapsed,
+      }))
+      setGroups(lastGroups)
     }
     void refresh()
     const events = [

@@ -8,11 +8,14 @@ import type { OpenTab } from './useOpenTabs'
 export function TabList({
   blocks,
   allTabs,
+  loaded,
   active,
 }: {
   blocks: TabBlock[]
   /** Every tab of the window: dragging a selected tab takes all selected ones along. */
   allTabs: OpenTab[]
+  /** False until the browser has listed the tabs: no "no tabs" message meanwhile. */
+  loaded: boolean
   active: ActiveContext
 }) {
   const t = useT()
@@ -31,7 +34,7 @@ export function TabList({
           />
         ),
       )}
-      {blocks.length === 0 && (
+      {loaded && blocks.length === 0 && (
         <p className="px-2 py-6 text-center text-[13px] text-ink-3">{t('panel.noTabs')}</p>
       )}
     </div>

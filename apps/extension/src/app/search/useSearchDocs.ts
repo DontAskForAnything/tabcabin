@@ -32,7 +32,7 @@ export function useSearchDocs(open: boolean, scope: Scope, workspaceId: string |
   }, [scope, open])
 
   const docs = useMemo(() => {
-    if (scope === 'tabs') return tabDocs(tabs, t)
+    if (scope === 'tabs') return tabDocs(tabs ?? [], t)
     if (scope === 'bookmarks') return bookmarks
     return itemDocs ?? []
   }, [scope, tabs, bookmarks, itemDocs, t])

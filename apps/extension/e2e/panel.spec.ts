@@ -83,3 +83,23 @@ test('collapses the panel to icons and peeks on hover', async ({ context, extens
   await page.getByRole('button', { name: 'Keep panel open' }).click()
   await expect(page.getByRole('button', { name: 'Collapse to icons' })).toBeVisible()
 })
+
+test('shows the open tabs right away when the panel opens', async ({ context, extensionId }) => {
+  await openPages(context, ['Steady page'])
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('button', { name: 'Collapse to icons' }).click()
+  await expect(panel(page).first()).toHaveCSS('width', '76px')
+  await page.evaluate(() => {
+    const flags = window as unknown as { emptyPanel: boolean }
+    flags.emptyPanel = false
+    new MutationObserver(() => {
+      if (/· 0 tabs|No other tabs here/.test(document.body.innerText)) flags.emptyPanel = true
+    }).observe(document.body, { childList: true, subtree: true, characterData: true })
+  })
+  await panel(page).first().hover()
+  await page.getByRole('button', { name: 'Keep panel open' }).click()
+  await expect(panel(page).getByRole('button', { name: 'Steady page' })).toBeVisible()
+  const flags = await page.evaluate(() => (window as unknown as { emptyPanel: boolean }).emptyPanel)
+  expect(flags).toBe(false)
+})

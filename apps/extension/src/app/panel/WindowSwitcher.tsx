@@ -9,7 +9,7 @@ import { windowLabel } from './windowLabel'
 export function WindowSwitcher({ data }: { data: PanelData }) {
   const t = useT()
   const setWindowId = usePanel((s) => s.setWindowId)
-  const { tabs, windowId, currentWindowId, windowIds, inWindow } = data
+  const { tabs, loaded, windowId, currentWindowId, windowIds, inWindow } = data
   const newWindow = () => void browser.windows.create({ focused: true })
   return (
     <div className="flex gap-2">
@@ -21,8 +21,8 @@ export function WindowSwitcher({ data }: { data: PanelData }) {
           >
             <span className="size-2 shrink-0 rounded-full bg-success" />
             <span className="flex-1 truncate text-left">
-              {windowId !== null ? windowLabel(windowId, data, t) : '…'} ·{' '}
-              {t('panel.windowTabs', { count: inWindow.length })}
+              {windowId !== null ? windowLabel(windowId, data, t) : '…'}
+              {loaded && ` · ${t('panel.windowTabs', { count: inWindow.length })}`}
             </span>
             <ChevronDown size={14} className="text-ink-3" />
           </button>

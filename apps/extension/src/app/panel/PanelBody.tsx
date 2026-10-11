@@ -35,7 +35,7 @@ export function PanelBody({
       <PanelHeader pinned={active.settings?.sidebarMode !== 'rail'} onPinChange={onPinChange} />
       <WindowSwitcher data={data} />
       <TabFilter value={filter} onChange={setFilter} />
-      <TabList blocks={blocks} allTabs={data.inWindow} active={active} />
+      <TabList blocks={blocks} allTabs={data.inWindow} loaded={data.loaded} active={active} />
 
       {selected.length > 0 && (
         <div className="flex items-center justify-between rounded-[11px] bg-accent-soft px-3 py-2 text-[12.5px] font-semibold text-accent-ink">

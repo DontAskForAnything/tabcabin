@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Typing a note in the save popover on a page with its own keyboard shortcuts (for example
   GitHub) no longer triggers those shortcuts
+- The open tabs panel no longer shows "0 tabs" for a moment when it is pinned or peeks from the
+  icons
 
 ## [1.2.0] — 2026-10-09
 

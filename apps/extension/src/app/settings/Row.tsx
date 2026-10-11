@@ -1,10 +1,6 @@
 import { Switch } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
 
-export function SectionTitle({ children }: { children: ReactNode }) {
-  return <h3 className="mb-2 text-[20px] font-semibold tracking-[-0.02em]">{children}</h3>
-}
-
 /** A setting: label and hint on the left, the control on the right. */
 export function Row({
   label,

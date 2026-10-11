@@ -2,14 +2,13 @@ import { SegmentedControl } from '@tabcabin/ui'
 import { type Locale, useT } from '@/i18n'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'
-import { Row, SectionTitle, SwitchRow } from './Row'
+import { Row, SwitchRow } from './Row'
 
 export function GeneralSettings({ active }: { active: ActiveContext }) {
   const t = useT()
   const settings = active.settings ?? DEFAULT_SETTINGS
   return (
     <>
-      <SectionTitle>{t('settings.tab.general')}</SectionTitle>
       <Row label={t('settings.language')} hint={t('settings.languageHint')}>
         <SegmentedControl<Locale>
           label={t('settings.language')}

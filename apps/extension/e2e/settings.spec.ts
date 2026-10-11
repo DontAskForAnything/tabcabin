@@ -24,6 +24,24 @@ test('changes appearance settings live', async ({ context, extensionId }) => {
   await expect(page.locator('html')).toHaveClass(/dark/)
 })
 
+test('keeps the title and the close button in view while a tab scrolls', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await openSettings(context, extensionId)
+  await page.setViewportSize({ width: 1280, height: 600 })
+  const dialog = page.getByRole('dialog', { name: 'Settings' })
+  await dialog.getByRole('tab', { name: 'Data' }).click()
+  await dialog.getByRole('button', { name: 'Delete everything' }).scrollIntoViewIfNeeded()
+  await expect(dialog.getByText('Export', { exact: true })).not.toBeInViewport()
+  await expect(dialog.getByRole('heading', { name: 'Data' })).toBeInViewport({ ratio: 1 })
+  // The dialog also has a hidden close button for screen readers; the visible one comes last.
+  const close = dialog.getByRole('button', { name: 'Close' }).last()
+  await expect(close).toBeInViewport({ ratio: 1 })
+  await close.click()
+  await expect(dialog).toHaveCount(0)
+})
+
 test('switches the language to Polish', async ({ context, extensionId }) => {
   const page = await openSettings(context, extensionId)
   await page

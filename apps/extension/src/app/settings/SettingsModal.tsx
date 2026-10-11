@@ -1,6 +1,6 @@
 import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
-import { IconButton, Modal, Tabs } from '@tabcabin/ui'
-import { useRef, type ReactNode } from 'react'
+import { cn, IconButton, Modal, Tabs } from '@tabcabin/ui'
+import { useRef, useState, type ReactNode } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { extensionUrl } from '@/lib/browser'
@@ -29,6 +29,7 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
   const tab: SettingsTab = (open && modal.tab) || 'general'
   // A shortcut being recorded swallows Escape instead of closing the dialog.
   const recording = useRef(false)
+  const [scrolled, setScrolled] = useState(false)
   const version = typeof browser !== 'undefined' ? browser.runtime.getManifest?.().version : ''
 
   return (
@@ -82,14 +83,27 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
             </div>
           )}
         </div>
-        <div className="relative min-w-0 flex-1 overflow-y-auto px-8 pt-7 pb-8">
-          <IconButton
-            label={t('common.close')}
-            icon={<X size={18} />}
-            tooltip={false}
-            className="absolute top-4 right-4"
-            onClick={close}
-          />
+        <div
+          className="min-w-0 flex-1 overflow-y-auto px-8 pb-8"
+          onScroll={(event) => setScrolled(event.currentTarget.scrollTop > 0)}
+        >
+          {/* The title and the close button stay in view while a long tab scrolls. */}
+          <header
+            className={cn(
+              'sticky top-0 z-10 -mx-8 flex items-start gap-4 bg-card pt-4 pr-4 pl-8 transition-shadow',
+              scrolled && 'shadow-[0_1px_0_var(--line)]',
+            )}
+          >
+            <h3 className="min-w-0 flex-1 pt-3 pb-2 text-[20px] font-semibold tracking-[-0.02em]">
+              {t(`settings.tab.${tab}`)}
+            </h3>
+            <IconButton
+              label={t('common.close')}
+              icon={<X size={18} />}
+              tooltip={false}
+              onClick={close}
+            />
+          </header>
           <Tabs.Content value="general" className="outline-none">
             <GeneralSettings active={active} />
           </Tabs.Content>

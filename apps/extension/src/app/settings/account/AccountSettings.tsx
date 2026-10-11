@@ -2,7 +2,6 @@ import { useT } from '@/i18n'
 import { SELF_HOSTING_DOCS } from '@/lib/links'
 import { useSyncServer } from '@/sync/server'
 import { useAccount } from '@/sync/state'
-import { SectionTitle } from '../Row'
 import { ConnectedAccount } from './ConnectedAccount'
 import { SignedOutAccount } from './SignedOutAccount'
 
@@ -15,7 +14,6 @@ export function AccountSettings() {
 
   return (
     <>
-      <SectionTitle>{t('settings.tab.account')}</SectionTitle>
       {account?.token && account.initialized ? (
         <ConnectedAccount account={account} />
       ) : server ? (

@@ -8,14 +8,13 @@ import {
   updateSettings,
 } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'
-import { Row, SectionTitle, SwitchRow } from './Row'
+import { Row, SwitchRow } from './Row'
 
 export function AppearanceSettings({ active }: { active: ActiveContext }) {
   const t = useT()
   const settings = active.settings ?? DEFAULT_SETTINGS
   return (
     <>
-      <SectionTitle>{t('settings.tab.appearance')}</SectionTitle>
       <Row label={t('settings.theme')}>
         <SegmentedControl<ThemePreference>
           label={t('settings.theme')}

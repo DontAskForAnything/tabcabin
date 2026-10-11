@@ -4,7 +4,7 @@ import { useT } from '@/i18n'
 import { formatShortcut, shortcutFromEvent } from '@/lib/keys'
 import { DEFAULT_SETTINGS, type Shortcuts, updateSettings } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'
-import { Row, SectionTitle } from './Row'
+import { Row } from './Row'
 
 const ACTIONS: (keyof Shortcuts)[] = ['newGroup', 'search', 'workspaces', 'bin']
 
@@ -77,7 +77,6 @@ export function ShortcutSettings({
 
   return (
     <>
-      <SectionTitle>{t('settings.tab.shortcuts')}</SectionTitle>
       <p className="mb-2 text-[13px] text-ink-3">{t('settings.shortcutsHint')}</p>
       {ACTIONS.map((action) => {
         const label = t(`settings.shortcut.${action}`)

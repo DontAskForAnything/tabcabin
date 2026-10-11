@@ -8,7 +8,7 @@ import { useDueCount } from '../reminders/useDue'
 import type { ActiveContext } from '../useActive'
 import { CategoryTabs } from './CategoryTabs'
 import { MoreMenu } from './MoreMenu'
-import { SyncButton } from './SyncButton'
+import { SignInButton } from './SignInButton'
 import { WorkspaceMenu } from './WorkspaceMenu'
 
 /** Text labels give way to icons on narrower screens so the bar stays on one line. */
@@ -71,7 +71,7 @@ export function TopBar({ active, compact }: { active: ActiveContext; compact: bo
           )}
         </button>
       </Tooltip>
-      <SyncButton compact={compact} hideLabel={NARROW_HIDDEN} />
+      <SignInButton compact={compact} hideLabel={NARROW_HIDDEN} />
       <IconButton
         label={t('reminders.button')}
         icon={<Bell size={17} />}

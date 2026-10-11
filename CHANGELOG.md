@@ -13,6 +13,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- The top bar no longer shows the sync status once you are signed in; "Sign in" still shows while
+  signed out, and the status lives in Settings → Account & sync
 - Settings keep the section title and the close button in view while a long tab scrolls
 - Settings in Polish: the account tab is called "Konto", so it fits on one line
 

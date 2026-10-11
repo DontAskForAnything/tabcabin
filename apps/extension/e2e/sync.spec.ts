@@ -94,6 +94,9 @@ test('syncs boards between two browsers through the server', async ({ context })
   await expect(dialogA.getByText('Signed in as michal')).toBeVisible()
   await expect(dialogA.getByText('Up to date')).toBeVisible({ timeout: 15_000 })
   await a.keyboard.press('Escape')
+  // Signed in, the top bar stays quiet: no sign-in button and no sync status.
+  await expect(a.getByRole('button', { name: 'Sign in to sync' })).toHaveCount(0)
+  await expect(a.getByRole('button', { name: /^Up to date/ })).toHaveCount(0)
 
   // Browser B: has its own starter data, so it asks what to do; take the server's copy.
   const other = await launchExtension()

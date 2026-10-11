@@ -10,7 +10,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 ## Polish
 
 - [ ] Ask for the name and icon right away when creating a new workspace
-- [ ] Remove the sync icon from the top right corner
 - [ ] Creating an account: ask for the password twice so a typo doesn't lock you out
 
 ## New

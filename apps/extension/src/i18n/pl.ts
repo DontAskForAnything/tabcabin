@@ -445,7 +445,7 @@ export const pl: Record<MessageKey, Message> = {
   'color.sky': 'Niebieski',
   'color.teal': 'Morski',
   'color.sand': 'Piaskowy',
-  'settings.tab.account': 'Konto i synchronizacja',
+  'settings.tab.account': 'Konto',
   'sync.intro':
     'Zaloguj się, żeby tablice były zsynchronizowane między komputerami. Bez konta wszystko zostaje w tej przeglądarce.',
   'sync.howTo': 'Jak uruchomić serwer',

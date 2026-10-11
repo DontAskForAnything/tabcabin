@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Settings in Polish: the account tab is called "Konto", so it fits on one line
+
 ### Fixed
 
 - Typing a note in the save popover on a page with its own keyboard shortcuts (for example

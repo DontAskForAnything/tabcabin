@@ -12,7 +12,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 - [ ] Ask for the name and icon right away when creating a new workspace
 - [ ] Remove the sync icon from the top right corner
 - [ ] Settings: keep the title bar visible (sticky) while scrolling
-- [ ] Settings in Polish: "Konto i synchronizacja" is too long and wraps badly — shorten it
 - [ ] Creating an account: ask for the password twice so a typo doesn't lock you out
 - [ ] Settings: clicking TabCabin next to the version opens the website
 

@@ -1,9 +1,12 @@
 import { Button, Field } from '@tabcabin/ui'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useT } from '@/i18n'
 import { FormError } from './FormError'
 
-/** Username and password, for signing in or (when the server allows it) creating an account. */
+/**
+ * Username and password, for signing in or (when the server allows it) creating an account. A new
+ * password is typed twice, so a typo can't lock anyone out.
+ */
 export function PasswordForm({
   signupOpen,
   busy,
@@ -20,14 +23,23 @@ export function PasswordForm({
   const t = useT()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [again, setAgain] = useState('')
+  const [differ, setDiffer] = useState(false)
   const [creating, setCreating] = useState(false)
+  const againField = useRef<HTMLInputElement>(null)
 
   return (
     <form
       className="flex flex-col gap-4"
       onSubmit={(event) => {
         event.preventDefault()
-        if (username && password) onSubmit(username, password, creating)
+        if (!username || !password) return
+        if (creating && password !== again) {
+          setDiffer(true)
+          againField.current?.focus()
+          return
+        }
+        onSubmit(username, password, creating)
       }}
     >
       <Field
@@ -42,16 +54,37 @@ export function PasswordForm({
         label={t('sync.password')}
         type="password"
         value={password}
-        onChange={(event) => setPassword(event.target.value)}
+        onChange={(event) => {
+          setPassword(event.target.value)
+          setDiffer(false)
+        }}
         autoComplete={creating ? 'new-password' : 'current-password'}
       />
-      {error && <FormError>{error}</FormError>}
+      {creating && (
+        <Field
+          ref={againField}
+          label={t('sync.passwordAgain')}
+          type="password"
+          value={again}
+          onChange={(event) => {
+            setAgain(event.target.value)
+            setDiffer(false)
+          }}
+          autoComplete="new-password"
+          aria-invalid={differ || undefined}
+        />
+      )}
+      {differ ? (
+        <FormError>{t('sync.passwordsDiffer')}</FormError>
+      ) : (
+        error && <FormError>{error}</FormError>
+      )}
       <Button
         type="submit"
         variant="primary"
         size="lg"
         className="mt-1 w-full"
-        disabled={busy || !username || !password}
+        disabled={busy || !username || !password || (creating && !again)}
       >
         {busy ? t('sync.signingIn') : creating ? t('sync.signUp') : t('sync.signIn')}
       </Button>
@@ -61,6 +94,8 @@ export function PasswordForm({
           className="w-fit text-[13px] font-medium text-accent-ink hover:underline"
           onClick={() => {
             setCreating((value) => !value)
+            setAgain('')
+            setDiffer(false)
             onModeChange()
           }}
         >

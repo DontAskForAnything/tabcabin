@@ -451,6 +451,8 @@ export const pl: Record<MessageKey, Message> = {
   'sync.howTo': 'Jak uruchomić serwer',
   'sync.username': 'Login',
   'sync.password': 'Hasło',
+  'sync.passwordAgain': 'Powtórz hasło',
+  'sync.passwordsDiffer': 'Hasła się różnią',
   'sync.signIn': 'Zaloguj się',
   'sync.signUp': 'Załóż konto',
   'sync.signingIn': 'Logowanie…',

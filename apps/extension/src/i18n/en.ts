@@ -366,6 +366,8 @@ export const en = {
   'sync.howTo': 'How to run a server',
   'sync.username': 'Username',
   'sync.password': 'Password',
+  'sync.passwordAgain': 'Repeat password',
+  'sync.passwordsDiffer': 'The passwords don’t match',
   'sync.signIn': 'Sign in',
   'sync.signUp': 'Create account',
   'sync.signingIn': 'Signing in…',

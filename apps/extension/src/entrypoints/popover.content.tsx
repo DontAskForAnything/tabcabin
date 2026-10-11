@@ -22,6 +22,9 @@ export default defineContentScript({
       css: contentCss,
       position: 'inline',
       anchor: 'html',
+      // Keys typed in the popover stay in it. Outside the shadow root they look like keys pressed
+      // on the page itself, so sites with their own shortcuts (GitHub: "s", "t", "/") react.
+      isolateEvents: true,
       onMount(container) {
         const root = createRoot(container)
         root.render(<PagePopover page={page} onClose={() => toggle(false)} />)

@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Typing a note in the save popover on a page with its own keyboard shortcuts (for example
+  GitHub) no longer triggers those shortcuts
+
 ## [1.2.0] — 2026-10-09
 
 A new name and a new look, more imports and smoother saving from pages.

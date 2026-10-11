@@ -148,6 +148,40 @@ test('saves the page with a note from the popover', async ({ context, extensionI
   await expect(popover).toHaveCount(0, { timeout: 4000 })
 })
 
+test('keeps typing in the popover away from the page shortcuts', async ({ context }) => {
+  // Like GitHub: "s" focuses the search box unless you are typing in a field.
+  const shortcuts = `<!doctype html><title>Shortcuts page</title><input id="search">
+<script>
+  window.shortcutKeys = 0
+  document.addEventListener('keydown', (event) => {
+    const el = event.target
+    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el.isContentEditable) return
+    window.shortcutKeys++
+    if (event.key === 's') {
+      event.preventDefault()
+      document.getElementById('search').focus()
+    }
+  })
+</script>`
+  await context.route('https://shortcuts.test/**', (route) =>
+    route.fulfill({ status: 200, contentType: 'text/html', body: shortcuts }),
+  )
+  const page = await context.newPage()
+  await page.goto('https://shortcuts.test/')
+  const sw = await worker(context)
+  const tab = await tabFor(sw, 'https://shortcuts.test/')
+  await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = page.getByRole('dialog', { name: 'TabCabin' })
+  const note = popover.getByRole('textbox')
+  await note.click()
+  await page.keyboard.type('Ask Sam about specs')
+  await expect(note).toHaveValue('Ask Sam about specs')
+  await expect(note).toBeFocused()
+  expect(
+    await page.evaluate(() => (window as unknown as { shortcutKeys: number }).shortcutKeys),
+  ).toBe(0)
+})
+
 test('shows the page favicon for a saved page', async ({ context, extensionId }) => {
   const icon = readFileSync(
     resolve(dirname(fileURLToPath(import.meta.url)), '../public/icon/32.png'),

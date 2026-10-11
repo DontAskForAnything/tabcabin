@@ -9,8 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## Fixes
 
-- [ ] Typing a note on a page with its own keyboard shortcuts (for example GitHub) triggers those
-      shortcuts instead of typing — keys should stay in the note
 - [ ] Pinning the side panel shows "0 tabs" for a moment before the open tabs load
 
 ## Polish

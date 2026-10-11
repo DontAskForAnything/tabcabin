@@ -104,15 +104,16 @@ other Chromium browsers.
 **With your own addresses** — the sync server and the website address are set when you build, never
 in the code:
 
-| Variable          | Used by                      | Example                    |
-| ----------------- | ---------------------------- | -------------------------- |
-| `WXT_SYNC_SERVER` | the extension (sync server)  | `https://tabs.example.com` |
-| `SITE_URL`        | the website (links, sitemap) | `https://example.com`      |
+| Variable          | Used by                                | Example                    |
+| ----------------- | -------------------------------------- | -------------------------- |
+| `WXT_SYNC_SERVER` | the extension (sync server)            | `https://tabs.example.com` |
+| `WXT_SITE_URL`    | the extension (website link, Settings) | `https://example.com`      |
+| `SITE_URL`        | the website (links, sitemap)           | `https://example.com`      |
 
 Put them in `apps/extension/.env` / your shell, or set them once as repository variables on GitHub
 (**Settings → Secrets and variables → Actions → Variables**) and run the manual **Build** workflow,
-which uploads the extension zip and the website as downloads. Without `WXT_SYNC_SERVER` the extension
-is built without sync and works offline only.
+which uploads the extension zip and the website as downloads (it fills `WXT_SITE_URL` from
+`SITE_URL`). Without `WXT_SYNC_SERVER` the extension is built without sync and works offline only.
 
 ## Privacy
 

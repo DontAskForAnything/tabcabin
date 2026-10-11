@@ -33,8 +33,8 @@ never written into the code: without `SITE_URL` the build uses the placeholder
 
 To build on GitHub, add `SITE_URL` once as a repository variable (**Settings → Secrets and variables →
 Actions → Variables**) and run **Actions → Build → Run workflow**: the built site (and the extension
-zip, with `WXT_SYNC_SERVER`) is attached to the run as a download. The **Pages** workflow below uses
-the same variable when you leave its address field empty.
+zip, with `WXT_SYNC_SERVER` and this address for its Settings link) is attached to the run as a
+download. The **Pages** workflow below uses the same variable when you leave its address field empty.
 
 Preview locally with `pnpm --filter @tabcabin/landing preview`.
 

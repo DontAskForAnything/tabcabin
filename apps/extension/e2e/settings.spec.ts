@@ -42,6 +42,16 @@ test('keeps the title and the close button in view while a tab scrolls', async (
   await expect(dialog).toHaveCount(0)
 })
 
+test('links the name next to the version to the website', async ({ context, extensionId }) => {
+  const page = await openSettings(context, extensionId)
+  const link = page
+    .getByRole('dialog', { name: 'Settings' })
+    .getByRole('link', { name: /^TabCabin \d/ })
+  // This build has no WXT_SITE_URL, so the link opens the project on GitHub.
+  await expect(link).toHaveAttribute('href', 'https://github.com/DontAskForAnything/tabcabin')
+  await expect(link).toHaveAttribute('target', '_blank')
+})
+
 test('switches the language to Polish', async ({ context, extensionId }) => {
   const page = await openSettings(context, extensionId)
   await page

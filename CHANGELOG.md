@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
+  Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
+
 ### Changed
 
 - Settings keep the section title and the close button in view while a long tab scrolls

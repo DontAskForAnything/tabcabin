@@ -4,6 +4,7 @@ import { useRef, useState, type ReactNode } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { extensionUrl } from '@/lib/browser'
+import { WEBSITE } from '@/lib/links'
 import { type SettingsTab, useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
 import { AccountSettings } from './account/AccountSettings'
@@ -11,6 +12,9 @@ import { AppearanceSettings } from './AppearanceSettings'
 import { DataSettings } from './data/DataSettings'
 import { GeneralSettings } from './GeneralSettings'
 import { ShortcutSettings } from './ShortcutSettings'
+
+const FOOTER_LINK =
+  'w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]'
 
 const TABS: { value: SettingsTab; icon: ReactNode }[] = [
   { value: 'general', icon: <SlidersHorizontal size={16} /> },
@@ -70,12 +74,14 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
             <div className="flex items-center gap-2.5 px-3 pb-1 text-[12px] text-ink-3">
               <CabinMark size={28} />
               <div className="flex flex-col gap-0.5">
-                <p>{t('settings.version', { version })}</p>
+                <a href={WEBSITE} target="_blank" rel="noreferrer" className={FOOTER_LINK}>
+                  {t('settings.version', { version })}
+                </a>
                 <a
                   href={extensionUrl('/third-party-licenses.txt')}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]"
+                  className={FOOTER_LINK}
                 >
                   {t('settings.licenses')}
                 </a>

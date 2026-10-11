@@ -2,7 +2,8 @@
 # hand (Actions → Build → Run workflow). Set the addresses once under Settings → Secrets and
 # variables → Actions → Variables:
 #   WXT_SYNC_SERVER  sync server built into the extension, e.g. https://tabs.example.com
-#   SITE_URL         public address of the website, e.g. https://example.com
+#   SITE_URL         public address of the website, e.g. https://example.com (the extension
+#                    links to it from Settings)
 # Both are optional: without WXT_SYNC_SERVER the extension works offline only.
 name: Build
 
@@ -26,6 +27,7 @@ jobs:
       - run: pnpm --filter @tabcabin/extension zip
         env:
           WXT_SYNC_SERVER: ${{ vars.WXT_SYNC_SERVER }}
+          WXT_SITE_URL: ${{ vars.SITE_URL }}
       - run: pnpm --filter @tabcabin/landing build
         env:
           SITE_URL: ${{ vars.SITE_URL }}

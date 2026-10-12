@@ -78,6 +78,26 @@ Netlify, Cloudflare Pages and similar: build command
 `pnpm --filter @tabcabin/landing build`, output directory `apps/landing/dist`, environment variable
 `SITE_URL` (and `EXTENSION_URL`, `REPO_URL`).
 
+## Option D — a container (Coolify and other Docker hosts)
+
+[`apps/landing/Dockerfile`](../apps/landing/Dockerfile) builds the site and serves it with Caddy on
+port 80: compressed, fingerprinted assets cached for a year, and the 404 page. The proxy in front of
+it adds HTTPS. The addresses are build arguments:
+
+```bash
+docker build -f apps/landing/Dockerfile --build-arg SITE_URL=https://tabcabin.example.com -t tabcabin-site .
+docker run -d -p 8080:80 tabcabin-site
+```
+
+In Coolify, add the repository as a new application (a private one through the GitHub App) with:
+
+- build pack **Dockerfile**, base directory `/`, Dockerfile location `/apps/landing/Dockerfile`
+- exposed port `80` and your domain
+- `SITE_URL` (the same address), `EXTENSION_URL` and `REPO_URL` as environment variables available
+  at build time
+- optionally watch paths `apps/landing/**`, `packages/ui/**` and `docs/screenshots/**`, so only
+  changes to the site start a new deployment
+
 ## After the first deploy
 
 - Put `https://<your-site>/privacy` into the Chrome Web Store listing (see

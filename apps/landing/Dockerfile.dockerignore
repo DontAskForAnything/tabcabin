@@ -1,0 +1,15 @@
+# Used instead of the root .dockerignore (which leaves the website out of the server image).
+**/node_modules
+**/dist
+**/.astro
+**/.output
+**/.wxt
+**/test-results
+**/playwright-report
+.git
+.github
+apps/extension
+apps/server
+*.log
+.env
+.env.*

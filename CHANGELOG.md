@@ -13,6 +13,7 @@ All notable changes to this project are documented here. The format follows
 - Sign-in: an eye in each password field shows what you typed
 - Website: "Coming soon to Chrome" in place of the download buttons until `EXTENSION_URL` is set,
   and GitHub links only once `REPO_URL` is set (both build variables, like `SITE_URL`)
+- Website: a Dockerfile that serves the site with Caddy, for Coolify and other Docker hosts
 
 ### Changed
 

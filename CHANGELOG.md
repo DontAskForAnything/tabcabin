@@ -32,6 +32,7 @@ All notable changes to this project are documented here. The format follows
   icons
 - White site icons (GitHub's when the system is dark) sit on a dark tile instead of vanishing on
   white, and empty icons fall back to the letter tile
+- Website: the comparison pages have a space again after "See also:"
 
 ## [1.2.0] — 2026-10-09
 

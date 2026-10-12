@@ -1,9 +1,10 @@
 ---
 import Footer from './Footer.astro'
+import GetExtension from './GetExtension.astro'
 import Icon from './Icon.astro'
 import Nav from './Nav.astro'
 import Layout from '../layouts/Layout.astro'
-import { comparisons, releases } from '../site'
+import { comparisons } from '../site'
 
 type Cell = true | false | string
 
@@ -147,12 +148,7 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
           <li set:html={step} />
         ))}
       </ol>
-      <a
-        href={releases}
-        class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-tile hover:brightness-110"
-      >
-        <Icon name="Download" size={17} /> Get TabCabin
-      </a>
+      <GetExtension label="Get TabCabin" size="md" class="mt-8" />
     </section>
 
     <p class="mt-12 text-[15px] text-ink-2">

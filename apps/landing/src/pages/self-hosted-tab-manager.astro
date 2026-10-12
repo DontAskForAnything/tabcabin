@@ -1,10 +1,11 @@
 ---
 import Footer from '../components/Footer.astro'
+import GetExtension from '../components/GetExtension.astro'
 import Icon from '../components/Icon.astro'
 import Nav from '../components/Nav.astro'
 import Terminal from '../components/Terminal.astro'
 import Layout from '../layouts/Layout.astro'
-import { releases, selfHostingGuide } from '../site'
+import { selfHostingGuide } from '../site'
 
 const parts = [
   [
@@ -82,18 +83,15 @@ const faqs = [
         VPS, a home server or a Raspberry Pi.
       </p>
       <div class="mt-8 flex flex-wrap gap-3" data-reveal="0.15">
-        <a
-          href={selfHostingGuide}
-          class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile hover:brightness-110"
-        >
-          Read the step-by-step guide <Icon name="ArrowRight" size={17} />
-        </a>
-        <a
-          href={releases}
-          class="flex h-12 items-center gap-2 rounded-xl bg-card px-6 text-[15.5px] font-semibold shadow-tile hover:bg-raised"
-        >
-          <Icon name="Download" size={17} /> Get the extension
-        </a>
+        {selfHostingGuide && (
+          <a
+            href={selfHostingGuide}
+            class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile hover:brightness-110"
+          >
+            Read the step-by-step guide <Icon name="ArrowRight" size={17} />
+          </a>
+        )}
+        <GetExtension label="Get the extension" tone={selfHostingGuide ? 'card' : 'primary'} />
       </div>
     </section>
 

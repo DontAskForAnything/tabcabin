@@ -109,11 +109,15 @@ in the code:
 | `WXT_SYNC_SERVER` | the extension (sync server)            | `https://tabs.example.com` |
 | `WXT_SITE_URL`    | the extension (website link, Settings) | `https://example.com`      |
 | `SITE_URL`        | the website (links, sitemap)           | `https://example.com`      |
+| `EXTENSION_URL`   | the website (download buttons)         | the Chrome Web Store page  |
+| `REPO_URL`        | the website (GitHub links)             | the GitHub repository      |
 
 Put them in `apps/extension/.env` / your shell, or set them once as repository variables on GitHub
 (**Settings → Secrets and variables → Actions → Variables**) and run the manual **Build** workflow,
 which uploads the extension zip and the website as downloads (it fills `WXT_SITE_URL` from
 `SITE_URL`). Without `WXT_SYNC_SERVER` the extension is built without sync and works offline only.
+Without `EXTENSION_URL` the website says "Coming soon" instead of "Get it for Chrome", and without
+`REPO_URL` it has no GitHub links.
 
 ## Privacy
 

@@ -27,7 +27,7 @@ const structuredData = {
   description,
   url: Astro.site?.toString(),
   license: 'https://opensource.org/licenses/MIT',
-  codeRepository: repo,
+  ...(repo && { codeRepository: repo }),
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 }
 ---

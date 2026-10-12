@@ -4,7 +4,10 @@
 #   WXT_SYNC_SERVER  sync server built into the extension, e.g. https://tabs.example.com
 #   SITE_URL         public address of the website, e.g. https://example.com (the extension
 #                    links to it from Settings)
-# Both are optional: without WXT_SYNC_SERVER the extension works offline only.
+#   EXTENSION_URL    where the website's download buttons go (the Chrome Web Store listing or a
+#                    release); until it is set they say "Coming soon"
+#   REPO_URL         the public GitHub repository; until it is set the website has no GitHub links
+# All are optional: without WXT_SYNC_SERVER the extension works offline only.
 name: Build
 
 on:
@@ -31,6 +34,8 @@ jobs:
       - run: pnpm --filter @tabcabin/landing build
         env:
           SITE_URL: ${{ vars.SITE_URL }}
+          EXTENSION_URL: ${{ vars.EXTENSION_URL }}
+          REPO_URL: ${{ vars.REPO_URL }}
       - uses: actions/upload-artifact@v7
         with:
           name: extension

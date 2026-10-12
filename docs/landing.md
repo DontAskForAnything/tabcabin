@@ -31,10 +31,18 @@ structured data, the sitemap and `robots.txt`, so set it for every production bu
 never written into the code: without `SITE_URL` the build uses the placeholder
 `https://tabs.example.com`.
 
+Two more addresses switch the site from "coming soon" to released, each on its own:
+
+| Variable        | When set                                                              | When empty                                 |
+| --------------- | --------------------------------------------------------------------- | ------------------------------------------ |
+| `EXTENSION_URL` | "Get it for Chrome" buttons go there (the store listing or a release) | the buttons say "Coming soon to Chrome"    |
+| `REPO_URL`      | GitHub links in the menu, hero, footer, privacy page and the terminal | no GitHub links (for a private repository) |
+
 To build on GitHub, add `SITE_URL` once as a repository variable (**Settings → Secrets and variables →
-Actions → Variables**) and run **Actions → Build → Run workflow**: the built site (and the extension
-zip, with `WXT_SYNC_SERVER` and this address for its Settings link) is attached to the run as a
-download. The **Pages** workflow below uses the same variable when you leave its address field empty.
+Actions → Variables**), with `EXTENSION_URL` and `REPO_URL` when they exist, and run **Actions →
+Build → Run workflow**: the built site (and the extension zip, with `WXT_SYNC_SERVER` and this
+address for its Settings link) is attached to the run as a download. The **Pages** workflow below
+uses the same variables (`SITE_URL` only when you leave its address field empty).
 
 Preview locally with `pnpm --filter @tabcabin/landing preview`.
 
@@ -68,7 +76,7 @@ by hand. For a custom domain, add it under **Settings → Pages** and point a `C
 
 Netlify, Cloudflare Pages and similar: build command
 `pnpm --filter @tabcabin/landing build`, output directory `apps/landing/dist`, environment variable
-`SITE_URL`.
+`SITE_URL` (and `EXTENSION_URL`, `REPO_URL`).
 
 ## After the first deploy
 
@@ -76,5 +84,5 @@ Netlify, Cloudflare Pages and similar: build command
   [chrome-web-store/README.md](chrome-web-store/README.md)).
 - Add the site to Google Search Console and submit `https://<your-site>/sitemap-index.xml`.
 - Check the social preview with a link-preview tool; the image is `public/og.png`.
-- Point the "Get it for Chrome" buttons at the store listing once it is live (`releases` in
-  `apps/landing/src/site.ts`).
+- Set `EXTENSION_URL` to the store listing once it is live, and `REPO_URL` once the repository is
+  public, then build the site again.

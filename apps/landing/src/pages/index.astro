@@ -3,6 +3,7 @@ import ChaosToCalm from '../components/ChaosToCalm.astro'
 import Contours from '../components/scene/Contours.astro'
 import FilmSection from '../components/FilmSection.astro'
 import Footer from '../components/Footer.astro'
+import GetExtension from '../components/GetExtension.astro'
 import GitHubMark from '../components/GitHubMark.astro'
 import HeroDemo from '../components/HeroDemo.astro'
 import Icon from '../components/Icon.astro'
@@ -13,7 +14,7 @@ import Valley from '../components/scene/Valley.astro'
 import StickyShowcase from '../components/StickyShowcase.astro'
 import Terminal from '../components/Terminal.astro'
 import Layout from '../layouts/Layout.astro'
-import { faq, nb, repo, releases } from '../site'
+import { extensionUrl, faq, nb, repo } from '../site'
 
 const features = [
   [
@@ -81,13 +82,15 @@ const filmSchema = {
       <div class="scene-sky relative isolate">
         <Sky id="hero-sky" />
         <div class="relative mx-auto max-w-6xl px-5 pt-[120px] text-center sm:pt-36">
-          <a
-            href={releases}
-            class="inline-flex items-center gap-1.5 text-[14.5px] text-ink-2 underline decoration-accent/40 underline-offset-[5px] hover:text-ink hover:decoration-accent"
-          >
-            Sync between your computers is here <Icon name="ArrowRight" size={14} />
-          </a>
-          <h1 class="mx-auto mt-6 max-w-4xl text-[44px] leading-[1.02] font-bold tracking-[-0.04em] text-balance sm:text-[72px]">
+          {extensionUrl && (
+            <a
+              href={extensionUrl}
+              class="mb-6 inline-flex items-center gap-1.5 text-[14.5px] text-ink-2 underline decoration-accent/40 underline-offset-[5px] hover:text-ink hover:decoration-accent"
+            >
+              Sync between your computers is here <Icon name="ArrowRight" size={14} />
+            </a>
+          )}
+          <h1 class="mx-auto max-w-4xl text-[44px] leading-[1.02] font-bold tracking-[-0.04em] text-balance sm:text-[72px]">
             A <span class="text-accent-ink">calm</span> cabin for your tabs
           </h1>
           <p class="mx-auto mt-6 max-w-2xl text-[18px] leading-relaxed text-balance text-ink-2 sm:text-[20px]">
@@ -97,18 +100,15 @@ const filmSchema = {
             to sync your computers, or run your own server.
           </p>
           <div class="mt-9 flex flex-wrap items-center justify-center gap-3" data-reveal="0.2">
-            <a
-              href={releases}
-              class="group flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile transition hover:brightness-110"
-            >
-              <Icon name="Download" size={18} /> Get it for Chrome
-            </a>
-            <a
-              href={repo}
-              class="flex h-12 items-center gap-2 rounded-xl bg-card px-6 text-[15.5px] font-semibold shadow-tile transition hover:bg-raised"
-            >
-              <GitHubMark size={18} /> Star on GitHub
-            </a>
+            <GetExtension label="Get it for Chrome" />
+            {repo && (
+              <a
+                href={repo}
+                class="flex h-12 items-center gap-2 rounded-xl bg-card px-6 text-[15.5px] font-semibold shadow-tile transition hover:bg-raised"
+              >
+                <GitHubMark size={18} /> Star on GitHub
+              </a>
+            )}
             <PromoFilm />
           </div>
           <p class="mt-4 text-[13.5px] text-ink-3" data-reveal="0.25">
@@ -245,12 +245,7 @@ const filmSchema = {
           Free and open source. Move in within a minute, sync when you are ready.
         </p>
         <div class="mt-9 flex flex-wrap justify-center gap-3">
-          <a
-            href={releases}
-            class="flex h-12 items-center gap-2 rounded-xl bg-accent px-6 text-[15.5px] font-semibold text-on-accent shadow-tile transition hover:brightness-110"
-          >
-            <Icon name="Download" size={18} /> Get it for Chrome
-          </a>
+          <GetExtension label="Get it for Chrome" />
           <a
             href="/alternatives/"
             class="flex h-12 items-center gap-2 rounded-xl bg-card px-6 text-[15.5px] font-semibold shadow-tile transition hover:bg-raised"

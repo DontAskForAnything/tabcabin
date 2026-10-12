@@ -1,7 +1,18 @@
-export const repo = 'https://github.com/DontAskForAnything/tabcabin'
-export const releases = `${repo}/releases/latest`
-export const selfHostingGuide = `${repo}/blob/main/docs/self-hosting.md`
-export const changelog = `${repo}/blob/main/CHANGELOG.md`
+/** An address from the build environment, without a trailing slash; empty means not set. */
+function address(value: string | undefined) {
+  return value?.trim().replace(/\/+$/, '') || undefined
+}
+
+/**
+ * Where people get the extension (the Chrome Web Store listing or a release). Until it is set, the
+ * download buttons say "Coming soon".
+ */
+export const extensionUrl = address(import.meta.env.EXTENSION_URL)
+
+/** The public GitHub repository. Until it is set, links to the code, guide and changelog stay out. */
+export const repo = address(import.meta.env.REPO_URL)
+export const selfHostingGuide = repo && `${repo}/blob/main/docs/self-hosting.md`
+export const changelog = repo && `${repo}/blob/main/CHANGELOG.md`
 
 /** Tools with a comparison page under /alternatives/ (each ends with a guide for moving over). */
 export const comparisons = [

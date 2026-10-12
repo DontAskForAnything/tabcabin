@@ -1,0 +1,39 @@
+---
+import Icon from './Icon.astro'
+import { extensionUrl } from '../site'
+
+interface Props {
+  /** Text of the button once the extension is out. */
+  label: string
+  /** The filled main button of its section, or the quieter card one next to another button. */
+  tone?: 'primary' | 'card'
+  size?: 'md' | 'lg'
+  class?: string
+}
+
+const { label, tone = 'primary', size = 'lg', class: className } = Astro.props
+const shape = [
+  'inline-flex items-center gap-2 rounded-xl font-semibold',
+  size === 'lg' ? 'h-12 px-6 text-[15.5px]' : 'h-11 px-5 text-[15px]',
+  className,
+]
+---
+
+{extensionUrl ? (
+  <a
+    href={extensionUrl}
+    class:list={[
+      shape,
+      'shadow-tile transition',
+      tone === 'primary'
+        ? 'bg-accent text-on-accent hover:brightness-110'
+        : 'bg-card hover:bg-raised',
+    ]}
+  >
+    <Icon name="Download" size={size === 'lg' ? 18 : 17} /> {label}
+  </a>
+) : (
+  <span class:list={[shape, 'bg-accent-soft text-accent-ink']}>
+    <Icon name="Clock" size={size === 'lg' ? 18 : 17} /> Coming soon to Chrome
+  </span>
+)}

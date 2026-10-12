@@ -43,11 +43,12 @@ const columns: [string, [string, string][]][] = [
   [
     'Project',
     [
+      // The repository links show once the repository is public (REPO_URL).
       ['GitHub', repo],
       ['Self-hosting guide', selfHostingGuide],
       ['Changelog', changelog],
       ['Licenses', '/third-party-licenses.txt'],
-    ],
+    ].filter((link): link is [string, string] => !!link[1]),
   ],
 ]
 ---

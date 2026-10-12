@@ -87,8 +87,9 @@ import { repo } from '../site'
       <ul>
         <li>In the extension: Settings → Data → Delete all data, or uninstall the extension.</li>
         <li>
-          On the sync server: ask the person who runs it (open an issue in the repository for the
-          official one) and your account and all of its data are deleted.
+          On the sync server: ask the person who runs it
+          {repo && ' (open an issue in the repository for the official one)'} and your account and
+          all of its data are deleted.
         </li>
       </ul>
 
@@ -96,15 +97,24 @@ import { repo } from '../site'
       <p>TabCabin is not directed at children and does not knowingly collect any information.</p>
 
       <h2>Changes</h2>
-      <p>
-        If this policy changes, the new version will be published on this page and in the
-        <a href={repo}>project repository</a>.
-      </p>
+      {repo ? (
+        <p>
+          If this policy changes, the new version will be published on this page and in the
+          <a href={repo}>project repository</a>.
+        </p>
+      ) : (
+        <p>If this policy changes, the new version will be published on this page.</p>
+      )}
 
-      <h2>Contact</h2>
-      <p>
-        Questions are welcome as an issue in the <a href={`${repo}/issues`}>GitHub repository</a>.
-      </p>
+      {repo && (
+        <>
+          <h2>Contact</h2>
+          <p>
+            Questions are welcome as an issue in the{' '}
+            <a href={`${repo}/issues`}>GitHub repository</a>.
+          </p>
+        </>
+      )}
     </article>
   </main>
   <Footer />

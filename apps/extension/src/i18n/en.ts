@@ -370,6 +370,8 @@ export const en = {
   'sync.password': 'Password',
   'sync.passwordAgain': 'Repeat password',
   'sync.passwordsDiffer': 'The passwords don’t match',
+  'sync.showPassword': 'Show password',
+  'sync.hidePassword': 'Hide password',
   'sync.signIn': 'Sign in',
   'sync.signUp': 'Create account',
   'sync.signingIn': 'Signing in…',

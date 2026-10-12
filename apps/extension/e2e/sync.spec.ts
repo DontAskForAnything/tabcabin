@@ -70,7 +70,7 @@ async function signIn(page: Page, password = 'correct horse') {
   // No Google on this server, so the username and password form shows right away.
   await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible()
   await page.getByLabel('Username').fill('michal')
-  await page.getByLabel('Password').fill(password)
+  await page.getByLabel('Password', { exact: true }).fill(password)
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()
 }
 

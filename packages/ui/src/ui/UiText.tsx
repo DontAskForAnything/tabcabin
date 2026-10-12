@@ -7,6 +7,8 @@ export interface UiText {
   dismiss: string
   searchEmoji: string
   noEmoji: string
+  showPassword: string
+  hidePassword: string
 }
 
 const DEFAULT_TEXT: UiText = {
@@ -15,6 +17,8 @@ const DEFAULT_TEXT: UiText = {
   dismiss: 'Dismiss',
   searchEmoji: 'Search emoji',
   noEmoji: 'No emoji found',
+  showPassword: 'Show password',
+  hidePassword: 'Hide password',
 }
 
 const UiTextContext = createContext<UiText>(DEFAULT_TEXT)

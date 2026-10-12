@@ -76,6 +76,8 @@ function ComponentText({ children }: { children: ReactNode }) {
         dismiss: t('common.dismiss'),
         searchEmoji: t('emoji.search'),
         noEmoji: t('emoji.empty'),
+        showPassword: t('sync.showPassword'),
+        hidePassword: t('sync.hidePassword'),
       }}
     >
       {children}

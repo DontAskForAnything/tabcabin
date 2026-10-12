@@ -1,5 +1,6 @@
 import { type ComponentProps, type ReactNode } from 'react'
 import { cn } from '../lib/cn'
+import { FIELD_INPUT } from './fieldInput'
 
 export interface InputProps extends ComponentProps<'input'> {
   leading?: ReactNode
@@ -38,11 +39,7 @@ export function Field({ label, hint, className, id, ...props }: FieldProps) {
   return (
     <label className={cn('flex flex-col gap-1.5', className)} htmlFor={id}>
       <span className="text-[13px] font-semibold text-ink-2">{label}</span>
-      <input
-        id={id}
-        className="h-11 rounded-xl border border-line bg-card px-3.5 text-[14.5px] text-ink shadow-tile outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--focus)]"
-        {...props}
-      />
+      <input id={id} className={FIELD_INPUT} {...props} />
       {hint && <span className="text-[12.5px] text-ink-3">{hint}</span>}
     </label>
   )

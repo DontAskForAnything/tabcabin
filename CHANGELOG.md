@@ -10,6 +10,7 @@ All notable changes to this project are documented here. The format follows
 
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
+- Sign-in: an eye in each password field shows what you typed
 
 ### Changed
 

@@ -1,11 +1,11 @@
-import { Button, Field } from '@tabcabin/ui'
+import { Button, Field, PasswordField } from '@tabcabin/ui'
 import { useRef, useState } from 'react'
 import { useT } from '@/i18n'
 import { FormError } from './FormError'
 
 /**
  * Username and password, for signing in or (when the server allows it) creating an account. A new
- * password is typed twice, so a typo can't lock anyone out.
+ * password is typed twice, so a typo can't lock anyone out, and the eye in each field shows it.
  */
 export function PasswordForm({
   signupOpen,
@@ -50,9 +50,8 @@ export function PasswordForm({
         spellCheck={false}
         autoFocus
       />
-      <Field
+      <PasswordField
         label={t('sync.password')}
-        type="password"
         value={password}
         onChange={(event) => {
           setPassword(event.target.value)
@@ -61,10 +60,9 @@ export function PasswordForm({
         autoComplete={creating ? 'new-password' : 'current-password'}
       />
       {creating && (
-        <Field
+        <PasswordField
           ref={againField}
           label={t('sync.passwordAgain')}
-          type="password"
           value={again}
           onChange={(event) => {
             setAgain(event.target.value)

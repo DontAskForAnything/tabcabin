@@ -70,6 +70,7 @@ FIND AND REMEMBER
 ON ALL YOUR COMPUTERS
 • Sign in with Google (or a username and password) and your boards stay in sync between computers
 • Changes arrive live; without signing in everything stays in this browser
+• Share a group as a read-only link with people who don't use TabCabin
 
 MAKE IT YOURS
 • Light and dark theme, compact layout, English and Polish
@@ -112,6 +113,7 @@ SZUKANIE I PRZYPOMNIENIA
 NA WSZYSTKICH KOMPUTERACH
 • Zaloguj się przez Google (albo nazwą użytkownika i hasłem), a tablice zostaną zsynchronizowane między komputerami
 • Zmiany przychodzą na żywo; bez logowania wszystko zostaje w tej przeglądarce
+• Udostępnij grupę jako link tylko do odczytu osobom, które nie używają TabCabin
 
 PO TWOJEMU
 • Motyw jasny i ciemny, widok kompaktowy, polski i angielski

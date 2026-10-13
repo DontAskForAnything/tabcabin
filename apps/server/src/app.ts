@@ -8,6 +8,7 @@ import type { Db } from './db/client'
 import { SignupGuard } from './auth/signupGuard'
 import { authRoutes } from './routes/auth'
 import { googleRoutes } from './routes/google'
+import { shareRoutes } from './routes/shares'
 import { syncRoutes } from './routes/sync'
 import { ChangeFeed } from './sync'
 
@@ -63,6 +64,7 @@ export function createApp({
   app.route('/auth/google', googleRoutes(db, config, now, fetcher, signups))
   app.route('/auth', authRoutes(db, config, now, signups))
   app.route('/', syncRoutes(db, config, feed, now))
+  app.route('/', shareRoutes(db, config, now))
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404))
   app.onError((error, c) => {

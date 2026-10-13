@@ -18,6 +18,7 @@ import {
   Ellipsis,
   FolderInput,
   Layers,
+  Link2,
   ListTodo,
   Minimize2,
   Maximize2,
@@ -27,6 +28,8 @@ import {
 import type { BoardGroup } from '@/db/hooks'
 import { updateGroup } from '@/db/repo'
 import { useT } from '@/i18n'
+import { useUi } from '@/state/ui'
+import { useAccount } from '@/sync/state'
 import type { ActiveContext } from '../../useActive'
 import { GroupMoveToOtherWorkspaces } from '../MoveTargets'
 import type { BoardActions } from '../actions'
@@ -42,6 +45,8 @@ export function GroupMenu({
 }) {
   const t = useT()
   const otherCategories = (active.categories ?? []).filter((cat) => cat.id !== group.categoryId)
+  const account = useAccount()
+  const signedIn = Boolean(account?.token && account.initialized)
   return (
     <Menu>
       <MenuTrigger asChild>
@@ -80,6 +85,20 @@ export function GroupMenu({
         <MenuItem icon={<ClipboardCopy size={15} />} onSelect={() => void actions.copyGroup(group)}>
           {t('group.copyAsText')}
         </MenuItem>
+        {signedIn && (
+          <MenuItem
+            icon={<Link2 size={15} />}
+            onSelect={() =>
+              useUi.getState().openModal({
+                type: 'share',
+                groupId: group.id,
+                title: `${group.emoji} ${group.title || t('group.untitled')}`,
+              })
+            }
+          >
+            {t('share.menu')}
+          </MenuItem>
+        )}
         <MenuSub>
           <MenuSubTrigger icon={<FolderInput size={15} />}>{t('group.moveTo')}</MenuSubTrigger>
           <MenuSubContent className="min-w-[220px]">

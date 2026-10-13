@@ -132,3 +132,33 @@ test('rejects a wrong password and explains how to get an account', async ({ con
   await page.getByRole('button', { name: /back to my boards/ }).click()
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
 })
+
+test('shares a group as a read-only page and takes it down again', async ({ context }) => {
+  const page = await openBoard(context)
+  await signIn(page)
+  // The server may already hold boards from the other tests.
+  const keepBoth = page.getByRole('button', { name: /Keep both/ })
+  const signedIn = page.getByRole('heading', { name: 'You’re signed in' })
+  await expect(keepBoth.or(signedIn)).toBeVisible()
+  if (await keepBoth.isVisible()) await keepBoth.click()
+  await page.getByRole('button', { name: 'Open my boards' }).click()
+
+  const group = page.getByRole('region', { name: 'Quick links' }).first()
+  await group.getByRole('button', { name: 'Group options' }).click()
+  await page.getByRole('menuitem', { name: 'Share a read-only link' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Read-only link' })
+  await dialog.getByRole('button', { name: 'Create link' }).click()
+  const link = dialog.getByRole('textbox', { name: 'Link to this group' })
+  await expect(link).toHaveValue(new RegExp(`^${SERVER}/s/[\\w-]{22}$`), { timeout: 15_000 })
+  const url = await link.inputValue()
+
+  const shared = await fetch(url)
+  expect(shared.status).toBe(200)
+  const html = await shared.text()
+  expect(html).toContain('Quick links')
+  expect(html).toContain('github.com')
+
+  await dialog.getByRole('button', { name: 'Stop sharing' }).click()
+  await expect(dialog.getByRole('button', { name: 'Create link' })).toBeVisible()
+  expect((await fetch(url)).status).toBe(404)
+})

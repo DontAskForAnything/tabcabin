@@ -110,6 +110,14 @@ network, 8 failures per account), each network can create `SIGNUPS_PER_IP_PER_DA
 `MAX_USERS` caps the total and `MAX_RECORDS_PER_USER` the size of one account. When an account is
 full, the extension says so and keeps new things locally until there is room again.
 
+## Shared groups
+
+Signed-in users can share a group as a read-only page (group menu → **Share a read-only link**).
+The server shows it at `https://<DOMAIN>/s/<id>`: plain HTML with no scripts and no outside
+requests, always the group as it is now, marked `noindex` for search engines. The id is long and
+random; stopping the share (or deleting the group) ends the link. Each account can share up to 100
+groups.
+
 ## Managing accounts
 
 The image includes a small command-line tool:
@@ -233,6 +241,6 @@ Run it as a service (systemd, pm2…) and put an HTTPS proxy in front of it.
 ## What is stored
 
 Accounts (username, a scrypt password hash, and the e-mail and Google account id when Google
-sign-in is used), active sessions (only a hash of each token), and the
-rows your browsers sync: workspaces, categories, groups, links, notes and reminders. Nothing is sent
-anywhere else; there is no telemetry.
+sign-in is used), active sessions (only a hash of each token), the
+rows your browsers sync (workspaces, categories, groups, links, notes and reminders) and which
+groups are shared. Nothing is sent anywhere else; there is no telemetry.

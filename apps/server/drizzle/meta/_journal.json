@@ -15,6 +15,13 @@
       "when": 1791461733815,
       "tag": "0001_google_sign_in",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791875422105,
+      "tag": "0002_group_shares",
+      "breakpoints": true
     }
   ]
 }

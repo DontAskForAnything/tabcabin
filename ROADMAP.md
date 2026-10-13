@@ -9,7 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Share a group with a read-only link
 - [ ] Boards on the web: sign in on the website and use it on a phone, maybe as an installable app
       (PWA)
 

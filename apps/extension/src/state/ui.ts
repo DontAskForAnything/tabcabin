@@ -15,6 +15,7 @@ type ModalState =
   | { type: 'reminders' }
   | { type: 'welcome' }
   | { type: 'week' }
+  | { type: 'share'; groupId: string; title: string }
   | null
 
 interface UiState {

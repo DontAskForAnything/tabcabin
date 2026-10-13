@@ -29,6 +29,9 @@ All notable changes to this project are documented here. The format follows
 - This week: a quiet line in the tabs panel ("12 tabs closed this week") and a look back at the
   last seven days from the menu, with tabs closed, links saved and to-dos done; no streaks or
   badges, and Settings → Appearance hides the line
+- Share a group with a read-only link (signed in, from the group menu): the sync server shows the
+  group as it is now at `/s/<id>`, without scripts and out of search engines, until you stop
+  sharing it
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

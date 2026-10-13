@@ -52,6 +52,7 @@ searchable, and works offline. No account needed and no tracking.
 - **Broken links** _(optional)_ — about once a week TabCabin asks each saved page whether it still loads and marks the ones that do not
 - **Bin** — restore deleted groups and items, or delete them for good
 - **Undo** for every change (`⌘Z` / `Ctrl+Z`)
+- **Share a group** _(signed in)_ — a read-only link that shows the group as it is now, for people without TabCabin; stop sharing at any time
 - **This week** — a quiet look back: tabs TabCabin closed, links saved and to-dos done in the last seven days (no streaks, can be hidden)
 
 **Make it yours**

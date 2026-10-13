@@ -25,6 +25,11 @@ interface ServerHealth {
   auth?: { password: boolean; google: boolean; signup: boolean }
 }
 
+export interface Share {
+  id: string
+  groupId: string
+}
+
 export interface SignedIn {
   token: string
   user: PublicUser
@@ -106,6 +111,27 @@ export class SyncClient {
 
   logout() {
     return this.request<void>('/auth/logout', { method: 'POST' })
+  }
+
+  /** The read-only link of a group, if it is shared. */
+  getShare(groupId: string) {
+    return this.request<{ share: Share | null }>(`/shares?groupId=${encodeURIComponent(groupId)}`)
+  }
+
+  shareGroup(groupId: string) {
+    return this.request<{ share: Share }>('/shares', {
+      method: 'POST',
+      body: JSON.stringify({ groupId }),
+    })
+  }
+
+  unshare(id: string) {
+    return this.request<void>(`/shares/${encodeURIComponent(id)}`, { method: 'DELETE' })
+  }
+
+  /** Where anyone can see a shared group. */
+  shareUrl(share: Share) {
+    return `${this.serverUrl}/s/${share.id}`
   }
 
   push(changes: PushChange[]) {

@@ -6,7 +6,7 @@ TabCabin is a pnpm monorepo with five TypeScript packages:
 packages/core      pure domain logic — runs anywhere (extension, server, tests)
 packages/ui        design system — tokens, Tailwind theme and accessible React components
 apps/extension     the Chrome extension (WXT, Manifest V3, React)
-apps/server        sync server: Hono, SQLite (Drizzle), password and Google sign-in
+apps/server        sync server: Hono, SQLite (Drizzle), password and Google sign-in, shared group pages
 apps/landing       the website (Astro)
 ```
 

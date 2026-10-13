@@ -1,5 +1,5 @@
 import { ENTITY_TYPES } from '@tabcabin/core'
-import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, integer, primaryKey, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
@@ -64,6 +64,23 @@ export const records = sqliteTable(
     primaryKey({ columns: [t.userId, t.entity, t.id] }),
     index('records_user_seq').on(t.userId, t.seq),
   ],
+)
+
+/**
+ * Read-only links to a group: whoever has `/s/<id>` sees the group as it is now (title, links,
+ * notes and to-dos), until its owner stops sharing. One link per group.
+ */
+export const shares = sqliteTable(
+  'shares',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    groupId: text('group_id').notNull(),
+    createdAt: integer('created_at').notNull(),
+  },
+  (t) => [uniqueIndex('shares_user_group').on(t.userId, t.groupId)],
 )
 
 /** Small key/value table (the global change counter). */

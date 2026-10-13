@@ -42,6 +42,8 @@ All notable changes to this project are documented here. The format follows
 - Website: optional visit counts with Umami (`UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`), without
   cookies and not for browsers that send Do Not Track; the privacy page then says what is counted
 - Self-hosting guide: running the sync server on Coolify
+- A "Chrome Web Store" workflow: started by hand, it builds the extension with your addresses,
+  uploads it to the store and sends it for review (setup in `docs/chrome-web-store`)
 
 ### Changed
 

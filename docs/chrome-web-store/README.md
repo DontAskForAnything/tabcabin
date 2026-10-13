@@ -1,8 +1,9 @@
 # Chrome Web Store submission
 
 Everything needed to publish TabCabin in the
-[Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole). Nothing here is
-published automatically.
+[Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole). The first
+version goes in by hand; later ones can be sent from GitHub (see
+[Updates from GitHub](#updates-from-github)). Nothing is published automatically.
 
 ## Package
 
@@ -187,3 +188,30 @@ with (see [../landing.md](../landing.md)).
 5. **Distribution:** public (or unlisted for a soft launch), all regions.
 6. Submit for review. Reviews usually take a few days. The only host permission is optional
    (link checks), which keeps the review simple; expect a question about it.
+
+## Updates from GitHub
+
+After the first version is in the store, the **Chrome Web Store** workflow
+([`.github/workflows/store.yml`](../../.github/workflows/store.yml)) builds the zip with your
+addresses, uploads it and sends it for review. It runs only when you start it (**Actions → Chrome
+Web Store → Run workflow**; untick "Send for review" to leave the upload as a draft). Set it up
+once:
+
+1. [Google Cloud Console](https://console.cloud.google.com/): in a project (the one with the Google
+   sign-in client is fine) open **APIs & Services → Library**, find **Chrome Web Store API** and
+   enable it.
+2. **IAM & Admin → Service accounts → Create service account** (e.g. `store-upload`, no roles).
+   Open it → **Keys → Add key → Create new key → JSON**. Keep the downloaded file private.
+3. Developer Dashboard → **Account** → add the service account's e-mail (`…@….iam.gserviceaccount.com`).
+   A publisher can have one service account.
+4. GitHub → **Settings → Secrets and variables → Actions**:
+   - secret `CWS_SERVICE_ACCOUNT` — the whole content of the JSON key file;
+   - variable `CWS_PUBLISHER_ID` — Developer Dashboard → **Publisher → Settings**;
+   - variable `CWS_EXTENSION_ID` — the item's id (in the dashboard and in its store address);
+   - the `WXT_SYNC_SERVER` and `SITE_URL` variables, as for the Build workflow. The store workflow
+     refuses to run without `WXT_SYNC_SERVER`, because the listing describes sync.
+
+For every update, raise `version` in `apps/extension/package.json` (and add the changelog section)
+before running it: the store refuses a version it already has. After changing the visibility in
+the dashboard (for example from unlisted to public), publish once from the dashboard; until then the
+workflow can upload but not publish.

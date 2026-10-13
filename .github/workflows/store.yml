@@ -1,0 +1,59 @@
+# Builds the extension with your addresses and sends it to the Chrome Web Store. Runs only when
+# started by hand (Actions → Chrome Web Store → Run workflow). The first version of the item is
+# submitted by hand in the Developer Dashboard; after that, set once (docs/chrome-web-store):
+#   secret   CWS_SERVICE_ACCOUNT  JSON key of the Google Cloud service account added to the
+#                                 Developer Dashboard (Account → Service account)
+#   variable CWS_PUBLISHER_ID     Developer Dashboard → Publisher → Settings
+#   variable CWS_EXTENSION_ID     the item's id
+# and the WXT_SYNC_SERVER and SITE_URL variables of the Build workflow. Raise `version` in
+# apps/extension/package.json first: the store refuses a version it already has.
+name: Chrome Web Store
+
+on:
+  workflow_dispatch:
+    inputs:
+      submit:
+        description: Send for review (otherwise the upload waits as a draft in the dashboard)
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chrome-web-store
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Check the sync server
+        # The store listing promises sync, so never upload a build without it.
+        run: |
+          if [ -z "$WXT_SYNC_SERVER" ]; then
+            echo "::error::Set the WXT_SYNC_SERVER variable first"
+            exit 1
+          fi
+        env:
+          WXT_SYNC_SERVER: ${{ vars.WXT_SYNC_SERVER }}
+      - run: pnpm --filter @tabcabin/extension zip
+        env:
+          WXT_SYNC_SERVER: ${{ vars.WXT_SYNC_SERVER }}
+          WXT_SITE_URL: ${{ vars.SITE_URL }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: extension
+          path: apps/extension/.output/*.zip
+      - run: pnpm --filter @tabcabin/extension store-upload
+        env:
+          CWS_SERVICE_ACCOUNT: ${{ secrets.CWS_SERVICE_ACCOUNT }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          CWS_SUBMIT: ${{ inputs.submit }}

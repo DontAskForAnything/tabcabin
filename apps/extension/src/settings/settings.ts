@@ -33,6 +33,8 @@ export interface Settings {
   trashZone: boolean
   /** Say so when a saved link is also in another group. */
   warnDuplicates: boolean
+  /** Look at saved pages now and then and mark the ones that no longer load. */
+  checkLinks: boolean
   shortcuts: Shortcuts
   /** The notification permission was offered once (when the first reminder was set). */
   notificationsAsked: boolean
@@ -60,6 +62,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sidebarWidth: 292,
   trashZone: true,
   warnDuplicates: true,
+  checkLinks: false,
   shortcuts: { newGroup: 'g', search: 'mod+k', workspaces: 'mod+o', bin: 'mod+shift+backspace' },
   notificationsAsked: false,
 }

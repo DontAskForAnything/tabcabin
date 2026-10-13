@@ -53,6 +53,8 @@ export default defineConfig({
       ...(mode === 'e2e' ? OPTIONAL_PERMISSIONS : []),
     ],
     optional_permissions: mode === 'e2e' ? [] : OPTIONAL_PERMISSIONS,
+    // Link checks read every saved site; asked for only when they are turned on.
+    ...(mode === 'e2e' ? {} : { optional_host_permissions: ['<all_urls>'] }),
     action: {
       default_title: 'TabCabin',
     },

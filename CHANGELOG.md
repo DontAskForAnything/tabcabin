@@ -20,6 +20,9 @@ All notable changes to this project are documented here. The format follows
   group as a window again with one click on its header; undo brings the window back
 - Saving a link that another group already has says where it is, with "Show" to go there
   (Settings → General turns it off)
+- Links that no longer load get a small mark: turn on link checks in Settings → General and
+  TabCabin asks each saved page about once a week whether it still loads (it needs access to the
+  saved sites for that, which it gives back when the checks are turned off)
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

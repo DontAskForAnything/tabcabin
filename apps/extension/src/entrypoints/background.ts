@@ -2,6 +2,7 @@ import { liveQuery } from 'dexie'
 import { db } from '@/db/db'
 import { startBadge } from '@/background/badge'
 import { SAVE_TO_INBOX, saveTabToInbox } from '@/background/inbox'
+import { checkLinks, startLinkChecks } from '@/background/linkChecks'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
@@ -50,6 +51,10 @@ export default defineBackground(() => {
       syncEngine.startLive()
       return undefined
     }
+    if (message.type === 'tabcabin:check-links') {
+      void checkLinks()
+      return undefined
+    }
     if (message.type === 'tabcabin:undo') {
       void runUndo(message.undoId)
       return undefined
@@ -65,9 +70,18 @@ export default defineBackground(() => {
   startBadge()
   startReminders()
   startSync()
+  startLinkChecks()
 
   // Hooks for end-to-end tests (menus and the toolbar button can't be clicked from Playwright).
   Object.assign(globalThis, {
-    tabcabin: { handleMenuClick, togglePopover, saveTabToInbox, rebuildMenus, checkReminders, db },
+    tabcabin: {
+      handleMenuClick,
+      togglePopover,
+      saveTabToInbox,
+      rebuildMenus,
+      checkReminders,
+      checkLinks,
+      db,
+    },
   })
 })

@@ -49,6 +49,7 @@ searchable, and works offline. No account needed and no tracking.
 
 - **Search** (`⌘K` / `Ctrl+K`) across the workspace, all workspaces, open tabs and bookmarks; jump to any result on the board
 - **Reminders** — one-time, weekly or monthly; desktop notifications, snooze, and a due count on the toolbar icon
+- **Broken links** _(optional)_ — about once a week TabCabin asks each saved page whether it still loads and marks the ones that do not
 - **Bin** — restore deleted groups and items, or delete them for good
 - **Undo** for every change (`⌘Z` / `Ctrl+Z`)
 
@@ -127,21 +128,24 @@ Without `EXTENSION_URL` the website says "Coming soon" instead of "Get it for Ch
 
 Your data lives in the browser's IndexedDB. It only leaves the browser when you sign in, and then
 only to the sync server the extension was built with. TabCabin has no analytics and no tracking; apart
-from sync, the only things it loads from the web are the icons and images of pages you saved.
+from sync, the only things it loads from the web are the icons and images of pages you saved (and,
+if you turn on link checks, the saved pages themselves, to see whether they still load).
 Permissions it asks for:
 
-| Permission                                            | Why                                                                                           |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `tabs`, `tabGroups`                                   | Show and save your open tabs and native tab groups                                            |
-| `contextMenus`, `activeTab`, `scripting`              | Right-click saving and the save popover on the page you are looking at (only after you click) |
-| `storage`, `unlimitedStorage`                         | Keep your boards locally                                                                      |
-| `favicon`                                             | Show site icons from the browser's own cache                                                  |
-| `alarms`                                              | Fire reminders on time                                                                        |
-| `sidePanel`                                           | Open the board in the side panel                                                              |
-| `bookmarks`, `topSites`, `notifications` _(optional)_ | Asked only when you use bookmark search/import, most visited sites or desktop notifications   |
-| `identity` _(optional)_                               | Asked only when you choose **Continue with Google**, to open Google's sign-in window          |
+| Permission                                            | Why                                                                                                                      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `tabs`, `tabGroups`                                   | Show and save your open tabs and native tab groups                                                                       |
+| `contextMenus`, `activeTab`, `scripting`              | Right-click saving and the save popover on the page you are looking at (only after you click)                            |
+| `storage`, `unlimitedStorage`                         | Keep your boards locally                                                                                                 |
+| `favicon`                                             | Show site icons from the browser's own cache                                                                             |
+| `alarms`                                              | Fire reminders on time                                                                                                   |
+| `sidePanel`                                           | Open the board in the side panel                                                                                         |
+| `bookmarks`, `topSites`, `notifications` _(optional)_ | Asked only when you use bookmark search/import, most visited sites or desktop notifications                              |
+| `identity` _(optional)_                               | Asked only when you choose **Continue with Google**, to open Google's sign-in window                                     |
+| All websites _(optional host permission)_             | Asked only when you turn on link checks, to ask your saved pages whether they still load; turning them off gives it back |
 
-The extension has **no host permissions**: it cannot read pages unless you invoke it on one.
+Without link checks the extension has **no host permissions**: it cannot read pages unless you
+invoke it on one.
 
 ## Keyboard shortcuts
 

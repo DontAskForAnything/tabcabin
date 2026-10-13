@@ -132,20 +132,21 @@ Bez analityki, bez reklam, bez śledzenia. TabCabin nie ma dostępu do odwiedzan
 
 ### Permission justifications
 
-| Permission                    | Justification                                                                                                                                                           |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tabs`                        | Lists the user's open tabs in the side panel of the board so they can be saved, focused or closed, and reads the URL and title of a tab when the user saves it.         |
-| `tabGroups`                   | Shows Chrome tab groups in the open tabs panel and lets the user save a whole tab group as a group of links.                                                            |
-| `storage`, `unlimitedStorage` | Stores the user's boards, notes and settings locally in IndexedDB; collections of saved links can exceed the default quota.                                             |
-| `contextMenus`                | Adds "Save page / link / selection / image to TabCabin" to the right-click menu.                                                                                        |
-| `activeTab`, `scripting`      | After the user clicks the toolbar button, shortcut or context menu, shows the save popover or a confirmation toast on that one page. No host permissions are requested. |
-| `favicon`                     | Shows website icons next to saved links using the browser's favicon cache.                                                                                              |
-| `alarms`                      | Fires the user's reminders at the time they set.                                                                                                                        |
-| `sidePanel`                   | Lets the user open the board in Chrome's side panel.                                                                                                                    |
-| `bookmarks` (optional)        | Requested only when the user searches bookmarks or imports bookmark folders.                                                                                            |
-| `topSites` (optional)         | Requested only when the user adds a group of their most visited sites.                                                                                                  |
-| `notifications` (optional)    | Requested when the user sets a reminder, to show it as a desktop notification.                                                                                          |
-| `identity` (optional)         | Requested only when the user chooses "Continue with Google" on the sign-in page, to open Google's sign-in window.                                                       |
+| Permission                              | Justification                                                                                                                                                                                                                                                                                             |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tabs`                                  | Lists the user's open tabs in the side panel of the board so they can be saved, focused or closed, and reads the URL and title of a tab when the user saves it.                                                                                                                                           |
+| `tabGroups`                             | Shows Chrome tab groups in the open tabs panel and lets the user save a whole tab group as a group of links.                                                                                                                                                                                              |
+| `storage`, `unlimitedStorage`           | Stores the user's boards, notes and settings locally in IndexedDB; collections of saved links can exceed the default quota.                                                                                                                                                                               |
+| `contextMenus`                          | Adds "Save page / link / selection / image to TabCabin" to the right-click menu.                                                                                                                                                                                                                          |
+| `activeTab`, `scripting`                | After the user clicks the toolbar button, shortcut or context menu, shows the save popover or a confirmation toast on that one page. No host permissions are requested.                                                                                                                                   |
+| `favicon`                               | Shows website icons next to saved links using the browser's favicon cache.                                                                                                                                                                                                                                |
+| `alarms`                                | Fires the user's reminders at the time they set.                                                                                                                                                                                                                                                          |
+| `sidePanel`                             | Lets the user open the board in Chrome's side panel.                                                                                                                                                                                                                                                      |
+| `bookmarks` (optional)                  | Requested only when the user searches bookmarks or imports bookmark folders.                                                                                                                                                                                                                              |
+| `topSites` (optional)                   | Requested only when the user adds a group of their most visited sites.                                                                                                                                                                                                                                    |
+| `notifications` (optional)              | Requested when the user sets a reminder, to show it as a desktop notification.                                                                                                                                                                                                                            |
+| `identity` (optional)                   | Requested only when the user chooses "Continue with Google" on the sign-in page, to open Google's sign-in window.                                                                                                                                                                                         |
+| `<all_urls>` (optional host permission) | Requested only when the user turns on "Mark links that no longer load" in Settings: the extension sends a HEAD (or GET) request to each saved address about once a week and marks the ones that answer 404/410 or not at all. Results stay on the device; turning the setting off removes the permission. |
 
 ### Remote code
 
@@ -182,5 +183,5 @@ with (see [../landing.md](../landing.md)).
 4. **Privacy practices:** paste the single purpose and permission justifications, answer "no remote
    code", certify data usage, set the privacy policy URL.
 5. **Distribution:** public (or unlisted for a soft launch), all regions.
-6. Submit for review. Reviews usually take a few days; optional permissions and no host permissions
-   keep the review simple.
+6. Submit for review. Reviews usually take a few days. The only host permission is optional
+   (link checks), which keeps the review simple; expect a question about it.

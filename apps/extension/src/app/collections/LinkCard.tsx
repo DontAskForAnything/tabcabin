@@ -7,6 +7,7 @@ import { useUi } from '@/state/ui'
 import type { ItemViewProps } from '../board/ItemView'
 import { ReminderChip } from '../reminders/ReminderChip'
 import { selectedRing, useSelectable } from '../board/items/selection'
+import { BrokenMark, useBroken } from '../board/items/BrokenMark'
 
 /** Link shown as a tile in the Collections view. */
 export function LinkCard({ item, group, actions }: ItemViewProps) {
@@ -16,6 +17,7 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
   const reminder = group.reminders[item.id]
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
   const url = item.url ?? ''
+  const broken = useBroken(item.url)
   return (
     <div
       className={cn(
@@ -43,7 +45,10 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
           <span className="line-clamp-2 text-[14px] leading-snug font-[550]">
             {item.title || displayHost(url)}
           </span>
-          <span className="mt-0.5 block truncate text-[12px] text-ink-3">{displayHost(url)}</span>
+          <span className="mt-0.5 flex items-center gap-1.5 text-[12px] text-ink-3">
+            {broken && <BrokenMark />}
+            <span className="truncate">{displayHost(url)}</span>
+          </span>
         </span>
       </a>
       {reminder && (

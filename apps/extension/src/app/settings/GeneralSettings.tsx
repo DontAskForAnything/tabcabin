@@ -2,6 +2,7 @@ import { SegmentedControl } from '@tabcabin/ui'
 import { type Locale, useT } from '@/i18n'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'
+import { LinkChecksRow } from './LinkChecksRow'
 import { Row, SwitchRow } from './Row'
 
 export function GeneralSettings({ active }: { active: ActiveContext }) {
@@ -44,6 +45,7 @@ export function GeneralSettings({ active }: { active: ActiveContext }) {
         checked={settings.warnDuplicates}
         onChange={(warnDuplicates) => void updateSettings({ warnDuplicates })}
       />
+      <LinkChecksRow settings={settings} />
       <SwitchRow
         label={t('settings.trashZone')}
         hint={t('settings.trashZoneHint')}

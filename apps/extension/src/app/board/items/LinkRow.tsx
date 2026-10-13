@@ -6,6 +6,7 @@ import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { ReminderChip } from '../../reminders/ReminderChip'
 import type { ItemViewProps } from '../ItemView'
+import { BrokenMark, useBroken } from './BrokenMark'
 import { selectedRing, useSelectable } from './selection'
 
 export function LinkRow({
@@ -22,6 +23,7 @@ export function LinkRow({
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
   const showUrl = active.settings?.showUrls !== false
   const url = item.url ?? ''
+  const broken = useBroken(item.url)
 
   return (
     <div
@@ -49,11 +51,17 @@ export function LinkRow({
           size={nested ? 'sm' : 'md'}
         />
         <span className="min-w-0 flex-1 pr-1 group-focus-within/item:pr-[100px] group-hover/item:pr-[100px]">
-          <span className="block truncate text-[14.5px] leading-snug font-[550]">
-            {item.title || displayUrl(url)}
+          <span className="flex items-center gap-1.5">
+            <span className="truncate text-[14.5px] leading-snug font-[550]">
+              {item.title || displayUrl(url)}
+            </span>
+            {broken && !showUrl && <BrokenMark />}
           </span>
           {showUrl && (
-            <span className="block truncate text-[12.5px] text-ink-3">{displayUrl(url)}</span>
+            <span className="flex items-center gap-1.5 text-[12.5px] text-ink-3">
+              {broken && <BrokenMark />}
+              <span className="truncate">{displayUrl(url)}</span>
+            </span>
           )}
         </span>
       </a>

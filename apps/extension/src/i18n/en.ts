@@ -96,6 +96,8 @@ export const en = {
     other: '{count} of them were already saved in other groups',
   },
   'duplicate.show': 'Show',
+  'links.broken': 'This page did not load when it was last checked',
+  'links.denied': 'Link checks need access to the saved sites',
   'category.new': 'New category',
   'category.defaultName': 'Untitled',
   'category.rename': 'Rename category',
@@ -320,6 +322,14 @@ export const en = {
   'settings.closeTabOnSaveHint': 'When you drag tabs into a group or save them from the panel.',
   'settings.warnDuplicates': 'Say when a link is already saved',
   'settings.warnDuplicatesHint': 'After saving a link that another group already has',
+  'settings.checkLinks': 'Mark links that no longer load',
+  'settings.checkLinksHint':
+    'Now and then TabCabin asks each saved page whether it still loads. It needs access to those sites for that; nothing is sent anywhere else.',
+  'settings.checkLinksOn': 'Each page is checked about once a week.',
+  'settings.checkLinksCount': {
+    one: '{count} link no longer loads.',
+    other: '{count} links no longer load.',
+  },
   'settings.trashZone': 'Show the trash zone while dragging',
   'settings.trashZoneHint': 'Drop items or groups on it to delete them.',
   'settings.theme': 'Theme',

@@ -64,7 +64,13 @@ import { analytics, repo } from '../site'
       <p>
         To show what you saved, the extension loads website icons and images from the websites they
         belong to. Website icons are taken from the browser's own icon cache when possible. No other
-        requests are made, except to the sync server once you sign in.
+        requests are made, except to the sync server once you sign in, and to your saved pages if
+        you turn on link checks.
+      </p>
+      <p>
+        Link checks are off until you turn them on in Settings. Then, about once a week, your
+        browser asks each saved page whether it still loads, without cookies, and marks the ones
+        that do not. The requests go straight to those websites; the results stay on your device.
       </p>
 
       <h2>Permissions</h2>
@@ -91,6 +97,10 @@ import { analytics, repo } from '../site'
         <li>
           <strong>Identity</strong> (optional) — only when you choose “Continue with Google”, to
           open Google's sign-in window.
+        </li>
+        <li>
+          <strong>Access to all websites</strong> (optional) — only while link checks are on, to ask
+          your saved pages whether they still load. Turning link checks off gives it back.
         </li>
       </ul>
 

@@ -19,6 +19,18 @@ interface MetaRow {
   value: unknown
 }
 
+/** What the last look at a saved address found (this browser only, never synced). */
+export interface LinkCheck {
+  /** The address as `normalizeUrl` writes it. */
+  url: string
+  checkedAt: number
+  /** HTTP status of the last answer, null when the page did not answer at all. */
+  status: number | null
+  /** Failed looks in a row (no answer, or an error from the server). */
+  failures: number
+  broken: boolean
+}
+
 class TabCabinDB extends Dexie {
   workspaces!: EntityTable<Workspace, 'id'>
   categories!: EntityTable<Category, 'id'>
@@ -28,6 +40,7 @@ class TabCabinDB extends Dexie {
   settings!: EntityTable<SettingRow, 'key'>
   meta!: EntityTable<MetaRow, 'key'>
   outbox!: Table<OutboxEntry, [EntityType, string]>
+  linkChecks!: EntityTable<LinkCheck, 'url'>
 
   constructor(name = 'tabcabin') {
     super(name)
@@ -41,6 +54,7 @@ class TabCabinDB extends Dexie {
       meta: 'key',
       outbox: '[entity+id], queuedAt',
     })
+    this.version(2).stores({ linkChecks: 'url, checkedAt' })
     // Data saved under the old app name moves over before the first query runs.
     this.on('ready', (vip) =>
       moveLegacyDatabase(vip).then(

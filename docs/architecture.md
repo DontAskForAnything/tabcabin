@@ -56,7 +56,8 @@ Built with [WXT](https://wxt.dev). Entry points in `src/entrypoints`:
 | `toast.content`   | Small in-page toasts with Undo after saving from the context menu                        |
 
 Content scripts are registered at runtime without `matches` and injected with `activeTab` +
-`scripting`, so the extension needs **no host permissions**.
+`scripting`, so the extension needs **no host permissions**. The one exception is optional: link
+checks (`background/linkChecks.ts`) ask for access to all sites while they are turned on.
 
 ### Data flow
 

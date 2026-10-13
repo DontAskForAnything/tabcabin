@@ -50,6 +50,11 @@ interface OpenAppRequest {
   type: 'tabcabin:open-app'
 }
 
+/** Ask the background to look at saved links now (right after link checks are turned on). */
+interface CheckLinksRequest {
+  type: 'tabcabin:check-links'
+}
+
 export type RuntimeMessage =
   | ToastMessage
   | UndoMessage
@@ -59,6 +64,7 @@ export type RuntimeMessage =
   | PopoverSaveRequest
   | OpenAppRequest
   | SyncNowRequest
+  | CheckLinksRequest
 
 export function isRuntimeMessage(value: unknown): value is RuntimeMessage {
   return (

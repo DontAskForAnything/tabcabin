@@ -3,6 +3,7 @@ import { Fragment, useMemo } from 'react'
 import { Button, cn } from '@tabcabin/ui'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useBoard } from '@/db/hooks'
+import { useBrokenLinks } from '@/db/linkChecks'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
 import { CollectionsView } from '../collections/CollectionsView'
@@ -19,6 +20,7 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
   const t = useT()
   const groups = useBoard(active.category?.id)
   const inbox = useInbox()
+  const broken = useBrokenLinks(active.settings?.checkLinks === true)
   const actions = useBoardActions(active)
   const insertAt = useGroupInsertIndex(active.category?.id ?? '')
   const context = useMemo(
@@ -29,8 +31,9 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
         title: group.title,
         emoji: group.emoji,
       })),
+      broken,
     }),
-    [actions, groups],
+    [actions, groups, broken],
   )
   if (!groups) return null
 

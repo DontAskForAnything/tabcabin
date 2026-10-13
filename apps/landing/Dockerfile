@@ -2,7 +2,8 @@
 # The website as a container, served by Caddy on port 80 (the host's proxy adds HTTPS).
 # Build from the repository root:
 #   docker build -f apps/landing/Dockerfile --build-arg SITE_URL=https://example.com -t tabcabin-site .
-# EXTENSION_URL and REPO_URL are build arguments too (see docs/landing.md).
+# EXTENSION_URL, REPO_URL, UMAMI_SCRIPT_URL and UMAMI_WEBSITE_ID are build arguments too (see
+# docs/landing.md).
 
 FROM node:24-slim AS build
 WORKDIR /repo
@@ -14,7 +15,7 @@ RUN pnpm install --frozen-lockfile --filter @tabcabin/landing...
 COPY packages/ui packages/ui
 COPY docs/screenshots docs/screenshots
 COPY apps/landing apps/landing
-ARG SITE_URL EXTENSION_URL REPO_URL
+ARG SITE_URL EXTENSION_URL REPO_URL UMAMI_SCRIPT_URL UMAMI_WEBSITE_ID
 RUN pnpm --filter @tabcabin/landing build
 
 FROM caddy:2-alpine

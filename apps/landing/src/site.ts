@@ -14,6 +14,14 @@ export const repo = address(import.meta.env.REPO_URL)
 export const selfHostingGuide = repo && `${repo}/blob/main/docs/self-hosting.md`
 export const changelog = repo && `${repo}/blob/main/CHANGELOG.md`
 
+/**
+ * Visit counts with Umami (no cookies, no personal data), only when both are set: the address of
+ * its tracker script and the website id from the Umami dashboard.
+ */
+const umamiScript = address(import.meta.env.UMAMI_SCRIPT_URL)
+const umamiId = import.meta.env.UMAMI_WEBSITE_ID?.trim()
+export const analytics = umamiScript && umamiId ? { script: umamiScript, id: umamiId } : undefined
+
 /** Tools with a comparison page under /alternatives/ (each ends with a guide for moving over). */
 export const comparisons = [
   { name: 'OneTab', slug: 'onetab' },

@@ -2,7 +2,7 @@
 import Footer from '../components/Footer.astro'
 import Nav from '../components/Nav.astro'
 import Layout from '../layouts/Layout.astro'
-import { repo } from '../site'
+import { analytics, repo } from '../site'
 ---
 
 <Layout
@@ -32,12 +32,33 @@ import { repo } from '../site'
       </p>
 
       <h2>What we collect</h2>
-      <p>Nothing. TabCabin has no analytics, no advertising, no tracking and no crash reporting.</p>
+      {analytics ? (
+        <p>
+          Nothing through the extension: it has no analytics, no advertising, no tracking and no
+          crash reporting. This website counts visits, see below.
+        </p>
+      ) : (
+        <p>
+          Nothing. TabCabin has no analytics, no advertising, no tracking and no crash reporting.
+        </p>
+      )}
       <ul>
         <li>We do not sell, share or transfer any data to third parties.</li>
         <li>Without signing in there is no account and nothing is sent to any server.</li>
         <li>Your data is not used for any purpose other than showing your boards to you.</li>
       </ul>
+
+      {analytics && (
+        <>
+          <h2>This website</h2>
+          <p>
+            The website counts visits with Umami, without cookies and without personal data. It
+            records the page, the site that sent you here, your browser, system, device type, screen
+            size, language and country, and keeps no IP addresses or anything else that identifies
+            you. When your browser sends “Do Not Track”, nothing is counted.
+          </p>
+        </>
+      )}
 
       <h2>Network requests</h2>
       <p>

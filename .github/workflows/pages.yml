@@ -1,7 +1,8 @@
 # Publishes the landing page to GitHub Pages. Runs only when started by hand
 # (Actions → Pages → Run workflow) after Pages is enabled in the repository settings.
 # The site address comes from the input, or else from the SITE_URL repository variable. The
-# EXTENSION_URL and REPO_URL variables turn on the download buttons and the GitHub links.
+# EXTENSION_URL and REPO_URL variables turn on the download buttons and the GitHub links, and
+# UMAMI_SCRIPT_URL with UMAMI_WEBSITE_ID the visit counts.
 name: Pages
 
 on:
@@ -37,6 +38,8 @@ jobs:
           SITE_URL: ${{ inputs.site_url || vars.SITE_URL }}
           EXTENSION_URL: ${{ vars.EXTENSION_URL }}
           REPO_URL: ${{ vars.REPO_URL }}
+          UMAMI_SCRIPT_URL: ${{ vars.UMAMI_SCRIPT_URL }}
+          UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

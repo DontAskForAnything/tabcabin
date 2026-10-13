@@ -38,6 +38,8 @@ Two more addresses switch the site from "coming soon" to released, each on its o
 | `EXTENSION_URL` | "Get it for Chrome" buttons go there (the store listing or a release) | the buttons say "Coming soon to Chrome"    |
 | `REPO_URL`      | GitHub links in the menu, hero, footer, privacy page and the terminal | no GitHub links (for a private repository) |
 
+Visit counts are optional as well, see [Visit counts](#visit-counts) below.
+
 To build on GitHub, add `SITE_URL` once as a repository variable (**Settings → Secrets and variables →
 Actions → Variables**), with `EXTENSION_URL` and `REPO_URL` when they exist, and run **Actions →
 Build → Run workflow**: the built site (and the extension zip, with `WXT_SYNC_SERVER` and this
@@ -76,7 +78,7 @@ by hand. For a custom domain, add it under **Settings → Pages** and point a `C
 
 Netlify, Cloudflare Pages and similar: build command
 `pnpm --filter @tabcabin/landing build`, output directory `apps/landing/dist`, environment variable
-`SITE_URL` (and `EXTENSION_URL`, `REPO_URL`).
+`SITE_URL` (and `EXTENSION_URL`, `REPO_URL`, the Umami variables).
 
 ## Option D — a container (Coolify and other Docker hosts)
 
@@ -93,10 +95,26 @@ In Coolify, add the repository as a new application (a private one through the G
 
 - build pack **Dockerfile**, base directory `/`, Dockerfile location `/apps/landing/Dockerfile`
 - exposed port `80` and your domain
-- `SITE_URL` (the same address), `EXTENSION_URL` and `REPO_URL` as environment variables available
-  at build time
+- `SITE_URL` (the same address), `EXTENSION_URL`, `REPO_URL` and the Umami variables as
+  environment variables available at build time
 - optionally watch paths `apps/landing/**`, `packages/ui/**` and `docs/screenshots/**`, so only
   changes to the site start a new deployment
+
+## Visit counts
+
+The site can count visits with [Umami](https://umami.is), which needs no cookies and no consent
+banner. Run Umami yourself (Coolify has it as a one-click service) or use Umami Cloud, add the
+website there, then build the site with:
+
+| Variable           | Value                                                                 |
+| ------------------ | --------------------------------------------------------------------- |
+| `UMAMI_SCRIPT_URL` | the tracker script, for example `https://stats.example.com/script.js` |
+| `UMAMI_WEBSITE_ID` | the website id from the Umami dashboard                               |
+
+Without both the page loads no tracker. With them it counts page views only on the `SITE_URL`
+host (not on previews) and not for browsers that send Do Not Track, counts clicks on the
+download, GitHub, film and self-hosting guide buttons (`data-umami-event`), and the privacy page
+gains a short "This website" section that says what is counted.
 
 ## After the first deploy
 

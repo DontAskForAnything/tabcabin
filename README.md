@@ -104,13 +104,15 @@ other Chromium browsers.
 **With your own addresses** — the sync server and the website address are set when you build, never
 in the code:
 
-| Variable          | Used by                                | Example                    |
-| ----------------- | -------------------------------------- | -------------------------- |
-| `WXT_SYNC_SERVER` | the extension (sync server)            | `https://tabs.example.com` |
-| `WXT_SITE_URL`    | the extension (website link, Settings) | `https://example.com`      |
-| `SITE_URL`        | the website (links, sitemap)           | `https://example.com`      |
-| `EXTENSION_URL`   | the website (download buttons)         | the Chrome Web Store page  |
-| `REPO_URL`        | the website (GitHub links)             | the GitHub repository      |
+| Variable           | Used by                                | Example                               |
+| ------------------ | -------------------------------------- | ------------------------------------- |
+| `WXT_SYNC_SERVER`  | the extension (sync server)            | `https://tabs.example.com`            |
+| `WXT_SITE_URL`     | the extension (website link, Settings) | `https://example.com`                 |
+| `SITE_URL`         | the website (links, sitemap)           | `https://example.com`                 |
+| `EXTENSION_URL`    | the website (download buttons)         | the Chrome Web Store page             |
+| `REPO_URL`         | the website (GitHub links)             | the GitHub repository                 |
+| `UMAMI_SCRIPT_URL` | the website (visit counts, optional)   | `https://stats.example.com/script.js` |
+| `UMAMI_WEBSITE_ID` | the website (visit counts, optional)   | the id from the Umami dashboard       |
 
 Put them in `apps/extension/.env` / your shell, or set them once as repository variables on GitHub
 (**Settings → Secrets and variables → Actions → Variables**) and run the manual **Build** workflow,

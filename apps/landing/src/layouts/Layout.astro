@@ -17,7 +17,7 @@ interface Props {
 const { title, description, path = '/', schema = [], breadcrumbs } = Astro.props
 const canonical = new URL(path, Astro.site)
 const ogImage = new URL('/og.png', Astro.site)
-import { repo } from '../site'
+import { analytics, repo } from '../site'
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -67,6 +67,17 @@ const structuredData = {
     {schema.map((item) => (
       <script type="application/ld+json" set:html={JSON.stringify(item)} />
     ))}
+    <!-- Visit counts only on the real address, and none for browsers that ask not to be tracked. -->
+    {analytics && (
+      <script
+        is:inline
+        defer
+        src={analytics.script}
+        data-website-id={analytics.id}
+        data-domains={Astro.site?.hostname}
+        data-do-not-track="true"
+      />
+    )}
     {breadcrumbs && (
       <script
         type="application/ld+json"

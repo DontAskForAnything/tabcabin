@@ -1,9 +1,11 @@
 import {
   makeCategory,
+  makeGroup,
   makeWorkspace,
   positionAtEnd,
   positionAtIndex,
   positionBetween,
+  positionsAtEnd,
   put,
   puts,
   touch,
@@ -12,10 +14,12 @@ import {
 import { clock, commit, mustGet, type Result } from './commit'
 import { descendantsOfCategories, getCategories, getWorkspaces } from './reads'
 
+/** A new workspace with one category, empty or with the groups of a template. */
 export async function createWorkspace(input: {
   name: string
   emoji?: string
   categoryName: string
+  groups?: { title: string; emoji: string }[]
 }): Promise<Result & { workspaceId: string; categoryId: string }> {
   const c = clock()
   const workspace = makeWorkspace(
@@ -26,7 +30,18 @@ export async function createWorkspace(input: {
     { workspaceId: workspace.id, name: input.categoryName, position: positionBetween(null, null) },
     c,
   )
-  const result = await commit([put('workspace', workspace), put('category', category)])
+  const groups = input.groups ?? []
+  const positions = positionsAtEnd([], groups.length)
+  const result = await commit([
+    put('workspace', workspace),
+    put('category', category),
+    ...puts(
+      'group',
+      groups.map((group, index) =>
+        makeGroup({ categoryId: category.id, position: positions[index]!, ...group }, c),
+      ),
+    ),
+  ])
   return { ...result, workspaceId: workspace.id, categoryId: category.id }
 }
 

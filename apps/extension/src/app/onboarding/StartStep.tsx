@@ -1,6 +1,7 @@
 import { Button } from '@tabcabin/ui'
 import { Upload } from 'lucide-react'
 import { useRef } from 'react'
+import { TEMPLATES } from '@/data/templates'
 import { useT } from '@/i18n'
 import { IMPORT_ACCEPT } from '../shared/useImportFile'
 import type { SketchGroup } from './BoardSketch'
@@ -13,7 +14,7 @@ const STARTER: SketchGroup[] = [
   { emoji: '👋', lines: 2 },
 ]
 
-/** The second step: the starter board, an empty one, or a file from another tab manager. */
+/** The second step: the starter board, an empty one, a template, or a file from elsewhere. */
 export function StartStep(props: {
   choice: StartChoice
   onChoose: (choice: StartChoice) => void
@@ -24,7 +25,7 @@ export function StartStep(props: {
   const fileInput = useRef<HTMLInputElement>(null)
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <StartCard
           title={t('onboarding.starter')}
           text={t('onboarding.starterText')}
@@ -39,6 +40,16 @@ export function StartStep(props: {
           selected={props.choice === 'empty'}
           onSelect={() => props.onChoose('empty')}
         />
+        {TEMPLATES.map((template) => (
+          <StartCard
+            key={template.id}
+            title={`${template.emoji} ${t(template.name)}`}
+            text={template.groups.map((group) => t(group.title)).join(', ')}
+            groups={template.groups.map((group) => ({ emoji: group.emoji, lines: 1 }))}
+            selected={props.choice === template.id}
+            onSelect={() => props.onChoose(template.id)}
+          />
+        ))}
       </div>
       <div className="flex items-center gap-3.5 rounded-[14px] bg-subtle px-4 py-3">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-card text-ink-2 shadow-tile">

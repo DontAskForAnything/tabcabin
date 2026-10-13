@@ -42,11 +42,7 @@ export function WelcomeDialog({
 
   const start = () =>
     run(async () => {
-      await startWith(choice, {
-        workspace: t('seed.workspace'),
-        category: t('onboarding.emptyCategory'),
-        settings: active.settings,
-      })
+      await startWith(choice, { t, settings: active.settings })
       return true
     })
 

@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows
 - A welcome for first-time users: what TabCabin does, then a start with the starter board, an
   empty board or a file from another tab manager, and the ways to fill the boards (with signing in
   when the build can sync)
+- Templates: Work, Home, Study and Side project workspaces with their groups ready to fill, offered
+  in the welcome and when creating a workspace
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

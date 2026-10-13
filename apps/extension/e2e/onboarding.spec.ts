@@ -35,6 +35,23 @@ test('welcomes a first start and can start with an empty board', async ({
   await expect(page.getByRole('dialog')).toHaveCount(0)
 })
 
+test('starts with a template', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await page.goto(`chrome-extension://${extensionId}/newtab.html`)
+  await page.getByRole('button', { name: 'Get started' }).click()
+  const start = page.getByRole('dialog', { name: 'How would you like to start?' })
+  await start.getByRole('button', { name: /Work/ }).click()
+  await start.getByRole('button', { name: 'Continue' }).click()
+  await page
+    .getByRole('dialog', { name: 'Good to know' })
+    .getByRole('button', { name: 'Done' })
+    .click()
+  await expect(page.getByRole('button', { name: 'Switch workspace' })).toHaveText('💼Work')
+  for (const title of ['Projects', 'Meetings', 'Read later'])
+    await expect(page.getByRole('heading', { name: title })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Quick links' })).toHaveCount(0)
+})
+
 test('closing the welcome keeps the starter board, and search can open on top', async ({
   context,
   extensionId,

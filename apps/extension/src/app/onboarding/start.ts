@@ -1,9 +1,11 @@
+import { TEMPLATES, type TemplateId, templateWorkspace } from '@/data/templates'
 import { removeStarter } from '@/db/onboarding'
 import { createWorkspace } from '@/db/repo'
+import type { Translate } from '@/i18n'
 import type { Settings } from '@/settings/settings'
 import { setActiveCategory } from '../useActive'
 
-export type StartChoice = 'starter' | 'empty'
+export type StartChoice = 'starter' | 'empty' | TemplateId
 
 /**
  * Sets up the board picked in the welcome dialog. The starter workspace is already there; any
@@ -11,15 +13,15 @@ export type StartChoice = 'starter' | 'empty'
  */
 export async function startWith(
   choice: StartChoice,
-  input: { workspace: string; category: string; settings: Settings | undefined },
+  { t, settings }: { t: Translate; settings: Settings | undefined },
 ) {
   if (choice === 'starter') return
   await removeStarter()
-  const created = await createWorkspace({
-    name: input.workspace,
-    emoji: '🏡',
-    categoryName: input.category,
-  })
-  if (input.settings)
-    await setActiveCategory(input.settings, created.workspaceId, created.categoryId)
+  const template = TEMPLATES.find((item) => item.id === choice)
+  const created = await createWorkspace(
+    template
+      ? templateWorkspace(template, t)
+      : { name: t('seed.workspace'), emoji: '🏡', categoryName: t('workspace.mainCategory') },
+  )
+  if (settings) await setActiveCategory(settings, created.workspaceId, created.categoryId)
 }

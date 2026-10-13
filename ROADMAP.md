@@ -9,9 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Templates — ready-made workspaces with groups (for example "Work": Projects, Meetings, Read
-      later; "Home": Shopping, Recipes, Trips); offered in onboarding and when creating a new
-      workspace
 - [ ] Inbox — save a page in one click without picking a group, sort it later
 - [ ] Save and close a whole window as one group, restore it in one click
 - [ ] Warn when a link is already saved in another group (with a setting to turn it off)

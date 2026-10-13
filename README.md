@@ -33,7 +33,7 @@ searchable, and works offline. No account needed and no tracking.
 - **Collections view** — the same groups as wide panels of link cards, per category
 - **Notes and to-dos** inside groups, nine colors, `- ` bullets, `/todo` and `/done` shortcuts, Enter + Enter for the next note
 - **Stacks** — hold one link over another to combine them; open all at once
-- **Workspaces** — separate boards for work, home and side projects; move groups and categories between them
+- **Workspaces** — separate boards for work, home and side projects, empty or from a template (Work, Home, Study, Side project); move groups and categories between them
 - **Drag and drop everywhere** — items, groups, open tabs, whole Chrome tab groups; drop on a category tab to move there, on the trash to delete
 
 **Capture**

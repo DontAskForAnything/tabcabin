@@ -51,7 +51,7 @@ ORGANIZE
 • Collections view — the same groups as wide panels of link cards
 • Notes and to-dos right next to your links, in nine colors
 • Stacks — hold one link over another to combine them
-• Workspaces for work, home and side projects
+• Workspaces for work, home and side projects, empty or from a template
 
 CAPTURE
 • Open tabs panel: drag tabs (or whole Chrome tab groups) into a group to save them
@@ -91,7 +91,7 @@ PORZĄDEK
 • Widok kolekcji — te same grupy jako szerokie panele z kafelkami linków
 • Notatki i zadania obok linków, w dziewięciu kolorach
 • Stosy — przytrzymaj jeden link nad drugim, żeby je połączyć
-• Osobne przestrzenie na pracę, dom i projekty po godzinach
+• Osobne przestrzenie na pracę, dom i projekty po godzinach, puste albo z szablonu
 
 ZAPISYWANIE
 • Panel otwartych kart: przeciągnij kartę (albo całą grupę kart Chrome) do grupy

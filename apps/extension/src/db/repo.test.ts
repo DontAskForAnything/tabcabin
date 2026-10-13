@@ -72,6 +72,25 @@ describe('seed', () => {
   })
 })
 
+describe('workspaces', () => {
+  it('creates a workspace with the groups of a template and undoes it', async () => {
+    const created = await createWorkspace({
+      name: 'Work',
+      emoji: '💼',
+      categoryName: 'Main',
+      groups: [
+        { title: 'Projects', emoji: '🗂️' },
+        { title: 'Meetings', emoji: '📅' },
+      ],
+    })
+    const board = await loadBoard(created.categoryId)
+    expect(board.map((g) => `${g.emoji} ${g.title}`)).toEqual(['🗂️ Projects', '📅 Meetings'])
+    await revert(created)
+    expect(await db.workspaces.count()).toBe(0)
+    expect(await db.groups.count()).toBe(0)
+  })
+})
+
 describe('items', () => {
   it('adds links and notes in order', async () => {
     const { ws, g1 } = await setup()

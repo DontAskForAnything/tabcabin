@@ -51,6 +51,24 @@ test('asks for the name and the icon of a new workspace', async ({ context, exte
   await expect(page.getByText('Nothing here yet')).toBeVisible()
 })
 
+test('creates a workspace from a template', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('button', { name: 'Switch workspace' }).click()
+  await page.getByRole('menuitem', { name: 'New workspace' }).click()
+  const dialog = page.getByRole('dialog', { name: 'New workspace' })
+  await dialog.getByRole('button', { name: 'Home' }).click()
+  await expect(dialog).toContainText('🛒 Shopping · 🍳 Recipes · ✈️ Trips')
+  await expect(dialog.getByRole('button', { name: 'Change emoji' })).toHaveText('🏠')
+  await expect(dialog.getByLabel('Name')).toHaveAttribute('placeholder', 'Home')
+  await dialog.getByRole('button', { name: 'Create' }).click()
+  await expect(dialog).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Switch workspace' })).toHaveText('🏠Home')
+  await expect(page.getByRole('tab', { name: 'Main' })).toBeVisible()
+  for (const title of ['Shopping', 'Recipes', 'Trips'])
+    await expect(page.getByRole('heading', { name: title })).toBeVisible()
+})
+
 test('cancels a new workspace without creating it', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

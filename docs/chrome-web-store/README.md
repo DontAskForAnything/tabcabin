@@ -76,7 +76,7 @@ ON ALL YOUR COMPUTERS
 MAKE IT YOURS
 • Light and dark theme, compact layout, English and Polish
 • Rebindable keyboard shortcuts
-• Import from TabCabin backups, Toby, tabExtend, OneTab lists, bookmark files, Chrome bookmark folders or your most visited sites
+• Import from other tab managers, bookmark files or your most visited sites
 • Export as JSON, a bookmarks file or CSV
 
 PRIVATE BY DESIGN
@@ -119,7 +119,7 @@ NA WSZYSTKICH KOMPUTERACH
 PO TWOJEMU
 • Motyw jasny i ciemny, widok kompaktowy, polski i angielski
 • Własne skróty klawiszowe
-• Import z kopii TabCabin, Toby, tabExtend, list OneTab, plików zakładek, folderów zakładek Chrome i najczęściej odwiedzanych stron
+• Import z innych menedżerów kart, plików zakładek i najczęściej odwiedzanych stron
 • Eksport do JSON, pliku zakładek lub CSV
 
 PRYWATNIE

@@ -99,3 +99,36 @@ test('shows the shortcuts with ? and item actions on keyboard focus', async ({
   await page.keyboard.press('Tab')
   await expect(group.getByRole('button', { name: 'Reminder' }).first()).toBeFocused()
 })
+
+test.describe('first start', () => {
+  test.use({ welcome: true })
+
+  test('the welcome dialog has no serious accessibility problems', async ({
+    context,
+    extensionId,
+  }) => {
+    const page = await context.newPage()
+    await page.goto(`chrome-extension://${extensionId}/newtab.html`)
+    const report: Record<string, Awaited<ReturnType<typeof audit>>> = {}
+    const both = async (step: string) => {
+      await page.waitForTimeout(400)
+      for (const dark of [false, true]) {
+        await page.evaluate((on) => document.documentElement.classList.toggle('dark', on), dark)
+        await page.waitForTimeout(200)
+        report[`${step}${dark ? 'Dark' : ''}`] = await audit(page)
+      }
+    }
+
+    await expect(page.getByRole('dialog', { name: 'Welcome to TabCabin' })).toBeVisible()
+    await both('welcome')
+    await page.getByRole('button', { name: 'Get started' }).click()
+    await expect(page.getByRole('dialog', { name: 'How would you like to start?' })).toBeVisible()
+    await both('start')
+    await page.getByRole('button', { name: 'Continue' }).click()
+    await expect(page.getByRole('dialog', { name: 'Good to know' })).toBeVisible()
+    await both('tips')
+
+    const failures = Object.fromEntries(Object.entries(report).filter(([, v]) => v.length > 0))
+    expect(failures).toEqual({})
+  })
+})

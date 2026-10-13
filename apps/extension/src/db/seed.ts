@@ -10,6 +10,7 @@ import {
 } from '@tabcabin/core'
 import { applyChanges } from './apply'
 import { db } from './db'
+import { openOnboarding } from './onboarding'
 
 export interface SeedText {
   workspace: string
@@ -24,7 +25,10 @@ export interface SeedText {
   tipNote: string
 }
 
-/** Creates a small starter workspace on the very first run. Returns the workspace id if created. */
+/**
+ * Creates a small starter workspace on the very first run and opens the welcome dialog next to it.
+ * Returns the workspace id if created.
+ */
 export async function ensureSeed(text: SeedText): Promise<string | null> {
   // One transaction for check + write: several new-tab pages may start at the same time.
   return db.transaction(
@@ -98,5 +102,6 @@ async function seedInTransaction(text: SeedText): Promise<string | null> {
     ...puts('item', [...links, ...tasks, welcomeNote]),
   ])
   await db.meta.put({ key: 'seeded', value: clock.now })
+  await openOnboarding(workspace.id, clock.now)
   return workspace.id
 }

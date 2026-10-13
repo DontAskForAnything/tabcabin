@@ -9,7 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Onboarding for first-time users
 - [ ] Templates — ready-made workspaces with groups (for example "Work": Projects, Meetings, Read
       later; "Home": Shopping, Recipes, Trips); offered in onboarding and when creating a new
       workspace

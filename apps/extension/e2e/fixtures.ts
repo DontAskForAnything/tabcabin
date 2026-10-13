@@ -9,8 +9,13 @@ const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.outp
 /** Browser profiles of a test run; e2e/teardown.ts removes what is left when the run ends. */
 export const PROFILES_DIR = join(tmpdir(), 'tabcabin-e2e')
 
-/** A fresh browser profile with the built extension loaded (run `pnpm build:e2e` first). */
-export async function launchExtension(): Promise<BrowserContext> {
+declare const tabcabin: { db: { meta: { put(row: object): Promise<unknown> } } }
+
+/**
+ * A fresh browser profile with the built extension loaded (run `pnpm build:e2e` first). Tests
+ * start on the board; `welcome: true` keeps the welcome dialog of a first start.
+ */
+export async function launchExtension({ welcome = false } = {}): Promise<BrowserContext> {
   mkdirSync(PROFILES_DIR, { recursive: true })
   const userDataDir = mkdtempSync(join(PROFILES_DIR, 'profile-'))
   const context = await chromium.launchPersistentContext(userDataDir, {
@@ -23,6 +28,12 @@ export async function launchExtension(): Promise<BrowserContext> {
   context.on('close', () =>
     rmSync(userDataDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }),
   )
+  if (!welcome) {
+    const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+    await worker.evaluate(() =>
+      tabcabin.db.meta.put({ key: 'onboarding', value: { state: 'done' } }),
+    )
+  }
   return context
 }
 
@@ -31,10 +42,15 @@ export async function extensionIdOf(context: BrowserContext): Promise<string> {
   return new URL(worker.url()).host
 }
 
-export const test = base.extend<{ context: BrowserContext; extensionId: string }>({
-  // eslint-disable-next-line no-empty-pattern
-  context: async ({}, use) => {
-    const context = await launchExtension()
+export const test = base.extend<{
+  context: BrowserContext
+  extensionId: string
+  /** Keep the welcome dialog of a first start (`test.use({ welcome: true })`). */
+  welcome: boolean
+}>({
+  welcome: [false, { option: true }],
+  context: async ({ welcome }, use) => {
+    const context = await launchExtension({ welcome })
     await use(context)
     await context.close()
   },

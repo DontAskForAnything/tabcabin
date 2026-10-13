@@ -3,6 +3,7 @@ import { type KeyboardEvent, type RefObject, useEffect, useState } from 'react'
 import { useT } from '@/i18n'
 import { formatShortcut, shortcutFromEvent } from '@/lib/keys'
 import { DEFAULT_SETTINGS, type Shortcuts, updateSettings } from '@/settings/settings'
+import { useSaveShortcut } from '../shared/useSaveShortcut'
 import type { ActiveContext } from '../useActive'
 import { Row } from './Row'
 
@@ -19,19 +20,11 @@ export function ShortcutSettings({
   const shortcuts = active.settings?.shortcuts ?? DEFAULT_SETTINGS.shortcuts
   const [editing, setEditing] = useState<keyof Shortcuts | null>(null)
   const [error, setError] = useState<{ action: keyof Shortcuts; message: string } | null>(null)
-  const [saveShortcut, setSaveShortcut] = useState('')
+  const saveShortcut = useSaveShortcut()
 
   useEffect(() => {
     recording.current = editing !== null
   }, [editing, recording])
-  useEffect(() => {
-    if (typeof browser === 'undefined' || !browser.commands) return
-    void browser.commands
-      .getAll()
-      .then((commands) =>
-        setSaveShortcut(commands.find((c) => c.name === '_execute_action')?.shortcut ?? ''),
-      )
-  }, [])
 
   const record = (action: keyof Shortcuts, event: KeyboardEvent) => {
     event.preventDefault()

@@ -5,6 +5,7 @@ import { BoardView } from './board/BoardView'
 import { DndProvider } from './dnd/DndProvider'
 import { TrashZone } from './dnd/DropMarkers'
 import { Modals } from './modals/Modals'
+import { Onboarding } from './onboarding/Onboarding'
 import type { Surface } from './mount'
 import { TabsPanel } from './panel/TabsPanel'
 import { TopBar } from './topbar/TopBar'
@@ -30,6 +31,7 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
           )}
         </main>
         <Modals active={active} />
+        {!compact && <Onboarding active={active} />}
         <NoteToolbar />
         <SelectionBar active={active} />
         <TrashZone enabled={active.settings?.trashZone ?? true} />

@@ -13,6 +13,7 @@ type ModalState =
   | { type: 'bookmarks' }
   | { type: 'shortcuts' }
   | { type: 'reminders' }
+  | { type: 'welcome' }
   | null
 
 interface UiState {

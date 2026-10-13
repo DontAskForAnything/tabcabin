@@ -75,6 +75,9 @@ IndexedDB ──► liveQuery (dexie-react-hooks) ──► React components   (
   change set. Undo is therefore generic: re-apply the snapshot.
 - **`db/apply.ts`** — writes a change set in one transaction and records each changed row in the
   `outbox`, which the sync engine pushes to the server.
+- **`db/seed.ts`, `db/onboarding.ts`** — the first start creates a starter workspace and opens the
+  welcome dialog (`app/onboarding/`). A `meta` row remembers that it was seen. Starting with an empty
+  board or an import removes the starter workspace, but only while nothing in it has changed.
 - Reads are live queries; there is no client-side cache to invalidate. New tab pages, the side panel
   and the service worker all observe the same database.
 

@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- A welcome for first-time users: what TabCabin does, then a start with the starter board, an
+  empty board or a file from another tab manager, and the ways to fill the boards (with signing in
+  when the build can sync)
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

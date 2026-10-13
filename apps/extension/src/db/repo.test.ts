@@ -283,7 +283,7 @@ describe('settings', () => {
     await setSetting('showUrls', false)
     await clearAllData()
     expect(await db.workspaces.count()).toBe(0)
-    expect(await db.meta.count()).toBe(0)
+    expect((await db.meta.toArray()).map((row) => row.key)).toEqual(['onboarding'])
     const settings = await getSettings()
     expect([settings.theme, settings.locale, settings.showUrls]).toEqual(['dark', 'pl', true])
     expect(await ensureSeed(seedText)).toBeTypeOf('string')

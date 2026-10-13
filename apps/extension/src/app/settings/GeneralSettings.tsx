@@ -39,6 +39,12 @@ export function GeneralSettings({ active }: { active: ActiveContext }) {
         onChange={(closeTabOnSave) => void updateSettings({ closeTabOnSave })}
       />
       <SwitchRow
+        label={t('settings.warnDuplicates')}
+        hint={t('settings.warnDuplicatesHint')}
+        checked={settings.warnDuplicates}
+        onChange={(warnDuplicates) => void updateSettings({ warnDuplicates })}
+      />
+      <SwitchRow
         label={t('settings.trashZone')}
         hint={t('settings.trashZoneHint')}
         checked={settings.trashZone}

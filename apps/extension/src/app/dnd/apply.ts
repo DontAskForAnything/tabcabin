@@ -6,6 +6,7 @@ import type { Settings } from '@/settings/settings'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import type { BoardActions } from '../board/actions'
+import { duplicateNote, findDuplicates } from '../shared/duplicates'
 import { randomEmoji } from '../board/actions'
 import { indexAmongRemaining } from './logic'
 import type { DragSource, DropTarget } from './types'
@@ -141,6 +142,19 @@ export async function applyDrop(source: DragSource, target: DropTarget, ctx: App
     title: tab.title,
     favIconUrl: tab.favIconUrl,
   }))
+  const targetGroup =
+    target.kind === 'insert'
+      ? target.groupId
+      : target.kind === 'combine'
+        ? ((await loadRow('item', target.itemId))?.groupId ?? '')
+        : target.kind === 'category'
+          ? ((await repo.getGroups(target.categoryId))[0]?.id ?? '')
+          : ''
+  const duplicates = await findDuplicates(
+    links.map((link) => link.url),
+    targetGroup,
+    settings,
+  )
   let groupId: string | null = null
   let index = 0
   if (target.kind === 'insert') {
@@ -171,7 +185,11 @@ export async function applyDrop(source: DragSource, target: DropTarget, ctx: App
     target.kind === 'category' ||
     target.kind === 'combine'
   ) {
-    toast({ title: t('dnd.tabsSaved', { count: links.length }), tone: 'success' })
+    toast({
+      title: t('dnd.tabsSaved', { count: links.length }),
+      tone: 'success',
+      ...duplicateNote(duplicates, t, settings),
+    })
     await closeTabs(source.tabIds, settings)
   }
 }

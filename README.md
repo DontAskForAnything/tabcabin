@@ -43,6 +43,7 @@ searchable, and works offline. No account needed and no tracking.
 - **Save popover** (`Ctrl+Shift+S`) — add a sticky note, pick the group, set a reminder, close the tab
 - **Inbox** (`Alt+Shift+S`) — save the page without choosing a group; it waits first on every board until you drag it where it belongs
 - The toolbar icon shows how many times the current page is already saved
+- A short note when a link you save is already in another group, with a button to show it (can be turned off)
 
 **Find and remember**
 

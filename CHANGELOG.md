@@ -18,6 +18,8 @@ All notable changes to this project are documented here. The format follows
   where it belongs, can be searched, and a backup of everything keeps it
 - Save a whole window as one group and close it (open tabs panel → Save all tabs), and open any
   group as a window again with one click on its header; undo brings the window back
+- Saving a link that another group already has says where it is, with "Show" to go there
+  (Settings → General turns it off)
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

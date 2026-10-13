@@ -9,7 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Warn when a link is already saved in another group (with a setting to turn it off)
 - [ ] Mark broken links (pages that no longer load) with a small icon
 - [ ] Actions in search (`⌘K`): move the tab to a group, open a group, add a note
 - [ ] Calm stats — for example "84 tabs closed this week", no streaks or badges

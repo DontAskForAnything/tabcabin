@@ -157,6 +157,7 @@ export async function handleMenuClick(
     }
     await showToast(tab.id, {
       title: t(message, { group: saved.groupTitle }),
+      description: saved.alsoIn ? t('duplicate.alsoIn', { place: saved.alsoIn }) : undefined,
       tone: 'success',
       undo: () => revert(saved.result),
       undoLabel: t('common.undo'),

@@ -17,6 +17,7 @@ import { type Translate, useLocale, useT } from '@/i18n'
 import { copyText, openAsTabGroup, openUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
+import { duplicateNote, findDuplicates } from '../shared/duplicates'
 import type { ActiveContext } from '../useActive'
 
 export { randomEmoji } from '@/lib/emoji'
@@ -104,7 +105,13 @@ export function useBoardActions(active: ActiveContext) {
           const url = withProtocol(text)
           if (looksLikeImageUrl(text))
             await repo.addImage(groupId, { imageUrl: url, title: displayHost(url) }, index)
-          else await repo.addLinks(groupId, [{ url, title: displayHost(url) }], index)
+          else {
+            const duplicates = await findDuplicates([url], groupId, settings)
+            await repo.addLinks(groupId, [{ url, title: displayHost(url) }], index)
+            const note = duplicateNote(duplicates, t, settings)
+            if (note.description)
+              toast({ title: note.description, tone: 'info', action: note.action })
+          }
           return null
         }
         const parsed = applyNoteShortcuts(text.slice(0, NOTE_MAX_LENGTH))

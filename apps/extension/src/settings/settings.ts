@@ -31,6 +31,8 @@ export interface Settings {
   sidebarMode: SidebarMode
   sidebarWidth: number
   trashZone: boolean
+  /** Say so when a saved link is also in another group. */
+  warnDuplicates: boolean
   shortcuts: Shortcuts
   /** The notification permission was offered once (when the first reminder was set). */
   notificationsAsked: boolean
@@ -57,6 +59,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sidebarMode: 'pinned',
   sidebarWidth: 292,
   trashZone: true,
+  warnDuplicates: true,
   shortcuts: { newGroup: 'g', search: 'mod+k', workspaces: 'mod+o', bin: 'mod+shift+backspace' },
   notificationsAsked: false,
 }

@@ -1,6 +1,7 @@
 import { displayHost, INBOX_ID, NOTE_MAX_LENGTH } from '@tabcabin/core'
 import * as repo from '@/db/repo'
 import { loadRow } from '@/db/apply'
+import { savedElsewhere } from '@/db/duplicates'
 import { translate } from '@/i18n/translate'
 import { randomEmoji } from '@/lib/emoji'
 import { getSettings } from '@/settings/settings'
@@ -36,11 +37,20 @@ export async function saveToGroup(
       }
     | { kind: 'note'; text: string; sourceUrl: string; title: string }
     | { kind: 'image'; imageUrl: string; title: string; pageUrl: string },
-): Promise<{ groupTitle: string; result: repo.Result; itemId: string | null }> {
+): Promise<{
+  groupTitle: string
+  result: repo.Result
+  itemId: string | null
+  /** Another group the link was already saved in (when the warning is on). */
+  alsoIn: string | null
+}> {
   const { groupId, created } = await resolveGroup(target)
   let result: repo.Result
   let itemId: string | null = null
+  let alsoIn: string | null = null
   if (what.kind === 'link') {
+    if ((await getSettings()).warnDuplicates)
+      alsoIn = (await savedElsewhere([what.url], groupId))[0]?.label ?? null
     const added = await repo.addLinks(groupId, [
       { url: what.url, title: what.title || displayHost(what.url), favIconUrl: what.favIconUrl },
     ])
@@ -86,5 +96,5 @@ export async function saveToGroup(
   if (created) result = { undo: [...result.undo, ...created.undo] }
   const saved = await loadRow('group', groupId)
   const title = groupId === INBOX_ID ? await inboxTitle() : saved?.title
-  return { groupTitle: saved ? `${saved.emoji} ${title}`.trim() : '', result, itemId }
+  return { groupTitle: saved ? `${saved.emoji} ${title}`.trim() : '', result, itemId, alsoIn }
 }

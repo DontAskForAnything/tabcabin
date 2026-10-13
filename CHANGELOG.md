@@ -26,6 +26,9 @@ All notable changes to this project are documented here. The format follows
 - Search does more: groups show up by name and Enter opens all their links, `→` moves an open
   tab or a saved item to a group, and what you typed can be added to a group (the Inbox first) as
   a note or a link
+- This week: a quiet line in the tabs panel ("12 tabs closed this week") and a look back at the
+  last seven days from the menu, with tabs closed, links saved and to-dos done; no streaks or
+  badges, and Settings → Appearance hides the line
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

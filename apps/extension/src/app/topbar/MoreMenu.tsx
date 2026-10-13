@@ -9,6 +9,7 @@ import {
   Settings,
   Sun,
   SunMoon,
+  Sprout,
   Trash,
 } from 'lucide-react'
 import {
@@ -79,6 +80,9 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
           onSelect={() => openModal({ type: 'bookmarks' })}
         >
           {t('menu.import')}
+        </MenuItem>
+        <MenuItem icon={<Sprout size={15} />} onSelect={() => openModal({ type: 'week' })}>
+          {t('stats.title')}
         </MenuItem>
         <MenuItem icon={<Trash size={15} />} onSelect={() => openModal({ type: 'bin' })}>
           {t('menu.bin')}

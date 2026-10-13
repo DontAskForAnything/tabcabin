@@ -12,6 +12,7 @@ import { SettingsModal } from '../settings/SettingsModal'
 import { BinModal } from './bin/BinModal'
 import { BookmarkImportModal } from './BookmarkImportModal'
 import { ShortcutsOverlay } from './ShortcutsOverlay'
+import { WeekDialog } from '../stats/WeekDialog'
 
 export function Modals({ active }: { active: ActiveContext }) {
   const modal = useUi((s) => s.modal)
@@ -28,6 +29,7 @@ export function Modals({ active }: { active: ActiveContext }) {
       <SettingsModal active={active} />
       <BookmarkImportModal open={modal?.type === 'bookmarks'} active={active} />
       <ShortcutsOverlay open={modal?.type === 'shortcuts'} active={active} />
+      <WeekDialog open={modal?.type === 'week'} />
       <ReminderEditor itemId={reminderItemId} settings={active.settings} />
       <ConfirmHost />
     </>

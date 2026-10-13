@@ -11,6 +11,7 @@ import { TabFilter } from './TabFilter'
 import { TabList } from './TabList'
 import { usePanelData } from './usePanelData'
 import { WindowSwitcher } from './WindowSwitcher'
+import { WeekLine } from '../stats/WeekLine'
 
 /** The open tabs panel: windows, a filter, the tabs and what to do with them. */
 export function PanelBody({
@@ -50,6 +51,7 @@ export function PanelBody({
         </div>
       )}
 
+      {active.settings?.showWeek !== false && <WeekLine />}
       <SaveTabsMenu data={data} active={active} />
     </div>
   )

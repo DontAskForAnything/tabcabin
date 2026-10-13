@@ -3,6 +3,7 @@ import { sortByPosition } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview, type WorkspaceOverview } from '@/db/overview'
 import { revert } from '@/db/repo'
+import { countClosedTabs } from '@/db/stats'
 import type { MessageKey } from '@/i18n/en'
 import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
@@ -174,4 +175,5 @@ async function closeOrReplace(tab: Browser.tabs.Tab) {
   const siblings = await browser.tabs.query({ windowId: tab.windowId })
   if (siblings.length <= 1) await browser.tabs.update(tab.id, { url: 'chrome://newtab/' })
   else await browser.tabs.remove(tab.id)
+  await countClosedTabs(1)
 }

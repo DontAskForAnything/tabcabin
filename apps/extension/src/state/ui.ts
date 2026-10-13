@@ -14,6 +14,7 @@ type ModalState =
   | { type: 'shortcuts' }
   | { type: 'reminders' }
   | { type: 'welcome' }
+  | { type: 'week' }
   | null
 
 interface UiState {

@@ -9,6 +9,7 @@ import {
 import { db } from '@/db/db'
 import { loadOverview } from '@/db/overview'
 import { setReminder } from '@/db/repo'
+import { countClosedTabs } from '@/db/stats'
 import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
 import type { RuntimeMessage } from '@/messages'
@@ -150,6 +151,7 @@ export function handlePopoverMessage(
         const siblings = await browser.tabs.query({ windowId: sender.tab?.windowId })
         if (siblings.length <= 1) await browser.tabs.update(tabId, { url: 'chrome://newtab/' })
         else await browser.tabs.remove(tabId)
+        await countClosedTabs(1)
       }
       return { ok: true, groupTitle: saved.groupTitle }
     })().catch((error: unknown) => ({ ok: false, error: String(error) }))

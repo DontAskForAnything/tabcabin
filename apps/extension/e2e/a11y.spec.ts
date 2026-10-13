@@ -36,6 +36,14 @@ test('board, dialogs and collections have no serious accessibility problems', as
     ['bin', () => page.keyboard.press('Control+Shift+Backspace'), 'Bin'],
     ['workspaces', () => page.keyboard.press('Control+o'), 'Workspaces'],
     [
+      'week',
+      async () => {
+        await page.getByRole('button', { name: 'More' }).click()
+        await page.getByRole('menuitem', { name: 'This week' }).click()
+      },
+      'This week',
+    ],
+    [
       'newWorkspace',
       async () => {
         await page.getByRole('button', { name: 'Switch workspace' }).click()

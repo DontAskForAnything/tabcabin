@@ -35,6 +35,8 @@ export interface Settings {
   warnDuplicates: boolean
   /** Look at saved pages now and then and mark the ones that no longer load. */
   checkLinks: boolean
+  /** A line about the week (tabs closed, links saved) in the tabs panel. */
+  showWeek: boolean
   shortcuts: Shortcuts
   /** The notification permission was offered once (when the first reminder was set). */
   notificationsAsked: boolean
@@ -63,6 +65,7 @@ export const DEFAULT_SETTINGS: Settings = {
   trashZone: true,
   warnDuplicates: true,
   checkLinks: false,
+  showWeek: true,
   shortcuts: { newGroup: 'g', search: 'mod+k', workspaces: 'mod+o', bin: 'mod+shift+backspace' },
   notificationsAsked: false,
 }

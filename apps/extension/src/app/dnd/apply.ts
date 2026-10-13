@@ -1,6 +1,7 @@
 import { toast } from '@tabcabin/ui'
 import { loadRow } from '@/db/apply'
 import * as repo from '@/db/repo'
+import { countClosedTabs } from '@/db/stats'
 import type { Translate } from '@/i18n'
 import type { Settings } from '@/settings/settings'
 import { useUi } from '@/state/ui'
@@ -46,7 +47,9 @@ async function closeTabs(tabIds: number[], settings: Settings | undefined) {
   if (typeof browser === 'undefined' || !browser.tabs) return
   const current = await browser.tabs.getCurrent()
   const ids = tabIds.filter((id) => id !== current?.id)
-  if (ids.length) await browser.tabs.remove(ids).catch(() => undefined)
+  if (ids.length === 0) return
+  await browser.tabs.remove(ids).catch(() => undefined)
+  await countClosedTabs(ids.length)
 }
 
 async function firstGroupOf(categoryId: string): Promise<string> {

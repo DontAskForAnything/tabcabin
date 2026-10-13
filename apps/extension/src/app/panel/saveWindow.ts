@@ -1,5 +1,6 @@
 import { toast } from '@tabcabin/ui'
 import * as repo from '@/db/repo'
+import { countClosedTabs } from '@/db/stats'
 import type { Locale, Translate } from '@/i18n'
 import { closeTabs, type TabLike, tabsToLinks } from '@/lib/tabs'
 
@@ -23,7 +24,10 @@ export async function saveAndCloseWindow(
   const added = await repo.addLinks(created.groupId, links)
   const current = await browser.tabs.getCurrent()
   if (current?.windowId === windowId) await closeTabs(tabs.map((tab) => tab.id))
-  else await browser.windows.remove(windowId).catch(() => undefined)
+  else {
+    await browser.windows.remove(windowId).catch(() => undefined)
+    await countClosedTabs(tabs.length)
+  }
 
   toast({
     title: t('panel.windowSaved', { count: links.length }),

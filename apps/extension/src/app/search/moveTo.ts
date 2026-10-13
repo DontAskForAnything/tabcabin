@@ -2,6 +2,7 @@ import { INBOX_ID } from '@tabcabin/core'
 import { toast } from '@tabcabin/ui'
 import * as repo from '@/db/repo'
 import type { SearchDoc } from '@/db/search'
+import { countClosedTabs } from '@/db/stats'
 import type { Translate } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
@@ -28,6 +29,7 @@ export async function moveTo(doc: SearchDoc, target: GroupTarget, t: Translate) 
       { url: doc.url, title: doc.title, favIconUrl: doc.favIconUrl ?? null },
     ])
     await browser.tabs.remove(doc.tabId).catch(() => undefined)
+    await countClosedTabs(1)
     toast({ title, tone: 'success', action: showAction(ids[0], t) })
     return
   }

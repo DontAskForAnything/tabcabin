@@ -9,7 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Calm stats — for example "84 tabs closed this week", no streaks or badges
 - [ ] Share a group with a read-only link
 - [ ] Boards on the web: sign in on the website and use it on a phone, maybe as an installable app
       (PWA)

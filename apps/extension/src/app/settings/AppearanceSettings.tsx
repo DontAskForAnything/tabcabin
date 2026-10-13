@@ -59,6 +59,12 @@ export function AppearanceSettings({ active }: { active: ActiveContext }) {
         checked={settings.showGroupEmoji}
         onChange={(showGroupEmoji) => void updateSettings({ showGroupEmoji })}
       />
+      <SwitchRow
+        label={t('settings.showWeek')}
+        hint={t('settings.showWeekHint')}
+        checked={settings.showWeek}
+        onChange={(showWeek) => void updateSettings({ showWeek })}
+      />
     </>
   )
 }

@@ -14,7 +14,7 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## Website
 
-- [ ] Comparison pages: TabCabin vs Toby, OneTab, tabExtend
+- [ ] Comparison page: TabCabin vs tabExtend
 
 ## Later
 

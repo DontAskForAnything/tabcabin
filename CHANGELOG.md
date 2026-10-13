@@ -43,6 +43,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Website: the comparisons with OneTab, Toby and Workona mention the Inbox, saving a whole window
+  and read-only links
 - Sync works between different versions: fields and kinds of data added in later versions are
   kept or skipped instead of being dropped or stopping sync, and the server stores the rest of a
   batch when it cannot take one change

@@ -9,10 +9,12 @@ import ComparePage from '../../components/ComparePage.astro'
   about="OneTab is a free Chrome extension that turns your open tabs into a list on one page, from where you can restore them individually or all at once."
   rows={[
     ['Save all open tabs in one click', true, true],
+    ['Keep a whole window and restore it later', true, true],
     ['Organize into groups and boards', 'Lists of tabs', 'Kanban boards and collections'],
     ['Notes and to-dos next to links', false, true],
     ['Reminders', false, true],
     ['Search across saved tabs, open tabs and bookmarks', false, true],
+    ['Share a list as a web page', true, 'Read-only link, when signed in'],
     ['Import and export', 'List of URLs', 'JSON, bookmarks file, CSV'],
     ['Sync between computers', false, 'Sign in, or your own server'],
     ['Open source', false, 'MIT'],
@@ -26,11 +28,11 @@ import ComparePage from '../../components/ComparePage.astro'
   ]}
   betterFit={[
     'You only want to dump tabs quickly to save memory and rarely come back to them.',
-    'You like sharing a list of tabs as a public web page.',
+    'You want to share a list of tabs without signing in to anything.',
   ]}
   moving={[
     'In OneTab, use <strong>Restore all</strong> on a list to reopen its tabs.',
-    'In TabCabin’s open tabs panel, click <strong>Save all tabs</strong> and pick or create a group — the tabs close as they are saved.',
+    'In TabCabin’s open tabs panel, click <strong>Save all tabs</strong> and pick a group, or choose <strong>Save as one group and close</strong> — the tabs close as they are saved.',
     'Repeat for each list, then rename the groups and add emoji headers.',
   ]}
 />

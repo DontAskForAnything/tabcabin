@@ -28,10 +28,10 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
 <Layout
   title={title}
   description={description}
-  path={`/alternatives/${slug}`}
+  path={`/alternatives/${slug}/`}
   breadcrumbs={[
     ['Alternatives', '/alternatives/'],
-    [`${name} alternative`, `/alternatives/${slug}`],
+    [`${name} alternative`, `/alternatives/${slug}/`],
   ]}
 >
   <Nav />
@@ -159,7 +159,7 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
           <>
             <a
               class="font-medium text-accent-ink hover:underline"
-              href={`/alternatives/${other.slug}`}
+              href={`/alternatives/${other.slug}/`}
             >
               {other.name} alternative
             </a>{' '}
@@ -170,7 +170,7 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
         all comparisons
       </a>{' '}
       ·{' '}
-      <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager">
+      <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager/">
         self-hosted tab manager
       </a>
     </p>

@@ -166,7 +166,7 @@ Then certify:
 
 ### Privacy policy URL
 
-Use the privacy page of the website, `https://<SITE_URL>/privacy` — the address you build the site
+Use the privacy page of the website, `https://<SITE_URL>/privacy/` — the address you build the site
 with (see [../landing.md](../landing.md)).
 
 ## Submission checklist

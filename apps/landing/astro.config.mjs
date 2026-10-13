@@ -10,6 +10,8 @@ const site = process.env.SITE_URL || 'https://tabs.example.com'
 
 export default defineConfig({
   site,
+  // Pages live in folders (/privacy/), so every link and canonical address ends with a slash.
+  trailingSlash: 'always',
   integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
   vite: {
     plugins: [

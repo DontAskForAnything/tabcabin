@@ -34,6 +34,8 @@ All notable changes to this project are documented here. The format follows
 - White site icons (GitHub's when the system is dark) sit on a dark tile instead of vanishing on
   white, and empty icons fall back to the letter tile
 - Website: the comparison pages have a space again after "See also:"
+- Website: links, canonical addresses and the sitemap use the same addresses (with a trailing
+  slash), so search engines no longer meet a redirect behind every link
 
 ## [1.2.0] — 2026-10-09
 

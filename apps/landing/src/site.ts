@@ -50,7 +50,7 @@ export const faq: FaqItem[] = [
   {
     q: 'Can I import my existing tabs and bookmarks?',
     a: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
-    html: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV. Step by step: moving from <a class="font-medium text-accent-ink hover:underline" href="/alternatives/toby#moving">Toby</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/onetab#moving">OneTab</a> or <a class="font-medium text-accent-ink hover:underline" href="/alternatives/workona#moving">Workona</a>.',
+    html: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV. Step by step: moving from <a class="font-medium text-accent-ink hover:underline" href="/alternatives/toby/#moving">Toby</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/onetab/#moving">OneTab</a> or <a class="font-medium text-accent-ink hover:underline" href="/alternatives/workona/#moving">Workona</a>.',
   },
   {
     q: 'Which browsers are supported?',
@@ -59,7 +59,7 @@ export const faq: FaqItem[] = [
   {
     q: 'Can I run the sync server myself?',
     a: 'Yes, if you want your data only on your own machine. You need Docker and a domain; a small VPS or a Raspberry Pi is plenty. You then build the extension with your server’s address, and the guide covers HTTPS, accounts, backups and updates.',
-    html: 'Yes, if you want your data only on your own machine. You need Docker and a domain; a small VPS or a Raspberry Pi is plenty. You then build the extension with your server’s address. The <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager">self-hosting overview</a> and the step-by-step guide cover HTTPS, accounts, backups and updates.',
+    html: 'Yes, if you want your data only on your own machine. You need Docker and a domain; a small VPS or a Raspberry Pi is plenty. You then build the extension with your server’s address. The <a class="font-medium text-accent-ink hover:underline" href="/self-hosted-tab-manager/">self-hosting overview</a> and the step-by-step guide cover HTTPS, accounts, backups and updates.',
   },
 ]
 

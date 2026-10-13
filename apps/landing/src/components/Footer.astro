@@ -17,7 +17,7 @@ const columns: [string, [string, string][]][] = [
       ['Features', '/#features'],
       ['Self-host', '/#self-host'],
       ['Questions', '/#faq'],
-      ['Privacy', '/privacy'],
+      ['Privacy', '/privacy/'],
     ],
   ],
   [
@@ -25,7 +25,7 @@ const columns: [string, [string, string][]][] = [
     [
       ...comparisons.map(({ name, slug }): [string, string] => [
         `${name} alternative`,
-        `/alternatives/${slug}`,
+        `/alternatives/${slug}/`,
       ]),
       ['All comparisons', '/alternatives/'],
     ],
@@ -35,9 +35,9 @@ const columns: [string, [string, string][]][] = [
     [
       ...comparisons.map(({ name, slug }): [string, string] => [
         `Moving from ${name}`,
-        `/alternatives/${slug}#moving`,
+        `/alternatives/${slug}/#moving`,
       ]),
-      ['Self-hosted tab manager', '/self-hosted-tab-manager'],
+      ['Self-hosted tab manager', '/self-hosted-tab-manager/'],
     ],
   ],
   [

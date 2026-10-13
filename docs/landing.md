@@ -100,9 +100,11 @@ In Coolify, add the repository as a new application (a private one through the G
 
 ## After the first deploy
 
-- Put `https://<your-site>/privacy` into the Chrome Web Store listing (see
+- Put `https://<your-site>/privacy/` into the Chrome Web Store listing (see
   [chrome-web-store/README.md](chrome-web-store/README.md)).
-- Add the site to Google Search Console and submit `https://<your-site>/sitemap-index.xml`.
+- Add the site to Google Search Console: a **Domain** property verified with a DNS TXT record
+  covers `www` and every subdomain. Then submit `https://<your-site>/sitemap-index.xml` under
+  **Sitemaps**.
 - Check the social preview with a link-preview tool; the image is `public/og.png`.
 - Set `EXTENSION_URL` to the store listing once it is live, and `REPO_URL` once the repository is
   public, then build the site again.

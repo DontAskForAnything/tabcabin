@@ -40,7 +40,7 @@ const tools = [
     <div class="mt-12 grid gap-4 sm:grid-cols-3">
       {tools.map(([name, slug, text], index) => (
         <a
-          href={`/alternatives/${slug}`}
+          href={`/alternatives/${slug}/`}
           class="flex flex-col rounded-[18px] bg-card p-6 shadow-card transition-transform hover:-translate-y-0.5"
           data-reveal={index * 0.06}
         >

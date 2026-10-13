@@ -1,10 +1,18 @@
-import { type EntityType, entitySchemas, ENTITY_TYPES } from '@tabcabin/core'
+import { type EntityType, isEntityType, syncSchemas } from '@tabcabin/core'
 import { and, asc, eq, gt, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import type { Db } from './db/client'
 import { meta, records } from './db/schema'
 
 const MAX_BATCH = 1000
+/** Rows keep fields from newer versions, so their size is capped (real rows stay far below). */
+const MAX_ROW_LENGTH = 64 * 1024
+
+/**
+ * The kind of row is checked per change, so one this server does not know (from a newer version)
+ * is refused on its own instead of failing the whole batch.
+ */
+const entityName = z.string().min(1).max(32)
 
 export const pushSchema = z.object({
   changes: z
@@ -12,12 +20,12 @@ export const pushSchema = z.object({
       z.discriminatedUnion('type', [
         z.object({
           type: z.literal('put'),
-          entity: z.enum(ENTITY_TYPES),
+          entity: entityName,
           row: z.record(z.string(), z.unknown()),
         }),
         z.object({
           type: z.literal('purge'),
-          entity: z.enum(ENTITY_TYPES),
+          entity: entityName,
           id: z.string().min(1).max(64),
           /** When the client purged it (defaults to now). */
           at: z.number().int().nonnegative().optional(),
@@ -37,13 +45,17 @@ interface PulledChange {
   seq: number
 }
 
-export class InvalidChange extends Error {
-  constructor(
-    readonly index: number,
-    message: string,
-  ) {
-    super(message)
-  }
+type StoredRow = Record<string, unknown> & { id: string; updatedAt: number }
+
+type ValidChange =
+  | { type: 'put'; entity: EntityType; row: StoredRow }
+  | { type: 'purge'; entity: EntityType; id: string; at?: number }
+
+/** A change this server cannot store. The rest of its batch is stored anyway. */
+interface RejectedChange {
+  index: number
+  entity: string
+  message: string
 }
 
 function nextSeq(tx: Pick<Db, 'select' | 'insert'>, count: number): number {
@@ -56,13 +68,35 @@ function nextSeq(tx: Pick<Db, 'select' | 'insert'>, count: number): number {
   return current + 1
 }
 
-/**
- * Applies a batch of changes for one user. A change wins when its `updatedAt` is not older
- * than the stored one (last write wins per row); older changes are skipped and reported.
- */
 /** The push would take the account over its storage limit. */
 export class QuotaExceeded extends Error {}
 
+/** Checks each change on its own; the ones that fail are reported instead of stored. */
+function validate(request: PushRequest) {
+  const valid: ValidChange[] = []
+  const rejected: RejectedChange[] = []
+  for (const [index, change] of request.changes.entries()) {
+    const entity = change.entity
+    let problem: string | null = null
+    if (!isEntityType(entity)) problem = 'unknown kind of row'
+    else if (change.type === 'purge') valid.push({ ...change, entity })
+    else if (JSON.stringify(change.row).length > MAX_ROW_LENGTH) problem = 'row too large'
+    else {
+      const parsed = syncSchemas[entity].safeParse(change.row)
+      if (parsed.success) valid.push({ type: 'put', entity, row: parsed.data as StoredRow })
+      else problem = `${entity}: ${parsed.error.issues[0]?.message ?? 'invalid'}`
+    }
+    if (problem) rejected.push({ index, entity, message: problem })
+  }
+  return { valid, rejected }
+}
+
+/**
+ * Applies a batch of changes for one user. A change wins when its `updatedAt` is not older
+ * than the stored one (last write wins per row); older changes are skipped and reported.
+ * Rows keep fields this version does not know, and a change it cannot store is rejected alone,
+ * so copies of the extension older or newer than the server keep syncing.
+ */
 export function applyPush(
   db: Db,
   userId: string,
@@ -70,25 +104,13 @@ export function applyPush(
   now = Date.now(),
   maxRecords = Infinity,
 ) {
-  const validated = request.changes.map((change, index) => {
-    if (change.type === 'purge') return change
-    const parsed = entitySchemas[change.entity].safeParse(change.row)
-    if (!parsed.success)
-      throw new InvalidChange(
-        index,
-        `${change.entity}: ${parsed.error.issues[0]?.message ?? 'invalid'}`,
-      )
-    return {
-      ...change,
-      row: parsed.data as Record<string, unknown> & { id: string; updatedAt: number },
-    }
-  })
+  const { valid, rejected } = validate(request)
 
   return db.transaction((tx) => {
     const skipped: { entity: EntityType; id: string }[] = []
     const writes: (typeof records.$inferInsert)[] = []
     let added = 0
-    for (const change of validated) {
+    for (const change of valid) {
       const id = change.type === 'put' ? change.row.id : change.id
       const updatedAt = change.type === 'put' ? change.row.updatedAt : (change.at ?? now)
       const existing = tx
@@ -132,7 +154,12 @@ export function applyPush(
         })
         .run()
     }
-    return { accepted: writes.length, skipped, seq: writes.length ? seq - 1 : currentSeq(tx) }
+    return {
+      accepted: writes.length,
+      skipped,
+      rejected,
+      seq: writes.length ? seq - 1 : currentSeq(tx),
+    }
   })
 }
 

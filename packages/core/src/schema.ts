@@ -112,6 +112,23 @@ export const entitySchemas = {
   reminder: reminderSchema,
 } as const
 
+/** Whether a kind of row named by the server (or another version) is one this version knows. */
+export function isEntityType(value: string): value is EntityType {
+  return (ENTITY_TYPES as readonly string[]).includes(value)
+}
+
+/**
+ * Rows as they travel through sync. The known fields are checked as usual, and fields added by a
+ * newer version are kept, so an older copy that edits the row hands them back unchanged.
+ */
+export const syncSchemas = {
+  workspace: workspaceSchema.loose(),
+  category: categorySchema.loose(),
+  group: groupSchema.loose(),
+  item: itemSchema.loose(),
+  reminder: reminderSchema.loose(),
+} as const
+
 export interface EntityMap {
   workspace: Workspace
   category: Category

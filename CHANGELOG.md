@@ -19,6 +19,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Sync works between different versions: fields and kinds of data added in later versions are
+  kept or skipped instead of being dropped or stopping sync, and the server stores the rest of a
+  batch when it cannot take one change
 - A new workspace asks for its name and icon first, from the workspace menu and from the
   workspaces dialog, then opens
 - Creating an account asks for the password twice, so a typo can't lock you out

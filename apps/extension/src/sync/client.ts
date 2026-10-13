@@ -1,7 +1,8 @@
 import type { EntityType } from '@tabcabin/core'
 
 export interface RemoteChange {
-  entity: EntityType
+  /** Usually an `EntityType`; a newer server may send kinds of rows this version does not know. */
+  entity: string
   id: string
   row: Record<string, unknown> | null
   /** Time of the change on the device that made it. */

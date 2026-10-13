@@ -85,6 +85,18 @@ the server's changes without queuing them again, `firstSync.ts` handles the firs
 `engine.ts` only schedules them (on every change, on a server-sent event, and once a minute). The
 server keeps the newest version of each row (last write wins by the client's `updatedAt`).
 
+Copies of the extension update at different times, so every version has to keep syncing with the
+others and with the server:
+
+- Rows travel with `syncSchemas` (core): known fields are checked, unknown ones are kept. An older
+  copy that edits a row sends back the fields a newer version added.
+- An older copy skips kinds of rows it does not know. The server rejects a change it cannot store
+  on its own (`rejected` in the push response) and stores the rest of the batch, so one bad row
+  never stops syncing.
+- New fields are optional, and fields, values and API routes are never renamed or removed.
+  `compat.test.ts` keeps rows from 1.2 valid. Update the server before releasing an extension
+  that relies on it.
+
 The server address is part of the build (`src/sync/server.ts`, or `WXT_SYNC_SERVER` in
 `apps/extension/.env`). Signing in happens on its own page: Google through the server's OAuth flow
 with PKCE (the extension receives a one-time code only it can redeem), or username and password.

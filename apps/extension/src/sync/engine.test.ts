@@ -6,10 +6,18 @@ import { migrationsFolder } from '@tabcabin/server/src/paths'
 import { createUser } from '@tabcabin/server/src/users'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/db/db'
-import { addLinks, createGroup, createWorkspace, deleteItems, purgeFromBin } from '@/db/repo'
+import {
+  addLinks,
+  createGroup,
+  createWorkspace,
+  deleteItems,
+  purgeFromBin,
+  updateWorkspace,
+} from '@/db/repo'
 import { SyncClient } from './client'
 import { SyncEngine } from './engine'
 import { firstSync } from './firstSync'
+import { pullAll } from './pull'
 import { getAccount, getSyncState, setAccount } from './state'
 
 const SERVER = 'https://sync.test'
@@ -111,6 +119,31 @@ describe('sync engine', () => {
     const item = (await other.pull(0)).changes.find((c) => c.id === ids[0])
     expect(item?.row).toBeNull()
     engine.stop()
+  })
+
+  it('keeps fields from a newer version when it edits the row', async () => {
+    const { engine, account, other } = await connectedEngine()
+    const remote = makeWorkspace({ name: 'Work', position: 'a0' }, { now: Date.now() - 5000 })
+    const newer = { ...remote, color: 'pine' }
+    await other.push([{ type: 'put', entity: 'workspace', row: newer }])
+    await engine.setAccount(account)
+    await updateWorkspace(remote.id, { name: 'Office' })
+    await engine.syncNow()
+    const [change] = (await other.pull(0)).changes.filter((c) => c.id === remote.id)
+    expect(change?.row).toMatchObject({ name: 'Office', color: 'pine' })
+    engine.stop()
+  })
+
+  it('skips kinds of rows from a newer version and keeps syncing', async () => {
+    const ws = makeWorkspace({ name: 'Work', position: 'a0' }, { now: Date.now() })
+    const changes = [
+      { entity: 'tag', id: 't1', row: { id: 't1', name: 'Later' }, updatedAt: 1, seq: 1 },
+      { entity: 'workspace', id: ws.id, row: ws, updatedAt: ws.updatedAt, seq: 2 },
+    ]
+    const client = { pull: async () => ({ changes, seq: 2, more: false }) }
+    await pullAll(client as unknown as SyncClient)
+    expect((await db.workspaces.get(ws.id))?.name).toBe('Work')
+    expect((await getSyncState()).lastSeq).toBe(2)
   })
 
   it('signs out when the session is no longer valid', async () => {

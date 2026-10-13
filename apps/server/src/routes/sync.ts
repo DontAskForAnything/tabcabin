@@ -10,7 +10,6 @@ import {
   applyPush,
   type ChangeFeed,
   currentSeq,
-  InvalidChange,
   QuotaExceeded,
   pullChanges,
   pushSchema,
@@ -36,8 +35,6 @@ export function syncRoutes(db: Db, config: Config, feed: ChangeFeed, now: () => 
     } catch (error) {
       if (error instanceof QuotaExceeded)
         return c.json({ error: 'quota_exceeded', limit: config.maxRecordsPerUser }, 413)
-      if (error instanceof InvalidChange)
-        return c.json({ error: 'invalid_change', index: error.index, message: error.message }, 400)
       throw error
     }
   })

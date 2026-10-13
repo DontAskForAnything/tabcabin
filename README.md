@@ -23,7 +23,7 @@ searchable, and works offline. No account needed and no tracking.
 
 ![Dragging a tab into a group, adding a to-do, searching and switching to the collections view](docs/screenshots/demo.gif)
 
-▶ [Watch the 50-second film](apps/landing/public/promo.mp4) (with music)
+▶ [Watch the 50-second film on YouTube](https://www.youtube.com/watch?v=voePPDRsFIg) (with music)
 
 ## Features
 

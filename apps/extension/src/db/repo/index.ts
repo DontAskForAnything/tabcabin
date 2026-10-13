@@ -40,3 +40,4 @@ export {
   snoozeReminder,
 } from './reminders'
 export { clearAllData } from './clear'
+export { ensureInbox } from './inbox'

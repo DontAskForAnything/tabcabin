@@ -1,3 +1,4 @@
+import { INBOX_ID } from '@tabcabin/core'
 import type { SearchDoc } from '@/db/search'
 import { openUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
@@ -11,6 +12,12 @@ export function useOpenResult(active: ActiveContext) {
   const close = useUi((s) => s.closeModal)
 
   const goTo = async (doc: SearchDoc) => {
+    if (doc.itemId && doc.groupId === INBOX_ID) {
+      // The Inbox is on every board.
+      close()
+      useUi.getState().flashItem(doc.itemId)
+      return
+    }
     if (!doc.itemId || !doc.workspaceId || !doc.categoryId || !active.settings) return
     close()
     await revealItem(active.settings, {

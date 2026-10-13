@@ -1,5 +1,5 @@
 import { ChevronDown, Plus } from 'lucide-react'
-import { displayHost } from '@tabcabin/core'
+import { displayHost, INBOX_EMOJI, INBOX_ID } from '@tabcabin/core'
 import { cn } from '@tabcabin/ui'
 import { useState } from 'react'
 import type { PopoverData } from '@/background/popover'
@@ -49,6 +49,23 @@ export function TargetPicker({
       </button>
       {open && data && (
         <div className="max-h-[220px] overflow-y-auto rounded-xl border border-line p-1.5">
+          <button
+            type="button"
+            onClick={() => choose({ groupId: INBOX_ID })}
+            className={cn(
+              'mb-1 flex h-8 w-full items-center gap-2 rounded-lg px-2 text-left text-[13px] hover:bg-subtle',
+              target &&
+                'groupId' in target &&
+                target.groupId === INBOX_ID &&
+                'bg-accent-soft font-semibold text-accent-ink',
+            )}
+          >
+            <span>{INBOX_EMOJI}</span>
+            <span className="truncate">{t('inbox.title')}</span>
+            <span className="ml-auto truncate text-[11.5px] font-normal text-ink-4">
+              {t('inbox.sortLater')}
+            </span>
+          </button>
           {data.workspaces.length > 1 && (
             <div className="mb-1.5 flex flex-wrap gap-1">
               {data.workspaces.map((ws) => (

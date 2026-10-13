@@ -1,3 +1,4 @@
+import { INBOX_EMOJI, INBOX_ID } from '@tabcabin/core'
 import type { PopoverData } from '@/background/popover'
 import type { Translate } from '@/i18n'
 import type { Target } from './types'
@@ -5,6 +6,8 @@ import type { Target } from './types'
 /** "🌍 Today › 📚 Read later" for the chosen target. */
 export function targetLabel(data: PopoverData | null, target: Target | null, t: Translate): string {
   if (!data || !target) return '…'
+  if ('groupId' in target && target.groupId === INBOX_ID)
+    return `${INBOX_EMOJI} ${t('inbox.title')}`
   for (const ws of data.workspaces)
     for (const cat of ws.categories) {
       if ('newGroupIn' in target && target.newGroupIn === cat.id)

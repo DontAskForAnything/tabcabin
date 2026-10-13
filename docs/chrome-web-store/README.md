@@ -58,6 +58,7 @@ CAPTURE
 • Select several tabs and save them at once, close duplicates
 • Right-click any page, link, image or selected text to save it
 • Save popover (Ctrl+Shift+S): add a sticky note, pick the group, set a reminder
+• Inbox (Alt+Shift+S): save the page without choosing a group, sort it later
 • The toolbar icon shows when the current page is already saved
 
 FIND AND REMEMBER
@@ -98,6 +99,7 @@ ZAPISYWANIE
 • Zaznacz kilka kart i zapisz je naraz, zamknij duplikaty
 • Prawy przycisk na stronie, linku, obrazku lub zaznaczonym tekście zapisuje go
 • Okienko zapisu (Ctrl+Shift+S): notatka, wybór grupy, przypomnienie
+• Skrzynka (Alt+Shift+S): zapisz stronę bez wybierania grupy i posortuj później
 • Ikona rozszerzenia pokazuje, że bieżąca strona jest już zapisana
 
 SZUKANIE I PRZYPOMNIENIA

@@ -1,6 +1,7 @@
 import { liveQuery } from 'dexie'
 import { db } from '@/db/db'
 import { startBadge } from '@/background/badge'
+import { SAVE_TO_INBOX, saveTabToInbox } from '@/background/inbox'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
@@ -38,6 +39,9 @@ export default defineBackground(() => {
 
   browser.contextMenus.onClicked.addListener((info, tab) => void handleMenuClick(info, tab))
   browser.action.onClicked.addListener((tab) => void togglePopover(tab))
+  browser.commands.onCommand.addListener((command, tab) => {
+    if (command === SAVE_TO_INBOX) void saveTabToInbox(tab)
+  })
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!isRuntimeMessage(message)) return undefined
@@ -64,6 +68,6 @@ export default defineBackground(() => {
 
   // Hooks for end-to-end tests (menus and the toolbar button can't be clicked from Playwright).
   Object.assign(globalThis, {
-    tabcabin: { handleMenuClick, togglePopover, rebuildMenus, checkReminders, db },
+    tabcabin: { handleMenuClick, togglePopover, saveTabToInbox, rebuildMenus, checkReminders, db },
   })
 })

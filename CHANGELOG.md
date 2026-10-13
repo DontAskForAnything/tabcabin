@@ -13,6 +13,9 @@ All notable changes to this project are documented here. The format follows
   when the build can sync)
 - Templates: Work, Home, Study and Side project workspaces with their groups ready to fill, offered
   in the welcome and when creating a workspace
+- Inbox: save a page without choosing a group (`Alt+Shift+S`, `Control+Shift+S` on a Mac, the
+  right-click menu or the save popover). It shows first on every board until you drag each item
+  where it belongs, can be searched, and a backup of everything keeps it
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

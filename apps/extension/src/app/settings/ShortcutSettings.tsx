@@ -3,7 +3,7 @@ import { type KeyboardEvent, type RefObject, useEffect, useState } from 'react'
 import { useT } from '@/i18n'
 import { formatShortcut, shortcutFromEvent } from '@/lib/keys'
 import { DEFAULT_SETTINGS, type Shortcuts, updateSettings } from '@/settings/settings'
-import { useSaveShortcut } from '../shared/useSaveShortcut'
+import { useCommandShortcut } from '../shared/useCommandShortcut'
 import type { ActiveContext } from '../useActive'
 import { Row } from './Row'
 
@@ -20,7 +20,8 @@ export function ShortcutSettings({
   const shortcuts = active.settings?.shortcuts ?? DEFAULT_SETTINGS.shortcuts
   const [editing, setEditing] = useState<keyof Shortcuts | null>(null)
   const [error, setError] = useState<{ action: keyof Shortcuts; message: string } | null>(null)
-  const saveShortcut = useSaveShortcut()
+  const saveShortcut = useCommandShortcut('_execute_action')
+  const inboxShortcut = useCommandShortcut('save-to-inbox')
 
   useEffect(() => {
     recording.current = editing !== null
@@ -54,6 +55,11 @@ export function ShortcutSettings({
     {
       label: t('settings.fixed.popover'),
       keys: saveShortcut ? [saveShortcut] : ['—'],
+      action: () => void browser.tabs.create({ url: 'chrome://extensions/shortcuts' }),
+    },
+    {
+      label: t('settings.fixed.inbox'),
+      keys: inboxShortcut ? [inboxShortcut] : ['—'],
       action: () => void browser.tabs.create({ url: 'chrome://extensions/shortcuts' }),
     },
     { label: t('settings.fixed.help'), keys: ['?'] },

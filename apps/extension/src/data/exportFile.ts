@@ -1,4 +1,14 @@
-import { type Bundle, collectBundle, createBackup, toBookmarksHtml, toCsv } from '@tabcabin/core'
+import {
+  type Bundle,
+  collectBundle,
+  createBackup,
+  INBOX_ID,
+  makeCategory,
+  makeWorkspace,
+  positionAtEnd,
+  toBookmarksHtml,
+  toCsv,
+} from '@tabcabin/core'
 import { db } from '@/db/db'
 
 export type ExportFormat = 'json' | 'html' | 'csv'
@@ -25,13 +35,43 @@ const slug = (text: string) =>
     .replace(/^-|-$/g, '')
     .slice(0, 40) || 'workspace'
 
-/** Builds an export file of the given workspaces (all of them when `workspaceIds` is null). */
+/**
+ * The Inbox as a workspace of its own (it belongs to none), so that exporting everything keeps
+ * what is still waiting there. Importing the file brings it back as that workspace.
+ */
+function withInbox(all: Bundle, name: string): Bundle {
+  const inbox = all.groups.find((group) => group.id === INBOX_ID && group.deletedAt === null)
+  const waiting = all.items.some((item) => item.groupId === INBOX_ID && item.deletedAt === null)
+  if (!inbox || !waiting) return all
+  const clock = { now: inbox.updatedAt }
+  const live = all.workspaces.filter((ws) => ws.deletedAt === null)
+  const workspace = makeWorkspace(
+    { name, emoji: inbox.emoji, position: positionAtEnd(live) },
+    clock,
+  )
+  const category = makeCategory({ workspaceId: workspace.id, name, position: 'a0' }, clock)
+  return {
+    ...all,
+    workspaces: [...all.workspaces, workspace],
+    categories: [...all.categories, category],
+    groups: all.groups.map((group) =>
+      group.id === INBOX_ID ? { ...group, title: name, categoryId: category.id } : group,
+    ),
+  }
+}
+
+/**
+ * Builds an export file of the given workspaces, or of everything (with the Inbox, named
+ * `inboxName`) when `workspaceIds` is null.
+ */
 export async function buildExport(
   format: ExportFormat,
   workspaceIds: string[] | null,
+  inboxName: string,
   now = new Date(),
 ): Promise<{ filename: string; mime: string; content: string }> {
-  const all = await loadAll()
+  const stored = await loadAll()
+  const all = workspaceIds ? stored : withInbox(stored, inboxName)
   const ids = workspaceIds ?? all.workspaces.map((ws) => ws.id)
   const bundle = collectBundle(all, ids)
   const date = now.toISOString().slice(0, 10)

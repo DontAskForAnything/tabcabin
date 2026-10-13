@@ -9,7 +9,6 @@ What's planned for TabCabin. Finished items move to the [changelog](CHANGELOG.md
 
 ## New
 
-- [ ] Inbox — save a page in one click without picking a group, sort it later
 - [ ] Save and close a whole window as one group, restore it in one click
 - [ ] Warn when a link is already saved in another group (with a setting to turn it off)
 - [ ] Mark broken links (pages that no longer load) with a small icon

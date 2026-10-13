@@ -12,7 +12,7 @@ export function ExportSection({ active }: { active: ActiveContext }) {
 
   const exportAs = async (format: ExportFormat) => {
     const ids = scope === 'all' || !active.workspace ? null : [active.workspace.id]
-    const file = await buildExport(format, ids)
+    const file = await buildExport(format, ids, t('inbox.title'))
     downloadFile(file)
     toast({ title: t('transfer.exported', { file: file.filename }), tone: 'success' })
   }

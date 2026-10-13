@@ -7,5 +7,8 @@
   },
   "cmdSaveCurrentPage": {
     "message": "Save the current page"
+  },
+  "cmdSaveToInbox": {
+    "message": "Save the current page to the Inbox"
   }
 }

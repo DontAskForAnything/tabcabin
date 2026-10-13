@@ -68,6 +68,7 @@ export const pl: Record<MessageKey, Message> = {
   'onboarding.tipDrag': 'Przeciągaj otwarte karty z panelu po lewej do dowolnej grupy.',
   'onboarding.tipSave':
     'Zapisz stronę, na której jesteś. Menu pod prawym przyciskiem też to potrafi.',
+  'onboarding.tipInbox': 'Albo wrzuć ją do Skrzynki bez wybierania grupy i posortuj później.',
   'onboarding.tipSearch': 'Przeszukuj tablice, otwarte karty i zakładki.',
   'onboarding.tipPin':
     'Przypnij TabCabin do paska narzędzi, żeby zapisywać jednym kliknięciem: ikona puzzla obok paska adresu, potem pinezka.',
@@ -103,6 +104,10 @@ export const pl: Record<MessageKey, Message> = {
   'template.project.resources': 'Materiały',
   'template.empty': 'Pusta',
   'template.startWith': 'Zacznij od',
+  'inbox.title': 'Skrzynka',
+  'inbox.count': '{count} do posortowania',
+  'inbox.hint': 'Zapisane bez grupy. Przeciągnij każdą rzecz tam, gdzie pasuje.',
+  'inbox.sortLater': 'posortuj później',
   'category.new': 'Nowa kategoria',
   'category.defaultName': 'Bez nazwy',
   'category.rename': 'Zmień nazwę kategorii',
@@ -389,6 +394,7 @@ export const pl: Record<MessageKey, Message> = {
   'settings.fixed.undo': 'Cofnij',
   'settings.fixed.newNote': 'Nowa notatka poniżej (podczas edycji)',
   'settings.fixed.select': 'Zaznacz kilka elementów',
+  'settings.fixed.inbox': 'Zapisz bieżącą stronę w Skrzynce',
   'settings.fixed.help': 'Pokaż skróty klawiszowe',
   'settings.fixed.revealSearch': 'Pokaż wynik wyszukiwania na tablicy',
   'settings.changeInChrome': 'Zmień w Chrome',

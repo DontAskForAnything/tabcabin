@@ -61,6 +61,11 @@ export default defineConfig({
         suggested_key: { default: 'Ctrl+Shift+S', mac: 'Command+Shift+S' },
         description: '__MSG_cmdSaveCurrentPage__',
       },
+      // Not Option on a Mac: Option+Shift+S types a letter on some keyboards (Polish: Ś).
+      'save-to-inbox': {
+        suggested_key: { default: 'Alt+Shift+S', mac: 'MacCtrl+Shift+S' },
+        description: '__MSG_cmdSaveToInbox__',
+      },
     },
     // End-to-end tests can't produce user gestures (activeTab, permission prompts), so the test
     // build may script any page and has the optional permissions granted up front.

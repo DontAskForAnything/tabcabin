@@ -11,11 +11,14 @@ import { useGroupInsertIndex } from '../dnd/hooks'
 import { useBoardActions } from './actions'
 import { BoardContext } from './BoardContext'
 import { GroupCard } from './group/GroupCard'
+import { InboxColumn } from './inbox/InboxColumn'
+import { useInbox } from './inbox/useInbox'
 import { NewGroupColumn } from './group/NewGroupColumn'
 
 export function BoardView({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()
   const groups = useBoard(active.category?.id)
+  const inbox = useInbox()
   const actions = useBoardActions(active)
   const insertAt = useGroupInsertIndex(active.category?.id ?? '')
   const context = useMemo(
@@ -31,7 +34,7 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
   )
   if (!groups) return null
 
-  if (groups.length === 0)
+  if (groups.length === 0 && !inbox)
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-24 text-center">
         <CabinMark size={56} />
@@ -51,7 +54,13 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
   if (view === 'collections')
     return (
       <BoardContext.Provider value={context}>
-        <CollectionsView groups={groups} actions={actions} active={active} compact={compact} />
+        <CollectionsView
+          groups={groups}
+          inbox={inbox}
+          actions={actions}
+          active={active}
+          compact={compact}
+        />
       </BoardContext.Provider>
     )
 
@@ -63,6 +72,7 @@ export function BoardView({ active, compact }: { active: ActiveContext; compact:
           compact ? 'flex-col px-4' : 'items-start overflow-x-auto px-7 pt-1.5',
         )}
       >
+        {inbox && <InboxColumn inbox={inbox} actions={actions} active={active} compact={compact} />}
         {groups.map((group, index) => (
           <Fragment key={group.id}>
             {insertAt === index && <GroupDropLine axis={compact ? 'y' : 'x'} />}

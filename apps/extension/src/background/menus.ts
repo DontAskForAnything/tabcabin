@@ -1,4 +1,4 @@
-import { displayHost, isSavableUrl } from '@tabcabin/core'
+import { displayHost, INBOX_EMOJI, INBOX_ID, isSavableUrl } from '@tabcabin/core'
 import { sortByPosition } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview, type WorkspaceOverview } from '@/db/overview'
@@ -49,6 +49,19 @@ export async function rebuildMenus() {
   for (const root of ROOTS) {
     const rootId = `root|${root.action}`
     await create({ id: rootId, title: t(root.title), contexts: root.contexts })
+    // The Inbox first: saving there needs no choice of group.
+    await create({
+      id: `${root.action}|g|${INBOX_ID}`,
+      parentId: rootId,
+      title: `${INBOX_EMOJI} ${t('inbox.title')}`,
+      contexts: root.contexts,
+    })
+    await create({
+      id: `${root.action}|separator`,
+      parentId: rootId,
+      type: 'separator',
+      contexts: root.contexts,
+    })
     const single = workspace.categories.length === 1
     for (const category of workspace.categories) {
       const parentId = single ? rootId : `${root.action}|cat|${category.id}`

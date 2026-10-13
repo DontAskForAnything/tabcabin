@@ -1,7 +1,15 @@
-import { isSavableUrl, minutesOfDay, normalizeUrl, sortByPosition } from '@tabcabin/core'
+import {
+  INBOX_EMOJI,
+  INBOX_ID,
+  isSavableUrl,
+  minutesOfDay,
+  normalizeUrl,
+  sortByPosition,
+} from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview } from '@/db/overview'
 import { setReminder } from '@/db/repo'
+import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
 import type { RuntimeMessage } from '@/messages'
 import { saveToGroup } from './saving'
@@ -40,6 +48,11 @@ async function popoverData(url: string): Promise<PopoverData> {
       if (item.deletedAt !== null || !item.url || normalizeUrl(item.url) !== key) continue
       const group = liveGroups.find((g) => g.id === item.groupId)
       if (!group) continue
+      if (group.id === INBOX_ID) {
+        const path = `${INBOX_EMOJI} ${translate(settings.locale, 'inbox.title')}`
+        savedIn.push({ itemId: item.id, path, text: item.text, color: item.color })
+        continue
+      }
       const ws = overview.find((w) => w.categories.some((c) => c.id === group.categoryId))
       const cat = ws?.categories.find((c) => c.id === group.categoryId)
       if (!ws || !cat) continue

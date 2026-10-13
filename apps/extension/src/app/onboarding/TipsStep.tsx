@@ -1,11 +1,11 @@
 import { Button } from '@tabcabin/ui'
-import { BookmarkPlus, Cloud, PanelLeft, Pin, Search } from 'lucide-react'
+import { BookmarkPlus, Cloud, Inbox, PanelLeft, Pin, Search } from 'lucide-react'
 import { useT } from '@/i18n'
 import { formatShortcut } from '@/lib/keys'
 import { DEFAULT_SETTINGS, type Settings } from '@/settings/settings'
 import { useSyncServer } from '@/sync/server'
 import { useAccount } from '@/sync/state'
-import { useSaveShortcut } from '../shared/useSaveShortcut'
+import { useCommandShortcut } from '../shared/useCommandShortcut'
 import { TipRow } from './TipRow'
 
 /** The last step: the ways to fill the boards, and signing in when the build can sync. */
@@ -17,7 +17,8 @@ export function TipsStep({
   onSignIn: () => void
 }) {
   const t = useT()
-  const saveKeys = useSaveShortcut()
+  const saveKeys = useCommandShortcut('_execute_action')
+  const inboxKeys = useCommandShortcut('save-to-inbox')
   const server = useSyncServer()
   const account = useAccount()
   const shortcuts = settings?.shortcuts ?? DEFAULT_SETTINGS.shortcuts
@@ -29,6 +30,9 @@ export function TipsStep({
         <TipRow icon={<PanelLeft size={18} />}>{t('onboarding.tipDrag')}</TipRow>
         <TipRow icon={<BookmarkPlus size={18} />} keys={saveKeys}>
           {t('onboarding.tipSave')}
+        </TipRow>
+        <TipRow icon={<Inbox size={18} />} keys={inboxKeys}>
+          {t('onboarding.tipInbox')}
         </TipRow>
         <TipRow icon={<Search size={18} />} keys={formatShortcut(shortcuts.search)}>
           {t('onboarding.tipSearch')}

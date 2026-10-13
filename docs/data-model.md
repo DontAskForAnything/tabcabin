@@ -30,6 +30,12 @@ or collections view (stored per category in settings).
 **Group** — `categoryId`, `title`, `emoji`, `position`, `collapsed`, `width` (custom column width in
 pixels or `null`).
 
+The **Inbox** is a group outside every workspace for things saved without choosing a group. Its `id`
+and `categoryId` are both `inbox` (no category has that id), so every browser that syncs creates the
+same row instead of one each. The extension shows it first on every board while it holds items;
+versions without the Inbox leave it out. A backup of everything stores it as a workspace called
+"Inbox".
+
 **Item** — `groupId`, `parentId`, `kind`, `position` and:
 
 | Field          | Used by     | Meaning                                                                    |

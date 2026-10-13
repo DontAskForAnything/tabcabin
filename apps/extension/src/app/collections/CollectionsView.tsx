@@ -6,6 +6,7 @@ import { useT } from '@/i18n'
 import type { BoardActions } from '../board/actions'
 import { GroupMenu } from '../board/group/GroupMenu'
 import { GroupTitle } from '../board/group/GroupTitle'
+import { InboxColumn } from '../board/inbox/InboxColumn'
 import type { ActiveContext } from '../useActive'
 import { GroupDropLine } from '../dnd/DropMarkers'
 import { useGroupInsertIndex, useSimpleDrop } from '../dnd/hooks'
@@ -14,11 +15,13 @@ import { CollectionSection } from './CollectionSection'
 
 export function CollectionsView({
   groups,
+  inbox,
   actions,
   active,
   compact,
 }: {
   groups: BoardGroup[]
+  inbox: BoardGroup | undefined
   actions: BoardActions
   active: ActiveContext
   compact: boolean
@@ -33,6 +36,7 @@ export function CollectionsView({
         compact ? 'px-4' : 'px-7 pt-1.5',
       )}
     >
+      {inbox && <InboxColumn inbox={inbox} actions={actions} active={active} wide />}
       {groups.map((group, index) => (
         <Fragment key={group.id}>
           {insertAt === index && <GroupDropLine axis="y" />}

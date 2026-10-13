@@ -1,4 +1,4 @@
-import type { Item } from '@tabcabin/core'
+import { INBOX_ID, type Item } from '@tabcabin/core'
 import { db } from './db'
 
 type SearchKind = 'link' | 'note' | 'todo' | 'image' | 'tab' | 'bookmark'
@@ -48,7 +48,7 @@ export async function loadItemDocs(workspaceId?: string): Promise<SearchDoc[]> {
   )
   const groupMap = new Map(
     live(groups)
-      .filter((g) => catMap.has(g.categoryId))
+      .filter((g) => catMap.has(g.categoryId) || g.id === INBOX_ID)
       .map((g) => [g.id, g]),
   )
   const docs: SearchDoc[] = []
@@ -56,25 +56,37 @@ export async function loadItemDocs(workspaceId?: string): Promise<SearchDoc[]> {
     if (item.kind === 'stack') continue
     const group = groupMap.get(item.groupId)
     if (!group) continue
+    const groupName = `${group.emoji} ${group.title}`.trim()
+    // The Inbox shows on every board, so its items belong to every workspace.
+    if (group.id === INBOX_ID) {
+      docs.push({ ...itemDoc(item), groupId: group.id, path: groupName })
+      continue
+    }
     const category = catMap.get(group.categoryId)!
     const workspace = wsMap.get(category.workspaceId)!
     if (workspaceId && workspace.id !== workspaceId) continue
-    const path = [workspace.name, category.name, `${group.emoji} ${group.title}`.trim()]
+    const path = [workspace.name, category.name, groupName]
     docs.push({
-      key: `item:${item.id}`,
-      kind: kindOf(item),
-      title: item.kind === 'note' ? item.text.split('\n')[0]!.slice(0, 160) : item.title,
-      url: item.url ?? item.imageUrl,
-      text: item.text,
-      done: item.done,
-      createdAt: item.createdAt,
-      itemId: item.parentId ?? item.id,
+      ...itemDoc(item),
       groupId: group.id,
       categoryId: category.id,
       workspaceId: workspace.id,
       path: (workspaceId ? path.slice(1) : path).join(' › '),
-      favIconUrl: item.favIconUrl,
     })
   }
   return docs
+}
+
+function itemDoc(item: Item) {
+  return {
+    key: `item:${item.id}`,
+    kind: kindOf(item),
+    title: item.kind === 'note' ? item.text.split('\n')[0]!.slice(0, 160) : item.title,
+    url: item.url ?? item.imageUrl,
+    text: item.text,
+    done: item.done,
+    createdAt: item.createdAt,
+    itemId: item.parentId ?? item.id,
+    favIconUrl: item.favIconUrl,
+  }
 }

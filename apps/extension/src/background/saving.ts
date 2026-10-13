@@ -1,14 +1,21 @@
-import { displayHost, NOTE_MAX_LENGTH } from '@tabcabin/core'
+import { displayHost, INBOX_ID, NOTE_MAX_LENGTH } from '@tabcabin/core'
 import * as repo from '@/db/repo'
 import { loadRow } from '@/db/apply'
+import { translate } from '@/i18n/translate'
 import { randomEmoji } from '@/lib/emoji'
+import { getSettings } from '@/settings/settings'
 
 export type SaveTarget = { groupId: string } | { newGroupIn: string; title: string }
+
+const inboxTitle = async () => translate((await getSettings()).locale, 'inbox.title')
 
 async function resolveGroup(
   target: SaveTarget,
 ): Promise<{ groupId: string; created: repo.Result | null }> {
-  if ('groupId' in target) return { groupId: target.groupId, created: null }
+  if ('groupId' in target) {
+    if (target.groupId === INBOX_ID) await repo.ensureInbox(await inboxTitle())
+    return { groupId: target.groupId, created: null }
+  }
   const result = await repo.createGroup(target.newGroupIn, {
     title: target.title.slice(0, 60),
     emoji: randomEmoji(),
@@ -78,5 +85,6 @@ export async function saveToGroup(
   }
   if (created) result = { undo: [...result.undo, ...created.undo] }
   const saved = await loadRow('group', groupId)
-  return { groupTitle: saved ? `${saved.emoji} ${saved.title}`.trim() : '', result, itemId }
+  const title = groupId === INBOX_ID ? await inboxTitle() : saved?.title
+  return { groupTitle: saved ? `${saved.emoji} ${title}`.trim() : '', result, itemId }
 }

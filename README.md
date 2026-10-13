@@ -41,6 +41,7 @@ searchable, and works offline. No account needed and no tracking.
 - **Open tabs panel** — every window and native tab group; select several tabs and save them in one go, close duplicates
 - **Right-click menu** — save the page, a link, a text selection (as a note) or an image to any group
 - **Save popover** (`Ctrl+Shift+S`) — add a sticky note, pick the group, set a reminder, close the tab
+- **Inbox** (`Alt+Shift+S`) — save the page without choosing a group; it waits first on every board until you drag it where it belongs
 - The toolbar icon shows how many times the current page is already saved
 
 **Find and remember**
@@ -143,16 +144,17 @@ The extension has **no host permissions**: it cannot read pages unless you invok
 
 ## Keyboard shortcuts
 
-| Action                          | Shortcut                       |
-| ------------------------------- | ------------------------------ |
-| Search                          | `⌘K` / `Ctrl+K`                |
-| Switch workspace                | `⌘O` / `Ctrl+O`                |
-| New group                       | `G`                            |
-| Switch category                 | `1`–`9`                        |
-| Undo                            | `⌘Z` / `Ctrl+Z`                |
-| Open the bin                    | `⌘⇧⌫` / `Ctrl+Shift+Backspace` |
-| Save the current page (popover) | `⌘⇧S` / `Ctrl+Shift+S`         |
-| All shortcuts                   | `?`                            |
+| Action                             | Shortcut                       |
+| ---------------------------------- | ------------------------------ |
+| Search                             | `⌘K` / `Ctrl+K`                |
+| Switch workspace                   | `⌘O` / `Ctrl+O`                |
+| New group                          | `G`                            |
+| Switch category                    | `1`–`9`                        |
+| Undo                               | `⌘Z` / `Ctrl+Z`                |
+| Open the bin                       | `⌘⇧⌫` / `Ctrl+Shift+Backspace` |
+| Save the current page (popover)    | `⌘⇧S` / `Ctrl+Shift+S`         |
+| Save the current page to the Inbox | `⌃⇧S` / `Alt+Shift+S`          |
+| All shortcuts                      | `?`                            |
 
 Most of them can be changed in **Settings → Shortcuts**.
 

@@ -41,6 +41,7 @@ All notable changes to this project are documented here. The format follows
 - Website: a comparison with tabExtend, with a guide for moving over
 - Website: optional visit counts with Umami (`UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`), without
   cookies and not for browsers that send Do Not Track; the privacy page then says what is counted
+- Self-hosting guide: running the sync server on Coolify
 
 ### Changed
 

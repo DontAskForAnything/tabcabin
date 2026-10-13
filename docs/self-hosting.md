@@ -188,6 +188,38 @@ docker compose --profile caddy up -d --build
 The new volume name assumes the folder is called `tabcabin` (Compose prefixes volumes with the
 folder name). Extensions built before the rename keep syncing: the server answers to both names.
 
+## Coolify
+
+[Coolify](https://coolify.io) builds the server from the repository and puts its own proxy with
+certificates in front of it; live sync passes through that proxy as it is.
+
+1. DNS: an `A` record for the server's name (e.g. `tabs.example.com`) pointing at the Coolify
+   machine. On Cloudflare keep it **DNS only** (grey cloud): through Cloudflare's proxy every user
+   would share Cloudflare's addresses, and the per-network sign-in and signup limits would hit
+   everyone at once.
+2. **New resource → Application** → the repository (a private one through the GitHub App), branch
+   `main`, build pack **Dockerfile**, base directory `/`, Dockerfile location
+   `/apps/server/Dockerfile`.
+3. **Ports exposes** `8787`, **Domains** `https://tabs.example.com`.
+4. **Persistent storage → Add → Volume**, destination path `/data`. Without it every deployment
+   starts with an empty database. Use a volume, not a folder of the host: the server runs as the
+   `node` user and cannot write to a folder owned by root.
+5. **Environment variables** (runtime, not build time):
+   - `PUBLIC_URL=https://tabs.example.com`, exactly the domain from step 3 (Google sign-in and
+     share links use it);
+   - `TRUST_PROXY=true`, so the limits see each user's own address;
+   - the rest from the table in [Configure](#2-configure): `ALLOW_SIGNUP`, `ADMIN_USERNAME` and
+     `ADMIN_PASSWORD` for the first start, `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, the limits.
+     `DOMAIN` is only for Docker Compose; Coolify does not need it.
+6. Leave Coolify's own health check off: the image checks itself, and Coolify's check needs `curl`
+   or `wget`, which the image does not have.
+7. **Deploy**, then `curl https://tabs.example.com/health`. Remove `ADMIN_PASSWORD` afterwards.
+
+The account commands from [Managing accounts](#managing-accounts) work in the application's
+**Terminal** tab (`tabcabin list-users`). For backups, add a **Scheduled task** with the command
+`tabcabin backup /data/tabcabin-backup.db` (e.g. `15 3 * * *`); it keeps a consistent copy next to
+the database, so also copy it off the machine from time to time (snapshots of the server work).
+
 ## Already running a reverse proxy?
 
 Start only the server (`docker compose up -d`, without `--profile caddy`). It listens on

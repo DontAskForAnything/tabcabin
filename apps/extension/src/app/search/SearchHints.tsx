@@ -9,6 +9,7 @@ export function SearchHints() {
       <KeyHint keys={['↑', '↓']}>{t('search.hintSelect')}</KeyHint>
       <KeyHint keys={['↵']}>{t('search.hintOpen')}</KeyHint>
       <KeyHint keys={['Ctrl ↵']}>{t('search.hintGoTo')}</KeyHint>
+      <KeyHint keys={['→']}>{t('search.hintMove')}</KeyHint>
       <KeyHint keys={['Tab']}>{t('search.hintScope')}</KeyHint>
     </div>
   )

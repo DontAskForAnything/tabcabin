@@ -50,4 +50,10 @@ describe('search engine', () => {
     )
     expect(recent.map((d) => d.key)).toEqual(['y'])
   })
+
+  it('finds groups by name but leaves them out of the newest documents', () => {
+    const group = doc('g', 'Quarterly planning', { kind: 'group', createdAt: 9 })
+    expect(search([group], 'planning')[0]!.doc.key).toBe('g')
+    expect(recentDocs([group, doc('y', 'new', { createdAt: 5 })]).map((d) => d.key)).toEqual(['y'])
+  })
 })

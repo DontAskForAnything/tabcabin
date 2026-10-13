@@ -1,7 +1,7 @@
 import { INBOX_ID, type Item } from '@tabcabin/core'
 import { db } from './db'
 
-type SearchKind = 'link' | 'note' | 'todo' | 'image' | 'tab' | 'bookmark'
+type SearchKind = 'link' | 'note' | 'todo' | 'image' | 'tab' | 'bookmark' | 'group' | 'command'
 
 export interface SearchDoc {
   key: string
@@ -11,8 +11,12 @@ export interface SearchDoc {
   text: string
   done?: boolean
   createdAt: number
-  /** Board location (items only). */
+  /** Board location (items and groups). `itemId` is what to show: a link in a stack shows the stack. */
   itemId?: string
+  /** The item itself, to move it. */
+  rowId?: string
+  /** Groups only. */
+  emoji?: string
   groupId?: string
   categoryId?: string
   workspaceId?: string
@@ -87,6 +91,43 @@ function itemDoc(item: Item) {
     done: item.done,
     createdAt: item.createdAt,
     itemId: item.parentId ?? item.id,
+    rowId: item.id,
     favIconUrl: item.favIconUrl,
   }
+}
+
+/** Named groups (to open them from search), optionally limited to one workspace. */
+export async function loadGroupDocs(workspaceId?: string): Promise<SearchDoc[]> {
+  const [workspaces, categories, groups] = await Promise.all([
+    db.workspaces.toArray(),
+    db.categories.toArray(),
+    db.groups.toArray(),
+  ])
+  const wsMap = new Map(live(workspaces).map((ws) => [ws.id, ws]))
+  const catMap = new Map(
+    live(categories)
+      .filter((c) => wsMap.has(c.workspaceId))
+      .map((c) => [c.id, c]),
+  )
+  const docs: SearchDoc[] = []
+  for (const group of live(groups)) {
+    const category = catMap.get(group.categoryId)
+    if (!category || !group.title) continue
+    const workspace = wsMap.get(category.workspaceId)!
+    if (workspaceId && workspace.id !== workspaceId) continue
+    docs.push({
+      key: `group:${group.id}`,
+      kind: 'group',
+      title: group.title,
+      url: null,
+      text: '',
+      createdAt: group.createdAt,
+      groupId: group.id,
+      categoryId: category.id,
+      workspaceId: workspace.id,
+      path: workspaceId ? category.name : `${workspace.name} › ${category.name}`,
+      emoji: group.emoji,
+    })
+  }
+  return docs
 }

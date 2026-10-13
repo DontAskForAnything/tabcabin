@@ -1,7 +1,7 @@
 import { toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useMemo, useState } from 'react'
-import { loadItemDocs, type SearchDoc } from '@/db/search'
+import { loadGroupDocs, loadItemDocs, type SearchDoc } from '@/db/search'
 import { useT } from '@/i18n'
 import { useOpenTabs } from '../panel/useOpenTabs'
 import { hasBookmarkAccess, loadBookmarkDocs, requestBookmarkAccess } from './bookmarks'
@@ -15,13 +15,12 @@ export function useSearchDocs(open: boolean, scope: Scope, workspaceId: string |
   const [bookmarkAccess, setBookmarkAccess] = useState<boolean | null>(null)
   const [bookmarks, setBookmarks] = useState<SearchDoc[]>([])
 
-  const itemDocs = useLiveQuery(
-    () =>
-      open && (scope === 'workspace' || scope === 'all')
-        ? loadItemDocs(scope === 'workspace' ? workspaceId : undefined)
-        : Promise.resolve([]),
-    [open, scope, workspaceId],
-  )
+  const itemDocs = useLiveQuery(async () => {
+    if (!open || (scope !== 'workspace' && scope !== 'all')) return []
+    const id = scope === 'workspace' ? workspaceId : undefined
+    const [groups, items] = await Promise.all([loadGroupDocs(id), loadItemDocs(id)])
+    return [...groups, ...items]
+  }, [open, scope, workspaceId])
 
   useEffect(() => {
     if (scope !== 'bookmarks' || !open) return

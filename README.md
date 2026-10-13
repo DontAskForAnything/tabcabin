@@ -47,7 +47,7 @@ searchable, and works offline. No account needed and no tracking.
 
 **Find and remember**
 
-- **Search** (`⌘K` / `Ctrl+K`) across the workspace, all workspaces, open tabs and bookmarks; jump to any result on the board
+- **Search** (`⌘K` / `Ctrl+K`) across the workspace, all workspaces, open tabs and bookmarks; jump to any result on the board, open a whole group, move a tab or an item to a group with `→`, or add what you typed as a note
 - **Reminders** — one-time, weekly or monthly; desktop notifications, snooze, and a due count on the toolbar icon
 - **Broken links** _(optional)_ — about once a week TabCabin asks each saved page whether it still loads and marks the ones that do not
 - **Bin** — restore deleted groups and items, or delete them for good

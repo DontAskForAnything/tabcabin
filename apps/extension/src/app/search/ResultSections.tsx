@@ -1,10 +1,13 @@
 import type { SearchDoc } from '@/db/search'
 import { type Translate, useT } from '@/i18n'
 import type { SearchHit } from './engine'
+import { canMove } from './moveTo'
 import { ResultRow } from './ResultRow'
 import type { HitSection } from './sections'
 
 function actionLabel(doc: SearchDoc, t: Translate): string {
+  if (doc.kind === 'group') return t('search.actionOpenAll')
+  if (doc.kind === 'command') return t('search.actionChooseGroup')
   if (doc.kind === 'tab') return t('search.actionSwitch')
   if (doc.kind === 'note' || doc.kind === 'todo') return t('search.actionGoTo')
   return t('search.actionOpen')
@@ -15,11 +18,13 @@ export function ResultSections({
   selected,
   onHover,
   onOpen,
+  onMove,
 }: {
   sections: HitSection[]
   selected: SearchHit | undefined
   onHover: (hit: SearchHit) => void
   onOpen: (hit: SearchHit, reveal: boolean) => void
+  onMove: (hit: SearchHit) => void
 }) {
   const t = useT()
   return sections.map((section) => (
@@ -35,6 +40,8 @@ export function ResultSections({
           onHover={() => onHover(hit)}
           onClick={(reveal) => onOpen(hit, reveal)}
           action={actionLabel(hit.doc, t)}
+          onMove={canMove(hit.doc) ? () => onMove(hit) : undefined}
+          moveLabel={t('search.actionMove')}
         />
       ))}
     </div>

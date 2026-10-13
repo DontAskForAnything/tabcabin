@@ -10,6 +10,8 @@ export function ScopeTabs({ scope, onChange }: { scope: Scope; onChange: (scope:
         <button
           key={option.value}
           type="button"
+          // Keep typing in the search field after picking a scope with the mouse.
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => onChange(option.value)}
           className={cn(
             'h-[30px] rounded-[9px] px-3 text-[12.5px] font-medium transition-colors',

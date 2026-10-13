@@ -23,6 +23,9 @@ All notable changes to this project are documented here. The format follows
 - Links that no longer load get a small mark: turn on link checks in Settings → General and
   TabCabin asks each saved page about once a week whether it still loads (it needs access to the
   saved sites for that, which it gives back when the checks are turned off)
+- Search does more: groups show up by name and Enter opens all their links, `→` moves an open
+  tab or a saved item to a group, and what you typed can be added to a group (the Inbox first) as
+  a note or a link
 - Settings: "TabCabin" next to the version opens the website (`WXT_SITE_URL` when building; the
   Build workflow fills it from `SITE_URL`, other builds open the project on GitHub)
 - Sign-in: an eye in each password field shows what you typed

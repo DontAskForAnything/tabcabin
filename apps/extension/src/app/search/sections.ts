@@ -10,6 +10,8 @@ const SECTION: Record<SearchDoc['kind'], MessageKey> = {
   todo: 'search.sectionNotes',
   tab: 'search.sectionTabs',
   bookmark: 'search.sectionBookmarks',
+  group: 'search.sectionGroups',
+  command: 'search.sectionActions',
 }
 
 export interface HitSection {

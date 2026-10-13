@@ -59,6 +59,10 @@ export function highlightParts(
   return parts
 }
 
+/** Recently added items (groups are only found by name). */
 export function recentDocs(docs: readonly SearchDoc[], limit = 8): SearchDoc[] {
-  return [...docs].sort((a, b) => b.createdAt - a.createdAt).slice(0, limit)
+  return docs
+    .filter((doc) => doc.kind !== 'group')
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, limit)
 }

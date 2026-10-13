@@ -118,7 +118,7 @@ test('the right-click menu and the popover save to the Inbox too', async ({
 
   await board.keyboard.press('Control+k')
   await board.keyboard.type('popover')
-  const result = board.getByRole('dialog').getByRole('button', { name: /popover/ })
+  const result = board.getByRole('dialog').getByRole('button', { name: /^popover/ })
   await expect(result).toContainText('📬 Inbox')
   await board.keyboard.press('Control+Enter')
   await expect(board.getByRole('dialog')).toHaveCount(0)

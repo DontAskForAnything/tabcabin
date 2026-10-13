@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-10-14
+
+A welcome for newcomers, an Inbox, shared groups and a quiet look at the week.
+
 ### Added
 
 - A welcome for first-time users: what TabCabin does, then a start with the starter board, an
@@ -176,6 +180,7 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...v1.2.0
 [0.1.0]: https://github.com/DontAskForAnything/tabcabin/releases/tag/v0.1.0

@@ -105,5 +105,5 @@ test('switches the category to the collections view and back', async ({ context,
     'true',
   )
   await page.getByRole('radio', { name: 'Board' }).click()
-  await expect(page.getByRole('button', { name: 'Open all' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Open all', exact: true })).toHaveCount(0)
 })

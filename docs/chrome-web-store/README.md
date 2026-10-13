@@ -56,6 +56,7 @@ ORGANIZE
 CAPTURE
 • Open tabs panel: drag tabs (or whole Chrome tab groups) into a group to save them
 • Select several tabs and save them at once, close duplicates
+• Save a whole window as one group and close it, then open it again in one click
 • Right-click any page, link, image or selected text to save it
 • Save popover (Ctrl+Shift+S): add a sticky note, pick the group, set a reminder
 • Inbox (Alt+Shift+S): save the page without choosing a group, sort it later
@@ -97,6 +98,7 @@ PORZĄDEK
 ZAPISYWANIE
 • Panel otwartych kart: przeciągnij kartę (albo całą grupę kart Chrome) do grupy
 • Zaznacz kilka kart i zapisz je naraz, zamknij duplikaty
+• Zapisz całe okno jako jedną grupę i zamknij je, a potem otwórz jednym kliknięciem
 • Prawy przycisk na stronie, linku, obrazku lub zaznaczonym tekście zapisuje go
 • Okienko zapisu (Ctrl+Shift+S): notatka, wybór grupy, przypomnienie
 • Skrzynka (Alt+Shift+S): zapisz stronę bez wybierania grupy i posortuj później

@@ -103,3 +103,54 @@ test('shows the open tabs right away when the panel opens', async ({ context, ex
   const flags = await page.evaluate(() => (window as unknown as { emptyPanel: boolean }).emptyPanel)
   expect(flags).toBe(false)
 })
+
+test('saves a whole window as one group, closes it and brings it back with undo', async ({
+  context,
+  extensionId,
+}) => {
+  await context.route('https://window.test/**', (route) =>
+    route.fulfill({
+      contentType: 'text/html',
+      body: `<title>${new URL(route.request().url()).pathname.slice(1)}</title>`,
+    }),
+  )
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const windows = () => page.evaluate(async () => (await chrome.windows.getAll()).length)
+  await page.evaluate(() =>
+    chrome.windows.create({ url: ['https://window.test/North', 'https://window.test/South'] }),
+  )
+  await expect.poll(windows).toBe(2)
+
+  await panel(page)
+    .getByRole('button', { name: /This window/ })
+    .click()
+  await page.getByRole('menuitem', { name: /Window \d · 2 tabs/ }).click()
+  await panel(page).getByRole('button', { name: 'Save all tabs' }).click()
+  await page.getByRole('menuitem', { name: 'Save as one group and close' }).click()
+
+  const group = page.getByRole('region', { name: /^Window from / })
+  await expect(group.getByRole('link', { name: /North/ })).toBeVisible()
+  await expect(group.getByRole('link', { name: /South/ })).toBeVisible()
+  await expect.poll(windows).toBe(1)
+
+  await page.getByText('Saved 2 tabs and closed the window').waitFor()
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect.poll(windows).toBe(2)
+  await expect(group).toHaveCount(0)
+})
+
+test('opens a saved group as a window in one click', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const group = page.getByRole('region', { name: 'Quick links' })
+  await group.hover()
+  await group.getByRole('button', { name: 'Open all in new window' }).click()
+  await expect
+    .poll(() =>
+      page.evaluate(async () =>
+        (await chrome.windows.getAll({ populate: true })).map((w) => w.tabs?.length ?? 0),
+      ),
+    )
+    .toContainEqual(4)
+})

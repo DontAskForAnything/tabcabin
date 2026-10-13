@@ -1,4 +1,4 @@
-import { Copy, Download, Plus, X } from 'lucide-react'
+import { AppWindow, Copy, Download, Plus, X } from 'lucide-react'
 import {
   Button,
   Menu,
@@ -17,6 +17,7 @@ import { closeTabs, duplicateTabIds } from '@/lib/tabs'
 import type { ActiveContext } from '../useActive'
 import { usePanel } from './panelStore'
 import { saveTabs } from './saveTabs'
+import { saveAndCloseWindow } from './saveWindow'
 import { SaveToMenuItems } from './SaveToMenu'
 import type { PanelData } from './usePanelData'
 import { windowLabel } from './windowLabel'
@@ -77,6 +78,17 @@ export function SaveTabsMenu({ data, active }: { data: PanelData; active: Active
         </MenuSub>
         <MenuSeparator />
         <MenuLabel>{windowId !== null ? windowLabel(windowId, data, t) : ''}</MenuLabel>
+        <MenuItem
+          icon={<AppWindow size={14} />}
+          onSelect={() => {
+            if (!active.category || windowId === null) return
+            void saveAndCloseWindow(windowId, inWindow, active.category.id, { t, locale }).then(
+              clearSelection,
+            )
+          }}
+        >
+          {t('panel.saveWindow')}
+        </MenuItem>
         <MenuItem
           icon={<Copy size={14} />}
           onSelect={async () => {

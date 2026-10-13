@@ -14,6 +14,7 @@ import { ItemView } from '../ItemView'
 import type { BoardActions } from '../actions'
 import { GroupMenu } from './GroupMenu'
 import { GroupResizeHandle } from './GroupResizeHandle'
+import { RestoreButton } from './RestoreButton'
 import { GroupTitle } from './GroupTitle'
 import { DEFAULT_GROUP_WIDTH } from './width'
 
@@ -63,7 +64,7 @@ export function GroupCard({
       aria-label={group.title || t('group.untitled')}
       style={{ ...style, width: effectiveWidth }}
       className={cn(
-        'relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150 dense:px-3.5 dense:pt-3.5 dense:pb-3',
+        'group/card relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150 dense:px-3.5 dense:pt-3.5 dense:pb-3',
         compact && 'w-full',
         dnd.dragging && 'opacity-40',
         dnd.receiving && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
@@ -100,6 +101,7 @@ export function GroupCard({
             {group.collapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
           </button>
         </div>
+        <RestoreButton group={group} actions={actions} />
         <GroupMenu group={group} actions={actions} active={active} />
       </header>
 

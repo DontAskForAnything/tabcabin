@@ -38,7 +38,7 @@ searchable, and works offline. No account needed and no tracking.
 
 **Capture**
 
-- **Open tabs panel** — every window and native tab group; select several tabs and save them in one go, close duplicates
+- **Open tabs panel** — every window and native tab group; select several tabs and save them in one go, close duplicates, or save a whole window as one group and close it (open it again later in one click)
 - **Right-click menu** — save the page, a link, a text selection (as a note) or an image to any group
 - **Save popover** (`Ctrl+Shift+S`) — add a sticky note, pick the group, set a reminder, close the tab
 - **Inbox** (`Alt+Shift+S`) — save the page without choosing a group; it waits first on every board until you drag it where it belongs

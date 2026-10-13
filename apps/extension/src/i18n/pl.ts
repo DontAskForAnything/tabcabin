@@ -270,6 +270,14 @@ export const pl: Record<MessageKey, Message> = {
   },
   'panel.noDuplicates': 'Brak zduplikowanych kart',
   'panel.noTabs': 'Brak innych kart',
+  'panel.saveWindow': 'Zapisz jako jedną grupę i zamknij',
+  'panel.windowTitle': 'Okno z {date}',
+  'panel.windowSaved': {
+    one: 'Zapisano {count} kartę i zamknięto okno',
+    few: 'Zapisano {count} karty i zamknięto okno',
+    many: 'Zapisano {count} kart i zamknięto okno',
+    other: 'Zapisano {count} karty i zamknięto okno',
+  },
   'panel.sessionTitle': 'Karty z {date}',
   'panel.selected': {
     one: 'Zaznaczono {count} kartę',

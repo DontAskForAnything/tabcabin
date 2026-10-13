@@ -225,6 +225,12 @@ export const en = {
   },
   'panel.noDuplicates': 'No duplicate tabs',
   'panel.noTabs': 'No other tabs here',
+  'panel.saveWindow': 'Save as one group and close',
+  'panel.windowTitle': 'Window from {date}',
+  'panel.windowSaved': {
+    one: 'Saved {count} tab and closed the window',
+    other: 'Saved {count} tabs and closed the window',
+  },
   'panel.sessionTitle': 'Tabs from {date}',
   'panel.selected': { one: '{count} tab selected', other: '{count} tabs selected' },
   'panel.resize': 'Resize panel',

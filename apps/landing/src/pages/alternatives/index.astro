@@ -16,11 +16,16 @@ const tools = [
     'Collections of tabs, plus kanban boards, notes and reminders, without an account.',
   ],
   ['Workona', 'workona', 'Workspaces without an account or limits, free and open source.'],
+  [
+    'tabExtend',
+    'tabextend',
+    'A board of tabs, notes and to-dos on the new tab page, without a limit on saves.',
+  ],
 ]
 ---
 
 <Layout
-  title="Best open-source alternatives to OneTab, Toby and Workona — TabCabin"
+  title="Best open-source alternatives to OneTab, Toby, Workona and tabExtend — TabCabin"
   description="How TabCabin compares with popular tab managers: boards, notes, reminders, privacy, price and self-hosted sync."
   path="/alternatives/"
   breadcrumbs={[['Alternatives', '/alternatives/']]}
@@ -37,7 +42,7 @@ const tools = [
       TabCabin is a free, open-source tab manager with kanban boards, notes, reminders and optional
       sync you can also host yourself. Here is how it stacks up against tools you may already use.
     </p>
-    <div class="mt-12 grid gap-4 sm:grid-cols-3">
+    <div class="mt-12 grid gap-4 sm:grid-cols-2">
       {tools.map(([name, slug, text], index) => (
         <a
           href={`/alternatives/${slug}/`}

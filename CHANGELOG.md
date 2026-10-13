@@ -38,6 +38,7 @@ All notable changes to this project are documented here. The format follows
 - Website: "Coming soon to Chrome" in place of the download buttons until `EXTENSION_URL` is set,
   and GitHub links only once `REPO_URL` is set (both build variables, like `SITE_URL`)
 - Website: a Dockerfile that serves the site with Caddy, for Coolify and other Docker hosts
+- Website: a comparison with tabExtend, with a guide for moving over
 - Website: optional visit counts with Umami (`UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`), without
   cookies and not for browsers that send Do Not Track; the privacy page then says what is counted
 

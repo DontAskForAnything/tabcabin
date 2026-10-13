@@ -1,0 +1,37 @@
+---
+import ComparePage from '../../components/ComparePage.astro'
+---
+
+<ComparePage
+  name="tabExtend"
+  slug="tabextend"
+  intro="tabExtend turns the new tab page into a board of saved tabs, notes and to-dos. TabCabin is built around the same board, with no limit on how much you save, no account needed, and a sync server you can also run yourself."
+  about="tabExtend is a tab manager for Chrome, Edge and Brave that replaces the new tab page with kanban-style boards of tabs, notes and to-dos, with an account for sync, phone apps and paid plans."
+  rows={[
+    ['Boards of tabs, notes and to-dos on the new tab page', true, true],
+    ['Drag open tabs from a sidebar into groups', true, true],
+    ['How much you can save', 'Free plan: 30 saves', 'No limit'],
+    ['Several workspaces and reminders', 'Pro plan', true],
+    ['Works without an account', true, true],
+    ['Sync', 'tabExtend account', 'Sign in, or your own server'],
+    ['Phone apps', 'iOS and Android', false],
+    ['Browsers', 'Chrome, Edge, Brave', 'Chrome, Edge, Brave'],
+    ['Price', 'Free trial up to 30 saves, Pro and Team plans', 'Free app, free self-hosting'],
+    ['Open source', false, 'MIT'],
+  ]}
+  whySwitch={[
+    'Save as much as you like: no limit on links, notes, workspaces or reminders.',
+    'No account needed; sign in only when you want sync, or run the sync server yourself.',
+    'Free and open source, with your boards kept in your browser.',
+    'An Inbox for saving now and sorting later, templates for new workspaces, and English or Polish.',
+  ]}
+  betterFit={[
+    'You want apps on your phone — TabCabin is a browser extension for now.',
+    'Your team already works together in tabExtend.',
+  ]}
+  moving={[
+    'In tabExtend’s settings, export your workspace as <strong>JSON</strong>.',
+    'In TabCabin open <strong>Settings → Data → Import from a file</strong> and choose that file.',
+    'Categories, groups, links with their comments, notes, to-dos, images and stacks come along into a new workspace.',
+  ]}
+/>

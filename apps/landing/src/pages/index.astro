@@ -57,6 +57,23 @@ const faqSchema = {
   })),
 }
 
+// The name and logo Google shows for the site, in place of the bare address.
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'TabCabin',
+  alternateName: 'Tab Cabin',
+  url: new URL('/', Astro.site).toString(),
+}
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'TabCabin',
+  url: new URL('/', Astro.site).toString(),
+  logo: new URL('/icon-512.png', Astro.site).toString(),
+}
+
 const filmSchema = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
@@ -73,7 +90,7 @@ const filmSchema = {
 <Layout
   title="TabCabin — a calm, open-source tab manager with kanban boards and sync"
   description="A calm cabin for your tabs: TabCabin turns every new tab into kanban boards for tabs, links, notes and to-dos. A free, open-source Chrome extension that works offline, syncs your computers when you sign in, and can run on your own server."
-  schema={[faqSchema, filmSchema]}
+  schema={[siteSchema, organizationSchema, faqSchema, filmSchema]}
 >
   <Nav />
   <main>

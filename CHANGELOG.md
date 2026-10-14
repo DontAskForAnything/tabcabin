@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.3.1] — 2026-10-14
+
+TabCabin in the Chrome Web Store, with a name that says what it does.
+
 ### Added
 
 - TabCabin is in the Chrome Web Store; the README links the listing
@@ -198,7 +202,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...v1.2.0
 [0.1.0]: https://github.com/DontAskForAnything/tabcabin/releases/tag/v0.1.0

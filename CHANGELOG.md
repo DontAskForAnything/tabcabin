@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Website: the film's upload date in the search data now has a time and a time zone, as search
   engines expect
+- Website: the TabCabin logo next to the site in search results (a PNG and an `.ico` favicon,
+  since search engines skip SVG), plus icons for phone home screens
 
 ## [1.3.0] — 2026-10-14
 

@@ -8,6 +8,7 @@
 quiet boards for your tabs, links, notes and to-dos — on your computer, and in sync between your
 computers when you sign in.
 
+[![CI](https://github.com/DontAskForAnything/tabcabin/actions/workflows/ci.yml/badge.svg)](https://github.com/DontAskForAnything/tabcabin/actions/workflows/ci.yml)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/eldaiannnllgnlgilfocoibpdjmngcfp?label=Chrome%20Web%20Store&color=1F4A3A)](https://chromewebstore.google.com/detail/tabcabin/eldaiannnllgnlgilfocoibpdjmngcfp)
 ![License: MIT](https://img.shields.io/badge/license-MIT-1F4A3A)
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-1F4A3A)

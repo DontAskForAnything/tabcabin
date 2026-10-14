@@ -8,6 +8,7 @@ declare const chrome: typeof browser
 declare const tabcabin: {
   handleMenuClick: (info: object, tab: object) => Promise<void>
   togglePopover: (tab: object) => Promise<void>
+  rebuildMenus: () => Promise<void>
 }
 
 const ARTICLE = `<!doctype html><html><head><title>Backup SQLite nightly</title></head>
@@ -88,6 +89,30 @@ test('saves the page from the context menu, shows a toast and undoes it', async 
       .getByRole('region', { name: 'Welcome' })
       .getByRole('link', { name: /Backup SQLite nightly/ }),
   ).toHaveCount(0)
+})
+
+test('shows the short name above the page entries of the right-click menu', async ({
+  context,
+  extensionId,
+}) => {
+  await openBoard(context, extensionId)
+  const sw = await worker(context)
+  const items = await sw.evaluate(async () => {
+    const created: { id?: string | number; title?: string; parentId?: string | number }[] = []
+    const original = chrome.contextMenus.create
+    chrome.contextMenus.create = (props, callback) => {
+      created.push({ id: props.id, title: props.title, parentId: props.parentId })
+      return original.call(chrome.contextMenus, props, callback)
+    }
+    await tabcabin.rebuildMenus()
+    chrome.contextMenus.create = original
+    return created
+  })
+  const item = (id: string) => items.find((entry) => entry.id === id)
+  expect(item('root|page')).toEqual({ id: 'root|page', title: 'TabCabin' })
+  expect(item('root|save')?.parentId).toBe('root|page')
+  expect(item('root|close')?.parentId).toBe('root|page')
+  expect(item('root|link')?.parentId).toBeUndefined()
 })
 
 test('saves a text selection as a note with its source', async ({ context, extensionId }) => {

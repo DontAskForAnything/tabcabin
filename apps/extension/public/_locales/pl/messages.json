@@ -1,5 +1,8 @@
 {
   "extName": {
+    "message": "TabCabin – menedżer kart, tablice i notatki"
+  },
+  "extShortName": {
     "message": "TabCabin"
   },
   "extDescription": {

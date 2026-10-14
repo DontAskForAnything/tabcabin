@@ -22,6 +22,10 @@ const ROOTS: { action: Action; contexts: [Context, ...Context[]]; title: Message
   { action: 'image', contexts: ['image'], title: 'menu.saveImage' },
 ]
 
+// Chrome puts two entries for the same right-click under the extension's full name, which is the
+// long store title, so the page entries get a short parent of their own.
+const PAGE_PARENT = 'root|page'
+
 const create = (props: Browser.contextMenus.CreateProperties) =>
   new Promise<void>((resolve) => {
     browser.contextMenus.create(props, () => {
@@ -47,9 +51,15 @@ export async function rebuildMenus() {
     ).filter((g) => g.deletedAt === null),
   )
 
+  await create({ id: PAGE_PARENT, title: 'TabCabin', contexts: ['page'] })
   for (const root of ROOTS) {
     const rootId = `root|${root.action}`
-    await create({ id: rootId, title: t(root.title), contexts: root.contexts })
+    await create({
+      id: rootId,
+      title: t(root.title),
+      contexts: root.contexts,
+      ...(root.contexts.includes('page') && { parentId: PAGE_PARENT }),
+    })
     // The Inbox first: saving there needs no choice of group.
     await create({
       id: `${root.action}|g|${INBOX_ID}`,

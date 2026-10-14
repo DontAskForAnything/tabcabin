@@ -36,7 +36,9 @@ export default defineConfig({
     },
   },
   manifest: ({ mode }) => ({
+    // The store shows this name as the title; Chrome uses the short one where space is tight.
     name: '__MSG_extName__',
+    short_name: '__MSG_extShortName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
     permissions: [

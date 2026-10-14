@@ -11,6 +11,11 @@ All notable changes to this project are documented here. The format follows
 - Website: search engines get the site's name, TabCabin, and its logo, to show in place of the bare
   address
 
+### Changed
+
+- The extension's name says what it does: TabCabin – Tab Manager, Boards & Notes (Polish: TabCabin –
+  menedżer kart, tablice i notatki). The right-click menu still says TabCabin
+
 ### Fixed
 
 - Website: the film's upload date in the search data now has a time and a time zone, as search

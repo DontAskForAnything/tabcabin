@@ -30,7 +30,9 @@ demo favicons). Stills from the promo film for social posts are in [`../promo/`]
 
 ## Store listing
 
-**Item name / title:** TabCabin – Tab Manager, Boards & Notes
+**Item name / title:** TabCabin – Tab Manager, Boards & Notes (Polish: TabCabin – menedżer kart,
+tablice i notatki). The store takes it from the manifest name (`extName` in `public/_locales`);
+Chrome shows the short name, TabCabin, where space is tight.
 
 **Summary** (max. 132 characters, also the manifest description):
 

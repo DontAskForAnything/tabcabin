@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Website: the film's upload date in the search data now has a time and a time zone, as search
+  engines expect
+
 ## [1.3.0] — 2026-10-14
 
 A welcome for newcomers, an Inbox, shared groups and a quiet look at the week.

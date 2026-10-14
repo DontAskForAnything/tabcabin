@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- TabCabin is in the Chrome Web Store; the README links the listing
 - Website: search engines get the site's name, TabCabin, and its logo, to show in place of the bare
   address
 

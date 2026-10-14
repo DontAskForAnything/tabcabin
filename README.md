@@ -8,6 +8,7 @@
 quiet boards for your tabs, links, notes and to-dos — on your computer, and in sync between your
 computers when you sign in.
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/eldaiannnllgnlgilfocoibpdjmngcfp?label=Chrome%20Web%20Store&color=1F4A3A)](https://chromewebstore.google.com/detail/tabcabin/eldaiannnllgnlgilfocoibpdjmngcfp)
 ![License: MIT](https://img.shields.io/badge/license-MIT-1F4A3A)
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-1F4A3A)
 
@@ -90,7 +91,7 @@ docker compose --profile caddy up -d
 
 ## Install
 
-TabCabin is not in the Chrome Web Store yet.
+**From the Chrome Web Store** — [add TabCabin to Chrome](https://chromewebstore.google.com/detail/tabcabin/eldaiannnllgnlgilfocoibpdjmngcfp), then open a new tab.
 
 **From a release** — download `tabcabin-<version>-chrome.zip` from
 [Releases](https://github.com/DontAskForAnything/tabcabin/releases), unzip it, open

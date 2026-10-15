@@ -116,7 +116,7 @@ test('announces due reminders on the toolbar and marks them done', async ({
 test('sets a reminder from the note toolbar', async ({ context, extensionId }) => {
   const page = await openBoard(context, extensionId)
   const group = page.getByRole('region', { name: 'To do' })
-  await group.getByText('Press ⌘K to search everything').click()
+  await group.getByText(/^Press (Ctrl\+K|⌘K) to search everything$/).click()
   await expect(group.locator('textarea')).toBeFocused()
   await page.getByRole('button', { name: 'Reminder', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Reminder' })

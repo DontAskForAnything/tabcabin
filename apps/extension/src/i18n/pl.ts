@@ -39,7 +39,7 @@ export const pl: Record<MessageKey, Message> = {
   'seed.welcome': 'Witaj',
   'seed.articles': 'Artykuły',
   'seed.task1': 'Przeciągnij kartę z lewego panelu do grupy',
-  'seed.task2': 'Naciśnij ⌘K, żeby wszystko przeszukać',
+  'seed.task2': 'Naciśnij {keys}, żeby wszystko przeszukać',
   'seed.task3': 'Wypróbuj widok Kolekcje',
   'seed.doneTask': 'Wprowadź się do TabCabin',
   'seed.welcomeNote':

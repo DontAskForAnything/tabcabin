@@ -23,7 +23,7 @@ export const en = {
   'seed.welcome': 'Welcome',
   'seed.articles': 'Articles',
   'seed.task1': 'Drag a tab from the left panel into a group',
-  'seed.task2': 'Press ⌘K to search everything',
+  'seed.task2': 'Press {keys} to search everything',
   'seed.task3': 'Try the Collections view',
   'seed.doneTask': 'Move into TabCabin',
   'seed.welcomeNote':

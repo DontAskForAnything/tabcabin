@@ -2,30 +2,14 @@ import { Toaster, TooltipProvider, UiTextProvider, useApplyTheme } from '@tabcab
 import { MotionConfig } from 'motion/react'
 import { type ReactNode, useEffect } from 'react'
 import { ensureSeed } from '@/db/seed'
-import { I18nProvider, type Translate, useLocale, useT } from '@/i18n'
+import { I18nProvider, useLocale, useT } from '@/i18n'
 import { translate } from '@/i18n/translate'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
+import { seedText } from './seedText'
 import { Shell } from './Shell'
 import { SignInPage } from './signin/SignInPage'
 import type { Surface } from './mount'
 import { useActive } from './useActive'
-
-const seedText = (t: Translate) => ({
-  workspace: t('seed.workspace'),
-  categories: [t('seed.today'), t('seed.readLater'), t('seed.projects')] as [
-    string,
-    string,
-    string,
-  ],
-  quickLinks: t('seed.quickLinks'),
-  todo: t('seed.todo'),
-  welcome: t('seed.welcome'),
-  readLater: t('seed.articles'),
-  tasks: [t('seed.task1'), t('seed.task2'), t('seed.task3')] as [string, string, string],
-  doneTask: t('seed.doneTask'),
-  welcomeNote: t('seed.welcomeNote'),
-  tipNote: t('seed.tipNote'),
-})
 
 export function App({ surface }: { surface: Surface }) {
   const active = useActive()

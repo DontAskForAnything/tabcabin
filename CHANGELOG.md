@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The starter board's search tip names the keys of your computer: Ctrl+K on Windows and Linux, ⌘K
+  on a Mac
+
 ## [1.3.1] — 2026-10-14
 
 TabCabin in the Chrome Web Store, with a name that says what it does.

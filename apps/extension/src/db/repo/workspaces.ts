@@ -1,6 +1,7 @@
 import {
   makeCategory,
   makeGroup,
+  makeItem,
   makeWorkspace,
   positionAtEnd,
   positionAtIndex,
@@ -8,18 +9,19 @@ import {
   positionsAtEnd,
   put,
   puts,
+  type TemplateRow,
   touch,
   type Workspace,
 } from '@tabcabin/core'
 import { clock, commit, mustGet, type Result } from './commit'
 import { descendantsOfCategories, getCategories, getWorkspaces } from './reads'
 
-/** A new workspace with one category, empty or with the groups of a template. */
+/** A new workspace with one category, empty or with the groups (and items) of a template. */
 export async function createWorkspace(input: {
   name: string
   emoji?: string
   categoryName: string
-  groups?: { title: string; emoji: string }[]
+  groups?: { title: string; emoji: string; items?: TemplateRow[] }[]
 }): Promise<Result & { workspaceId: string; categoryId: string }> {
   const c = clock()
   const workspace = makeWorkspace(
@@ -30,17 +32,22 @@ export async function createWorkspace(input: {
     { workspaceId: workspace.id, name: input.categoryName, position: positionBetween(null, null) },
     c,
   )
-  const groups = input.groups ?? []
-  const positions = positionsAtEnd([], groups.length)
+  const specs = input.groups ?? []
+  const positions = positionsAtEnd([], specs.length)
+  const groups = specs.map(({ title, emoji }, index) =>
+    makeGroup({ categoryId: category.id, position: positions[index]!, title, emoji }, c),
+  )
+  const items = specs.flatMap(({ items = [] }, index) => {
+    const keys = positionsAtEnd([], items.length)
+    return items.map((item, k) =>
+      makeItem({ groupId: groups[index]!.id, position: keys[k]!, ...item }, c),
+    )
+  })
   const result = await commit([
     put('workspace', workspace),
     put('category', category),
-    ...puts(
-      'group',
-      groups.map((group, index) =>
-        makeGroup({ categoryId: category.id, position: positions[index]!, ...group }, c),
-      ),
-    ),
+    ...puts('group', groups),
+    ...puts('item', items),
   ])
   return { ...result, workspaceId: workspace.id, categoryId: category.id }
 }

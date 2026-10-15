@@ -67,6 +67,29 @@ test('creates a workspace from a template', async ({ context, extensionId }) => 
   await expect(page.getByRole('tab', { name: 'Main' })).toBeVisible()
   for (const title of ['Shopping', 'Recipes', 'Trips'])
     await expect(page.getByRole('heading', { name: title })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Shopping' })).toContainText(
+    'End a note with /todo',
+  )
+})
+
+test('offers the templates for one job too, with their first notes and to-dos', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('button', { name: 'Switch workspace' }).click()
+  await page.getByRole('menuitem', { name: 'New workspace' }).click()
+  const dialog = page.getByRole('dialog', { name: 'New workspace' })
+  for (const name of ['Job hunt', 'Thesis', 'Trip', 'Moving house', 'Gift list', 'Weekly reset'])
+    await expect(dialog.getByRole('button', { name })).toBeVisible()
+  await dialog.getByRole('button', { name: 'Job hunt' }).click()
+  await expect(dialog).toContainText('📌 To apply · 📨 Applied · 🗣️ Interviews')
+  await dialog.getByRole('button', { name: 'Create' }).click()
+  await expect(page.getByRole('button', { name: 'Switch workspace' })).toHaveText('🧭Job hunt')
+  const interviews = page.getByRole('region', { name: 'Interviews' })
+  await expect(interviews.getByRole('checkbox')).toHaveCount(2)
+  await expect(interviews).toContainText('Prepare three questions of your own')
 })
 
 test('cancels a new workspace without creating it', async ({ context, extensionId }) => {

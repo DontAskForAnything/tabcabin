@@ -2,7 +2,7 @@ import { Button, Modal } from '@tabcabin/ui'
 import { motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import { removeStarter } from '@/db/onboarding'
-import { useT } from '@/i18n'
+import { useLocale, useT } from '@/i18n'
 import { openSignInPage } from '@/lib/pages'
 import { useImportFile } from '../shared/useImportFile'
 import type { ActiveContext } from '../useActive'
@@ -25,6 +25,7 @@ export function WelcomeDialog({
   onFinish: () => Promise<void>
 }) {
   const t = useT()
+  const locale = useLocale()
   const [step, setStep] = useState(0)
   const [choice, setChoice] = useState<StartChoice>('starter')
   const [busy, setBusy] = useState(false)
@@ -42,7 +43,7 @@ export function WelcomeDialog({
 
   const start = () =>
     run(async () => {
-      await startWith(choice, { t, settings: active.settings })
+      await startWith(choice, { t, locale, settings: active.settings })
       return true
     })
 

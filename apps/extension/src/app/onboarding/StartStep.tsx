@@ -1,8 +1,8 @@
 import { Button } from '@tabcabin/ui'
 import { Upload } from 'lucide-react'
 import { useRef } from 'react'
-import { TEMPLATES } from '@/data/templates'
-import { useT } from '@/i18n'
+import { FEATURED_TEMPLATES } from '@/data/templates'
+import { useLocale, useT } from '@/i18n'
 import { IMPORT_ACCEPT } from '../shared/useImportFile'
 import type { SketchGroup } from './BoardSketch'
 import { StartCard } from './StartCard'
@@ -22,6 +22,7 @@ export function StartStep(props: {
   busy: boolean
 }) {
   const t = useT()
+  const locale = useLocale()
   const fileInput = useRef<HTMLInputElement>(null)
   return (
     <div className="flex flex-col gap-4">
@@ -40,11 +41,11 @@ export function StartStep(props: {
           selected={props.choice === 'empty'}
           onSelect={() => props.onChoose('empty')}
         />
-        {TEMPLATES.map((template) => (
+        {FEATURED_TEMPLATES.map((template) => (
           <StartCard
             key={template.id}
-            title={`${template.emoji} ${t(template.name)}`}
-            text={template.groups.map((group) => t(group.title)).join(', ')}
+            title={`${template.emoji} ${template.name[locale]}`}
+            text={template.groups.map((group) => group.title[locale]).join(', ')}
             groups={template.groups.map((group) => ({ emoji: group.emoji, lines: 1 }))}
             selected={props.choice === template.id}
             onSelect={() => props.onChoose(template.id)}

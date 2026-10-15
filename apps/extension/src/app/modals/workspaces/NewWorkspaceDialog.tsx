@@ -2,7 +2,7 @@ import { Button, EmojiPickerPopover, Field, Modal } from '@tabcabin/ui'
 import { useEffect, useRef, useState } from 'react'
 import { TEMPLATES, type TemplateId, templateWorkspace } from '@/data/templates'
 import { createWorkspace } from '@/db/repo'
-import { useT } from '@/i18n'
+import { useLocale, useT } from '@/i18n'
 import { emojiBaseUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { setActiveCategory, type ActiveContext } from '../../useActive'
@@ -16,6 +16,7 @@ const DEFAULT_EMOJI = '📦'
  */
 export function NewWorkspaceDialog({ open, active }: { open: boolean; active: ActiveContext }) {
   const t = useT()
+  const locale = useLocale()
   const close = useUi((s) => s.closeModal)
   const [name, setName] = useState('')
   const [emoji, setEmoji] = useState(DEFAULT_EMOJI)
@@ -24,7 +25,7 @@ export function NewWorkspaceDialog({ open, active }: { open: boolean; active: Ac
   const nameField = useRef<HTMLInputElement>(null)
   const template = TEMPLATES.find((item) => item.id === templateId)
   const fallbackName = template
-    ? t(template.name)
+    ? template.name[locale]
     : t('workspace.defaultName', { n: (active.workspaces?.length ?? 0) + 1 })
 
   useEffect(() => {
@@ -43,7 +44,9 @@ export function NewWorkspaceDialog({ open, active }: { open: boolean; active: Ac
 
   const create = async () => {
     const result = await createWorkspace({
-      ...(template ? templateWorkspace(template, t) : { categoryName: t('category.defaultName') }),
+      ...(template
+        ? templateWorkspace(template, locale, t)
+        : { categoryName: t('category.defaultName') }),
       name: name.trim() || fallbackName,
       emoji,
     })

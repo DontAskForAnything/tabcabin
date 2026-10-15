@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Templates for one job: Job hunt, Thesis, Trip, Moving house, Gift list and Weekly reset, in English
+  and Polish, under New workspace
+- Every template starts its groups with a tip or a short checklist instead of leaving them empty
+
 ### Fixed
 
 - The starter board's search tip names the keys of your computer: Ctrl+K on Windows and Linux, ⌘K

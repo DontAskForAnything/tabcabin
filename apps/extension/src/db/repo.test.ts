@@ -1,4 +1,8 @@
+import { templateById } from '@tabcabin/core'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { templateWorkspace } from '@/data/templates'
+import type { MessageKey } from '@/i18n'
+import { translate } from '@/i18n/translate'
 import { getSettings, setSetting } from '@/settings/settings'
 import { db } from './db'
 import { loadBoard } from './hooks'
@@ -88,6 +92,28 @@ describe('workspaces', () => {
     await revert(created)
     expect(await db.workspaces.count()).toBe(0)
     expect(await db.groups.count()).toBe(0)
+  })
+
+  it('fills the groups of a template in the chosen language', async () => {
+    const t = (key: MessageKey) => translate('pl', key)
+    const created = await createWorkspace(templateWorkspace(templateById('thesis'), 'pl', t))
+    const workspace = await db.workspaces.get(created.workspaceId)
+    expect(`${workspace!.emoji} ${workspace!.name}`).toBe('📜 Praca dyplomowa')
+    expect((await db.categories.get(created.categoryId))!.name).toBe('Główna')
+    const board = await loadBoard(created.categoryId)
+    expect(board.map((g) => g.title)).toEqual(['Źródła', 'Rozdziały', 'Promotor'])
+    expect(board[0]!.items.map((item) => [item.kind, item.url])).toEqual([
+      ['link', 'https://scholar.google.com/'],
+      ['note', null],
+    ])
+    expect(board[1]!.items.map((item) => [item.text, item.todo, item.done])).toEqual([
+      ['Wstęp', true, false],
+      ['Metoda', true, false],
+      ['Wyniki', true, false],
+    ])
+    expect(board[2]!.items[0]!.color).toBe('amber')
+    await revert(created)
+    expect(await db.items.count()).toBe(0)
   })
 })
 

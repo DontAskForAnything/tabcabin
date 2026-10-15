@@ -1,7 +1,7 @@
 import { cn } from '@tabcabin/ui'
 import { useId } from 'react'
 import { TEMPLATES, type TemplateId } from '@/data/templates'
-import { useT } from '@/i18n'
+import { useLocale, useT } from '@/i18n'
 
 /** "Start with": an empty workspace or one of the templates, with the groups it brings. */
 export function TemplatePicker({
@@ -12,6 +12,7 @@ export function TemplatePicker({
   onChange: (value: TemplateId | null) => void
 }) {
   const t = useT()
+  const locale = useLocale()
   const labelId = useId()
   const chosen = TEMPLATES.find((template) => template.id === value)
   const chip = (selected: boolean) =>
@@ -42,13 +43,13 @@ export function TemplatePicker({
             onClick={() => onChange(template.id)}
           >
             <span aria-hidden>{template.emoji}</span>
-            {t(template.name)}
+            {template.name[locale]}
           </button>
         ))}
       </div>
       {chosen && (
         <p className="text-[12.5px] text-ink-3">
-          {chosen.groups.map((group) => `${group.emoji} ${t(group.title)}`).join(' · ')}
+          {chosen.groups.map((group) => `${group.emoji} ${group.title[locale]}`).join(' · ')}
         </p>
       )}
     </div>

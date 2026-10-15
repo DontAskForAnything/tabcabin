@@ -1,8 +1,9 @@
 # Landing page
 
 `apps/landing` is a static Astro site: the home page, `/self-hosted-tab-manager`, comparison pages under
-`/alternatives/`, the privacy policy (`/privacy`, needed for the Chrome Web Store listing), a sitemap
-and `robots.txt`. It has no server-side code, so any static host works.
+`/alternatives/`, board templates under `/templates/` (one page per template from
+`@tabcabin/core`, texts in `src/templates.ts`), the privacy policy (`/privacy`, needed for the Chrome
+Web Store listing), a sitemap and `robots.txt`. It has no server-side code, so any static host works.
 
 ## Drawings
 
@@ -37,6 +38,10 @@ Two more addresses switch the site from "coming soon" to released, each on its o
 | --------------- | --------------------------------------------------------------------- | ------------------------------------------ |
 | `EXTENSION_URL` | "Get it for Chrome" buttons go there (the store listing or a release) | the buttons say "Coming soon to Chrome"    |
 | `REPO_URL`      | GitHub links in the menu, hero, footer, privacy page and the terminal | no GitHub links (for a private repository) |
+
+When `EXTENSION_URL` is the Chrome Web Store listing, the template pages read the extension id from
+it: with TabCabin installed (a version built with this site's `WXT_SITE_URL`), "Add to TabCabin" adds
+the board in one click; otherwise the button opens the listing.
 
 Visit counts are optional as well, see [Visit counts](#visit-counts) below.
 

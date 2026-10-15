@@ -6,6 +6,11 @@ import { defineConfig } from 'wxt'
 const require = createRequire(import.meta.url)
 const EMOJI_LOCALES = ['en', 'pl'] as const
 const OPTIONAL_PERMISSIONS = ['bookmarks', 'topSites', 'notifications', 'identity']
+/**
+ * The website may ask the extension to add a template ("Add to TabCabin"). Only builds that
+ * know the site (WXT_SITE_URL, also read from .env) let it; the e2e build lets a local page.
+ */
+const site = process.env.WXT_SITE_URL ? new URL(process.env.WXT_SITE_URL).origin : null
 
 export default defineConfig({
   srcDir: 'src',
@@ -74,5 +79,10 @@ export default defineConfig({
     // End-to-end tests can't produce user gestures (activeTab, permission prompts), so the test
     // build may script any page and has the optional permissions granted up front.
     ...(mode === 'e2e' ? { host_permissions: ['<all_urls>'] } : {}),
+    ...(mode === 'e2e'
+      ? { externally_connectable: { matches: ['http://localhost/*'] } }
+      : site
+        ? { externally_connectable: { matches: [`${site}/*`] } }
+        : {}),
   }),
 })

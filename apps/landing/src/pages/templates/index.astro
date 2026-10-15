@@ -1,0 +1,51 @@
+---
+import Footer from '../../components/Footer.astro'
+import Nav from '../../components/Nav.astro'
+import TemplateCard from '../../components/templates/TemplateCard.astro'
+import Layout from '../../layouts/Layout.astro'
+import { templatePages } from '../../templates'
+
+// Boards for one job first (what people search for), then the everyday ones.
+const sections = [
+  ['For one job', templatePages.filter((entry) => !entry.template.featured), 'lg:grid-cols-3'],
+  ['For every day', templatePages.filter((entry) => entry.template.featured), 'lg:grid-cols-4'],
+] as const
+---
+
+<Layout
+  title="Free board templates for your new tab: job hunt, thesis, trip and more — TabCabin"
+  description="Ready-made TabCabin boards for a job hunt, a thesis, a trip, a move, gifts or your week. Free, in every new tab, and added in one click."
+  path="/templates/"
+  breadcrumbs={[['Templates', '/templates/']]}
+>
+  <Nav />
+  <main class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /<span class="text-ink-2">Templates</span>
+    </nav>
+    <h1
+      class="max-w-3xl text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[56px]"
+      data-reveal
+    >
+      Boards for <span class="text-accent-ink">real</span> weeks
+    </h1>
+    <p class="mt-6 max-w-2xl text-[18px] leading-relaxed text-ink-2" data-reveal="0.05">
+      Start from a board someone already thought through. Each one opens as a new workspace with a
+      first tip or checklist in every group, in English or Polish. Free, like the extension.
+    </p>
+    {sections.map(([title, list, columns]) => (
+      <section class="mt-14">
+        <h2 class="text-[24px] font-semibold tracking-[-0.025em]">{title}</h2>
+        <div class:list={['mt-6 grid gap-5 sm:grid-cols-2', columns]}>
+          {list.map(({ template }, index) => (
+            <TemplateCard template={template} reveal={(index % 3) * 0.05} />
+          ))}
+        </div>
+      </section>
+    ))}
+  </main>
+  <Footer />
+</Layout>

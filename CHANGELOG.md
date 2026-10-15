@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows
 - Templates for one job: Job hunt, Thesis, Trip, Moving house, Gift list and Weekly reset, in English
   and Polish, under New workspace
 - Every template starts its groups with a tip or a short checklist instead of leaving them empty
+- Website: a page for every template under /templates/, with the whole board and a short guide. With
+  TabCabin installed, "Add to TabCabin" adds the board in one click and opens it
 
 ### Fixed
 

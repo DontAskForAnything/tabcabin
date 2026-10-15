@@ -7,6 +7,7 @@ import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
 import { startSync, syncEngine } from '@/background/sync'
+import { handleSiteMessage, type SiteReply } from '@/background/templates'
 import { runUndo } from '@/background/toast'
 import { trimBin } from '@/db/repo'
 import { isRuntimeMessage } from '@/messages'
@@ -65,6 +66,17 @@ export default defineBackground(() => {
       return true
     }
     return undefined
+  })
+
+  // "Add to TabCabin" on the website: only the site in the manifest's externally_connectable
+  // can send these.
+  browser.runtime.onMessageExternal.addListener((message, _sender, sendResponse) => {
+    const failed: SiteReply = { ok: false, error: 'failed' }
+    void handleSiteMessage(message).then(sendResponse, (error) => {
+      console.error(error)
+      sendResponse(failed)
+    })
+    return true
   })
 
   startBadge()

@@ -1,0 +1,127 @@
+---
+import type { Template } from '@tabcabin/core'
+import Footer from '../../components/Footer.astro'
+import Icon from '../../components/Icon.astro'
+import Nav from '../../components/Nav.astro'
+import MiniBoard from '../../components/templates/MiniBoard.astro'
+import UseTemplate from '../../components/templates/UseTemplate.astro'
+import Layout from '../../layouts/Layout.astro'
+import { nb } from '../../site'
+import { templatePages } from '../../templates'
+
+export function getStaticPaths() {
+  return templatePages.map(({ template, page }) => ({
+    params: { id: template.id },
+    props: { template, page },
+  }))
+}
+
+interface Props {
+  template: Template
+  page: (typeof templatePages)[number]['page']
+}
+
+const { template, page } = Astro.props
+const name = template.name.en
+// Three others to look at next, the ones after this one in the list.
+const index = templatePages.findIndex((entry) => entry.template.id === template.id)
+const more = [1, 2, 3].map((step) => templatePages[(index + step) % templatePages.length]!.template)
+const steps = [
+  'Get TabCabin for Chrome, Edge or Brave. It is free and needs no account.',
+  `Come back to this page and press “Add to TabCabin”. The ${name.toLowerCase()} board opens as a new workspace.`,
+  page.tip,
+]
+---
+
+<Layout
+  title={`${name} board template (${page.query}) — TabCabin`}
+  description={`${template.summary.en} A free ${name.toLowerCase()} board for your new tab, added to TabCabin in one click.`}
+  path={`/templates/${template.id}/`}
+  breadcrumbs={[
+    ['Templates', '/templates/'],
+    [name, `/templates/${template.id}/`],
+  ]}
+>
+  <Nav />
+  <main class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /
+      <a href="/templates/" class="hover:text-ink">
+        Templates
+      </a>{' '}
+      /<span class="text-ink-2">{name}</span>
+    </nav>
+    <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14">
+      <div>
+        <h1
+          class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]"
+          data-reveal
+        >
+          {page.title}
+        </h1>
+        <p class="mt-5 text-[18px] leading-relaxed text-ink-2" data-reveal="0.05">
+          {template.summary.en} A board in every new tab, with a first tip or checklist in each
+          group.
+        </p>
+        <div class="mt-8" data-reveal="0.08">
+          <UseTemplate id={template.id} name={name} />
+        </div>
+      </div>
+      <div class="rounded-[20px] bg-card p-2 shadow-card" data-reveal="0.1">
+        <MiniBoard template={template} size="large" />
+      </div>
+    </div>
+
+    <div class="mt-20 grid gap-12 lg:grid-cols-2">
+      <section>
+        <h2 class="text-[28px] font-semibold tracking-[-0.025em]">How to use it</h2>
+        <ol class="mt-6 flex flex-col gap-4">
+          {steps.map((step, i) => (
+            <li class="flex gap-4 text-[16px] leading-relaxed text-ink-2">
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-soft font-semibold text-accent-ink">
+                {i + 1}
+              </span>
+              <span class="pt-1" set:html={nb(step)} />
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section>
+        <h2 class="text-[28px] font-semibold tracking-[-0.025em]">Make it yours</h2>
+        {page.guide.map((paragraph) => (
+          <p class="mt-5 text-[16px] leading-relaxed text-ink-2" set:html={nb(paragraph)} />
+        ))}
+      </section>
+    </div>
+
+    <section class="mt-20">
+      <h2 class="text-[28px] font-semibold tracking-[-0.025em]">More templates</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-3">
+        {more.map((other) => (
+          <a
+            href={`/templates/${other.id}/`}
+            class="flex flex-col rounded-[18px] bg-card p-5 shadow-card transition-transform hover:-translate-y-0.5"
+          >
+            <span class="flex items-center gap-2 text-[17px] font-semibold">
+              <span aria-hidden="true">{other.emoji}</span>
+              {other.name.en}
+            </span>
+            <span class="mt-1.5 flex-1 text-[14px] leading-relaxed text-ink-2">
+              {other.summary.en}
+            </span>
+          </a>
+        ))}
+      </div>
+      <a
+        href="/templates/"
+        class="mt-6 inline-flex items-center gap-1.5 text-[14.5px] font-semibold text-accent-ink"
+      >
+        All templates <Icon name="ArrowRight" size={15} />
+      </a>
+    </section>
+  </main>
+  <Footer />
+</Layout>

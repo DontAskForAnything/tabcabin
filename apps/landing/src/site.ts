@@ -9,6 +9,12 @@ function address(value: string | undefined) {
  */
 export const extensionUrl = address(import.meta.env.EXTENSION_URL)
 
+/**
+ * The extension's id when EXTENSION_URL is its Chrome Web Store listing. With it, "Add to
+ * TabCabin" asks an installed TabCabin to add the board; without it the button opens the store.
+ */
+export const extensionId = extensionUrl?.match(/\/([a-p]{32})(?:[/?#]|$)/)?.[1]
+
 /** The public GitHub repository. Until it is set, links to the code, guide and changelog stay out. */
 export const repo = address(import.meta.env.REPO_URL)
 export const selfHostingGuide = repo && `${repo}/blob/main/docs/self-hosting.md`

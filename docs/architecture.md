@@ -28,6 +28,9 @@ Everything that can be written without browser APIs lives here and is covered by
   checks.
 - **Transfer** (`transfer/`) — the backup format, bookmarks HTML and CSV exporters, and importers for
   tabExtend and Toby exports, bookmark files and link lists (parsed into a shared outline first).
+- **Templates** (`templates/`) — the ready-made workspaces in English and Polish, with a first tip
+  or checklist per group. The extension builds workspaces from them and the website shows the same
+  boards on its template pages.
 - **Text helpers** — URL normalization (for "already saved" checks and duplicate detection) and note
   shortcuts (`- ` → `•`, `/todo`, `/done`).
 
@@ -58,6 +61,13 @@ Built with [WXT](https://wxt.dev). Entry points in `src/entrypoints`:
 Content scripts are registered at runtime without `matches` and injected with `activeTab` +
 `scripting`, so the extension needs **no host permissions**. The one exception is optional: link
 checks (`background/linkChecks.ts`) ask for access to all sites while they are turned on.
+
+The website can talk to the extension, and no other site can: builds with `WXT_SITE_URL` list that
+origin under `externally_connectable` (the e2e build lists `http://localhost`). A template page asks
+`tabcabin:hello` (is TabCabin installed?) and `tabcabin:add-template` with a template id;
+`background/templates.ts` accepts only the ids of the built-in templates, creates the workspace in
+the user's language and opens it in a new tab. Offline builds have no `externally_connectable`, and
+the page's button stays a link to the store.
 
 ### Data flow
 

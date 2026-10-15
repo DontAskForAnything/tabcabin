@@ -13,6 +13,7 @@
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@fontsource-variable/geist": "^5.3.0",
+    "@tabcabin/core": "workspace:*",
     "@tabcabin/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.7",

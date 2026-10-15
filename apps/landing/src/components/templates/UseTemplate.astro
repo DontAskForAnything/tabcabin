@@ -1,0 +1,75 @@
+---
+import Icon from '../Icon.astro'
+import { extensionId, extensionUrl } from '../../site'
+
+interface Props {
+  id: string
+  name: string
+}
+
+const { id, name } = Astro.props
+const shape = 'inline-flex h-12 items-center gap-2 rounded-xl px-6 text-[15.5px] font-semibold'
+---
+
+{extensionUrl ? (
+  <div class="flex flex-col items-start gap-3" data-use-template={id} data-extension={extensionId}>
+    <a
+      href={extensionUrl}
+      data-umami-event="Use template"
+      data-umami-event-template={id}
+      class:list={[shape, 'bg-accent text-on-accent shadow-tile transition hover:brightness-110']}
+    >
+      <Icon name="Plus" size={18} />
+      <span data-label>Get TabCabin to use it</span>
+    </a>
+    <p class="text-[14px] text-ink-3" data-status aria-live="polite">
+      Free for Chrome, Edge and Brave. Then come back and add the {name.toLowerCase()} board in one
+      click.
+    </p>
+  </div>
+) : (
+  <span class:list={[shape, 'bg-accent-soft text-accent-ink']}>
+    <Icon name="Clock" size={18} /> Coming soon to Chrome
+  </span>
+)}
+
+<script>
+  type Reply = { ok: boolean; workspace?: string }
+  declare const chrome:
+    | { runtime?: { sendMessage(id: string, message: object, reply: (r?: Reply) => void): void } }
+    | undefined
+
+  // TabCabin lets this site talk to it (externally_connectable). If it answers, the button adds
+  // the board straight away; otherwise it stays a link to the store.
+  for (const box of document.querySelectorAll<HTMLElement>('[data-use-template]')) {
+    const extension = box.dataset.extension
+    const runtime = typeof chrome === 'undefined' ? undefined : chrome.runtime
+    if (!extension || !runtime?.sendMessage) continue
+    const button = box.querySelector<HTMLAnchorElement>('a')!
+    const label = box.querySelector<HTMLElement>('[data-label]')!
+    const status = box.querySelector<HTMLElement>('[data-status]')!
+    const send = (message: object) =>
+      new Promise<Reply | undefined>((resolve) => {
+        try {
+          runtime.sendMessage(extension, message, resolve)
+        } catch {
+          resolve(undefined)
+        }
+      })
+    void send({ type: 'tabcabin:hello' }).then((hello) => {
+      if (!hello?.ok) return
+      label.textContent = 'Add to TabCabin'
+      status.textContent = 'Opens as a new workspace in a new tab.'
+      button.addEventListener('click', async (event) => {
+        event.preventDefault()
+        if (button.ariaDisabled === 'true') return
+        button.ariaDisabled = 'true'
+        const reply = await send({ type: 'tabcabin:add-template', id: box.dataset.useTemplate })
+        button.ariaDisabled = null
+        status.textContent = reply?.ok
+          ? `Added: “${reply.workspace}” is open in a new tab.`
+          : 'That did not work. Try again, or pick the template under New workspace in TabCabin.'
+      })
+    })
+  }
+</script>

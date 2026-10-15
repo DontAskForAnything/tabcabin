@@ -1,0 +1,98 @@
+---
+import { localizeTemplate, type Template } from '@tabcabin/core'
+import { nb } from '../../site'
+
+interface Props {
+  template: Template
+  /** The shelf's sketch of the board, or the full board on a template's own page. */
+  size?: 'small' | 'large'
+}
+
+const { template, size = 'small' } = Astro.props
+const board = localizeTemplate(template, 'en')
+const large = size === 'large'
+// Links get a letter tile in one of the app's earthy tones, like a site without a favicon.
+const TILES = ['#7a5c3e', '#4d6b57', '#5b5f7a', '#8a4f45', '#6b6a3f']
+const tile = (title: string) => TILES[title.length % TILES.length]
+const noteStyle = (color: string | null) =>
+  color ? `background: var(--note-${color}-bg); color: var(--note-${color}-ink)` : undefined
+/** In the sketch a row is a line about as long as its text. */
+const lineWidth = (text: string) => `${Math.min(100, 40 + text.length * 1.4)}%`
+---
+
+{large ? (
+  <div
+    class="grid gap-3 rounded-[14px] bg-subtle p-3 sm:grid-cols-[repeat(var(--groups),minmax(0,1fr))] sm:gap-4 sm:p-4"
+    style={`--groups: ${board.groups.length}`}
+  >
+    {board.groups.map((group) => (
+      <div class="min-w-0 rounded-[12px] bg-card p-3.5 shadow-tile">
+        <p class="flex items-center gap-2 text-[15px] font-semibold">
+          <span aria-hidden="true">{group.emoji}</span>
+          {group.title}
+        </p>
+        <ul class="mt-3 flex flex-col gap-2">
+          {group.items.map((item) => (
+            <li
+              class:list={[
+                'flex items-start gap-2 rounded-[8px] px-2.5 py-2 text-[13.5px] leading-snug',
+                !(item.kind === 'note' && item.color) && 'bg-subtle',
+                item.kind === 'note' && !item.todo ? 'text-ink-2' : 'text-ink',
+              ]}
+              style={item.kind === 'note' ? noteStyle(item.color) : undefined}
+            >
+              {item.kind === 'note' && item.todo && (
+                <span class="mt-0.5 size-3.5 shrink-0 rounded-[4px] border-[1.5px] border-ink-3" />
+              )}
+              {item.kind === 'link' && (
+                <span
+                  class="mt-px flex size-4 shrink-0 items-center justify-center rounded-[4px] text-[10px] font-bold text-white"
+                  style={`background: ${tile(item.title)}`}
+                >
+                  {item.title[0]}
+                </span>
+              )}
+              <span set:html={nb(item.kind === 'link' ? item.title : item.text)} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+) : (
+  <div class="grid grid-cols-3 gap-1.5 rounded-[14px] bg-subtle p-2" aria-hidden="true">
+    {board.groups.slice(0, 3).map((group) => (
+      <div class="min-w-0 rounded-[10px] bg-card p-2 shadow-tile">
+        <div class="flex items-center gap-1 truncate text-[11.5px] font-semibold">
+          <span>{group.emoji}</span>
+          <span class="truncate">{group.title}</span>
+        </div>
+        <div class="mt-2 flex flex-col gap-1.5">
+          {group.items.map((item) => (
+            <div
+              class:list={[
+                'flex h-[18px] items-center gap-1.5 rounded-[5px] px-1.5',
+                !(item.kind === 'note' && item.color) && 'bg-subtle',
+              ]}
+              style={item.kind === 'note' ? noteStyle(item.color) : undefined}
+            >
+              {item.kind === 'note' && item.todo && (
+                <span class="size-2 shrink-0 rounded-[2px] border border-ink-3" />
+              )}
+              {item.kind === 'link' && (
+                <span
+                  class="size-2 shrink-0 rounded-[2px]"
+                  style={`background: ${tile(item.title)}`}
+                />
+              )}
+              <span
+                class="h-1 rounded-full bg-current opacity-25"
+                style={`width: ${lineWidth(item.kind === 'link' ? item.title : item.text)}`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+)}

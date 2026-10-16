@@ -19,6 +19,7 @@ All notable changes to this project are documented here. The format follows
 - The starter board's search tip names the keys of your computer: Ctrl+K on Windows and Linux, ⌘K
   on a Mac
 - Website: the privacy page had no space before "project repository"
+- Website: screen readers heard "Tobycompared with TabCabin" in the comparison tables
 
 ## [1.3.1] — 2026-10-14
 

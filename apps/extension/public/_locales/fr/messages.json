@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "TabCabin – Gestionnaire d’onglets, tableaux et notes"
+  },
+  "extShortName": {
+    "message": "TabCabin"
+  },
+  "extDescription": {
+    "message": "Une cabane paisible pour vos onglets : tableaux d’onglets, liens, notes et tâches dans chaque nouvel onglet. Privé, hors ligne."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Enregistrer la page actuelle"
+  },
+  "cmdSaveToInbox": {
+    "message": "Enregistrer la page actuelle dans l’Inbox"
+  }
+}

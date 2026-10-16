@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "TabCabin – Tab-Manager, Boards & Notizen"
+  },
+  "extShortName": {
+    "message": "TabCabin"
+  },
+  "extDescription": {
+    "message": "Eine ruhige Hütte für deine Tabs: Boards für Tabs, Links, Notizen und To-dos in jedem neuen Tab. Privat, funktioniert offline."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Aktuelle Seite speichern"
+  },
+  "cmdSaveToInbox": {
+    "message": "Aktuelle Seite in der Inbox speichern"
+  }
+}

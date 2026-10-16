@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "TabCabin – タブ管理、ボード、メモ"
+  },
+  "extShortName": {
+    "message": "TabCabin"
+  },
+  "extDescription": {
+    "message": "タブのための静かな小屋。新しいタブを開くたびに、タブ、リンク、メモ、ToDoをまとめたボードが表示されます。プライベートで、オフラインでも動作します。"
+  },
+  "cmdSaveCurrentPage": {
+    "message": "現在のページを保存"
+  },
+  "cmdSaveToInbox": {
+    "message": "現在のページをInboxに保存"
+  }
+}

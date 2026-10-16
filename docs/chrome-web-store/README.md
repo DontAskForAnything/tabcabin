@@ -40,7 +40,8 @@ Chrome shows the short name, TabCabin, where space is tight.
 
 **Category:** Productivity → Workflow & planning
 
-**Languages:** English, Polish
+**Languages:** English, Polish; the listing also in German, Spanish, French, Portuguese (Brazil)
+and Japanese (see below)
 
 ### Description (English)
 
@@ -126,6 +127,226 @@ PO TWOJEMU
 
 PRYWATNIE
 Bez analityki, bez reklam, bez śledzenia. TabCabin nie ma dostępu do odwiedzanych stron, dopóki go na nich nie klikniesz. Tablice opuszczają przeglądarkę tylko wtedy, gdy zalogujesz się do synchronizacji. Kod jest otwarty (MIT).
+```
+
+The listing is also in German, Spanish, French, Portuguese (Brazil) and Japanese: the name and
+summary come from the manifest (`public/_locales/<lang>`), and the descriptions below go into
+**Store listing → language → Add language** in the dashboard. The app itself stays in English and
+Polish, and these texts say so.
+
+### Description (German)
+
+```text
+TabCabin ist eine ruhige Hütte für deine Tabs. Jeder neue Tab wird zu stillen Boards für alles, was du behalten möchtest: Tabs, Links, Notizen und To-dos.
+
+Zu viele Tabs offen, weil sich Schließen wie Verlieren anfühlt? Zieh einen Tab in eine Gruppe, füg eine Notiz hinzu, stell eine Erinnerung ein und schließ ihn. Er wartet einen neuen Tab entfernt auf dich.
+
+ORDNEN
+• Boards mit Kategorien und Gruppen – große Emoji-Überschriften, Spalten in beliebiger Breite
+• Sammlungsansicht – dieselben Gruppen als breite Felder mit Link-Karten
+• Notizen und To-dos direkt neben deinen Links, in neun Farben
+• Stapel – halte einen Link über einen anderen, um sie zu kombinieren
+• Arbeitsbereiche für Arbeit, Zuhause und Nebenprojekte, leer oder aus einer Vorlage
+
+SPEICHERN
+• Seitenleiste mit offenen Tabs: Tabs (oder ganze Chrome-Tabgruppen) in eine Gruppe ziehen, um sie zu speichern
+• Mehrere Tabs auswählen und auf einmal speichern, Duplikate schließen
+• Ein ganzes Fenster als eine Gruppe speichern und schließen, später mit einem Klick wieder öffnen
+• Rechtsklick auf eine Seite, einen Link, ein Bild oder markierten Text speichert ihn
+• Speicherfenster (Strg+Umschalt+S): Notiz hinzufügen, Gruppe wählen, Erinnerung einstellen
+• Inbox (Alt+Umschalt+S): die Seite ohne Gruppe speichern und später einsortieren
+• Das Symbol in der Symbolleiste zeigt, wenn die aktuelle Seite schon gespeichert ist
+
+FINDEN UND ERINNERN
+• Alles mit Strg+K durchsuchen: diesen Arbeitsbereich, alle Arbeitsbereiche, offene Tabs und Lesezeichen
+• Erinnerungen – einmalig, wöchentlich oder monatlich – mit Desktop-Benachrichtigungen
+• Jede Änderung lässt sich rückgängig machen, Gelöschtes wartet im Papierkorb
+
+AUF ALLEN DEINEN COMPUTERN
+• Mit Google (oder Benutzername und Passwort) anmelden, und deine Boards bleiben zwischen deinen Computern synchron
+• Änderungen kommen live an; ohne Anmeldung bleibt alles in diesem Browser
+• Eine Gruppe als schreibgeschützten Link mit Leuten teilen, die TabCabin nicht nutzen
+
+SO, WIE DU ES MAGST
+• Helles und dunkles Design, kompakte Ansicht; Oberfläche auf Englisch oder Polnisch
+• Frei belegbare Tastenkürzel
+• Import aus anderen Tab-Managern, Lesezeichen-Dateien oder deinen meistbesuchten Seiten
+• Export als JSON, Lesezeichen-Datei oder CSV
+
+PRIVAT VON ANFANG AN
+Keine Analyse, keine Werbung, kein Tracking. TabCabin hat keinen Zugriff auf die Seiten, die du besuchst, solange du es dort nicht anklickst. Deine Boards verlassen den Browser nur, wenn du dich zur Synchronisierung anmeldest. Der Quellcode ist offen (MIT).
+```
+
+### Description (Spanish)
+
+```text
+TabCabin es una cabaña tranquila para tus pestañas. Cada pestaña nueva se convierte en un conjunto sereno de tableros para lo que quieres guardar: pestañas, enlaces, notas y tareas.
+
+¿Tienes demasiadas pestañas abiertas porque cerrarlas parece perderlas? Arrastra una pestaña a un grupo, añade una nota, pon un recordatorio y ciérrala. Te espera a una pestaña nueva de distancia.
+
+ORGANIZA
+• Tableros con categorías y grupos: grandes encabezados con emoji y columnas del ancho que quieras
+• Vista de colecciones: los mismos grupos como paneles anchos con tarjetas de enlaces
+• Notas y tareas junto a tus enlaces, en nueve colores
+• Pilas: mantén un enlace sobre otro para combinarlos
+• Espacios de trabajo para el trabajo, la casa y los proyectos personales, vacíos o a partir de una plantilla
+
+GUARDA
+• Panel de pestañas abiertas: arrastra pestañas (o grupos de pestañas de Chrome enteros) a un grupo para guardarlas
+• Selecciona varias pestañas y guárdalas a la vez, cierra las duplicadas
+• Guarda una ventana entera como un grupo y ciérrala; vuelve a abrirla con un clic
+• Haz clic derecho en una página, un enlace, una imagen o un texto seleccionado para guardarlo
+• Ventana de guardado (Ctrl+Mayús+S): añade una nota, elige el grupo, pon un recordatorio
+• Inbox (Alt+Mayús+S): guarda la página sin elegir grupo y ordénala después
+• El icono de la barra de herramientas indica cuándo la página actual ya está guardada
+
+ENCUENTRA Y RECUERDA
+• Busca todo con Ctrl+K: este espacio, todos los espacios, las pestañas abiertas y los marcadores
+• Recordatorios únicos, semanales o mensuales, con notificaciones de escritorio
+• Deshacer para cada cambio y una papelera para recuperar lo que borraste
+
+EN TODOS TUS EQUIPOS
+• Inicia sesión con Google (o con usuario y contraseña) y tus tableros se mantienen sincronizados entre tus equipos
+• Los cambios llegan en directo; sin iniciar sesión, todo se queda en este navegador
+• Comparte un grupo como enlace de solo lectura con personas que no usan TabCabin
+
+A TU MANERA
+• Tema claro y oscuro, vista compacta; interfaz en inglés o polaco
+• Atajos de teclado personalizables
+• Importa desde otros gestores de pestañas, archivos de marcadores o tus sitios más visitados
+• Exporta como JSON, archivo de marcadores o CSV
+
+PRIVADO POR DISEÑO
+Sin analíticas, sin anuncios, sin rastreo. TabCabin no tiene acceso a las páginas que visitas a menos que hagas clic en él en una de ellas. Tus tableros solo salen del navegador cuando inicias sesión para sincronizar. Es de código abierto (MIT).
+```
+
+### Description (French)
+
+```text
+TabCabin est une cabane paisible pour vos onglets. Chaque nouvel onglet devient un ensemble calme de tableaux pour tout ce que vous voulez garder : onglets, liens, notes et tâches.
+
+Trop d’onglets ouverts parce que les fermer donne l’impression de les perdre ? Glissez un onglet dans un groupe, ajoutez une note, réglez un rappel, fermez-le. Il vous attend dans un nouvel onglet.
+
+ORGANISER
+• Tableaux avec catégories et groupes : grands titres avec emoji, colonnes redimensionnables
+• Vue collections : les mêmes groupes en larges panneaux de cartes de liens
+• Notes et tâches juste à côté de vos liens, en neuf couleurs
+• Piles : maintenez un lien au-dessus d’un autre pour les combiner
+• Espaces de travail pour le travail, la maison et les projets perso, vides ou à partir d’un modèle
+
+ENREGISTRER
+• Panneau des onglets ouverts : glissez des onglets (ou des groupes d’onglets Chrome entiers) dans un groupe pour les enregistrer
+• Sélectionnez plusieurs onglets et enregistrez-les d’un coup, fermez les doublons
+• Enregistrez une fenêtre entière comme un seul groupe et fermez-la, puis rouvrez-la en un clic
+• Clic droit sur une page, un lien, une image ou un texte sélectionné pour l’enregistrer
+• Fenêtre d’enregistrement (Ctrl+Maj+S) : ajoutez une note, choisissez le groupe, réglez un rappel
+• Inbox (Alt+Maj+S) : enregistrez la page sans choisir de groupe et triez-la plus tard
+• L’icône de la barre d’outils indique quand la page actuelle est déjà enregistrée
+
+RETROUVER ET SE SOUVENIR
+• Cherchez tout avec Ctrl+K : cet espace, tous les espaces, les onglets ouverts et les favoris
+• Rappels ponctuels, hebdomadaires ou mensuels, avec notifications sur le bureau
+• Annulation de chaque modification et une corbeille pour restaurer ce que vous avez supprimé
+
+SUR TOUS VOS ORDINATEURS
+• Connectez-vous avec Google (ou un nom d’utilisateur et un mot de passe) et vos tableaux restent synchronisés entre vos ordinateurs
+• Les modifications arrivent en direct ; sans connexion, tout reste dans ce navigateur
+• Partagez un groupe sous forme de lien en lecture seule avec des personnes qui n’utilisent pas TabCabin
+
+À VOTRE FAÇON
+• Thème clair et sombre, affichage compact ; interface en anglais ou en polonais
+• Raccourcis clavier personnalisables
+• Import depuis d’autres gestionnaires d’onglets, des fichiers de favoris ou vos sites les plus visités
+• Export en JSON, fichier de favoris ou CSV
+
+PRIVÉ PAR CONCEPTION
+Pas d’analyse, pas de publicité, pas de pistage. TabCabin n’a aucun accès aux pages que vous visitez, sauf si vous cliquez dessus sur l’une d’elles. Vos tableaux ne quittent le navigateur que lorsque vous vous connectez pour les synchroniser. Le code est ouvert (MIT).
+```
+
+### Description (Portuguese, Brazil)
+
+```text
+TabCabin é uma cabana tranquila para suas abas. Cada nova aba vira um conjunto calmo de quadros para o que você quer guardar: abas, links, notas e tarefas.
+
+Abas demais abertas porque fechá-las parece perdê-las? Arraste uma aba para um grupo, adicione uma nota, defina um lembrete e feche. Ela espera por você a uma nova aba de distância.
+
+ORGANIZE
+• Quadros com categorias e grupos: grandes títulos com emoji, colunas redimensionáveis
+• Visualização de coleções: os mesmos grupos como painéis largos com cartões de links
+• Notas e tarefas ao lado dos seus links, em nove cores
+• Pilhas: segure um link sobre outro para combiná-los
+• Espaços de trabalho para trabalho, casa e projetos pessoais, vazios ou a partir de um modelo
+
+SALVE
+• Painel de abas abertas: arraste abas (ou grupos de abas do Chrome inteiros) para um grupo para salvá-las
+• Selecione várias abas e salve todas de uma vez, feche as duplicadas
+• Salve uma janela inteira como um grupo e feche-a; depois abra de novo com um clique
+• Clique com o botão direito em uma página, link, imagem ou texto selecionado para salvá-lo
+• Janela de salvamento (Ctrl+Shift+S): adicione uma nota, escolha o grupo, defina um lembrete
+• Inbox (Alt+Shift+S): salve a página sem escolher um grupo e organize depois
+• O ícone na barra de ferramentas mostra quando a página atual já está salva
+
+ENCONTRE E LEMBRE
+• Pesquise tudo com Ctrl+K: este espaço, todos os espaços, abas abertas e favoritos
+• Lembretes únicos, semanais ou mensais, com notificações na área de trabalho
+• Desfazer para cada alteração e uma lixeira para recuperar o que você apagou
+
+EM TODOS OS SEUS COMPUTADORES
+• Entre com o Google (ou com usuário e senha) e seus quadros ficam sincronizados entre computadores
+• As alterações chegam ao vivo; sem entrar, tudo fica neste navegador
+• Compartilhe um grupo como link somente leitura com quem não usa o TabCabin
+
+DO SEU JEITO
+• Tema claro e escuro, layout compacto; interface em inglês ou polonês
+• Atalhos de teclado personalizáveis
+• Importe de outros gerenciadores de abas, arquivos de favoritos ou dos sites mais visitados
+• Exporte como JSON, arquivo de favoritos ou CSV
+
+PRIVADO DESDE O INÍCIO
+Sem análises, sem anúncios, sem rastreamento. O TabCabin não tem acesso às páginas que você visita, a menos que você clique nele em uma delas. Seus quadros só saem do navegador quando você entra para sincronizar. O código é aberto (MIT).
+```
+
+### Description (Japanese)
+
+```text
+TabCabinは、タブのための静かな小屋です。新しいタブを開くたびに、残しておきたいもの（タブ、リンク、メモ、ToDo）をまとめた落ち着いたボードが表示されます。
+
+閉じると失くしそうで、タブを開いたままにしていませんか？タブをグループにドラッグし、メモを添え、リマインダーを設定して閉じましょう。新しいタブを開けば、いつでもそこにあります。
+
+整理する
+• カテゴリーとグループで作るボード：大きな絵文字の見出し、幅を変えられる列
+• コレクション表示：同じグループをリンクカードの横長パネルで表示
+• リンクのすぐ横にメモとToDo（9色）
+• スタック：リンクを別のリンクに重ねてまとめる
+• 仕事、家庭、個人プロジェクト用のワークスペース（空から、またはテンプレートから）
+
+保存する
+• 開いているタブのパネル：タブ（またはChromeのタブグループ全体）をグループにドラッグして保存
+• 複数のタブを選んで一度に保存、重複したタブを閉じる
+• ウィンドウ全体を1つのグループとして保存して閉じ、あとでワンクリックで開き直す
+• ページ、リンク、画像、選択したテキストを右クリックで保存
+• 保存ポップアップ（Ctrl+Shift+S）：メモを追加し、グループを選び、リマインダーを設定
+• Inbox（Alt+Shift+S）：グループを選ばずに保存して、あとで整理
+• 現在のページが保存済みなら、ツールバーのアイコンでわかります
+
+探す・思い出す
+• Ctrl+Kですべてを検索：このワークスペース、すべてのワークスペース、開いているタブ、ブックマーク
+• 1回限り・毎週・毎月のリマインダーとデスクトップ通知
+• すべての変更を元に戻せて、削除したものはゴミ箱から復元できます
+
+すべてのパソコンで
+• Google（またはユーザー名とパスワード）でサインインすると、ボードがパソコン間で同期されます
+• 変更はリアルタイムで届きます。サインインしなければ、すべてこのブラウザに残ります
+• グループを閲覧専用リンクで、TabCabinを使っていない人とも共有できます
+
+自分好みに
+• ライト／ダークテーマ、コンパクト表示。画面の表示言語は英語またはポーランド語です
+• キーボードショートカットを変更可能
+• 他のタブ管理ツール、ブックマークファイル、よく見るサイトからインポート
+• JSON、ブックマークファイル、CSVでエクスポート
+
+プライバシー重視
+分析、広告、トラッキングは一切ありません。TabCabinは、あなたがページ上でクリックしない限り、閲覧中のページにアクセスしません。ボードがブラウザの外に出るのは、同期のためにサインインしたときだけです。オープンソース（MIT）です。
 ```
 
 ## Privacy practices tab

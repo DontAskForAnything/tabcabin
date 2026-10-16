@@ -13,6 +13,8 @@ All notable changes to this project are documented here. The format follows
 - Every template starts its groups with a tip or a short checklist instead of leaving them empty
 - Website: a page for every template under /templates/, with the whole board and a short guide. With
   TabCabin installed, "Add to TabCabin" adds the board in one click and opens it
+- Chrome Web Store: the name, summary and description in German, Spanish, French, Portuguese
+  (Brazil) and Japanese; the app itself stays in English and Polish
 
 ### Fixed
 

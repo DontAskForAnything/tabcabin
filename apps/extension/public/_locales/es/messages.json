@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "TabCabin – Gestor de pestañas, tableros y notas"
+  },
+  "extShortName": {
+    "message": "TabCabin"
+  },
+  "extDescription": {
+    "message": "Una cabaña tranquila para tus pestañas: tableros de pestañas, enlaces, notas y tareas en cada pestaña nueva. Privado y sin conexión."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Guardar la página actual"
+  },
+  "cmdSaveToInbox": {
+    "message": "Guardar la página actual en la Inbox"
+  }
+}

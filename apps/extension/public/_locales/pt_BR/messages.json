@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "TabCabin – Gerenciador de abas, quadros e notas"
+  },
+  "extShortName": {
+    "message": "TabCabin"
+  },
+  "extDescription": {
+    "message": "Uma cabana tranquila para suas abas: quadros de abas, links, notas e tarefas em cada nova aba. Privado e funciona offline."
+  },
+  "cmdSaveCurrentPage": {
+    "message": "Salvar a página atual"
+  },
+  "cmdSaveToInbox": {
+    "message": "Salvar a página atual na Inbox"
+  }
+}

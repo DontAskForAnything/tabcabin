@@ -9,9 +9,11 @@ FROM node:24-slim AS build
 WORKDIR /repo
 RUN npm install -g pnpm@12.10.1
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
+COPY packages/core/package.json packages/core/
 COPY packages/ui/package.json packages/ui/
 COPY apps/landing/package.json apps/landing/
 RUN pnpm install --frozen-lockfile --filter @tabcabin/landing...
+COPY packages/core packages/core
 COPY packages/ui packages/ui
 COPY docs/screenshots docs/screenshots
 COPY apps/landing apps/landing

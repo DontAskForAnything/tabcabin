@@ -16,6 +16,10 @@ All notable changes to this project are documented here. The format follows
 - Chrome Web Store: the name, summary and description in German, Spanish, French, Portuguese
   (Brazil) and Japanese; the app itself stays in English and Polish
 
+### Changed
+
+- Website: shorter page titles and descriptions, so search results show them whole
+
 ### Fixed
 
 - The starter board's search tip names the keys of your computer: Ctrl+K on Windows and Linux, ⌘K

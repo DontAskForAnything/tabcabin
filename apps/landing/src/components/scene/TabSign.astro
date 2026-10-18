@@ -18,20 +18,28 @@ interface Props {
 }
 const { href, label, x, y, width, tilt, nail, arrow } = Astro.props
 const height = 46
+const middle = y + height / 2
+// Drawn, not typed: the label font has no arrow glyphs.
+const arrowPath =
+  arrow === 'right'
+    ? `M${x + width - 30} ${middle} h14 m-5 -5 l5 5 l-5 5`
+    : arrow === 'left'
+      ? `M${x + 56} ${middle} h-14 m5 -5 l-5 5 l5 5`
+      : undefined
 ---
 
 <a href={href} class="tab-sign">
   <g transform={`rotate(${tilt} ${nail[0]} ${nail[1]})`}>
     <rect x={x} y={y} width={width} height={height} rx="11" class="tab-sign-board"></rect>
-    <g transform={`translate(${x + 14} ${y + height / 2 - 9})`}>
+    <g transform={`translate(${x + 14} ${middle - 9})`}>
       <Logo size={18} />
     </g>
-    <text x={x + 42} y={y + height / 2 + 5.5} class="tab-sign-label">
-      {arrow === 'left' ? `← ${label}` : label}
+    <text x={arrow === 'left' ? x + 64 : x + 42} y={middle + 5.5} class="tab-sign-label">
+      {label}
     </text>
-    {arrow === 'right' && (
+    {arrowPath && (
       <path
-        d={`M${x + width - 30} ${y + height / 2} h14 m-5 -5 l5 5 l-5 5`}
+        d={arrowPath}
         fill="none"
         stroke-width="1.8"
         stroke-linecap="round"

@@ -4,7 +4,16 @@
  * trail down to the cabin. The signs are real links. Morning in the light theme, night in the
  * dark one.
  */
-import { forest, land, mountains, round, ridge, seeded, spruce } from '../../lib/landscape'
+import {
+  forest,
+  type Ground,
+  land,
+  mountains,
+  round,
+  ridge,
+  seeded,
+  spruce,
+} from '../../lib/landscape'
 import Cabin from './Cabin.astro'
 import TabSign from './TabSign.astro'
 
@@ -13,6 +22,13 @@ const height = 800
 const rand = seeded(404)
 const post = 600
 const cabinX = 900
+// Wider screens see more of the valley, not a closer and cropped view: the drawing reaches 1440
+// units either side of its middle, so up to 32:9 it scales with the screen height and the
+// signpost stays clear of the heading.
+const centre = 605
+const reach = 1440
+const left = centre - reach
+const right = centre + reach
 
 const range = mountains(
   [
@@ -30,28 +46,26 @@ const range = mountains(
   height,
   rand,
 )
-const far = forest({
-  width,
-  bottom: height,
-  y: ridge({ base: 482, amp: 8, phase: 1.4 }),
-  rand,
-  gap: 12,
-  min: 16,
-  max: 34,
+const farRow = { gap: 12, min: 16, max: 34 }
+const farGround = ridge({ base: 482, amp: 8, phase: 1.4 })
+const far = forest({ width, bottom: height, y: farGround, rand, ...farRow })
+const cabinY = ridge({ base: 522, amp: 10, phase: 2.2 })(cabinX)
+const middleRow = { gap: 18, min: 28, max: 58 }
+const middleGround = ridge({
+  base: 522,
+  amp: 10,
+  phase: 2.2,
+  pin: { x: cabinX, y: cabinY, reach: 70 },
 })
-const middleGround = ridge({ base: 522, amp: 10, phase: 2.2 })
-const cabinY = middleGround(cabinX)
 const middle = forest({
   width,
   bottom: height,
-  y: ridge({ base: 522, amp: 10, phase: 2.2, pin: { x: cabinX, y: cabinY, reach: 70 } }),
+  y: middleGround,
   rand,
-  gap: 18,
-  min: 28,
-  max: 58,
+  ...middleRow,
   skip: (x) => Math.abs(x - cabinX) < 42,
 })
-const meadow = land(ridge({ base: 556, amp: 6, phase: 0.3 }), width, height)
+const meadow = land(ridge({ base: 556, amp: 6, phase: 0.3 }), right, height, left - 60)
 const saplings = [
   [452, 708, 46],
   [486, 716, 30],
@@ -59,16 +73,34 @@ const saplings = [
   [1010, 640, 52],
   [1050, 652, 34],
   [230, 650, 44],
+  [-120, 700, 40],
+  [-196, 676, 28],
+  [-560, 690, 46],
+  [1400, 690, 44],
+  [1440, 712, 30],
+  [1780, 700, 42],
 ]
   .map(([x, y, tall]) => spruce(x!, y!, tall!, tall! * 0.44))
   .join('')
 const front = [
-  [-40, 440],
-  [40, 320],
+  // The left ones stay below the button on short, wide screens.
+  [-40, 370],
+  [40, 290],
   [112, 210],
   [1180, 270],
   [1240, 390],
   [1312, 470],
+  // Further out, for wide screens.
+  [-250, 250],
+  [-330, 360],
+  [-420, 470],
+  [-640, 300],
+  [-760, 440],
+  [1480, 250],
+  [1560, 360],
+  [1650, 460],
+  [1860, 320],
+  [1980, 450],
 ]
   .map(([x, tall]) => spruce(x!, 822, tall!, tall! * 0.42))
   .join('')
@@ -78,15 +110,52 @@ const fireflies = Array.from({ length: 16 }, () => ({
   delay: `${(-rand() * 9).toFixed(1)}s, ${(-rand() * 3).toFixed(1)}s`,
 }))
 const nails = [421, 483, 545]
+
+// The parts beyond the first view come last, so the middle keeps the same trees and peaks.
+const rangeWings =
+  mountains(
+    [
+      [left - 20, 452],
+      [-760, 414],
+      [-650, 440],
+      [-520, 396],
+      [-400, 436],
+      [-290, 408],
+      [-150, 446],
+      [-20, 470],
+    ],
+    height,
+    rand,
+  ) +
+  mountains(
+    [
+      [1300, 440],
+      [1420, 404],
+      [1540, 430],
+      [1660, 388],
+      [1790, 428],
+      [1910, 400],
+      [right + 20, 444],
+    ],
+    height,
+    rand,
+  )
+/** A row's ground across the whole drawing and its trees on both sides of the first view. */
+const wings = (y: Ground, row: { gap: number; min: number; max: number }) =>
+  land(y, right, height, left - 60) +
+  forest({ width, bottom: height, y, rand, ...row, from: left, to: -30, ground: false }) +
+  forest({ width, bottom: height, y, rand, ...row, from: width + 30, to: right, ground: false })
+const farWings = wings(farGround, farRow)
+const middleWings = wings(middleGround, middleRow)
 ---
 
 <!--
   On a phone the drawing keeps a fixed small scale (806 × 504), wide enough for the signpost and
-  the cabin; from the small breakpoint up it fills the scene.
+  the cabin; from the small breakpoint up it fills the scene, which is as tall as the screen.
 -->
 <svg
   class="absolute bottom-0 left-1/2 -ml-[450px] h-[504px] w-[806px] sm:inset-0 sm:ml-0 sm:h-full sm:w-full"
-  viewBox={`-35 0 ${width} ${height}`}
+  viewBox={`${left} 0 ${2 * reach} ${height}`}
   preserveAspectRatio="xMidYMax slice"
   role="group"
   aria-label="A signpost made of browser tabs"
@@ -111,11 +180,11 @@ const nails = [421, 483, 545]
     <circle cx="1080" cy="404" r="86" opacity="0.35" style="fill: var(--scene-sun)"></circle>
     <circle cx="1080" cy="404" r="54" style="fill: var(--scene-sun)"></circle>
   </g>
-  <path d={range} style="fill: var(--scene-mountain)"></path>
-  <rect x="-20" y="420" width="1320" height="80" fill="url(#lost-mist)"></rect>
-  <path d={far} style="fill: var(--scene-far)"></path>
-  <rect x="-20" y="470" width="1320" height="60" fill="url(#lost-mist)" opacity="0.7"></rect>
-  <path d={middle} style="fill: var(--scene-middle)"></path>
+  <path d={range + rangeWings} style="fill: var(--scene-mountain)"></path>
+  <rect x={left} y="420" width={2 * reach} height="80" fill="url(#lost-mist)"></rect>
+  <path d={far + farWings} style="fill: var(--scene-far)"></path>
+  <rect x={left} y="470" width={2 * reach} height="60" fill="url(#lost-mist)" opacity="0.7"></rect>
+  <path d={middle + middleWings} style="fill: var(--scene-middle)"></path>
   <Cabin x={cabinX} y={Math.round(cabinY + 1)} scale={1.6} id="lost-cabin" />
   <path d={meadow} style="fill: var(--scene-near)"></path>
   <path

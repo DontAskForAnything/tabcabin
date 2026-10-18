@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Website: the page-not-found scene fills the whole screen, and on wide screens the signpost no
+  longer covers the heading
+
 ## [1.3.2] — 2026-10-18
 
 Templates for one job, a safe way to sign out of someone else's computer, a week that adds up across

@@ -73,11 +73,11 @@ export function spruce(cx: number, ground: number, height: number, width: number
   )
 }
 
-/** The area under a ground line, down to `bottom`. */
-export function land(y: Ground, width: number, bottom: number): string {
-  let d = `M-60 ${round(y(-60))}`
-  for (let x = -52; x <= width + 60; x += 8) d += `L${x} ${round(y(x))}`
-  return `${d}L${width + 60} ${bottom}L-60 ${bottom}Z`
+/** The area under a ground line, down to `bottom`, from `from` to 60 units past `width`. */
+export function land(y: Ground, width: number, bottom: number, from = -60): string {
+  let d = `M${from} ${round(y(from))}`
+  for (let x = from + 8; x <= width + 60; x += 8) d += `L${x} ${round(y(x))}`
+  return `${d}L${width + 60} ${bottom}L${from} ${bottom}Z`
 }
 
 /** A row of spruces standing on a ground line, optionally with the ground itself. */

@@ -13,7 +13,7 @@ import Layout from '../layouts/Layout.astro'
   path="/404"
 >
   <Nav />
-  <main class="scene-sky relative isolate -mt-16 overflow-hidden sm:h-[clamp(640px,100svh,880px)]">
+  <main class="scene-sky relative isolate -mt-16 overflow-hidden sm:h-[max(640px,100svh)]">
     <Sky id="lost-sky" seed={9} moon={{ x: 1110, y: 170 }} />
     <div class="relative z-10 pt-24 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:top-[136px] sm:pt-0">
       <div class="mx-auto max-w-6xl px-5">

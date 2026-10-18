@@ -66,12 +66,15 @@ const siteSchema = {
   url: new URL('/', Astro.site).toString(),
 }
 
+// The store listing and the code, so search engines know they belong to the same TabCabin.
+const profiles = [extensionUrl, repo].filter(Boolean)
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'TabCabin',
   url: new URL('/', Astro.site).toString(),
   logo: new URL('/icon-512.png', Astro.site).toString(),
+  ...(profiles.length > 0 && { sameAs: profiles }),
 }
 
 const filmSchema = {

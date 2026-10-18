@@ -17,7 +17,7 @@ interface Props {
 const { title, description, path = '/', schema = [], breadcrumbs } = Astro.props
 const canonical = new URL(path, Astro.site)
 const ogImage = new URL('/og.png', Astro.site)
-import { analytics, repo } from '../site'
+import { analytics, extensionUrl, repo } from '../site'
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -26,7 +26,9 @@ const structuredData = {
   operatingSystem: 'Chrome, Edge, Brave',
   description,
   url: Astro.site?.toString(),
+  image: ogImage.toString(),
   license: 'https://opensource.org/licenses/MIT',
+  ...(extensionUrl && { installUrl: extensionUrl }),
   ...(repo && { codeRepository: repo }),
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 }

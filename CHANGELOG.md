@@ -15,6 +15,7 @@ All notable changes to this project are documented here. The format follows
   TabCabin installed, "Add to TabCabin" adds the board in one click and opens it
 - Chrome Web Store: the name, summary and description in German, Spanish, French, Portuguese
   (Brazil) and Japanese; the app itself stays in English and Polish
+- Website: search engines learn that the Chrome Web Store listing and the code belong to the site
 
 ### Changed
 

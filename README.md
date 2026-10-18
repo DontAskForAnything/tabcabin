@@ -208,12 +208,7 @@ TypeScript · React 19 · Tailwind CSS 4 · Radix UI · Motion · dnd-kit · Dex
 WXT (Manifest V3) · Hono · SQLite (better-sqlite3) · Drizzle ORM · Docker · Caddy · Vitest · Playwright ·
 axe-core
 
-## Roadmap
-
-- [x] Local-first Chrome extension (board, collections, panel, saving, search, reminders, bin, import/export)
-- [x] Self-hosted sync server — Docker image, Google or password sign-in, live sync between browsers
-- [x] Website with comparison pages, a privacy page and the film
-- [ ] Chrome Web Store listing
+## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version.
 

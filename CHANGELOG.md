@@ -19,6 +19,7 @@ All notable changes to this project are documented here. The format follows
 ### Changed
 
 - Website: shorter page titles and descriptions, so search results show them whole
+- Website: template pages have plain titles, such as "Job search tracker template for your new tab"
 
 ### Fixed
 

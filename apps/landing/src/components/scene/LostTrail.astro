@@ -152,9 +152,10 @@ const middleWings = wings(middleGround, middleRow)
 <!--
   On a phone the drawing keeps a fixed small scale (806 × 504), wide enough for the signpost and
   the cabin; from the small breakpoint up it fills the scene, which is as tall as the screen.
+  Only the signs take the pointer (TabSign): the lantern's glow lies over them.
 -->
 <svg
-  class="absolute bottom-0 left-1/2 -ml-[450px] h-[504px] w-[806px] sm:inset-0 sm:ml-0 sm:h-full sm:w-full"
+  class="pointer-events-none absolute bottom-0 left-1/2 -ml-[450px] h-[504px] w-[806px] sm:inset-0 sm:ml-0 sm:h-full sm:w-full"
   viewBox={`${left} 0 ${2 * reach} ${height}`}
   preserveAspectRatio="xMidYMax slice"
   role="group"

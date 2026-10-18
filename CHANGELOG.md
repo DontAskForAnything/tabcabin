@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows
 - Website: the page-not-found scene fills the whole screen, and on wide screens the signpost no
   longer covers the heading
 - Website: the arrow on the 404 page's Features sign matches the other signs
+- Website: a click anywhere on the 404 page's Features sign opens the page; the lantern's glow
+  covered most of it
 
 ## [1.3.2] — 2026-10-18
 

@@ -1,4 +1,5 @@
 import { toast } from '@tabcabin/ui'
+import { countActivity } from '@/db/activity/count'
 import * as repo from '@/db/repo'
 import type { Translate } from '@/i18n'
 import { closeTabs, type TabLike, tabsToLinks } from '@/lib/tabs'
@@ -32,6 +33,7 @@ export async function saveTabs(
     if (!target.title) useUi.getState().setFocusGroupTitle(groupId)
   }
   await repo.addLinks(groupId, links)
+  await countActivity({ saved: links.length })
   toast({
     title: ctx.t('dnd.tabsSaved', { count: links.length }),
     tone: 'success',

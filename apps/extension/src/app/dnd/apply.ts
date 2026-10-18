@@ -1,7 +1,7 @@
 import { toast } from '@tabcabin/ui'
+import { countActivity } from '@/db/activity/count'
 import { loadRow } from '@/db/apply'
 import * as repo from '@/db/repo'
-import { countClosedTabs } from '@/db/stats'
 import type { Translate } from '@/i18n'
 import type { Settings } from '@/settings/settings'
 import { useUi } from '@/state/ui'
@@ -49,7 +49,6 @@ async function closeTabs(tabIds: number[], settings: Settings | undefined) {
   const ids = tabIds.filter((id) => id !== current?.id)
   if (ids.length === 0) return
   await browser.tabs.remove(ids).catch(() => undefined)
-  await countClosedTabs(ids.length)
 }
 
 async function firstGroupOf(categoryId: string): Promise<string> {
@@ -188,6 +187,7 @@ export async function applyDrop(source: DragSource, target: DropTarget, ctx: App
     target.kind === 'category' ||
     target.kind === 'combine'
   ) {
+    await countActivity({ saved: links.length })
     toast({
       title: t('dnd.tabsSaved', { count: links.length }),
       tone: 'success',

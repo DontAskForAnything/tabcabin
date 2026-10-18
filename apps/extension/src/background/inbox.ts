@@ -1,5 +1,4 @@
 import { displayHost, INBOX_ID, isSavableUrl } from '@tabcabin/core'
-import { revert } from '@/db/repo'
 import type { MessageKey } from '@/i18n/en'
 import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
@@ -28,7 +27,7 @@ export async function saveTabToInbox(tab: Browser.tabs.Tab | undefined) {
       title: t('toast.saved', { group: saved.groupTitle }),
       description: saved.alsoIn ? t('duplicate.alsoIn', { place: saved.alsoIn }) : undefined,
       tone: 'success',
-      undo: () => revert(saved.result),
+      undo: saved.undo,
       undoLabel: t('common.undo'),
     })
   } catch (error) {

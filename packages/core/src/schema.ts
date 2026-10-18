@@ -100,7 +100,40 @@ export const reminderSchema = z.object({
 export type Reminder = z.infer<typeof reminderSchema>
 export type RepeatMode = Reminder['repeat']
 
-export const ENTITY_TYPES = ['workspace', 'category', 'group', 'item', 'reminder'] as const
+const dayCount = z.number().int().nonnegative()
+
+/** What happened on one computer during one local day. */
+export const activityDaySchema = z
+  .object({
+    /** Tabs with a page that were closed. */
+    closed: dayCount,
+    /** Links the user saved (imports, templates and the starter board don't count). */
+    saved: dayCount,
+    /** To-dos ticked off. */
+    done: dayCount,
+  })
+  .loose()
+export type ActivityDay = z.infer<typeof activityDaySchema>
+
+/**
+ * The week in numbers, one row per computer (its id): each computer only writes its own row, so
+ * two of them never overwrite each other's counts, and every computer shows the sum.
+ */
+export const activitySchema = z.object({
+  ...base,
+  /** Local days ("2026-10-18") of the last few weeks. */
+  days: z.record(z.string().regex(/^\d{4}-\d{2}-\d{2}$/), activityDaySchema),
+})
+export type Activity = z.infer<typeof activitySchema>
+
+export const ENTITY_TYPES = [
+  'workspace',
+  'category',
+  'group',
+  'item',
+  'reminder',
+  'activity',
+] as const
 export const entityTypeSchema = z.enum(ENTITY_TYPES)
 export type EntityType = z.infer<typeof entityTypeSchema>
 
@@ -110,6 +143,7 @@ export const entitySchemas = {
   group: groupSchema,
   item: itemSchema,
   reminder: reminderSchema,
+  activity: activitySchema,
 } as const
 
 /** Whether a kind of row named by the server (or another version) is one this version knows. */
@@ -127,6 +161,7 @@ export const syncSchemas = {
   group: groupSchema.loose(),
   item: itemSchema.loose(),
   reminder: reminderSchema.loose(),
+  activity: activitySchema.loose(),
 } as const
 
 export interface EntityMap {
@@ -135,6 +170,7 @@ export interface EntityMap {
   group: Group
   item: Item
   reminder: Reminder
+  activity: Activity
 }
 
 export type AnyEntity = EntityMap[EntityType]

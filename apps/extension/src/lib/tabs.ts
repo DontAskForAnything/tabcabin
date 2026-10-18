@@ -1,6 +1,5 @@
 import { isSavableUrl, normalizeUrl } from '@tabcabin/core'
 import type { NewLink } from '@/db/repo'
-import { countClosedTabs } from '@/db/stats'
 
 export interface TabLike {
   id: number
@@ -22,7 +21,6 @@ export async function closeTabs(tabIds: readonly number[]) {
   const ids = tabIds.filter((id) => id !== current?.id)
   if (ids.length === 0) return
   await browser.tabs.remove(ids).catch(() => undefined)
-  await countClosedTabs(ids.length)
 }
 
 /** Ids of tabs whose URL already appeared earlier (keeps the active/first one). */

@@ -1,4 +1,5 @@
 import { displayHost, INBOX_ID, NOTE_MAX_LENGTH } from '@tabcabin/core'
+import { countActivity } from '@/db/activity/count'
 import * as repo from '@/db/repo'
 import { loadRow } from '@/db/apply'
 import { savedElsewhere } from '@/db/duplicates'
@@ -43,11 +44,14 @@ export async function saveToGroup(
   itemId: string | null
   /** Another group the link was already saved in (when the warning is on). */
   alsoIn: string | null
+  /** Takes the save back, the week's count included. */
+  undo: () => Promise<void>
 }> {
   const { groupId, created } = await resolveGroup(target)
   let result: repo.Result
   let itemId: string | null = null
   let alsoIn: string | null = null
+  let links = 0
   if (what.kind === 'link') {
     if ((await getSettings()).warnDuplicates)
       alsoIn = (await savedElsewhere([what.url], groupId))[0]?.label ?? null
@@ -56,6 +60,8 @@ export async function saveToGroup(
     ])
     result = added
     itemId = added.ids[0] ?? null
+    links = added.ids.length
+    await countActivity({ saved: links })
     const note = what.note
     if (note && note.text.trim() && added.ids[0]) {
       if (note.todo) {
@@ -96,5 +102,15 @@ export async function saveToGroup(
   if (created) result = { undo: [...result.undo, ...created.undo] }
   const saved = await loadRow('group', groupId)
   const title = groupId === INBOX_ID ? await inboxTitle() : saved?.title
-  return { groupTitle: saved ? `${saved.emoji} ${title}`.trim() : '', result, itemId, alsoIn }
+  const undo = async () => {
+    await repo.revert(result)
+    await countActivity({ saved: -links })
+  }
+  return {
+    groupTitle: saved ? `${saved.emoji} ${title}`.trim() : '',
+    result,
+    itemId,
+    alsoIn,
+    undo,
+  }
 }

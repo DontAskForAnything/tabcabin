@@ -1,4 +1,5 @@
 import { ENTITY_TYPES } from '@tabcabin/core'
+import { ownDeviceId } from '@/db/activity/device'
 import { db } from '@/db/db'
 import type { SyncClient } from './client'
 import { pullAll } from './pull'
@@ -21,11 +22,30 @@ async function enqueueEverything() {
   })
 }
 
-/** Drops local boards (keeps settings) before downloading the server's copy. */
+/**
+ * Drops local boards (keeps settings) before downloading the server's copy. This browser's own
+ * activity stays and joins the account's.
+ */
 async function clearLocalData() {
   await db.transaction('rw', [...entityTables(), db.outbox], async () => {
-    await Promise.all([...entityTables(), db.outbox].map((t) => t.clear()))
+    const boards = ENTITY_TYPES.filter((entity) => entity !== 'activity')
+    await Promise.all([...boards.map((entity) => table(entity).clear()), db.outbox.clear()])
+    const own = await db.activity.toCollection().primaryKeys()
+    await db.outbox.bulkPut(
+      own.map((id) => ({
+        entity: 'activity' as const,
+        id,
+        type: 'put' as const,
+        queuedAt: Date.now(),
+      })),
+    )
   })
+}
+
+/** Activity rows of other computers belong to an account this browser was signed in to before. */
+async function forgetOtherComputers() {
+  const own = await ownDeviceId()
+  await db.activity.filter((row) => row.id !== own).delete()
 }
 
 /** Whether this browser has boards of its own (the first sync then asks what to keep). */
@@ -39,6 +59,7 @@ export async function localHasData(): Promise<boolean> {
  */
 export async function firstSync(client: SyncClient, mode: FirstSyncMode) {
   await updateSyncState({ status: 'syncing', lastSeq: 0, error: null })
+  await forgetOtherComputers()
   if (mode === 'server') await clearLocalData()
   else await enqueueEverything()
   await pushAll(client)

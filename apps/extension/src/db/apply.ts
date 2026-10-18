@@ -4,12 +4,14 @@ import { db, tables } from './db'
 
 type AnyTable = Table<{ id: string }, string>
 
-const entityTables = () => [
+/** Every table a change set can write to, with the outbox. */
+export const entityTables = () => [
   db.workspaces,
   db.categories,
   db.groups,
   db.items,
   db.reminders,
+  db.activity,
   db.outbox,
 ]
 

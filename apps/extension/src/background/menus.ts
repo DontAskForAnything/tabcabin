@@ -2,8 +2,6 @@ import { displayHost, INBOX_EMOJI, INBOX_ID, isSavableUrl } from '@tabcabin/core
 import { sortByPosition } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview, type WorkspaceOverview } from '@/db/overview'
-import { revert } from '@/db/repo'
-import { countClosedTabs } from '@/db/stats'
 import type { MessageKey } from '@/i18n/en'
 import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
@@ -170,7 +168,7 @@ export async function handleMenuClick(
       title: t(message, { group: saved.groupTitle }),
       description: saved.alsoIn ? t('duplicate.alsoIn', { place: saved.alsoIn }) : undefined,
       tone: 'success',
-      undo: () => revert(saved.result),
+      undo: saved.undo,
       undoLabel: t('common.undo'),
     })
   } catch (error) {
@@ -185,5 +183,4 @@ async function closeOrReplace(tab: Browser.tabs.Tab) {
   const siblings = await browser.tabs.query({ windowId: tab.windowId })
   if (siblings.length <= 1) await browser.tabs.update(tab.id, { url: 'chrome://newtab/' })
   else await browser.tabs.remove(tab.id)
-  await countClosedTabs(1)
 }

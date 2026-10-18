@@ -84,6 +84,8 @@ export const en = {
   'links.denied': 'Link checks need access to the saved sites',
   'stats.title': 'This week',
   'stats.hint': 'The last seven days in this browser. Nothing to keep up, just a look back.',
+  'stats.hintEverywhere':
+    'The last seven days on all your computers. Nothing to keep up, just a look back.',
   'stats.closedThisWeek': {
     one: '{count} tab closed this week',
     other: '{count} tabs closed this week',

@@ -1,13 +1,13 @@
 import { Modal } from '@tabcabin/ui'
-import { useWeekStats } from '@/db/stats'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
+import { useWeekStats } from './useWeekStats'
 
 /** The last seven days in three numbers. No streaks, no goals, nothing to keep up. */
 export function WeekDialog({ open }: { open: boolean }) {
   const t = useT()
   const close = useUi((s) => s.closeModal)
-  const stats = useWeekStats()
+  const { stats, everywhere } = useWeekStats()
   const tiles: [number, string][] = stats
     ? [
         [stats.closedTabs, t('stats.tabsClosed', { count: stats.closedTabs })],
@@ -20,7 +20,7 @@ export function WeekDialog({ open }: { open: boolean }) {
       open={open}
       onOpenChange={(value) => !value && close()}
       title={t('stats.title')}
-      description={t('stats.hint')}
+      description={t(everywhere ? 'stats.hintEverywhere' : 'stats.hint')}
       size="md"
     >
       <dl className="grid grid-cols-3 gap-3">

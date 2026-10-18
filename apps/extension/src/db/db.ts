@@ -1,5 +1,14 @@
-import type { Category, EntityType, Group, Item, Reminder, Workspace } from '@tabcabin/core'
+import type {
+  Activity,
+  Category,
+  EntityType,
+  Group,
+  Item,
+  Reminder,
+  Workspace,
+} from '@tabcabin/core'
 import { Dexie, type EntityTable, type Table } from 'dexie'
+import { moveClosedTabs } from './activity/upgrade'
 import { moveLegacyDatabase } from './legacy'
 
 export interface OutboxEntry {
@@ -31,12 +40,13 @@ export interface LinkCheck {
   broken: boolean
 }
 
-class TabCabinDB extends Dexie {
+export class TabCabinDB extends Dexie {
   workspaces!: EntityTable<Workspace, 'id'>
   categories!: EntityTable<Category, 'id'>
   groups!: EntityTable<Group, 'id'>
   items!: EntityTable<Item, 'id'>
   reminders!: EntityTable<Reminder, 'id'>
+  activity!: EntityTable<Activity, 'id'>
   settings!: EntityTable<SettingRow, 'key'>
   meta!: EntityTable<MetaRow, 'key'>
   outbox!: Table<OutboxEntry, [EntityType, string]>
@@ -55,6 +65,7 @@ class TabCabinDB extends Dexie {
       outbox: '[entity+id], queuedAt',
     })
     this.version(2).stores({ linkChecks: 'url, checkedAt' })
+    this.version(3).stores({ activity: 'id' }).upgrade(moveClosedTabs)
     // Data saved under the old app name moves over before the first query runs.
     this.on('ready', (vip) =>
       moveLegacyDatabase(vip).then(
@@ -73,4 +84,5 @@ export const tables = {
   group: () => db.groups,
   item: () => db.items,
   reminder: () => db.reminders,
+  activity: () => db.activity,
 } satisfies Record<EntityType, () => Table>

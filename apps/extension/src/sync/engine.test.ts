@@ -1,5 +1,6 @@
 import { makeWorkspace } from '@tabcabin/core'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { countActivity } from '@/db/activity/count'
 import { db } from '@/db/db'
 import {
   addLinks,
@@ -170,5 +171,17 @@ describe('first sync', () => {
     await firstSync(client, 'server')
     expect((await db.workspaces.toArray()).map((w) => w.name)).toEqual(['Server'])
     expect(await db.outbox.count()).toBe(0)
+  })
+
+  it('keeps this browser’s week and forgets the computers of an earlier account', async () => {
+    const server = await startServer()
+    const { client } = await server.signIn()
+    await countActivity({ closed: 3 })
+    const own = (await db.activity.toArray())[0]!
+    await db.activity.put({ ...own, id: 'earlier-account' })
+    await firstSync(client, 'server')
+    expect((await db.activity.toArray()).map((row) => row.id)).toEqual([own.id])
+    const uploaded = (await (await server.signIn()).client.pull(0)).changes
+    expect(uploaded.map((c) => [c.entity, c.id])).toEqual([['activity', own.id]])
   })
 })

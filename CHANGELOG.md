@@ -28,6 +28,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- This week: signed in, every computer shows the same numbers, added up from all your computers
+- This week: tabs you close in Chrome itself count as closed tabs too, not only the ones TabCabin
+  closes
 - Website: shorter page titles and descriptions, so search results show them whole
 - Website: template pages have plain titles, such as "Job search tracker template for your new tab"
 - Website: the film's poster is a WebP of 50 KB instead of a 180 KB JPEG, cached by browsers for good
@@ -39,6 +42,8 @@ All notable changes to this project are documented here. The format follows
 - Website: the privacy page had no space before "project repository"
 - Website: screen readers heard "Tobycompared with TabCabin" in the comparison tables
 - Deleting all data while signed in also ends the session on the server
+- This week: imports, templates and links in the bin no longer count as saved links, moving,
+  editing or deleting a finished to-do no longer counts it again, and undo takes a save back
 
 ## [1.3.1] — 2026-10-14
 

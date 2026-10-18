@@ -1,6 +1,7 @@
 import { liveQuery } from 'dexie'
 import { db } from '@/db/db'
 import { startBadge } from '@/background/badge'
+import { startClosedTabs } from '@/background/closedTabs'
 import { SAVE_TO_INBOX, saveTabToInbox } from '@/background/inbox'
 import { checkLinks, startLinkChecks } from '@/background/linkChecks'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
@@ -88,6 +89,7 @@ export default defineBackground(() => {
   })
 
   startBadge()
+  startClosedTabs()
   startReminders()
   startSync()
   startLinkChecks()

@@ -7,6 +7,7 @@ Workspace ─┬─ Category ─┬─ Group ─┬─ Item (link | note | image
            │            └─ …
            └─ …
 Reminder ── Item (at most one live reminder per item)
+Activity (one per browser, for the week view)
 ```
 
 All entities share these fields:
@@ -58,6 +59,14 @@ A **stack** is an item of kind `stack` whose children are links with `parentId` 
 `weekdays` (0 = Monday … 6 = Sunday), `monthDay` (1–31; short months use their last day), `timeOfDay`
 (minutes after midnight, local time) and `firedAt` (when the notification for the current `dueAt` was
 shown). Marking a repeating reminder done moves `dueAt` to the next occurrence.
+
+**Activity** — one row per browser; its `id` is made on the first count and kept in the `meta` row
+`activity.device`. `days` maps a local day (`2026-10-18`) to `{ closed, saved, done }`: tabs with a
+page that were closed (in TabCabin or in the browser), links the user saved (not imports, templates or
+the starter board; undo takes a save back) and to-dos ticked off (unticking takes it back). Each
+browser only writes its own row, so last-write-wins never loses a count; signed in, the week view adds
+up the rows of every computer, otherwise it shows this browser's row. Days older than eight weeks are
+dropped. Versions before this row skip it.
 
 ## Bin
 

@@ -104,6 +104,8 @@ export const pl: Record<MessageKey, Message> = {
   'links.denied': 'Sprawdzanie linków wymaga dostępu do zapisanych stron',
   'stats.title': 'Ten tydzień',
   'stats.hint': 'Ostatnie siedem dni w tej przeglądarce. Bez zobowiązań, tylko spojrzenie wstecz.',
+  'stats.hintEverywhere':
+    'Ostatnie siedem dni na wszystkich Twoich komputerach. Bez zobowiązań, tylko spojrzenie wstecz.',
   'stats.closedThisWeek': {
     one: '{count} karta zamknięta w tym tygodniu',
     few: '{count} karty zamknięte w tym tygodniu',

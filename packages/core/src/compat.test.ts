@@ -7,7 +7,7 @@ import { type EntityType, entitySchemas, syncSchemas } from './schema'
  * have to be optional, and fields or values must not be renamed or removed.
  */
 const at = Date.UTC(2026, 9, 1)
-const rowsFrom1_2: Record<EntityType, Record<string, unknown>> = {
+const rowsFrom1_2: Record<Exclude<EntityType, 'activity'>, Record<string, unknown>> = {
   workspace: {
     id: 'w1',
     createdAt: at,
@@ -74,6 +74,15 @@ const rowsFrom1_2: Record<EntityType, Record<string, unknown>> = {
   },
 }
 
+/** A computer's week as the first version with activity rows writes it. */
+const firstActivity = {
+  id: 'd1',
+  createdAt: at,
+  updatedAt: at,
+  deletedAt: null,
+  days: { '2026-10-18': { closed: 3, saved: 1, done: 2 } },
+}
+
 describe('rows from older versions', () => {
   it.each(Object.entries(rowsFrom1_2))('accepts a %s from TabCabin 1.2', (entity, row) => {
     expect(entitySchemas[entity as EntityType].safeParse(row).success).toBe(true)
@@ -83,5 +92,14 @@ describe('rows from older versions', () => {
   it('keeps fields from newer versions when syncing', () => {
     const row = { ...rowsFrom1_2.item, pinned: true }
     expect(syncSchemas.item.parse(row)).toEqual(row)
+  })
+
+  it('accepts the first activity rows and keeps counts added later', () => {
+    expect(entitySchemas.activity.safeParse(firstActivity).success).toBe(true)
+    const later = {
+      ...firstActivity,
+      days: { '2026-10-19': { closed: 1, saved: 0, done: 0, notes: 4 } },
+    }
+    expect(syncSchemas.activity.parse(later)).toEqual(later)
   })
 })

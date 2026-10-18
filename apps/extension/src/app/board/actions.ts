@@ -11,6 +11,7 @@ import {
 } from '@tabcabin/core'
 import { toast } from '@tabcabin/ui'
 import { useMemo } from 'react'
+import { countActivity } from '@/db/activity/count'
 import type { BoardGroup, BoardItem } from '@/db/hooks'
 import * as repo from '@/db/repo'
 import { type Translate, useLocale, useT } from '@/i18n'
@@ -108,6 +109,7 @@ export function useBoardActions(active: ActiveContext) {
           else {
             const duplicates = await findDuplicates([url], groupId, settings)
             await repo.addLinks(groupId, [{ url, title: displayHost(url) }], index)
+            await countActivity({ saved: 1 })
             const note = duplicateNote(duplicates, t, settings)
             if (note.description)
               toast({ title: note.description, tone: 'info', action: note.action })

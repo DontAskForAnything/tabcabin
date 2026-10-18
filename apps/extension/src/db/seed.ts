@@ -8,7 +8,7 @@ import {
   put,
   puts,
 } from '@tabcabin/core'
-import { applyChanges } from './apply'
+import { applyChanges, entityTables } from './apply'
 import { db } from './db'
 import { openOnboarding } from './onboarding'
 
@@ -31,11 +31,7 @@ export interface SeedText {
  */
 export async function ensureSeed(text: SeedText): Promise<string | null> {
   // One transaction for check + write: several new-tab pages may start at the same time.
-  return db.transaction(
-    'rw',
-    [db.meta, db.workspaces, db.categories, db.groups, db.items, db.reminders, db.outbox],
-    () => seedInTransaction(text),
-  )
+  return db.transaction('rw', [db.meta, ...entityTables()], () => seedInTransaction(text))
 }
 
 async function seedInTransaction(text: SeedText): Promise<string | null> {

@@ -1,12 +1,12 @@
 import { Sprout } from 'lucide-react'
-import { useWeekStats } from '@/db/stats'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
+import { useWeekStats } from './useWeekStats'
 
 /** One quiet line in the tabs panel about the week, when there is something to say. */
 export function WeekLine() {
   const t = useT()
-  const stats = useWeekStats()
+  const { stats } = useWeekStats()
   const openModal = useUi((s) => s.openModal)
   if (!stats) return null
   const text = stats.closedTabs

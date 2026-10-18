@@ -81,8 +81,8 @@ import { analytics, repo } from '../site'
       <h2>Permissions</h2>
       <ul>
         <li>
-          <strong>Tabs and tab groups</strong> — to list your open tabs and save the ones you
-          choose.
+          <strong>Tabs and tab groups</strong> — to list your open tabs, save the ones you choose
+          and count how many you close each day (only the number, never which pages).
         </li>
         <li>
           <strong>Context menus, active tab and scripting</strong> — to save the page you are on,
@@ -114,8 +114,9 @@ import { analytics, repo } from '../site'
         When you sign in, your boards are sent to the sync server this copy of TabCabin was built
         with, so your other computers can download them. The server stores your username (or, with
         Google sign-in, your e-mail address and Google account id), a scrypt hash of your password
-        if you use one, hashed session tokens and the data you sync — nothing else, and it is never
-        used for anything but syncing. Anyone can also run the server themselves and build the
+        if you use one, hashed session tokens and the data you sync (your boards, and how many tabs
+        you closed, links you saved and to-dos you finished each day) — nothing else, and it is
+        never used for anything but syncing. Anyone can also run the server themselves and build the
         extension for it. You can sign out at any time; your data stays in the browser.
       </p>
       <p>

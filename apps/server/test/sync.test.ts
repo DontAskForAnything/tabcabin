@@ -127,6 +127,25 @@ describe('sync', () => {
     expect((await pull()).changes.map((c) => c.id)).toEqual([ws.id])
   })
 
+  it('keeps one activity row per computer, so the week adds up across them', async () => {
+    const { push, pull } = await signedIn()
+    const row = (id: string, closed: number) => ({
+      id,
+      createdAt: clock.now,
+      updatedAt: clock.now,
+      deletedAt: null,
+      days: { '2026-10-18': { closed, saved: 1, done: 0 } },
+    })
+    const res = await push([put('activity', row('laptop', 12)), put('activity', row('work', 7))])
+    expect(await res.json()).toMatchObject({ accepted: 2, rejected: [] })
+    const closed = (await pull()).changes.map(
+      (c) => (c.row as { days: Record<string, { closed: number }> }).days['2026-10-18']!.closed,
+    )
+    expect(closed).toEqual([12, 7])
+    const bad = await push([put('activity', { ...row('x', 1), days: { yesterday: {} } })])
+    expect(await bad.json()).toMatchObject({ accepted: 0, rejected: [{ entity: 'activity' }] })
+  })
+
   it('pages through long histories', async () => {
     const { push, pull } = await signedIn()
     const rows = Array.from({ length: 5 }, (_, i) =>

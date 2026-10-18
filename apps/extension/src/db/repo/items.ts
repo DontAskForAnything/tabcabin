@@ -12,6 +12,7 @@ import {
   touch,
   unstack,
 } from '@tabcabin/core'
+import { countActivity } from '../activity/count'
 import { db } from '../db'
 import { clock, commit, live, mustGet, type Result } from './commit'
 import { getGroupItems, getTopLevelItems } from './reads'
@@ -97,7 +98,11 @@ export type ItemPatch = Partial<
 
 export async function updateItem(id: string, patch: ItemPatch) {
   const row = await mustGet('item', id)
-  return commit([put('item', touch(row, patch, clock()))])
+  const result = await commit([put('item', touch(row, patch, clock()))])
+  // Ticking a to-do off counts for the week; unticking it takes that back.
+  const ticked = patch.done !== undefined && patch.done !== row.done
+  if (ticked && row.todo && patch.todo !== false) await countActivity({ done: patch.done ? 1 : -1 })
+  return result
 }
 
 /** Turns a note into a link or image (keeps its place in the group). */

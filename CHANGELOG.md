@@ -21,6 +21,7 @@ All notable changes to this project are documented here. The format follows
 
 - Website: shorter page titles and descriptions, so search results show them whole
 - Website: template pages have plain titles, such as "Job search tracker template for your new tab"
+- Website: the film's poster is a WebP of 50 KB instead of a 180 KB JPEG, cached by browsers for good
 
 ### Fixed
 

@@ -32,12 +32,11 @@ run([
   ...['-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart'],
   join(publicDir, 'promo.mp4'),
 ])
-// The logo shot makes a good poster.
 const frame = (seconds: number) =>
   join(PROMO_DIR, `frames/${String(Math.round(seconds * FPS)).padStart(5, '0')}.jpg`)
-copyFileSync(frame(8.4), join(publicDir, 'promo-poster.jpg'))
 
-// Stills for social posts and the store listing.
+// Stills for social posts and the store listing. The logo shot is also the website's poster for
+// the film (apps/landing/src/lib/poster.ts).
 const scene = (i: number, seconds: number) => SCENE_STARTS[i]! + seconds
 const stills: [string, number][] = [
   ['01-forty-tabs', 2.6],

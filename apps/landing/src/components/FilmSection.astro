@@ -5,6 +5,7 @@
  * motion) it waits on its poster, and the button plays it full screen with sound.
  */
 import Icon from './Icon.astro'
+import { poster } from '../lib/poster'
 ---
 
 <section class="py-24" id="demo">
@@ -26,7 +27,7 @@ import Icon from './Icon.astro'
       <video
         class="block aspect-video w-full"
         src="/promo.mp4"
-        poster="/promo-poster.jpg"
+        poster={poster.src}
         muted
         loop
         playsinline

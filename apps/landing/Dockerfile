@@ -16,6 +16,7 @@ RUN pnpm install --frozen-lockfile --filter @tabcabin/landing...
 COPY packages/core packages/core
 COPY packages/ui packages/ui
 COPY docs/screenshots docs/screenshots
+COPY docs/promo/02-logo.jpg docs/promo/
 COPY apps/landing apps/landing
 ARG SITE_URL EXTENSION_URL REPO_URL UMAMI_SCRIPT_URL UMAMI_WEBSITE_ID
 RUN pnpm --filter @tabcabin/landing build

@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro'
+import { poster } from '../lib/poster'
 ---
 
 <button
@@ -24,7 +25,7 @@ import Icon from './Icon.astro'
     <video
       class="block aspect-video w-full"
       src="/promo.mp4"
-      poster="/promo-poster.jpg"
+      poster={poster.src}
       controls
       playsinline
       preload="none"

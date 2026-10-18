@@ -121,6 +121,22 @@ host (not on previews) and not for browsers that send Do Not Track, counts click
 download, GitHub, film and self-hosting guide buttons (`data-umami-event`), and the privacy page
 gains a short "This website" section that says what is counted.
 
+## Guides
+
+Each guide under `/guides/` is a file in `apps/landing/src/guides/` plus an entry in its
+`index.ts` with a `published` day. The site builds only the guides whose day has come (`astro dev`
+shows them all), so a guide can be committed early and still go online on its day.
+
+The site is static, so something has to rebuild it that morning: the **Guides** workflow
+([`.github/workflows/guides.yml`](../.github/workflows/guides.yml)) runs every Tuesday at 07:00 UTC
+and, when a guide is published that day, calls the Coolify deploy webhook. It needs two repository
+secrets:
+
+- `COOLIFY_DEPLOY_URL`: in Coolify, the website application → Webhooks → Deploy Webhook
+- `COOLIFY_TOKEN`: an API token (Keys & Tokens → API tokens) allowed to deploy
+
+Give new guides a Tuesday as their `published` day, or rebuild the site by hand on other days.
+
 ## After the first deploy
 
 - Put `https://<your-site>/privacy/` into the Chrome Web Store listing (see

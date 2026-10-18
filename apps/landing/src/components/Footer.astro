@@ -1,4 +1,5 @@
 ---
+import { guidePath, guides } from '../guides'
 import { changelog, comparisons, repo, selfHostingGuide } from '../site'
 import Logo from './Logo.astro'
 import Etching from './scene/Etching.astro'
@@ -34,11 +35,13 @@ const columns: [string, [string, string][]][] = [
   [
     'Guides',
     [
+      ...guides.map(({ crumb, slug }): [string, string] => [crumb, guidePath(slug)]),
       ...comparisons.map(({ name, slug }): [string, string] => [
         `Moving from ${name}`,
         `/alternatives/${slug}/#moving`,
       ]),
       ['Self-hosted tab manager', '/self-hosted-tab-manager/'],
+      ['All guides', '/guides/'],
     ],
   ],
   [

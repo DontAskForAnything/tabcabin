@@ -1,0 +1,52 @@
+---
+import Footer from '../../components/Footer.astro'
+import Nav from '../../components/Nav.astro'
+import Layout from '../../layouts/Layout.astro'
+import { guidePath, guides } from '../../guides'
+
+const month = (day: string) =>
+  new Date(day).toLocaleDateString('en', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+---
+
+<Layout
+  title="Guides: saving, moving and syncing your tabs — TabCabin"
+  description="Short, step-by-step guides to saving open tabs in Chrome, moving them out of other tab managers and keeping them in sync between computers."
+  path="/guides/"
+  breadcrumbs={[['Guides', '/guides/']]}
+>
+  <Nav />
+  <main class="mx-auto max-w-3xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /<span class="text-ink-2">Guides</span>
+    </nav>
+    <h1 class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]">
+      Guides
+    </h1>
+    <p class="mt-6 max-w-2xl text-[18px] leading-relaxed text-ink-2">
+      Short answers, step by step, to what people ask about their tabs: saving them, moving them
+      from another tab manager and keeping them on every computer.
+    </p>
+    <ul class="mt-12 flex flex-col gap-4">
+      {guides.map((guide) => (
+        <li>
+          <a
+            href={guidePath(guide.slug)}
+            class="block rounded-[18px] bg-card p-6 shadow-card transition hover:bg-raised"
+          >
+            <span class="block text-[20px] font-semibold tracking-[-0.015em] text-ink">
+              {guide.title}
+            </span>
+            <span class="mt-2 block text-[15.5px] leading-relaxed text-ink-2">{guide.summary}</span>
+            <span class="mt-3 block text-[13.5px] text-ink-3">
+              {month(guide.published)} · {guide.minutes} min read
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,109 @@
+---
+import { Image } from 'astro:assets'
+import board from '../../../../docs/screenshots/board-light.png'
+import BrowserWindow from '../components/BrowserWindow.astro'
+import ShortAnswer from '../components/guides/ShortAnswer.astro'
+import WaysTable from '../components/guides/WaysTable.astro'
+---
+
+<ShortAnswer>
+  press <kbd>Ctrl+Shift+D</kbd> (<kbd>⌘+Shift+D</kbd> on a Mac) and Chrome bookmarks every tab in
+  the window into one new folder. To keep them with notes, find one later and have them on your
+  other computers, save them to a board in a tab manager such as TabCabin.
+</ShortAnswer>
+
+<h2>1. Bookmark every tab at once</h2>
+<p>Chrome can put all the tabs of a window into one bookmarks folder.</p>
+<ol>
+  <li>
+    Press <kbd>Ctrl+Shift+D</kbd>, or open the ⋮ menu → Bookmarks and lists → Bookmark all tabs.
+  </li>
+  <li>Name the folder, for example with today's date, and press Save.</li>
+  <li>
+    To get them back, right-click the folder in the bookmarks bar or the bookmark manager and choose
+    Open all.
+  </li>
+</ol>
+<p>
+  Good for a quick backup before you close a window. Less good for finding one tab later: a folder
+  of forty titles has no notes and no order.
+</p>
+
+<h2>2. Save a tab group</h2>
+<p>
+  Tab groups keep related tabs together in the tab strip. Right-click the group's name and save it:
+  Chrome keeps the group after you close it, and you can open it again from the bookmarks bar.
+</p>
+<p>
+  Good for a few groups you reopen often. A saved group lives only in Chrome and is still a row of
+  tabs, with no notes or to-dos.
+</p>
+
+<h2>3. Let Chrome reopen them after a restart</h2>
+<p>
+  In Settings → On start-up, choose Continue where you left off, and Chrome opens your last windows
+  when it starts. <kbd>Ctrl+Shift+T</kbd> brings back the tab or window you closed last, and History
+  → Recently closed shows the rest.
+</p>
+<p>The tabs stay open, though, which is where we started.</p>
+
+<h2>4. Save them to a board with TabCabin</h2>
+<p>
+  TabCabin is a free, open-source extension that turns the new tab page into boards of tabs, links,
+  notes and to-dos. Saved tabs become cards you can drag into groups, find with search and close
+  without a second thought.
+</p>
+<ol>
+  <li>Get TabCabin for Chrome, Edge or Brave and open a new tab.</li>
+  <li>
+    In the tabs panel on the left, open Save all tabs and choose Save all into a new group, or into
+    a group you already have.
+  </li>
+  <li>
+    To clear a whole window, choose Save as one group and close. The tabs become one group, “Window
+    from” and the date, and the window closes.
+  </li>
+  <li>
+    For one page, <kbd>Ctrl+Shift+S</kbd> saves it with a note and <kbd>Alt+Shift+S</kbd> puts it in
+    the Inbox to sort later.
+  </li>
+</ol>
+<BrowserWindow class="mt-8">
+  <Image
+    src={board}
+    alt="A TabCabin board with the open tabs panel on the left"
+    widths={[720, 1080, 1440]}
+    sizes="(min-width: 800px) 720px, 100vw"
+    class="block w-full"
+  />
+</BrowserWindow>
+<p>
+  Everything stays in your browser and works offline. Sign in when you want the same boards on your
+  other computers.
+</p>
+
+<h2>Which one to pick</h2>
+<WaysTable
+  caption="Ways to save open tabs in Chrome"
+  columns={['Notes and to-dos', 'Find one tab later', 'Other computers']}
+  rows={[
+    ['Bookmarks folder', 'No', 'Bookmark search', 'With Chrome sync'],
+    ['Saved tab group', 'No', 'Open the group and look', 'With Chrome sync'],
+    ['TabCabin board', 'Yes', 'Search across every board', 'When you sign in'],
+  ]}
+/>
+
+<h2>Questions</h2>
+<h3>Can I save the tabs of every window at once?</h3>
+<p>
+  Bookmark all tabs saves the window you are in. In TabCabin the tabs panel lists every window, so
+  you can save each one as its own group.
+</p>
+<h3>Do saved tabs still use memory?</h3>
+<p>No. A bookmark or a card on a board is only an address, so closing the tab frees its memory.</p>
+<h3>Can I bring my tabs over from OneTab or Toby?</h3>
+<p>
+  Yes. TabCabin imports OneTab lists, Toby exports and bookmark files from any browser. Step by
+  step: moving from <a href="/alternatives/onetab/#moving">OneTab</a> and from{' '}
+  <a href="/alternatives/toby/#moving">Toby</a>.
+</p>

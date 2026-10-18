@@ -1,0 +1,25 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
+import GuidePage from '../../components/guides/GuidePage.astro'
+import { type Guide, guides } from '../../guides'
+
+// The text of each guide lives next to the list, in src/guides/<slug>.astro.
+const texts = import.meta.glob<{ default: AstroComponentFactory }>('../../guides/*.astro', {
+  eager: true,
+})
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({ params: { slug: guide.slug }, props: { guide } }))
+}
+
+interface Props {
+  guide: Guide
+}
+
+const { guide } = Astro.props
+const Text = texts[`../../guides/${guide.slug}.astro`]!.default
+---
+
+<GuidePage guide={guide}>
+  <Text />
+</GuidePage>

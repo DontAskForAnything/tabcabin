@@ -1,0 +1,35 @@
+# Puts each guide online on its day. Every Tuesday morning it checks whether a guide in
+# apps/landing/src/guides/index.ts is published today and, if one is, asks Coolify to rebuild the
+# website (the site only builds the guides whose day has come).
+# Needs two repository secrets: COOLIFY_DEPLOY_URL (the website's deploy webhook in Coolify,
+# Webhooks → Deploy Webhook) and COOLIFY_TOKEN (a Coolify API token allowed to deploy). Without
+# them it only logs which guide is due.
+name: Guides
+
+on:
+  schedule:
+    - cron: '0 7 * * 2'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Rebuild the website when a guide is due today
+        env:
+          COOLIFY_DEPLOY_URL: ${{ secrets.COOLIFY_DEPLOY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: |
+          today=$(date -u +%F)
+          if ! grep -q "published: '$today'" apps/landing/src/guides/index.ts; then
+            echo "No guide is published on $today."
+            exit 0
+          fi
+          if [ -z "$COOLIFY_DEPLOY_URL" ] || [ -z "$COOLIFY_TOKEN" ]; then
+            echo "A guide is due on $today, but COOLIFY_DEPLOY_URL or COOLIFY_TOKEN is not set."
+            exit 0
+          fi
+          curl --fail --silent --show-error -H "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_DEPLOY_URL"

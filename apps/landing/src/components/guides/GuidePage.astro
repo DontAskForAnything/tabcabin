@@ -1,0 +1,97 @@
+---
+/**
+ * A guide under /guides/: breadcrumbs, the article in the site's reading style, a download button
+ * and the other guides. The guide's text goes in the slot.
+ */
+import Footer from '../Footer.astro'
+import GetExtension from '../GetExtension.astro'
+import Nav from '../Nav.astro'
+import Layout from '../../layouts/Layout.astro'
+import { type Guide, guidePath, guides } from '../../guides'
+
+interface Props {
+  guide: Guide
+}
+
+const { guide } = Astro.props
+const { description, crumb } = guide
+const path = guidePath(guide.slug)
+const others = guides.filter((entry) => entry.slug !== guide.slug)
+const published = new Date(guide.published).toLocaleDateString('en', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
+
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.title,
+  description,
+  datePublished: guide.published,
+  author: { '@type': 'Person', name: 'Michał Jasiński' },
+  publisher: { '@type': 'Organization', name: 'TabCabin' },
+  mainEntityOfPage: new URL(path, Astro.site).toString(),
+}
+---
+
+<Layout
+  title={`${guide.title} — TabCabin`}
+  description={description}
+  path={path}
+  schema={[article]}
+  breadcrumbs={[
+    ['Guides', '/guides/'],
+    [crumb, path],
+  ]}
+>
+  <Nav />
+  <main class="mx-auto max-w-3xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /
+      <a href="/guides/" class="hover:text-ink">
+        Guides
+      </a>{' '}
+      /<span class="text-ink-2">{crumb}</span>
+    </nav>
+    <article class="text-[16.5px] leading-relaxed text-ink-2 [&_a]:font-medium [&_a]:text-accent-ink [&_a:hover]:underline [&_h2]:mt-14 [&_h2]:mb-3 [&_h2]:text-[26px] [&_h2]:font-semibold [&_h2]:tracking-[-0.02em] [&_h2]:text-ink [&_h3]:mt-6 [&_h3]:text-[17px] [&_h3]:font-semibold [&_h3]:text-ink [&_h3+p]:mt-2 [&_kbd]:rounded-md [&_kbd]:bg-subtle [&_kbd]:px-1.5 [&_kbd]:py-0.5 [&_kbd]:font-mono [&_kbd]:text-[13.5px] [&_kbd]:whitespace-nowrap [&_kbd]:text-ink [&_li]:mt-2 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mt-4">
+      <h1 class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] text-ink sm:text-[52px]">
+        {guide.title}
+      </h1>
+      <p class="text-[14px] text-ink-3">
+        {published} · {guide.minutes} min read
+      </p>
+      <slot />
+    </article>
+    <div class="mt-14 flex flex-wrap items-center gap-4">
+      <GetExtension label="Get TabCabin for Chrome" />
+      <a href="/templates/" class="text-[15px] font-medium text-accent-ink hover:underline">
+        Or start from a template
+      </a>
+    </div>
+    {others.length > 0 && (
+      <section class="mt-20 border-t border-line pt-10">
+        <h2 class="text-[22px] font-semibold tracking-[-0.02em]">More guides</h2>
+        <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+          {others.map((other) => (
+            <li>
+              <a
+                href={guidePath(other.slug)}
+                class="block h-full rounded-[18px] bg-card p-5 shadow-card transition hover:bg-raised"
+              >
+                <span class="block font-semibold text-ink">{other.title}</span>
+                <span class="mt-1.5 block text-[14.5px] leading-relaxed text-ink-2">
+                  {other.summary}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </main>
+  <Footer />
+</Layout>

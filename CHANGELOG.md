@@ -16,6 +16,8 @@ All notable changes to this project are documented here. The format follows
 - Chrome Web Store: the name, summary and description in German, Spanish, French, Portuguese
   (Brazil) and Japanese; the app itself stays in English and Polish
 - Website: search engines learn that the Chrome Web Store listing and the code belong to the site
+- Website: guides under /guides/, starting with how to save all your open tabs in Chrome. Each guide
+  goes online on its own day, and the site rebuilds itself on those mornings
 
 ### Changed
 

@@ -388,6 +388,9 @@ It depends on the build:
   pages, notes, reminders) and their account (username, or e-mail with Google sign-in) go to that
   server, only to sync them. Tick **Personally identifiable information** (e-mail address) and
   **Web history** (addresses of saved pages), and describe them as used for the sync feature only.
+- **When the server has the feedback form** (`FEEDBACK_WEBHOOK_URL`): a message the user chooses to
+  write, with an optional e-mail address for the answer, goes to the developer. Also tick **Personal
+  communications** and describe it as feedback the user sends on purpose.
 
 Then certify:
 

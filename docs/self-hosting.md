@@ -37,6 +37,8 @@ nano .env
 | `MAX_USERS`                        | Most accounts the server accepts. Default `0` (no limit)                         |
 | `SIGNUPS_PER_IP_PER_DAY`           | New accounts one network may create per day. Default `5`                         |
 | `MAX_RECORDS_PER_USER`             | Synced boards, groups, links and notes per account. Default `100000`             |
+| `FEEDBACK_WEBHOOK_URL`             | Discord webhook for the feedback form (see [Feedback](#feedback)). Default off   |
+| `FEEDBACK_PER_IP_PER_DAY`          | Feedback messages one network may send per day. Default `5`                      |
 
 ## 3. Start
 
@@ -117,6 +119,21 @@ The server shows it at `https://<DOMAIN>/s/<id>`: plain HTML with no scripts and
 requests, always the group as it is now, marked `noindex` for search engines. The id is long and
 random; stopping the share (or deleting the group) ends the link. Each account can share up to 100
 groups.
+
+## Feedback
+
+The extension has a feedback form (More → **Send feedback**, and once after two weeks of use). The
+server passes each message on to a Discord channel and keeps nothing:
+
+1. In Discord, open the settings of a private channel → **Integrations** → **Webhooks** → **New
+   Webhook**, and copy its URL.
+2. Set it as `FEEDBACK_WEBHOOK_URL`. Keep it secret: anyone with the address can post to the
+   channel. It never goes into the extension.
+
+A message holds the text, an optional e-mail address for an answer, the extension's version and
+language; mentions such as `@everyone` don't ping anyone. Each network can send
+`FEEDBACK_PER_IP_PER_DAY` messages a day, and the whole server passes on 200. Without the variable
+the form tells people this server doesn't take feedback.
 
 ## Managing accounts
 
@@ -209,7 +226,8 @@ certificates in front of it; live sync passes through that proxy as it is.
      share links use it);
    - `TRUST_PROXY=true`, so the limits see each user's own address;
    - the rest from the table in [Configure](#2-configure): `ALLOW_SIGNUP`, `ADMIN_USERNAME` and
-     `ADMIN_PASSWORD` for the first start, `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, the limits.
+     `ADMIN_PASSWORD` for the first start, `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, the limits,
+     `FEEDBACK_WEBHOOK_URL` for the [feedback form](#feedback).
      `DOMAIN` is only for Docker Compose; Coolify does not need it.
 6. Leave Coolify's own health check off: the image checks itself, and Coolify's check needs `curl`
    or `wget`, which the image does not have.

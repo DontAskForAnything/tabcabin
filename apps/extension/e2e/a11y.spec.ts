@@ -186,3 +186,40 @@ test('the sign-out dialogs have no serious accessibility problems', async ({
   const failures = Object.fromEntries(Object.entries(report).filter(([, v]) => v.length > 0))
   expect(failures).toEqual({})
 })
+
+test('the feedback card and form have no serious accessibility problems', async ({
+  context,
+  extensionId,
+}) => {
+  // Two weeks of use behind this browser; the server can't be reached, so the form stays open.
+  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  await worker.evaluate(async (day) => {
+    await tabcabin.db.meta.put({ key: 'test.syncServer', value: 'http://127.0.0.1:9' })
+    await tabcabin.db.meta.put({
+      key: 'feedback.ask',
+      value: { since: Date.now() - 15 * day, daysUsed: 5, lastDay: '2026-01-01', state: 'waiting' },
+    })
+  }, 86_400_000)
+  const page = await context.newPage()
+  await page.goto(`chrome-extension://${extensionId}/newtab.html`)
+  const card = page.getByRole('region', { name: 'How is TabCabin working for you?' })
+  await expect(card).toBeVisible()
+  const report: Record<string, Awaited<ReturnType<typeof audit>>> = {}
+  const both = async (step: string) => {
+    await page.waitForTimeout(400)
+    for (const dark of [false, true]) {
+      await page.evaluate((on) => document.documentElement.classList.toggle('dark', on), dark)
+      await page.waitForTimeout(200)
+      report[`${step}${dark ? 'Dark' : ''}`] = await audit(page)
+    }
+  }
+
+  await both('card')
+  await card.getByRole('button', { name: 'Tell me what to improve' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Tell me what to improve' })
+  await dialog.getByLabel('Message').fill('The week view could show a month too.')
+  await both('form')
+
+  const failures = Object.fromEntries(Object.entries(report).filter(([, v]) => v.length > 0))
+  expect(failures).toEqual({})
+})

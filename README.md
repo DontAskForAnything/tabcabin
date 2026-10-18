@@ -131,7 +131,9 @@ Without `EXTENSION_URL` the website says "Coming soon" instead of "Get it for Ch
 ## Privacy
 
 Your data lives in the browser's IndexedDB. It only leaves the browser when you sign in, and then
-only to the sync server the extension was built with. TabCabin has no analytics and no tracking; apart
+only to the sync server the extension was built with. A feedback message you choose to send (More →
+**Send feedback**) goes through that server to the people who run it, with nothing from your
+boards. TabCabin has no analytics and no tracking; apart
 from sync, the only things it loads from the web are the icons and images of pages you saved (and,
 if you turn on link checks, the saved pages themselves, to see whether they still load).
 Permissions it asks for:

@@ -204,6 +204,7 @@ export const en = {
   'selection.clear': 'Clear selection',
   'menu.more': 'More',
   'menu.settings': 'Settings',
+  'menu.feedback': 'Send feedback',
   'menu.bin': 'Bin',
   'menu.theme': 'Theme',
   'menu.themeLight': 'Light',
@@ -656,6 +657,24 @@ export const en = {
   'bin.kind.stack': 'Stack',
   'bin.items': { one: '{count} item', other: '{count} items' },
   'bin.from': 'from {place}',
+  'feedback.question': 'How is TabCabin working for you?',
+  'feedback.questionHint': 'You’ve used it for two weeks. Every rating and every note helps a lot.',
+  'feedback.questionHintAgain': 'Every rating and every note helps a lot.',
+  'feedback.rate': 'Rate in the Chrome Web Store',
+  'feedback.write': 'Tell me what to improve',
+  'feedback.notNow': 'Not now',
+  'feedback.writeHint':
+    'What doesn’t work, what’s missing, what gets in the way? I read every message.',
+  'feedback.message': 'Message',
+  'feedback.email': 'Email, if you’d like an answer (optional)',
+  'feedback.emailPlaceholder': 'you@example.com',
+  'feedback.privacy':
+    'Only the TabCabin version and language go with it. Nothing from your boards.',
+  'feedback.send': 'Send',
+  'feedback.sent': 'Sent. Thank you for the feedback.',
+  'feedback.limit': 'That’s enough messages for today. Try again tomorrow.',
+  'feedback.failed': 'Couldn’t send it. Try again in a moment.',
+  'feedback.off': 'This sync server doesn’t take feedback.',
 } satisfies Record<string, Message>
 
 export type MessageKey = keyof typeof en

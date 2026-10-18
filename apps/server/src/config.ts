@@ -29,6 +29,8 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
   SIGNUP_EMAILS: z.string().optional(),
   EXTENSION_IDS: z.string().optional(),
+  FEEDBACK_WEBHOOK_URL: z.url().optional(),
+  FEEDBACK_PER_IP_PER_DAY: z.coerce.number().int().min(1).default(5),
   // Only for tests: a stand-in for Google's endpoints.
   GOOGLE_AUTH_URL: z.url().default('https://accounts.google.com/o/oauth2/v2/auth'),
   GOOGLE_TOKEN_URL: z.url().default(GOOGLE_TOKEN_URL),
@@ -68,6 +70,10 @@ export interface Config {
   signupsPerIpPerDay: number
   /** Synced rows (workspaces, groups, items…) one account may store. */
   maxRecordsPerUser: number
+  /** Discord webhook that receives the feedback form (none: the form is off). */
+  feedbackWebhook: string | null
+  /** Feedback messages one address may send per day. */
+  feedbackPerIpPerDay: number
 }
 
 /** Reads the configuration from environment variables; throws with every problem at once. */
@@ -119,5 +125,7 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     maxUsers: e.MAX_USERS,
     signupsPerIpPerDay: e.SIGNUPS_PER_IP_PER_DAY,
     maxRecordsPerUser: e.MAX_RECORDS_PER_USER,
+    feedbackWebhook: e.FEEDBACK_WEBHOOK_URL ?? null,
+    feedbackPerIpPerDay: e.FEEDBACK_PER_IP_PER_DAY,
   }
 }

@@ -7,7 +7,7 @@ import { analytics, repo } from '../site'
 
 <Layout
   title="Privacy policy — TabCabin"
-  description="TabCabin keeps your data in your browser and sends it to the sync server only when you sign in. No analytics, no ads, no tracking."
+  description="TabCabin keeps your data in your browser and sends it to the sync server only when you sign in or send feedback. No analytics, no ads, no tracking."
   path="/privacy/"
 >
   <Nav />
@@ -43,8 +43,14 @@ import { analytics, repo } from '../site'
         </p>
       )}
       <ul>
-        <li>We do not sell, share or transfer any data to third parties.</li>
-        <li>Without signing in there is no account and nothing is sent to any server.</li>
+        <li>
+          We do not sell, share or transfer any data to third parties. The one exception is a
+          feedback message you choose to send (see below).
+        </li>
+        <li>
+          Without signing in there is no account and nothing is sent to any server, unless you send
+          feedback.
+        </li>
         <li>Your data is not used for any purpose other than showing your boards to you.</li>
       </ul>
 
@@ -64,8 +70,8 @@ import { analytics, repo } from '../site'
       <p>
         To show what you saved, the extension loads website icons and images from the websites they
         belong to. Website icons are taken from the browser's own icon cache when possible. No other
-        requests are made, except to the sync server once you sign in, and to your saved pages if
-        you turn on link checks.
+        requests are made, except to the sync server once you sign in or when you send feedback, and
+        to your saved pages if you turn on link checks.
       </p>
       <p>
         Link checks are off until you turn them on in Settings. Then, about once a week, your
@@ -123,6 +129,17 @@ import { analytics, repo } from '../site'
         Once signed in, you can share a group as a read-only link. Anyone with that link sees the
         group's title, links, notes and to-dos until you stop sharing it or delete the group. The
         page is kept out of search engines and loads nothing from anywhere else.
+      </p>
+
+      <h2>Feedback</h2>
+      <p>
+        After two weeks of use, TabCabin asks once how it is working for you, and More → Send
+        feedback is always there. Rating it opens the Chrome Web Store, where Google's own terms
+        apply. If you write a message instead, the message, the e-mail address you give for an
+        answer (optional), the TabCabin version and the language go to the sync server, which posts
+        them to the developer's private Discord channel and does not keep them. Discord stores them
+        like any message on its service. Nothing from your boards goes with it. To limit how many
+        messages one network can send, the server counts them by IP address, in memory, for a day.
       </p>
 
       <h2>Deleting your data</h2>

@@ -15,6 +15,8 @@ type ModalState =
   | { type: 'reminders' }
   | { type: 'welcome' }
   | { type: 'week' }
+  /** The feedback form; `fromCard` when it was opened from the two-week question. */
+  | { type: 'feedback'; fromCard?: boolean }
   | { type: 'share'; groupId: string; title: string }
   | null
 

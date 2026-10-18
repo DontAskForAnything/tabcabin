@@ -3,6 +3,7 @@ import {
   Cloud,
   Ellipsis,
   Keyboard,
+  MessageSquare,
   Monitor,
   Moon,
   Plus,
@@ -28,6 +29,7 @@ import type { ReactNode } from 'react'
 import { useT } from '@/i18n'
 import { setSetting } from '@/settings/settings'
 import { useUi } from '@/state/ui'
+import { useSyncServer } from '@/sync/server'
 import { useBoardActions } from '../board/actions'
 import type { ActiveContext } from '../useActive'
 
@@ -35,6 +37,7 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
   const t = useT()
   const openModal = useUi((s) => s.openModal)
   const actions = useBoardActions(active)
+  const server = useSyncServer()
   const theme = active.settings?.theme ?? 'system'
   const themes: { value: ThemePreference; label: string; icon: ReactNode }[] = [
     { value: 'light', label: t('menu.themeLight'), icon: <Sun size={15} /> },
@@ -99,6 +102,17 @@ export function MoreMenu({ active }: { active: ActiveContext }) {
         <MenuItem icon={<Settings size={15} />} onSelect={() => openModal({ type: 'settings' })}>
           {t('menu.settings')}
         </MenuItem>
+        {server && (
+          <>
+            <MenuSeparator />
+            <MenuItem
+              icon={<MessageSquare size={15} />}
+              onSelect={() => openModal({ type: 'feedback' })}
+            >
+              {t('menu.feedback')}
+            </MenuItem>
+          </>
+        )}
       </MenuContent>
     </Menu>
   )

@@ -23,6 +23,15 @@ interface ServerHealth {
   version: string
   /** Sign-in options (missing on servers older than Google sign-in). */
   auth?: { password: boolean; google: boolean; signup: boolean }
+  /** Whether the server passes the feedback form on (missing on older servers). */
+  feedback?: boolean
+}
+
+export interface FeedbackMessage {
+  text: string
+  email: string
+  version: string
+  language: string
 }
 
 export interface Share {
@@ -78,6 +87,10 @@ export class SyncClient {
 
   health() {
     return this.request<ServerHealth>('/health')
+  }
+
+  sendFeedback(message: FeedbackMessage) {
+    return this.request<void>('/feedback', { method: 'POST', body: JSON.stringify(message) })
   }
 
   async login(username: string, password: string, label: string, signup = false) {

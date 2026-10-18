@@ -4,6 +4,7 @@ import { useUi } from '@/state/ui'
 import { BoardView } from './board/BoardView'
 import { DndProvider } from './dnd/DndProvider'
 import { TrashZone } from './dnd/DropMarkers'
+import { FeedbackCard } from './feedback/FeedbackCard'
 import { Modals } from './modals/Modals'
 import { Onboarding } from './onboarding/Onboarding'
 import type { Surface } from './mount'
@@ -32,6 +33,7 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
         </main>
         <Modals active={active} />
         {!compact && <Onboarding active={active} />}
+        {!compact && <FeedbackCard />}
         <NoteToolbar />
         <SelectionBar active={active} />
         <TrashZone enabled={active.settings?.trashZone ?? true} />

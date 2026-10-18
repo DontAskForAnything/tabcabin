@@ -25,6 +25,11 @@ All notable changes to this project are documented here. The format follows
 - Signing out asks whose computer it is. On your own the boards stay; on someone else's or a shared
   one, TabCabin sends the last changes to your account, removes everything from that browser and
   starts over with the welcome
+- After two weeks of use, TabCabin asks once how it's working: rate it in the Chrome Web Store or
+  write what to improve. "Not now" asks once more a month later. The form is also under More → Send
+  feedback; only the version and language go with the message, nothing from your boards
+- Server: `FEEDBACK_WEBHOOK_URL` passes the feedback form on to a Discord channel, with a daily limit
+  per network
 
 ### Changed
 

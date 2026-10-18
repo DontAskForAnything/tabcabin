@@ -7,6 +7,7 @@ import type { Config } from './config'
 import type { Db } from './db/client'
 import { SignupGuard } from './auth/signupGuard'
 import { authRoutes } from './routes/auth'
+import { feedbackRoutes } from './routes/feedback'
 import { googleRoutes } from './routes/google'
 import { shareRoutes } from './routes/shares'
 import { syncRoutes } from './routes/sync'
@@ -57,6 +58,7 @@ export function createApp({
       version: pkg.version,
       // Lets the extension offer only the sign-in options this server has.
       auth: { password: true, google: config.google !== null, signup: config.allowSignup },
+      feedback: config.feedbackWebhook !== null,
     })
   })
 
@@ -65,6 +67,7 @@ export function createApp({
   app.route('/auth', authRoutes(db, config, now, signups))
   app.route('/', syncRoutes(db, config, feed, now))
   app.route('/', shareRoutes(db, config, now))
+  app.route('/', feedbackRoutes(config, now, fetcher))
 
   app.notFound((c) => c.json({ error: 'not_found' }, 404))
   app.onError((error, c) => {

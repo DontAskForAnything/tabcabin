@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.3.2] — 2026-10-18
+
+Templates for one job, a safe way to sign out of someone else's computer, a week that adds up across
+your computers, and a short form to say what could be better. Update the sync server before the
+extension: it needs to know the week's counts and the feedback form.
+
 ### Added
 
 - Templates for one job: Job hunt, Thesis, Trip, Moving house, Gift list and Weekly reset, in English
@@ -246,7 +252,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/DontAskForAnything/tabcabin/compare/v0.1.0...v1.2.0

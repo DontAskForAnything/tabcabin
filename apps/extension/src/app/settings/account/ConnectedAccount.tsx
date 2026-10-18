@@ -1,17 +1,11 @@
 import { Cloud, CloudOff, LogOut } from 'lucide-react'
-import { Button, cn, toast } from '@tabcabin/ui'
+import { Button, cn } from '@tabcabin/ui'
+import { useState } from 'react'
 import { useLocale, useT } from '@/i18n'
 import { relativeTime } from '@/lib/time'
-import { SyncClient } from '@/sync/client'
-import {
-  type Account,
-  INITIAL_STATE,
-  setAccount,
-  updateSyncState,
-  usePendingCount,
-  useSyncState,
-} from '@/sync/state'
+import { type Account, INITIAL_STATE, usePendingCount, useSyncState } from '@/sync/state'
 import { SYNC_STATUS_DOT } from '@/sync/statusColors'
+import { SignOutDialog } from './SignOutDialog'
 
 /** The signed-in account and how syncing goes (it runs by itself; there is nothing to press). */
 export function ConnectedAccount({ account }: { account: Account }) {
@@ -19,13 +13,7 @@ export function ConnectedAccount({ account }: { account: Account }) {
   const locale = useLocale()
   const state = useSyncState() ?? INITIAL_STATE
   const pending = usePendingCount()
-
-  const signOut = async () => {
-    await new SyncClient(account.serverUrl, account.token).logout().catch(() => undefined)
-    await setAccount(null)
-    await updateSyncState(INITIAL_STATE)
-    toast({ title: t('sync.signedOut'), tone: 'success' })
-  }
+  const [signingOut, setSigningOut] = useState(false)
 
   return (
     <div className="flex flex-col gap-4 pt-1">
@@ -72,11 +60,11 @@ export function ConnectedAccount({ account }: { account: Account }) {
         variant="ghost"
         icon={<LogOut size={15} />}
         className="w-fit text-danger hover:text-danger"
-        onClick={() => void signOut()}
+        onClick={() => setSigningOut(true)}
       >
         {t('sync.signOut')}
       </Button>
-      <p className="-mt-2 text-[12.5px] text-ink-3">{t('sync.signOutHint')}</p>
+      <SignOutDialog account={account} open={signingOut} onOpenChange={setSigningOut} />
     </div>
   )
 }

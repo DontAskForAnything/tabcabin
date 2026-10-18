@@ -8,6 +8,8 @@ export interface Account {
   user: PublicUser
   /** Set once the first synchronization (merge or download) finished. */
   initialized: boolean
+  /** How this browser signed in (missing for sign-ins from before it was stored). */
+  via?: 'google' | 'password'
 }
 
 type SyncStatus = 'idle' | 'syncing' | 'synced' | 'offline' | 'error' | 'signed-out'

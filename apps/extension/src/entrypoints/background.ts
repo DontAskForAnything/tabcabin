@@ -6,6 +6,7 @@ import { checkLinks, startLinkChecks } from '@/background/linkChecks'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
+import { handleSignOut } from '@/background/signOut'
 import { startSync, syncEngine } from '@/background/sync'
 import { handleSiteMessage, type SiteReply } from '@/background/templates'
 import { runUndo } from '@/background/toast'
@@ -59,6 +60,13 @@ export default defineBackground(() => {
     if (message.type === 'tabcabin:undo') {
       void runUndo(message.undoId)
       return undefined
+    }
+    if (message.type === 'tabcabin:sign-out') {
+      void handleSignOut(message).then(sendResponse, (error: unknown) => {
+        console.error(error)
+        sendResponse({ ok: false, pending: 0 })
+      })
+      return true
     }
     const reply = handlePopoverMessage(message, sender)
     if (reply) {

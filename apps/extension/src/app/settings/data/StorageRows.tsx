@@ -5,6 +5,8 @@ import { db } from '@/db/db'
 import { clearAllData } from '@/db/repo'
 import { useLocale, useT } from '@/i18n'
 import { confirmDialog } from '@/state/confirm'
+import { getAccount } from '@/sync/state'
+import { requestSignOut } from '../account/requestSignOut'
 import { Row } from '../Row'
 
 function formatBytes(bytes: number, locale: string): string {
@@ -46,6 +48,8 @@ export function StorageRows() {
       danger: true,
     })
     if (!ok) return
+    // Signed in: end the session and stop syncing first, so nothing comes back from the server.
+    if (await getAccount()) await requestSignOut({ remove: false, force: false })
     await clearAllData()
     location.reload()
   }

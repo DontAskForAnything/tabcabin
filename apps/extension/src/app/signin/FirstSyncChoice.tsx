@@ -1,9 +1,10 @@
 import { Download, Upload } from 'lucide-react'
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { useT } from '@/i18n'
 import { firstSync } from '@/sync/firstSync'
 import type { PendingChoice } from '@/sync/session'
 import { setAccount } from '@/sync/state'
+import { ChoiceButton } from '../shared/ChoiceButton'
 import { errorText } from './errorText'
 
 /** Asked once, when this browser and the account both have boards. */
@@ -47,30 +48,5 @@ export function FirstSyncChoice({ choice, onDone }: { choice: PendingChoice; onD
         </p>
       )}
     </div>
-  )
-}
-
-function ChoiceButton(props: {
-  icon: ReactNode
-  title: string
-  hint: string
-  disabled: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      disabled={props.disabled}
-      onClick={props.onClick}
-      className="flex items-center gap-3.5 rounded-[14px] border border-line bg-card px-4 py-3.5 text-left shadow-tile transition-[border-color,box-shadow] outline-none hover:border-accent/50 focus-visible:shadow-[0_0_0_2px_var(--focus)] disabled:opacity-50"
-    >
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-ink">
-        {props.icon}
-      </span>
-      <span>
-        <span className="block text-[14px] font-semibold">{props.title}</span>
-        <span className="block text-[12.5px] text-ink-3">{props.hint}</span>
-      </span>
-    </button>
   )
 }

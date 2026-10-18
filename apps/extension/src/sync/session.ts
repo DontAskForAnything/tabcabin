@@ -24,12 +24,14 @@ export async function completeSignIn(
   client: SyncClient,
   result: SignedIn,
   previous: Account | null | undefined,
+  via: Account['via'],
 ): Promise<PendingChoice | null> {
   const account: Account = {
     serverUrl: client.serverUrl,
     token: result.token,
     user: result.user,
     initialized: false,
+    via,
   }
   const sameAccount =
     previous?.initialized &&

@@ -10,7 +10,7 @@ export type SignInMethod = 'google' | 'password'
 /** Runs a sign-in against the sync server and keeps its progress and error for the form. */
 export function useSignIn(
   server: string,
-  onSignedIn: (client: SyncClient, result: SignedIn) => Promise<void>,
+  onSignedIn: (client: SyncClient, result: SignedIn, via: SignInMethod) => Promise<void>,
 ) {
   const t = useT()
   const [busy, setBusy] = useState(false)
@@ -21,7 +21,7 @@ export function useSignIn(
     setError(null)
     try {
       const client = new SyncClient(server)
-      await onSignedIn(client, await signIn(client))
+      await onSignedIn(client, await signIn(client), from)
     } catch (err) {
       // Closing the Google window is not an error worth showing.
       if (!(err instanceof ApiError && err.code === 'cancelled'))

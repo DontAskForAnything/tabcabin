@@ -44,6 +44,13 @@ export class SyncEngine {
     if (this.pushTimer) clearTimeout(this.pushTimer)
   }
 
+  /** Stops syncing and waits for a pass that is still running, so nothing arrives after it. */
+  async halt() {
+    const running = this.running
+    this.stop()
+    await running?.catch(() => undefined)
+  }
+
   /** Debounced push after local edits. */
   schedulePush(delay = 800) {
     if (!this.client) return
@@ -121,8 +128,8 @@ export class SyncEngine {
           if (controller.signal.aborted) break
           if (error instanceof ApiError && error.status === 401) return this.fail(error)
         }
-        await updateSyncState({ live: false })
         if (controller.signal.aborted) break
+        await updateSyncState({ live: false })
         await new Promise((resolve) => setTimeout(resolve, this.backoff))
         this.backoff = Math.min(this.backoff * 2, 60_000)
       }

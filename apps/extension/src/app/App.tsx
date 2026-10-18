@@ -7,6 +7,7 @@ import { translate } from '@/i18n/translate'
 import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
 import { seedText } from './seedText'
 import { Shell } from './Shell'
+import { StartOver } from './StartOver'
 import { SignInPage } from './signin/SignInPage'
 import type { Surface } from './mount'
 import { useActive } from './useActive'
@@ -41,6 +42,7 @@ export function App({ surface }: { surface: Surface }) {
           <TooltipProvider>
             {surface === 'signin' ? <SignInPage /> : <Shell surface={surface} active={active} />}
             <Toaster />
+            <StartOver />
           </TooltipProvider>
         </MotionConfig>
       </ComponentText>

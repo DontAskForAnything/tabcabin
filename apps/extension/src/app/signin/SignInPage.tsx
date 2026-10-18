@@ -35,8 +35,8 @@ export function SignInPage() {
       <SignInForm
         server={server}
         expired={!!account && !account.token}
-        onSignedIn={async (client, result) => {
-          const pending = await completeSignIn(client, result, account)
+        onSignedIn={async (client, result, via) => {
+          const pending = await completeSignIn(client, result, account, via)
           if (pending) setChoice(pending)
           else setDone(true)
         }}

@@ -22,6 +22,9 @@ All notable changes to this project are documented here. The format follows
   October)
 - Website: a guide to syncing tabs between computers without a Google account (online on 27
   October)
+- Signing out asks whose computer it is. On your own the boards stay; on someone else's or a shared
+  one, TabCabin sends the last changes to your account, removes everything from that browser and
+  starts over with the welcome
 
 ### Changed
 
@@ -35,6 +38,7 @@ All notable changes to this project are documented here. The format follows
   on a Mac
 - Website: the privacy page had no space before "project repository"
 - Website: screen readers heard "Tobycompared with TabCabin" in the comparison tables
+- Deleting all data while signed in also ends the session on the server
 
 ## [1.3.1] — 2026-10-14
 

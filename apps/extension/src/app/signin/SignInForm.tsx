@@ -7,7 +7,7 @@ import { useServerHealth } from '@/sync/useServerHealth'
 import { FormError } from './FormError'
 import { GoogleButton } from './GoogleButton'
 import { PasswordForm } from './PasswordForm'
-import { useSignIn } from './useSignIn'
+import { type SignInMethod, useSignIn } from './useSignIn'
 
 /**
  * Google first (simpler for people, and fewer fake accounts); username and password stay one
@@ -20,7 +20,7 @@ export function SignInForm({
 }: {
   server: string
   expired: boolean
-  onSignedIn: (client: SyncClient, result: SignedIn) => Promise<void>
+  onSignedIn: (client: SyncClient, result: SignedIn, via: SignInMethod) => Promise<void>
 }) {
   const t = useT()
   const health = useServerHealth(server)

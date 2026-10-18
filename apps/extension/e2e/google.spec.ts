@@ -1,13 +1,8 @@
-import { type ChildProcess, spawn } from 'node:child_process'
-import { mkdtempSync, rmSync } from 'node:fs'
 import { createServer, type Server } from 'node:http'
-import { tmpdir } from 'node:os'
-import { dirname, join, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { type BrowserContext } from '@playwright/test'
 import { expect, test } from './fixtures'
+import { pointAt, startSyncServer, type SyncServer } from './syncServer'
 
-const serverMain = resolve(dirname(fileURLToPath(import.meta.url)), '../../server/dist/main.js')
 const PORT = 19_000 + Math.floor(Math.random() * 500)
 const GOOGLE_PORT = PORT + 500
 const SERVER = `http://127.0.0.1:${PORT}`
@@ -16,9 +11,7 @@ const CLIENT_ID = 'test-client.apps.googleusercontent.com'
 /** Who the fake Google says is signing in. */
 let account = { sub: 'g-1', email: 'ola@studio.dev' }
 let google: Server | undefined
-let server: ChildProcess | undefined
-/** Created in beforeAll: Playwright also loads this file just to list the tests. */
-let dataDir = ''
+let server: SyncServer | undefined
 
 /** Stands in for Google: approves every sign-in at once and returns an ID token for `account`. */
 function fakeGoogle(): Server {
@@ -49,14 +42,9 @@ function fakeGoogle(): Server {
 }
 
 test.beforeAll(async () => {
-  dataDir = mkdtempSync(join(tmpdir(), 'tabcabin-server-'))
   google = fakeGoogle()
-  server = spawn(process.execPath, [serverMain], {
-    env: {
-      ...process.env,
-      PORT: String(PORT),
-      HOST: '127.0.0.1',
-      DATA_DIR: dataDir,
+  server = await startSyncServer(
+    {
       PUBLIC_URL: SERVER,
       GOOGLE_CLIENT_ID: CLIENT_ID,
       GOOGLE_CLIENT_SECRET: 'test-secret',
@@ -64,35 +52,18 @@ test.beforeAll(async () => {
       GOOGLE_TOKEN_URL: `http://127.0.0.1:${GOOGLE_PORT}/token`,
       SIGNUP_EMAILS: '@studio.dev',
     },
-    stdio: 'ignore',
-  })
-  await expect
-    .poll(
-      () =>
-        fetch(`${SERVER}/health`).then(
-          (r) => r.ok,
-          () => false,
-        ),
-      { timeout: 15_000 },
-    )
-    .toBe(true)
+    PORT,
+  )
 })
 
 test.afterAll(() => {
-  server?.kill()
-  if (dataDir) rmSync(dataDir, { recursive: true, force: true })
+  server?.stop()
   google?.close()
 })
 
-declare const tabcabin: { db: { meta: { put(row: object): Promise<unknown> } } }
-
 /** Opens the sign-in page of a test build pointed at this test's server. */
 async function openSignIn(context: BrowserContext, extensionId: string) {
-  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
-  await worker.evaluate(
-    (server) => tabcabin.db.meta.put({ key: 'test.syncServer', value: server }),
-    SERVER,
-  )
+  await pointAt(context, SERVER)
   const page = await context.newPage()
   await page.goto(`chrome-extension://${extensionId}/newtab.html`)
   await page.getByRole('button', { name: 'Sign in to sync' }).click()
@@ -116,6 +87,12 @@ test('signs in with Google and creates the invited account', async ({ context, e
   const dialog = page.getByRole('dialog', { name: 'Settings' })
   await expect(dialog.getByText('ola@studio.dev')).toBeVisible()
   await expect(dialog.getByText('Up to date')).toBeVisible({ timeout: 15_000 })
+
+  // Signing out reminds that the browser itself stays signed in to Google.
+  await dialog.getByRole('button', { name: 'Sign out' }).click()
+  await expect(page.getByRole('dialog', { name: 'Sign out' })).toContainText(
+    'On someone else’s computer, sign out of Google in Chrome too.',
+  )
 })
 
 test('explains when a Google account is not invited', async ({ context, extensionId }) => {

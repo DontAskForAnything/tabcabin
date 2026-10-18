@@ -140,3 +140,49 @@ test.describe('first start', () => {
     expect(failures).toEqual({})
   })
 })
+
+declare const tabcabin: { db: { meta: { put(row: object): Promise<unknown> } } }
+
+test('the sign-out dialogs have no serious accessibility problems', async ({
+  context,
+  extensionId,
+}) => {
+  // Signed in with Google to a server that can't be reached, so the second dialog shows too.
+  const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+  await worker.evaluate(async () => {
+    const serverUrl = 'http://127.0.0.1:9'
+    const user = { id: 'u1', username: 'michal', email: null, isAdmin: false }
+    await tabcabin.db.meta.put({ key: 'test.syncServer', value: serverUrl })
+    await tabcabin.db.meta.put({
+      key: 'sync.account',
+      value: { serverUrl, token: 'token', user, initialized: true, via: 'google' },
+    })
+  })
+  const page = await context.newPage()
+  await page.goto(`chrome-extension://${extensionId}/newtab.html`)
+  await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
+  const report: Record<string, Awaited<ReturnType<typeof audit>>> = {}
+  const both = async (step: string) => {
+    await page.waitForTimeout(400)
+    for (const dark of [false, true]) {
+      await page.evaluate((on) => document.documentElement.classList.toggle('dark', on), dark)
+      await page.waitForTimeout(200)
+      report[`${step}${dark ? 'Dark' : ''}`] = await audit(page)
+    }
+  }
+
+  await page.getByRole('button', { name: 'More' }).click()
+  await page.getByRole('menuitem', { name: 'Account & sync' }).click()
+  await page.getByRole('button', { name: 'Sign out' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Sign out' })
+  await expect(dialog).toContainText('sign out of Google')
+  await both('choice')
+  await dialog.getByRole('button', { name: /Someone else’s, or shared/ }).click()
+  await expect(
+    page.getByRole('dialog', { name: 'Some changes are only in this browser' }),
+  ).toBeVisible({ timeout: 15_000 })
+  await both('pending')
+
+  const failures = Object.fromEntries(Object.entries(report).filter(([, v]) => v.length > 0))
+  expect(failures).toEqual({})
+})

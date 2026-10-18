@@ -1,3 +1,5 @@
+import type { SignOutOptions } from '@/sync/signOut'
+
 /** Messages exchanged between the background worker and content scripts. */
 export type ToastTone = 'success' | 'error' | 'info'
 
@@ -55,6 +57,16 @@ interface CheckLinksRequest {
   type: 'tabcabin:check-links'
 }
 
+/** Sign this browser out; the reply is a `SignOutResult`. */
+interface SignOutRequest extends SignOutOptions {
+  type: 'tabcabin:sign-out'
+}
+
+/** Sent to every TabCabin page once this browser's data is removed: they start over. */
+interface ResetNotice {
+  type: 'tabcabin:reset'
+}
+
 export type RuntimeMessage =
   | ToastMessage
   | UndoMessage
@@ -65,6 +77,8 @@ export type RuntimeMessage =
   | OpenAppRequest
   | SyncNowRequest
   | CheckLinksRequest
+  | SignOutRequest
+  | ResetNotice
 
 export function isRuntimeMessage(value: unknown): value is RuntimeMessage {
   return (

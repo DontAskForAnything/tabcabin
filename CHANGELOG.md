@@ -18,6 +18,10 @@ All notable changes to this project are documented here. The format follows
 - Website: search engines learn that the Chrome Web Store listing and the code belong to the site
 - Website: guides under /guides/, starting with how to save all your open tabs in Chrome. Each guide
   goes online on its own day, and the site rebuilds itself on those mornings
+- Website: a guide to exporting your tabs from OneTab and moving them to TabCabin (online on 20
+  October)
+- Website: a guide to syncing tabs between computers without a Google account (online on 27
+  October)
 
 ### Changed
 

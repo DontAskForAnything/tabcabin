@@ -29,6 +29,26 @@ const all: Guide[] = [
     published: '2026-10-18',
     minutes: 4,
   },
+  {
+    slug: 'export-onetab-tabs',
+    title: 'How to export your tabs from OneTab',
+    description:
+      'OneTab keeps your tabs in one browser only. Export every list to a text file in four steps, keep it as a backup and move it to a board with notes.',
+    summary: 'Keep a backup of every OneTab list and move it to a board with notes and search.',
+    crumb: 'Export from OneTab',
+    published: '2026-10-20',
+    minutes: 3,
+  },
+  {
+    slug: 'sync-tabs-without-google-account',
+    title: 'How to sync tabs between computers without a Google account',
+    description:
+      'Chrome syncs tabs only through a Google account. Three other ways to keep the same tabs on every computer: a file, a TabCabin account or your own server.',
+    summary: 'A bookmarks file, an account with a username and password, or a server of your own.',
+    crumb: 'Sync without a Google account',
+    published: '2026-10-27',
+    minutes: 4,
+  },
 ]
 
 // `astro dev` shows every guide, so the next ones can be checked before their day.

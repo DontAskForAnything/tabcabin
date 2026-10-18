@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets'
+import collections from '../../../../docs/screenshots/collections-light.png'
+import BrowserWindow from '../components/BrowserWindow.astro'
+import ShortAnswer from '../components/guides/ShortAnswer.astro'
+---
+
+<ShortAnswer>
+  open the OneTab page, click Export / Import URLs at the top right, copy all the text and save it
+  as a .txt file. That file is your backup, and TabCabin imports it as it is: Settings → Data →
+  Import from a file.
+</ShortAnswer>
+
+<h2>Why export at all</h2>
+<p>
+  OneTab keeps its lists inside the browser, on this computer only. It has no account and no copy
+  anywhere else. When the extension is removed, the browser profile is reset or the computer is
+  replaced, the lists go with it. An export is the only backup there is.
+</p>
+
+<h2>1. Export the lists</h2>
+<ol>
+  <li>Right-click the OneTab icon and choose Display OneTab.</li>
+  <li>At the top right of the page, click Export / Import URLs.</li>
+  <li>
+    Click in the box with the addresses, select everything with <kbd>Ctrl+A</kbd> and copy it with
+    <kbd>Ctrl+C</kbd>.
+  </li>
+  <li>Paste it into a text editor and save it as a file, for example onetab.txt.</li>
+</ol>
+<p>
+  Each line is one tab: the address, a vertical bar and the title. A blank line starts the next
+  group. Stars and locks are not part of the file, so note which groups mattered before you move.
+</p>
+
+<h2>2. Keep the file somewhere safe</h2>
+<p>
+  Put it in a cloud drive or send it to yourself. OneTab adds new lists over time, so export again
+  every few weeks, or before you reinstall the browser.
+</p>
+
+<h2>3. Bring the lists into TabCabin</h2>
+<p>
+  A text file is a backup you can restore, but not a place to work. TabCabin is a free, open-source
+  extension that turns the new tab page into boards, and it reads the OneTab file directly.
+</p>
+<ol>
+  <li>Get TabCabin for Chrome, Edge or Brave and open a new tab.</li>
+  <li>Open Settings → Data → Import from a file and choose the .txt file.</li>
+  <li>
+    The tabs arrive in a new workspace, “Imported from OneTab”, with each OneTab group as a group of
+    its own.
+  </li>
+  <li>
+    Rename the groups, drag them where they belong and add a note to whatever you want to remember.
+  </li>
+</ol>
+<BrowserWindow class="mt-8">
+  <Image
+    src={collections}
+    alt="Groups of links in TabCabin's collections view"
+    widths={[720, 1080, 1440]}
+    sizes="(min-width: 800px) 720px, 100vw"
+    class="block w-full"
+  />
+</BrowserWindow>
+<p>
+  From then on, Save all tabs in the tabs panel does what the OneTab button did, except that the
+  tabs land in groups you name, next to your notes and to-dos.
+</p>
+
+<h2>Questions</h2>
+<h3>Does importing change anything in OneTab?</h3>
+<p>No. TabCabin only reads the file, so keep OneTab until you are happy with the boards.</p>
+<h3>Can I import a newer export later?</h3>
+<p>Yes. Every import goes into a new workspace, so nothing you already have is overwritten.</p>
+<h3>What else does TabCabin have that OneTab doesn't?</h3>
+<p>
+  Notes, to-dos and reminders next to links, search across everything, and sync between your
+  computers when you sign in. The <a href="/alternatives/onetab/">OneTab comparison</a> has the full
+  table.
+</p>

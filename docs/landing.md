@@ -102,8 +102,8 @@ In Coolify, add the repository as a new application (a private one through the G
 - exposed port `80` and your domain
 - `SITE_URL` (the same address), `EXTENSION_URL`, `REPO_URL` and the Umami variables as
   environment variables available at build time
-- optionally watch paths `apps/landing/**`, `packages/ui/**` and `docs/screenshots/**`, so only
-  changes to the site start a new deployment
+- optionally watch paths `apps/landing/**`, `packages/core/**`, `packages/ui/**`,
+  `docs/screenshots/**` and `docs/promo/**`, so only changes to the site start a new deployment
 
 ## Visit counts
 

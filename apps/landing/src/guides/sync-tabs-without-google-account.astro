@@ -1,0 +1,94 @@
+---
+import ShortAnswer from '../components/guides/ShortAnswer.astro'
+import WaysTable from '../components/guides/WaysTable.astro'
+---
+
+<ShortAnswer>
+  Chrome's own sync needs a Google account. Without one, carry your tabs over as a bookmarks file,
+  or use a tab manager with its own sync: in TabCabin you create an account with a username and
+  password, or run the sync server yourself.
+</ShortAnswer>
+
+<h2>What Chrome needs a Google account for</h2>
+<p>
+  Bookmarks, history, saved tab groups and the tabs open on your other devices all travel through
+  Chrome sync, and Chrome sync works only when you sign in to the browser with a Google account. On
+  a work or school computer that is often switched off, and some people would rather keep their
+  browsing out of their Google account.
+</p>
+
+<h2>1. Carry a bookmarks file</h2>
+<ol>
+  <li>
+    On the first computer, press <kbd>Ctrl+Shift+D</kbd> to bookmark all tabs of the window into a
+    folder.
+  </li>
+  <li>
+    Open the bookmark manager with <kbd>Ctrl+Shift+O</kbd>, then ⋮ → Export bookmarks, and save the
+    file.
+  </li>
+  <li>
+    On the other computer, open the bookmark manager, choose ⋮ → Import bookmarks and pick the file.
+  </li>
+</ol>
+<p>
+  It works in every browser, but it is a copy: what you change on one computer reaches the other
+  only when you export and import again.
+</p>
+
+<h2>2. A TabCabin account with a username and password</h2>
+<p>
+  TabCabin is a free, open-source extension that keeps your tabs, links, notes and to-dos on boards
+  in the new tab page. It works offline on its own, and syncs through the TabCabin sync server when
+  you sign in.
+</p>
+<ol>
+  <li>Get TabCabin on both computers.</li>
+  <li>
+    On the first one, open Settings → Account & sync, choose “or with a username and password” and
+    create an account.
+  </li>
+  <li>
+    On the second one, sign in with the same username and password. If that browser already has
+    boards, choose Keep both or Use the server's data.
+  </li>
+</ol>
+<p>
+  From then on a change on one computer shows up on the other within seconds while both are online.
+  Signing in with Google is there too, for anyone who prefers it, but you never need it.
+</p>
+
+<h2>3. Run your own sync server</h2>
+<p>
+  If you want the data only on a machine you own, run the TabCabin server with Docker on a small VPS
+  or a Raspberry Pi, and build the extension with your server's address. The{' '}
+  <a href="/self-hosted-tab-manager/">self-hosted tab manager</a> page explains the whole setup.
+</p>
+
+<h2>Which one to pick</h2>
+<WaysTable
+  caption="Ways to sync tabs without a Google account"
+  columns={['Changes reach the other computer', 'Account', 'Notes and to-dos']}
+  rows={[
+    ['Bookmarks file', 'When you export again', 'None', 'No'],
+    ['TabCabin account', 'Within seconds', 'Username and password', 'Yes'],
+    ['Your own server', 'Within seconds', 'On your server', 'Yes'],
+  ]}
+/>
+
+<h2>Questions</h2>
+<h3>How safe is the password account?</h3>
+<p>
+  Passwords are stored only as scrypt hashes, sign-in attempts are limited, and without signing in
+  nothing leaves your browser at all.
+</p>
+<h3>What happens when I'm offline?</h3>
+<p>
+  TabCabin keeps working from the browser's own database. Changes wait and are sent when the
+  computer is back online.
+</p>
+<h3>Can I stop syncing later?</h3>
+<p>
+  Yes. Sign out in Settings → Account & sync. The boards stay in the browser; they just stop
+  syncing.
+</p>

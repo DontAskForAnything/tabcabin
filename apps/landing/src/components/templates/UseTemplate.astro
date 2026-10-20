@@ -8,13 +8,21 @@ interface Props {
 }
 
 const { id, name } = Astro.props
+// The store page names the template, so TabCabin can add it right after installing even if
+// this page was closed (the page itself is found too while it stays open).
+const storeUrl = extensionUrl ? new URL(extensionUrl) : null
+storeUrl?.searchParams.set('utm_source', 'website')
+storeUrl?.searchParams.set('utm_medium', 'template')
+storeUrl?.searchParams.set('utm_campaign', id)
 const shape = 'inline-flex h-12 items-center gap-2 rounded-xl px-6 text-[15.5px] font-semibold'
 ---
 
-{extensionUrl ? (
+{storeUrl ? (
   <div class="flex flex-col items-start gap-3" data-use-template={id} data-extension={extensionId}>
     <a
-      href={extensionUrl}
+      href={storeUrl.href}
+      target="_blank"
+      rel="noopener"
       data-umami-event="Use template"
       data-umami-event-template={id}
       class:list={[shape, 'bg-accent text-on-accent shadow-tile transition hover:brightness-110']}
@@ -23,8 +31,8 @@ const shape = 'inline-flex h-12 items-center gap-2 rounded-xl px-6 text-[15.5px]
       <span data-label>Get TabCabin to use it</span>
     </a>
     <p class="text-[14px] text-ink-3" data-status aria-live="polite">
-      Free for Chrome, Edge and Brave. Then come back and add the {name.toLowerCase()} board in one
-      click.
+      Free for Chrome, Edge and Brave. Once it is installed, the {name.toLowerCase()} board opens by
+      itself.
     </p>
   </div>
 ) : (

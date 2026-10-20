@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from './db'
-import { finishOnboarding, getOnboarding, openOnboarding, removeStarter } from './onboarding'
+import {
+  finishOnboarding,
+  getOnboarding,
+  openOnboarding,
+  removeStarter,
+  startedWithTemplate,
+} from './onboarding'
 import { addNote, clearAllData, createWorkspace } from './repo'
 import { ensureSeed, type SeedText } from './seed'
 
@@ -58,6 +64,15 @@ describe('onboarding', () => {
     await addNote(group.id, { text: 'mine' })
     expect(await removeStarter()).toBe(false)
     expect(await db.workspaces.count()).toBe(1)
+  })
+
+  it('remembers a template added from the website while it is open', async () => {
+    const starterId = await ensureSeed(seedText)
+    await startedWithTemplate('trip')
+    expect(await getOnboarding()).toMatchObject({ state: 'open', starterId, template: 'trip' })
+    await finishOnboarding()
+    await startedWithTemplate('study')
+    expect(await getOnboarding()).toEqual({ state: 'done' })
   })
 
   it('is not shown again after deleting all data', async () => {

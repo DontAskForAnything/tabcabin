@@ -1,4 +1,4 @@
-import { type Change, purge } from '@tabcabin/core'
+import { type Change, purge, type TemplateId } from '@tabcabin/core'
 import { applyChanges } from './apply'
 import { db } from './db'
 
@@ -8,7 +8,8 @@ import { db } from './db'
  */
 export const ONBOARDING_KEY = 'onboarding'
 
-export type Onboarding = { state: 'open'; starterId: string; seededAt: number } | { state: 'done' }
+export type Onboarding =
+  { state: 'open'; starterId: string; seededAt: number; template?: TemplateId } | { state: 'done' }
 
 export async function getOnboarding(): Promise<Onboarding | null> {
   const row = await db.meta.get(ONBOARDING_KEY)
@@ -19,6 +20,17 @@ export async function getOnboarding(): Promise<Onboarding | null> {
 export async function openOnboarding(starterId: string, seededAt: number) {
   if (await db.meta.get(ONBOARDING_KEY)) return
   const value: Onboarding = { state: 'open', starterId, seededAt }
+  await db.meta.put({ key: ONBOARDING_KEY, value })
+}
+
+/**
+ * A template added from the website during the first start (often right after installing): the
+ * welcome dialog then skips asking how to start.
+ */
+export async function startedWithTemplate(template: TemplateId) {
+  const onboarding = await getOnboarding()
+  if (onboarding?.state !== 'open') return
+  const value: Onboarding = { ...onboarding, template }
   await db.meta.put({ key: ONBOARDING_KEY, value })
 }
 

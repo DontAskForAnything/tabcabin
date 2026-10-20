@@ -1,11 +1,5 @@
-import { isTemplateId, templateById } from '@tabcabin/core'
-import { seedText } from '@/app/seedText'
-import { templateWorkspace } from '@/data/templates'
-import { createWorkspace } from '@/db/repo'
-import { ensureSeed } from '@/db/seed'
-import type { Translate } from '@/i18n'
-import { translate } from '@/i18n/translate'
-import { getSettings, updateSettings } from '@/settings/settings'
+import { isTemplateId } from '@tabcabin/core'
+import { addTemplate } from './addTemplate'
 
 /**
  * What the website may ask (manifest `externally_connectable` lets only TabCabin's own site
@@ -24,19 +18,5 @@ export async function handleSiteMessage(message: unknown): Promise<SiteReply> {
   if (type !== 'tabcabin:add-template') return { ok: false, error: 'unknown-message' }
   const id = (message as { id?: unknown }).id
   if (!isTemplateId(id)) return { ok: false, error: 'unknown-template' }
-
-  const { locale } = await getSettings()
-  const t: Translate = (key, params) => translate(locale, key, params)
-  // On a first start the starter board comes first, as it would when the new tab opens, so it
-  // does not take the template's place afterwards.
-  await ensureSeed(seedText(t))
-  const workspace = templateWorkspace(templateById(id), locale, t)
-  const created = await createWorkspace(workspace)
-  const { activeCategoryIds } = await getSettings()
-  await updateSettings({
-    activeWorkspaceId: created.workspaceId,
-    activeCategoryIds: { ...activeCategoryIds, [created.workspaceId]: created.categoryId },
-  })
-  await browser.tabs.create({ url: browser.runtime.getURL('/newtab.html') })
-  return { ok: true, workspace: workspace.name }
+  return { ok: true, workspace: await addTemplate(id) }
 }

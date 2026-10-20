@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- A template picked on the website opens right after installing TabCabin, without going back to
+  its page; the store link opens in a new tab and the welcome skips asking how to start
+
 ### Fixed
 
 - Website: the page-not-found scene fills the whole screen, and on wide screens the signpost no

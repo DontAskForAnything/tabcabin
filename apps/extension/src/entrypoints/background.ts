@@ -9,6 +9,7 @@ import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
 import { handleSignOut } from '@/background/signOut'
 import { startSync, syncEngine } from '@/background/sync'
+import { addTemplateOnInstall } from '@/background/installTemplate'
 import { handleSiteMessage, type SiteReply } from '@/background/templates'
 import { runUndo } from '@/background/toast'
 import { trimBin } from '@/db/repo'
@@ -21,9 +22,10 @@ export default defineBackground(() => {
     timer = setTimeout(() => void rebuildMenus().catch((error) => console.error(error)), 300)
   }
 
-  browser.runtime.onInstalled.addListener(() => {
+  browser.runtime.onInstalled.addListener(({ reason }) => {
     void browser.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: false })
     scheduleMenus()
+    if (reason === 'install') void addTemplateOnInstall().catch(console.error)
   })
   browser.runtime.onStartup.addListener(() => {
     scheduleMenus()
@@ -103,6 +105,7 @@ export default defineBackground(() => {
       rebuildMenus,
       checkReminders,
       checkLinks,
+      addTemplateOnInstall,
       db,
     },
   })

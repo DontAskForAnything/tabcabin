@@ -6,22 +6,26 @@ import { useLocale, useT } from '@/i18n'
 import { openSignInPage } from '@/lib/pages'
 import { useImportFile } from '../shared/useImportFile'
 import type { ActiveContext } from '../useActive'
+import type { TemplateId } from '@/data/templates'
 import { type StartChoice, startWith } from './start'
 import { StartStep } from './StartStep'
 import { StepDots } from './StepDots'
 import { TipsStep } from './TipsStep'
 import { WelcomeStep } from './WelcomeStep'
 
-const STEPS = 3
-
-/** Three short steps: what TabCabin is, how to start, and how to fill the boards. */
+/**
+ * Three short steps: what TabCabin is, how to start, and how to fill the boards. A template
+ * added from the website already answered how to start, so that step is left out.
+ */
 export function WelcomeDialog({
   open,
   active,
+  startedWith,
   onFinish,
 }: {
   open: boolean
   active: ActiveContext
+  startedWith?: TemplateId
   onFinish: () => Promise<void>
 }) {
   const t = useT()
@@ -59,6 +63,7 @@ export function WelcomeDialog({
     openSignInPage(true)
   }
 
+  const steps = startedWith ? [0, 2] : [0, 1, 2]
   const titles = [t('onboarding.title'), t('onboarding.startTitle'), t('onboarding.tipsTitle')]
 
   return (
@@ -69,9 +74,9 @@ export function WelcomeDialog({
       initialFocus={getStarted}
       footer={
         <>
-          <StepDots step={step} total={STEPS} />
+          <StepDots step={steps.indexOf(step)} total={steps.length} />
           {step === 0 && (
-            <Button ref={getStarted} variant="primary" onClick={() => setStep(1)}>
+            <Button ref={getStarted} variant="primary" onClick={() => setStep(steps[1]!)}>
               {t('onboarding.getStarted')}
             </Button>
           )}

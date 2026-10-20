@@ -49,6 +49,42 @@ test('the website adds a template and opens it', async ({ context, extensionId }
   await expect(board.getByRole('dialog')).toHaveCount(0)
 })
 
+test.describe('installed from a template page', () => {
+  test.use({ welcome: true })
+
+  test('opens the picked template right away', async ({ context }) => {
+    await context.route(`${SITE}/**`, (route) =>
+      route.fulfill({ contentType: 'text/html; charset=utf-8', body: page }),
+    )
+    const site = await context.newPage()
+    await site.goto(`${SITE}/templates/moving/`)
+    const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'))
+
+    // What runs when Chrome installs TabCabin, with the template page still open.
+    const [board] = await Promise.all([
+      context.waitForEvent('page', (opened) => opened.url().endsWith('/newtab.html')),
+      worker.evaluate(() =>
+        (
+          globalThis as unknown as { tabcabin: { addTemplateOnInstall(): Promise<void> } }
+        ).tabcabin.addTemplateOnInstall(),
+      ),
+    ])
+    // The welcome skips "How would you like to start?": the template answered it.
+    await board
+      .getByRole('dialog', { name: 'Welcome to TabCabin' })
+      .getByRole('button', { name: 'Get started' })
+      .click()
+    const tips = board.getByRole('dialog', { name: 'Good to know' })
+    await expect(tips).toBeVisible()
+    await tips.getByRole('button', { name: 'Done' }).click()
+
+    // The template took the untouched starter workspace's place.
+    await expect(board.getByRole('button', { name: 'Switch workspace' })).toContainText('Moving')
+    await board.getByRole('button', { name: 'Switch workspace' }).click()
+    await expect(board.getByRole('menuitem', { name: /Personal/ })).toHaveCount(0)
+  })
+})
+
 test('other sites cannot reach the extension', async ({ context }) => {
   await context.route('https://elsewhere.example.org/**', (route) =>
     route.fulfill({ contentType: 'text/html; charset=utf-8', body: page }),

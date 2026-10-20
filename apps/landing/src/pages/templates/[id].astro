@@ -28,7 +28,7 @@ const index = templatePages.findIndex((entry) => entry.template.id === template.
 const more = [1, 2, 3].map((step) => templatePages[(index + step) % templatePages.length]!.template)
 const steps = [
   'Get TabCabin for Chrome, Edge or Brave. It is free and needs no account.',
-  `Come back to this page and press “Add to TabCabin”. The ${name.toLowerCase()} board opens as a new workspace.`,
+  `The ${name.toLowerCase()} board opens as a new workspace right after installing. Already have TabCabin? Press “Add to TabCabin”.`,
   page.tip,
 ]
 ---

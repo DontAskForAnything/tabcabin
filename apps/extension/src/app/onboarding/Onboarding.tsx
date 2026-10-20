@@ -26,6 +26,11 @@ export function Onboarding({ active }: { active: ActiveContext }) {
   }
 
   return (
-    <WelcomeDialog open={pending && modal?.type === 'welcome'} active={active} onFinish={finish} />
+    <WelcomeDialog
+      open={pending && modal?.type === 'welcome'}
+      active={active}
+      startedWith={onboarding?.state === 'open' ? onboarding.template : undefined}
+      onFinish={finish}
+    />
   )
 }

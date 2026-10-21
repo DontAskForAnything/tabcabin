@@ -32,4 +32,14 @@ jobs:
             echo "A guide is due on $today, but COOLIFY_DEPLOY_URL or COOLIFY_TOKEN is not set."
             exit 0
           fi
-          curl --fail --silent --show-error -H "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_DEPLOY_URL"
+          # Only the status code goes into the log: the address and the answer may name the server.
+          status=$(curl --silent --output /dev/null --write-out '%{http_code}' \
+            -H "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_DEPLOY_URL" || true)
+          echo "Coolify answered $status."
+          case "$status" in
+            2??) ;;
+            401|403) echo "::error::Coolify refused the token: check COOLIFY_TOKEN (it needs the deploy permission)."; exit 1 ;;
+            404) echo "::error::Coolify does not know this webhook: copy COOLIFY_DEPLOY_URL again from the website's Webhooks tab."; exit 1 ;;
+            000) echo "::error::Coolify could not be reached."; exit 1 ;;
+            *) echo "::error::The deploy did not start."; exit 1 ;;
+          esac

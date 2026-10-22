@@ -10,6 +10,7 @@ All notable changes to this project are documented here. The format follows
 
 - A template picked on the website opens right after installing TabCabin, without going back to
   its page; the store link opens in a new tab and the welcome skips asking how to start
+- Website: the film has its own page with its scenes as chapters, so search engines can show it
 
 ### Fixed
 

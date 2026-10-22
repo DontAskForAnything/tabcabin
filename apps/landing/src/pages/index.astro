@@ -14,7 +14,6 @@ import Valley from '../components/scene/Valley.astro'
 import StickyShowcase from '../components/StickyShowcase.astro'
 import Terminal from '../components/Terminal.astro'
 import Layout from '../layouts/Layout.astro'
-import { poster } from '../lib/poster'
 import { extensionUrl, faq, nb, repo } from '../site'
 
 const features = [
@@ -77,24 +76,12 @@ const organizationSchema = {
   logo: new URL('/icon-512.png', Astro.site).toString(),
   ...(profiles.length > 0 && { sameAs: profiles }),
 }
-
-const filmSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'VideoObject',
-  name: 'TabCabin in under a minute',
-  description:
-    'A short film about the TabCabin browser extension: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, dark mode and sync between computers.',
-  thumbnailUrl: new URL(poster.src, Astro.site).toString(),
-  contentUrl: new URL('/promo.mp4', Astro.site).toString(),
-  uploadDate: '2026-10-08T19:00:00+02:00',
-  duration: 'PT50S',
-}
 ---
 
 <Layout
   title="TabCabin — an open-source tab manager with kanban boards"
   description="A calm cabin for your tabs: kanban boards for tabs, links, notes and to-dos in every new tab. Free and open source, works offline, syncs when you sign in."
-  schema={[siteSchema, organizationSchema, faqSchema, filmSchema]}
+  schema={[siteSchema, organizationSchema, faqSchema]}
 >
   <Nav />
   <main>

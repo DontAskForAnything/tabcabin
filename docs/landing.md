@@ -2,7 +2,8 @@
 
 `apps/landing` is a static Astro site: the home page, `/self-hosted-tab-manager`, comparison pages under
 `/alternatives/`, board templates under `/templates/` (one page per template from
-`@tabcabin/core`, texts in `src/templates.ts`), the privacy policy (`/privacy`, needed for the Chrome
+`@tabcabin/core`, texts in `src/templates.ts`), the promo film with its chapters (`/film/`, the
+only page with the film's structured data, so search engines see it as its watch page), the privacy policy (`/privacy`, needed for the Chrome
 Web Store listing), a sitemap and `robots.txt`. It has no server-side code, so any static host works.
 
 ## Drawings

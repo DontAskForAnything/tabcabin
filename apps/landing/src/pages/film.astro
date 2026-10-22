@@ -1,0 +1,144 @@
+---
+/**
+ * The promo film on a page of its own. Search engines index a video only where it is the main
+ * thing on the page, so the film's structured data lives here (with its chapters as key moments),
+ * not on the home page. `?t=<seconds>` starts at a chapter.
+ */
+import Footer from '../components/Footer.astro'
+import GetExtension from '../components/GetExtension.astro'
+import Nav from '../components/Nav.astro'
+import Layout from '../layouts/Layout.astro'
+import { poster } from '../lib/poster'
+
+const path = '/film/'
+const title = 'TabCabin in under a minute'
+const description =
+  'A 50-second film about TabCabin: dragging tabs into groups, saving any page with a note, to-dos, search, collections, reminders, the dark theme and sync.'
+
+// The film's scenes (scripts/promo/timeline.ts: one bar is 2.4 s, the app scenes start at 9.6 s).
+const chapters: [number, number, string, string][] = [
+  [0, 10, 'Forty tabs open', 'A morning valley, too many tabs, and a cabin for them.'],
+  [10, 14, 'Drag tabs into groups', 'Open tabs go into a group and close in the same move.'],
+  [14, 19, 'Save any page in one click', 'With a note, a group and a reminder, if you like.'],
+  [19, 24, 'Notes and to-dos', 'Type /todo next to your links and tick it off later.'],
+  [24, 28, 'Search everything', 'Ctrl+K finds boards, open tabs and bookmarks.'],
+  [28, 31, 'Boards or collections', 'Pick a view for each category.'],
+  [31, 35, 'Reminders', 'One-time, weekly or monthly.'],
+  [35, 38, 'Light and dark', 'The sun sets on the valley and the app with it.'],
+  [38, 50, 'Sync and what TabCabin stands for', 'The same boards on every computer.'],
+]
+const clock = (seconds: number) => `0:${String(seconds).padStart(2, '0')}`
+const pageUrl = new URL(path, Astro.site).toString()
+
+const filmSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: title,
+  description,
+  thumbnailUrl: new URL(poster.src, Astro.site).toString(),
+  contentUrl: new URL('/promo.mp4', Astro.site).toString(),
+  uploadDate: '2026-10-08T19:00:00+02:00',
+  duration: 'PT50S',
+  hasPart: chapters.map(([start, end, name]) => ({
+    '@type': 'Clip',
+    name,
+    startOffset: start,
+    endOffset: end,
+    url: `${pageUrl}?t=${start}`,
+  })),
+}
+---
+
+<Layout
+  title="TabCabin film: the tab manager in 50 seconds"
+  description={description}
+  path={path}
+  schema={[filmSchema]}
+  breadcrumbs={[['Film', path]]}
+>
+  <Nav />
+  <main class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /<span class="text-ink-2">Film</span>
+    </nav>
+    <h1 class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]">
+      {title}
+    </h1>
+    <p class="mt-5 max-w-2xl text-[18px] leading-relaxed text-ink-2">
+      What a day with TabCabin looks like: tabs put away on boards, notes and to-dos next to them,
+      and the same boards on every computer.
+    </p>
+    <div class="mt-10 overflow-hidden rounded-[22px] bg-black shadow-pop ring-1 ring-line">
+      <video
+        class="block aspect-video w-full"
+        src="/promo.mp4"
+        poster={poster.src}
+        controls
+        playsinline
+        preload="metadata"
+        aria-label="TabCabin film"
+        data-film
+      ></video>
+    </div>
+
+    <section class="mt-14 grid gap-10 md:grid-cols-[1fr_1.2fr]">
+      <div>
+        <h2 class="text-[26px] font-semibold tracking-[-0.02em]">In the film</h2>
+        <p class="mt-3 text-[16.5px] leading-relaxed text-ink-2">
+          Each scene is one thing TabCabin does. Pick one to watch it again.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+          <GetExtension label="Get TabCabin for Chrome" />
+          <a href="/templates/" class="text-[15px] font-medium text-accent-ink hover:underline">
+            Or start from a template
+          </a>
+        </div>
+      </div>
+      <ol class="flex flex-col gap-1">
+        {chapters.map(([start, , name, text]) => (
+          <li>
+            <a
+              href={`?t=${start}`}
+              class="flex gap-4 rounded-xl px-3 py-2.5 transition hover:bg-card"
+              data-seek={start}
+            >
+              <span class="w-10 shrink-0 pt-px font-mono text-[14px] text-accent-ink tabular-nums">
+                {clock(start)}
+              </span>
+              <span>
+                <span class="block font-semibold text-ink">{name}</span>
+                <span class="block text-[14.5px] leading-relaxed text-ink-2">{text}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('[data-film]')
+  const seek = (seconds: number, play: boolean) => {
+    if (!video || !Number.isFinite(seconds)) return
+    video.currentTime = seconds
+    if (play) void video.play().catch(() => undefined)
+  }
+
+  // A link to a chapter (?t=24, as search results use) starts the film there.
+  const start = Number(new URLSearchParams(location.search).get('t'))
+  if (start > 0) seek(start, false)
+
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-seek]')) {
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+      seek(Number(link.dataset.seek), true)
+      history.replaceState(null, '', link.href)
+      video?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }
+</script>

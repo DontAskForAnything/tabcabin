@@ -34,6 +34,7 @@ export const comparisons = [
   { name: 'Toby', slug: 'toby' },
   { name: 'Workona', slug: 'workona' },
   { name: 'tabExtend', slug: 'tabextend' },
+  { name: 'Session Buddy', slug: 'session-buddy' },
 ]
 
 export interface FaqItem {
@@ -58,14 +59,14 @@ export const faq: FaqItem[] = [
     a: 'In your browser (IndexedDB). When you sign in to sync, a copy is kept on the TabCabin sync server, or on your own server if you run one. Nothing is sent anywhere else and there is no telemetry.',
   },
   {
-    q: 'How is it different from OneTab, Toby, Workona or tabExtend?',
+    q: 'How is it different from OneTab, Toby, Workona, tabExtend or Session Buddy?',
     a: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, works without an account, and lets you run the sync server yourself.',
     html: 'TabCabin combines kanban boards and a collections view with notes, to-dos and reminders, is open source, works without an account, and lets you run the sync server yourself. See the <a class="font-medium text-accent-ink hover:underline" href="/alternatives/">comparisons</a>.',
   },
   {
     q: 'Can I import my existing tabs and bookmarks?',
     a: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV.',
-    html: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV. Step by step: moving from <a class="font-medium text-accent-ink hover:underline" href="/alternatives/toby/#moving">Toby</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/onetab/#moving">OneTab</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/workona/#moving">Workona</a> or <a class="font-medium text-accent-ink hover:underline" href="/alternatives/tabextend/#moving">tabExtend</a>.',
+    html: 'Yes: TabCabin backups, Toby and tabExtend exports, bookmark files from any browser or bookmark manager, OneTab lists, Chrome bookmark folders and your most visited sites. You can also save every open tab at once from the tabs panel, and export everything as JSON, a bookmarks file or CSV. Step by step: moving from <a class="font-medium text-accent-ink hover:underline" href="/alternatives/toby/#moving">Toby</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/onetab/#moving">OneTab</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/workona/#moving">Workona</a>, <a class="font-medium text-accent-ink hover:underline" href="/alternatives/tabextend/#moving">tabExtend</a> or <a class="font-medium text-accent-ink hover:underline" href="/alternatives/session-buddy/#moving">Session Buddy</a>.',
   },
   {
     q: 'Which browsers are supported?',

@@ -1,0 +1,41 @@
+---
+import ComparePage from '../../components/ComparePage.astro'
+---
+
+<ComparePage
+  name="Session Buddy"
+  slug="session-buddy"
+  checked="October 2026"
+  intro="Session Buddy is the classic way to save a browser session and bring it back. TabCabin is for the tabs you mean to come back to: it puts them on boards in every new tab, next to notes, to-dos and reminders, and syncs your computers when you sign in."
+  about="Session Buddy is a free Chrome extension that saves open tabs as collections, restores whole sessions and windows, recovers tabs after a crash and keeps a history of past sessions on your device."
+  rows={[
+    ['Save all open tabs in one click', true, true],
+    ['Keep a whole window and restore it later', true, true],
+    ['Recover tabs after a browser crash', true, false],
+    ['History of past sessions', true, false],
+    ['Organize saved tabs', 'Collections', 'Kanban boards and collections'],
+    ['Notes, to-dos and reminders next to links', false, true],
+    ['Search saved tabs and open tabs', true, 'Also bookmarks'],
+    ['Saved tabs on the new tab page', false, true],
+    ['Works without an account', true, true],
+    ['Sync between computers', 'Backup file', 'Sign in, or your own server'],
+    ['Import and export', 'URL lists, JSON, CSV', 'JSON, bookmarks file, CSV'],
+    ['Open source', false, 'MIT'],
+    ['Price', 'Free', 'Free app, free self-hosting'],
+  ]}
+  whySwitch={[
+    'Your saved tabs are on every new tab, so they get read instead of piling up in a list.',
+    'Put links in named groups with a note, a to-do or a reminder, so you remember why you kept them.',
+    'Find any saved page with Ctrl+K, together with your open tabs and bookmarks.',
+    'Keep the same boards on every computer through the built-in sync or a server you run, or stay fully offline.',
+  ]}
+  betterFit={[
+    'You mostly want crash recovery and a timeline of every past session.',
+    'You need windows restored exactly as they were, sizes and positions included.',
+  ]}
+  moving={[
+    'In Session Buddy, open a collection and restore its tabs into one window.',
+    'In TabCabin’s open tabs panel, click <strong>Save all tabs</strong> and pick a group, or choose <strong>Save as one group and close</strong>; the tabs close as they are saved.',
+    'Many collections? Export them in the <strong>URLs</strong> format to a .txt file, then in TabCabin open <strong>Settings → Data → Import from a file</strong>; the links arrive in a new workspace.',
+  ]}
+/>

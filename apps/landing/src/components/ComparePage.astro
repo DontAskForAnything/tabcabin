@@ -18,9 +18,21 @@ interface Props {
   betterFit: string[]
   whySwitch: string[]
   moving: string[]
+  /** When the facts about the other tool were last checked. */
+  checked?: string
 }
 
-const { name, slug, intro, about, rows, betterFit, whySwitch, moving } = Astro.props
+const {
+  name,
+  slug,
+  intro,
+  about,
+  rows,
+  betterFit,
+  whySwitch,
+  moving,
+  checked = 'September 2026',
+} = Astro.props
 const title = `${name} alternative: free and open source — TabCabin`
 const description = `Comparing ${name} and TabCabin: boards, notes, reminders, privacy and sync. TabCabin is a free, open-source ${name} alternative you can self-host.`
 ---
@@ -102,8 +114,8 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
       </table>
     </div>
     <p class="mt-3 text-[13px] text-ink-3">
-      Based on public information about {name} in September 2026. Features change — check their
-      website for the latest.
+      Based on public information about {name} in {checked}. Features change — check their website
+      for the latest.
     </p>
 
     <div class="mt-16 grid gap-10 md:grid-cols-2">

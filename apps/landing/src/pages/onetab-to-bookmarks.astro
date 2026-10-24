@@ -1,0 +1,249 @@
+---
+/**
+ * A free converter: a OneTab export (or a Toby file, or any list of links) in, a bookmarks file
+ * every browser can import out. It runs in the page with TabCabin's own importers; nothing is
+ * uploaded.
+ */
+import Footer from '../components/Footer.astro'
+import GetExtension from '../components/GetExtension.astro'
+import Icon from '../components/Icon.astro'
+import Nav from '../components/Nav.astro'
+import Layout from '../layouts/Layout.astro'
+import { guidePath } from '../guides'
+
+const path = '/onetab-to-bookmarks/'
+const name = 'OneTab to bookmarks'
+
+const app = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'OneTab to bookmarks converter',
+  url: new URL(path, Astro.site).toString(),
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any',
+  browserRequirements: 'Requires JavaScript',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+}
+
+const prose =
+  'text-[16.5px] leading-relaxed text-ink-2 [&_a]:font-medium [&_a]:text-accent-ink [&_a:hover]:underline [&_kbd]:rounded-md [&_kbd]:bg-subtle [&_kbd]:px-1.5 [&_kbd]:py-0.5 [&_kbd]:font-mono [&_kbd]:text-[13.5px] [&_kbd]:whitespace-nowrap [&_kbd]:text-ink [&_li]:mt-2 [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mt-4 [&_strong]:text-ink'
+const h2 = 'text-[26px] font-semibold tracking-[-0.02em] text-ink'
+---
+
+<Layout
+  title="OneTab to bookmarks converter, free — TabCabin"
+  description="Turn a OneTab export, a Toby file or any list of links into a bookmarks file that Chrome, Edge, Firefox and Safari can import. Free, in your browser, nothing uploaded."
+  path={path}
+  schema={[app]}
+  breadcrumbs={[[name, path]]}
+>
+  <Nav />
+  <main class="mx-auto max-w-3xl px-5 py-16 sm:py-24">
+    <nav class="mb-8 text-[13.5px] text-ink-3" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">
+        Home
+      </a>{' '}
+      /<span class="text-ink-2">{name}</span>
+    </nav>
+    <h1 class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]">
+      Turn your OneTab tabs into bookmarks
+    </h1>
+    <p class="mt-5 text-[18px] leading-relaxed text-ink-2">
+      Paste the text from OneTab and download a bookmarks file that any browser can import, with
+      each list in its own folder. It also takes a Toby export or any list of links. Everything
+      happens in this page; your tabs are not uploaded anywhere.
+    </p>
+
+    <form class="mt-10 rounded-[22px] bg-card p-5 shadow-card sm:p-6" data-convert>
+      <label for="convert-text" class="block text-[15px] font-semibold text-ink">
+        Your OneTab list
+      </label>
+      <textarea
+        id="convert-text"
+        rows="9"
+        spellcheck="false"
+        placeholder="https://example.com/article | An article I meant to read&#10;https://example.org/docs | Some docs&#10;&#10;https://example.net/ | The next list starts after a blank line"
+        class="mt-2.5 block w-full resize-y rounded-xl border border-line bg-canvas p-3.5 font-mono text-[13px] leading-relaxed text-ink placeholder:text-ink-3"
+        data-text
+      ></textarea>
+      <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px]">
+        <label class="cursor-pointer font-medium text-accent-ink focus-within:underline hover:underline">
+          Or choose a file
+          <input
+            type="file"
+            accept=".txt,.json,.md,text/plain,application/json"
+            class="sr-only"
+            data-file
+          />
+        </label>
+        <p class="text-ink-3" aria-live="polite" data-status>
+          Paste a list to start.
+        </p>
+      </div>
+      <div class="mt-6 flex flex-wrap items-end gap-4 border-t border-line pt-5">
+        <label class="flex min-w-[200px] flex-1 flex-col gap-1.5 text-[14px] font-medium text-ink-2">
+          Folder name
+          <input
+            type="text"
+            value="OneTab"
+            maxlength="80"
+            class="h-11 rounded-xl border border-line bg-canvas px-3.5 text-[15px] text-ink"
+            data-folder
+          />
+        </label>
+        <button
+          type="submit"
+          disabled
+          class="inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-tile transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100"
+          data-umami-event="Convert OneTab"
+          data-download
+        >
+          <Icon name="Download" size={17} /> Download bookmarks file
+        </button>
+      </div>
+    </form>
+
+    <section class:list={['mt-16', prose]}>
+      <h2 class={h2}>Get the list out of OneTab</h2>
+      <ol>
+        <li>Right-click the OneTab icon and choose Display OneTab.</li>
+        <li>
+          At the top right, click <strong>Export / Import URLs</strong>.
+        </li>
+        <li>
+          Select all the text under Export URLs with <kbd>Ctrl+A</kbd>, copy it and paste it above.
+        </li>
+      </ol>
+      <p>
+        Every list in OneTab becomes its own folder. Keep the text as a backup too: the guide on{' '}
+        <a href={guidePath('export-onetab-tabs')}>exporting your tabs from OneTab</a> explains why.
+      </p>
+    </section>
+
+    <section class:list={['mt-14', prose]}>
+      <h2 class={h2}>Import the file into your browser</h2>
+      <p>
+        <strong>Chrome, Edge and Brave:</strong> open the bookmark manager with{' '}
+        <kbd>Ctrl+Shift+O</kbd>, click the three dots at the top right and choose Import bookmarks.
+      </p>
+      <p>
+        <strong>Firefox:</strong> Bookmarks → Manage bookmarks → Import and Backup → Import
+        Bookmarks from HTML.
+      </p>
+      <p>
+        <strong>Safari:</strong> File → Import From → Bookmarks HTML File.
+      </p>
+    </section>
+
+    <section class="mt-16 rounded-[22px] bg-subtle p-6 sm:p-8">
+      <h2 class={h2}>Or give your tabs a board</h2>
+      <p class="mt-3 text-[16.5px] leading-relaxed text-ink-2">
+        Bookmarks folders are where tabs go to be forgotten. TabCabin imports the same OneTab text
+        (Settings → Data → Import from a file) and puts each list on a board in your new tab, where
+        you can add notes, to-dos and reminders next to the links.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <GetExtension label="Get TabCabin for Chrome" />
+        <a
+          href="/alternatives/onetab/"
+          class="text-[15px] font-medium text-accent-ink hover:underline"
+        >
+          TabCabin compared with OneTab
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  import {
+    isOneTabExport,
+    isTobyExport,
+    isUrlList,
+    type Outline,
+    outlineLinkCount,
+    outlineToBookmarksHtml,
+    parseToby,
+    parseUrlList,
+  } from '@tabcabin/core'
+
+  type Read = { outline: Outline; from: 'OneTab' | 'Toby' | 'list' }
+
+  /** The same detection the extension's import uses, minus the formats that need a board. */
+  function read(text: string): Read | null {
+    const trimmed = text.trim()
+    if (!trimmed) return null
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        const json: unknown = JSON.parse(trimmed)
+        return isTobyExport(json) ? { outline: parseToby(json), from: 'Toby' } : null
+      } catch {
+        return null
+      }
+    }
+    if (!isUrlList(text)) return null
+    return { outline: parseUrlList(text), from: isOneTabExport(text) ? 'OneTab' : 'list' }
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-convert]')!
+  const text = form.querySelector<HTMLTextAreaElement>('[data-text]')!
+  const file = form.querySelector<HTMLInputElement>('[data-file]')!
+  const folder = form.querySelector<HTMLInputElement>('[data-folder]')!
+  const status = form.querySelector<HTMLElement>('[data-status]')!
+  const download = form.querySelector<HTMLButtonElement>('[data-download]')!
+  let current: Read | null = null
+  let named = false
+
+  const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+  function update() {
+    current = read(text.value)
+    const links = current ? outlineLinkCount(current.outline) : 0
+    const lists = current
+      ? current.outline.categories.reduce(
+          (sum, category) => sum + category.groups.filter((g) => g.links.length > 0).length,
+          0,
+        )
+      : 0
+    download.disabled = links === 0
+    if (!text.value.trim()) status.textContent = 'Paste a list to start.'
+    else if (links === 0)
+      status.textContent = 'No links found. Paste the whole text from OneTab’s Export URLs box.'
+    else
+      status.textContent = `${plural(links, 'link', 'links')} in ${plural(lists, 'list', 'lists')}, ready.`
+    if (current && !named) folder.value = current.from === 'list' ? 'Saved tabs' : current.from
+  }
+
+  text.addEventListener('input', update)
+  folder.addEventListener('input', () => (named = true))
+  file.addEventListener('change', async () => {
+    const chosen = file.files?.[0]
+    if (!chosen) return
+    text.value = await chosen.text()
+    file.value = ''
+    update()
+  })
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    if (!current) return
+    const html = outlineToBookmarksHtml(current.outline, {
+      folder: folder.value,
+      groupName: 'List',
+      now: Date.now(),
+    })
+    const slug = folder.value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }))
+    link.download = `${slug || 'tabs'}-bookmarks.html`
+    link.click()
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000)
+  })
+
+  update()
+</script>

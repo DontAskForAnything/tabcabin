@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows
   its page; the store link opens in a new tab and the welcome skips asking how to start
 - Website: the film has its own page with its scenes as chapters, so search engines can show it
 - Website: TabCabin compared with Session Buddy, with the steps for moving saved sessions over
+- Website: a free OneTab to bookmarks converter (also Toby exports and lists of links), working in
+  the page without uploading anything
 
 ### Fixed
 

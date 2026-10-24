@@ -34,7 +34,7 @@ export function bundleTree(bundle: Bundle): Tree[] {
   }))
 }
 
-const escapeHtml = (text: string) =>
+export const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 const seconds = (ms: number) => Math.floor(ms / 1000)

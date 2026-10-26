@@ -61,7 +61,9 @@ import { analytics, repo } from '../site'
             The website counts visits with Umami, without cookies and without personal data. It
             records the page, the site that sent you here, your browser, system, device type, screen
             size, language and country, and keeps no IP addresses or anything else that identifies
-            you. When your browser sends “Do Not Track”, nothing is counted.
+            you. When your browser sends “Do Not Track”, nothing is counted. A few buttons are
+            counted when clicked, such as the download button or the answer to why you removed
+            TabCabin on the goodbye page.
           </p>
         </>
       )}
@@ -84,7 +86,8 @@ import { analytics, repo } from '../site'
         installed; your boards never go to the website. No other website can talk to the extension.
         Right after installing, TabCabin looks once at the addresses of your open tabs for a
         template page (or the store page it links to) and adds that template; the addresses stay on
-        your device.
+        your device. When you remove TabCabin, the browser opens a goodbye page on this website; the
+        extension sends nothing with it.
       </p>
 
       <h2>Permissions</h2>

@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows
 - Website: TabCabin compared with Session Buddy, with the steps for moving saved sessions over
 - Website: a free OneTab to bookmarks converter (also Toby exports and lists of links), working in
   the page without uploading anything
+- Removing TabCabin opens a short goodbye page: where the boards are now and how to get them back,
+  and one optional click on why
 
 ### Fixed
 

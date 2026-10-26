@@ -3,16 +3,17 @@ import { db } from '@/db/db'
 import { startBadge } from '@/background/badge'
 import { startClosedTabs } from '@/background/closedTabs'
 import { SAVE_TO_INBOX, saveTabToInbox } from '@/background/inbox'
+import { addTemplateOnInstall } from '@/background/installTemplate'
 import { checkLinks, startLinkChecks } from '@/background/linkChecks'
 import { handleMenuClick, rebuildMenus } from '@/background/menus'
 import { handlePopoverMessage, togglePopover } from '@/background/popover'
 import { checkReminders, startReminders } from '@/background/reminders'
 import { handleSignOut } from '@/background/signOut'
 import { startSync, syncEngine } from '@/background/sync'
-import { addTemplateOnInstall } from '@/background/installTemplate'
 import { handleSiteMessage, type SiteReply } from '@/background/templates'
 import { runUndo } from '@/background/toast'
 import { trimBin } from '@/db/repo'
+import { GOODBYE_PAGE } from '@/lib/links'
 import { isRuntimeMessage } from '@/messages'
 
 export default defineBackground(() => {
@@ -27,6 +28,8 @@ export default defineBackground(() => {
     scheduleMenus()
     if (reason === 'install') void addTemplateOnInstall().catch(console.error)
   })
+  // Removing TabCabin opens a page that says where the boards are now.
+  if (GOODBYE_PAGE) void browser.runtime.setUninstallURL(GOODBYE_PAGE)
   browser.runtime.onStartup.addListener(() => {
     scheduleMenus()
     void trimBin()

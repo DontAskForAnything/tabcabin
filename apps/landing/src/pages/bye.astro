@@ -1,0 +1,92 @@
+---
+/**
+ * The page the browser opens when TabCabin is removed (the extension sets it as its uninstall
+ * address). It says where the boards went, and, with visit counts on, asks once why; the answer is
+ * one count in the visit statistics, nothing else.
+ */
+import Footer from '../components/Footer.astro'
+import GetExtension from '../components/GetExtension.astro'
+import Nav from '../components/Nav.astro'
+import Layout from '../layouts/Layout.astro'
+import { analytics } from '../site'
+
+const reasons = [
+  'I prefer another tool',
+  'Something I need is missing',
+  'It got in the way of my new tab',
+  'It felt slow',
+  'I was only trying it out',
+]
+---
+
+<Layout
+  title="TabCabin was removed"
+  description="TabCabin is no longer in this browser. Where your boards are now, and how to bring them back."
+  path="/bye/"
+  noindex
+>
+  <Nav />
+  <main class="mx-auto max-w-2xl px-5 py-16 sm:py-24">
+    <h1 class="text-[38px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[52px]">
+      TabCabin was removed
+    </h1>
+    <p class="mt-5 text-[18px] leading-relaxed text-ink-2">
+      Thank you for giving it a try. Your new tab is back to the browser's own page.
+    </p>
+
+    <section class="mt-10 rounded-[22px] bg-card p-6 shadow-card sm:p-7">
+      <h2 class="text-[20px] font-semibold tracking-[-0.01em]">Where your boards are</h2>
+      <dl class="mt-4 flex flex-col gap-4 text-[16px] leading-relaxed text-ink-2">
+        <div>
+          <dt class="font-semibold text-ink">If you were signed in</dt>
+          <dd>They are kept with your account. Add TabCabin again and sign in to get them back.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-ink">If you were not</dt>
+          <dd>
+            They lived in this browser and left with the extension. A backup from Settings → Data
+            brings them back after you add TabCabin again.
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    {analytics && (
+      <section class="mt-10" data-reasons>
+        <h2 class="text-[20px] font-semibold tracking-[-0.01em]">What made you remove it?</h2>
+        <p class="mt-2 text-[15px] text-ink-3">One click, no form. It helps decide what to fix.</p>
+        <div class="mt-4 flex flex-wrap gap-2.5">
+          {reasons.map((reason) => (
+            <button
+              type="button"
+              class="rounded-full bg-card px-4 py-2 text-[14.5px] font-medium text-ink-2 shadow-tile transition not-disabled:hover:bg-raised not-disabled:hover:text-ink disabled:not-aria-pressed:opacity-50 aria-pressed:bg-accent aria-pressed:text-on-accent"
+              data-umami-event="Uninstall reason"
+              data-umami-event-reason={reason}
+            >
+              {reason}
+            </button>
+          ))}
+        </div>
+        <p class="mt-4 text-[15px] text-accent-ink" aria-live="polite" data-thanks />
+      </section>
+    )}
+
+    <section class="mt-12 flex flex-wrap items-center gap-4">
+      <GetExtension label="Add TabCabin back" />
+      <span class="text-[15px] text-ink-3">Removed it by mistake? It takes a few seconds.</span>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  // The click itself is counted by the visit statistics (data-umami-event); this only thanks.
+  const box = document.querySelector<HTMLElement>('[data-reasons]')
+  for (const button of box?.querySelectorAll('button') ?? []) {
+    button.addEventListener('click', () => {
+      for (const other of box!.querySelectorAll('button')) other.disabled = true
+      button.ariaPressed = 'true'
+      box!.querySelector('[data-thanks]')!.textContent = 'Thank you. That helps.'
+    })
+  }
+</script>

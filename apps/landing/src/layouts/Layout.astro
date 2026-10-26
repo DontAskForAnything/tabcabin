@@ -12,9 +12,11 @@ interface Props {
   schema?: object[]
   /** Breadcrumb trail for subpages: [name, path][]. */
   breadcrumbs?: [string, string][]
+  /** Pages that are only reached from the extension (kept out of search and the sitemap). */
+  noindex?: boolean
 }
 
-const { title, description, path = '/', schema = [], breadcrumbs } = Astro.props
+const { title, description, path = '/', schema = [], breadcrumbs, noindex } = Astro.props
 const canonical = new URL(path, Astro.site)
 const ogImage = new URL('/og.png', Astro.site)
 import { analytics, extensionUrl, repo } from '../site'
@@ -42,6 +44,7 @@ const structuredData = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <!-- The headline and body fonts arrive with the page, so the hero does not jump when they swap in. -->
     <link rel="preload" href={bricolage} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={geist} as="font" type="font/woff2" crossorigin />

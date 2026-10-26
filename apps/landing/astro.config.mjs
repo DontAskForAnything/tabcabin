@@ -12,7 +12,8 @@ export default defineConfig({
   site,
   // Pages live in folders (/privacy/), so every link and canonical address ends with a slash.
   trailingSlash: 'always',
-  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
+  // The goodbye page opens only when the extension is removed.
+  integrations: [sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/bye/') })],
   vite: {
     plugins: [
       tailwindcss(),

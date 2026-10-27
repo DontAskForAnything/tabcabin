@@ -16,6 +16,7 @@ All notable changes to this project are documented here. The format follows
   the page without uploading anything
 - Removing TabCabin opens a short goodbye page: where the boards are now and how to get them back,
   and one optional click on why
+- Website: a guide to changing the new tab page in Chrome (online on 3 November)
 
 ### Fixed
 

@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets'
+import board from '../../../../docs/screenshots/board-light.png'
+import BrowserWindow from '../components/BrowserWindow.astro'
+import ShortAnswer from '../components/guides/ShortAnswer.astro'
+import WaysTable from '../components/guides/WaysTable.astro'
+---
+
+<ShortAnswer>
+  open a new tab and click Customize Chrome at the bottom right to change its background, colours
+  and shortcuts. Chrome has no setting for putting a page of your own there; for that you need an
+  extension that replaces the new tab page, such as TabCabin.
+</ShortAnswer>
+
+<h2>1. Customize Chrome's own new tab page</h2>
+<p>The page with the Google search box can change its look, not what it holds.</p>
+<ol>
+  <li>Open a new tab and click Customize Chrome at the bottom right. A side panel opens.</li>
+  <li>
+    Change the theme: pick a background from the gallery or upload a picture of your own. Chrome
+    suggests colours to match it.
+  </li>
+  <li>
+    Under Shortcuts, turn them off, or choose between the sites you visit most and shortcuts you add
+    yourself.
+  </li>
+</ol>
+<p>
+  Good for a calmer page in a minute. It is still the same search box and a row of shortcuts, with
+  no room for notes or anything longer.
+</p>
+
+<h2>2. Open your own page with the Home button or at startup</h2>
+<p>Two settings come close, although neither changes a new tab.</p>
+<ol>
+  <li>
+    In Settings → Appearance, turn on Show Home button and enter a web address. The Home button next
+    to the address bar now opens that page.
+  </li>
+  <li>
+    In Settings → On startup, choose Open a specific page or set of pages, and Chrome opens them
+    every time it starts.
+  </li>
+</ol>
+<p>
+  Good when one website is where you start the day. New tabs still open Chrome's own page, because
+  Chrome has no setting for a new tab address.
+</p>
+
+<h2>3. Replace the new tab page with an extension</h2>
+<p>
+  Extensions are the only way to put something else in every new tab: a dashboard, a quote, a to-do
+  list or your saved tabs. A few things are worth knowing first.
+</p>
+<ul class="mt-4 list-disc pl-6">
+  <li>Only one extension at a time can own the new tab page.</li>
+  <li>
+    The first time a new tab opens, Chrome may ask whether this is the page you expected. Keep it to
+    stay with the extension.
+  </li>
+  <li>
+    To go back, open the ⋮ menu → Extensions → Manage Extensions and turn the extension off or
+    remove it.
+  </li>
+</ul>
+
+<h2>4. Boards in every new tab with TabCabin</h2>
+<p>
+  TabCabin is a free, open-source extension that turns the new tab page into boards of tabs, links,
+  notes and to-dos. Instead of a search box, every new tab shows the things you are working on.
+</p>
+<ol>
+  <li>Get TabCabin for Chrome, Edge or Brave and open a new tab.</li>
+  <li>
+    Pick how to start: a starter board with a few tips, an empty board, or one of the{' '}
+    <a href="/templates/">ready-made templates</a>.
+  </li>
+  <li>
+    Drag open tabs from the panel on the left into groups, and add notes or to-dos next to them.
+  </li>
+  <li>
+    In Settings → Appearance, choose a light or dark theme and a compact density if you want more on
+    the screen. Under Settings → Data, Most visited sites → Add puts the sites Chrome's shortcuts
+    used to show into a group.
+  </li>
+</ol>
+<BrowserWindow class="mt-8">
+  <Image
+    src={board}
+    alt="A new tab with TabCabin: groups of links, notes and to-dos"
+    widths={[720, 1080, 1440]}
+    sizes="(min-width: 800px) 720px, 100vw"
+    class="block w-full"
+  />
+</BrowserWindow>
+<p>
+  Your boards stay in the browser and work offline. Sign in when you want the same boards on your
+  other computers.
+</p>
+
+<h2>Which one to pick</h2>
+<WaysTable
+  caption="Ways to change the new tab page in Chrome"
+  columns={['A new tab shows', 'Your own links', 'Notes and to-dos']}
+  rows={[
+    ['Customize Chrome', 'Google search and shortcuts', 'A row of shortcuts', 'No'],
+    ['Home button or startup page', 'Still Chrome’s page', 'One page you choose', 'No'],
+    ['TabCabin', 'Your boards', 'Groups of links, as many as you like', 'Yes'],
+  ]}
+/>
+
+<h2>Questions</h2>
+<h3>Can I set a website as the new tab page without an extension?</h3>
+<p>
+  No. Chrome has no setting for a new tab address. The Home button and the startup pages are the
+  closest it gets.
+</p>
+<h3>Do I lose Google search on a new tab?</h3>
+<p>
+  The address bar still searches with your search engine, as it does on any page. In TabCabin,
+  <kbd>Ctrl+K</kbd> searches your boards, open tabs and bookmarks.
+</p>
+<h3>How do I get Chrome's own page back?</h3>
+<p>
+  Turn the extension off in Manage Extensions, or remove it. With TabCabin, sign in or export a
+  backup from Settings → Data first, so your boards are kept.
+</p>

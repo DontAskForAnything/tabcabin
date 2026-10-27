@@ -49,6 +49,16 @@ const all: Guide[] = [
     published: '2026-10-27',
     minutes: 4,
   },
+  {
+    slug: 'change-new-tab-page-chrome',
+    title: 'How to change the new tab page in Chrome',
+    description:
+      'Chrome lets you change the look of its new tab page, not what it shows. How to customize it, and how to put your own boards of links there instead.',
+    summary: 'Customize Chrome’s own page, or put your own boards there with an extension.',
+    crumb: 'Change the new tab page',
+    published: '2026-11-03',
+    minutes: 4,
+  },
 ]
 
 // `astro dev` shows every guide, so the next ones can be checked before their day.

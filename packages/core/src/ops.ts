@@ -2,7 +2,7 @@ import { generateNKeysBetween } from 'fractional-indexing'
 import { type Clock, makeItem, touch } from './factories'
 import { newId } from './ids'
 import { sortByPosition } from './position'
-import type { Group, Item } from './schema'
+import { type Group, type Item, NOTE_MAX_LENGTH } from './schema'
 
 const live = <T extends { deletedAt: number | null }>(rows: readonly T[]) =>
   rows.filter((row) => row.deletedAt === null)
@@ -46,11 +46,19 @@ export function moveItems(input: MoveItemsInput, clock: Clock): Item[] {
 
 export type CombineError = 'same-item' | 'note-with-link' | 'stack-with-note' | 'unsupported'
 
-export type CombineResult = { ok: true; rows: Item[] } | { ok: false; error: CombineError }
+export type CombineResult =
+  | {
+      ok: true
+      rows: Item[]
+      /** The notes were pinned to a link rather than stacked or merged. */
+      pinned?: true
+    }
+  | { ok: false; error: CombineError }
 
 /**
  * Drops `dragged` onto `target`:
- * links/stacks onto a link or stack → one stack; notes onto a note → merged note.
+ * links/stacks onto a link or stack → one stack; notes onto a note → merged note;
+ * notes onto a link → the link's note.
  */
 export function combineItems(
   dragged: readonly Item[],
@@ -70,6 +78,27 @@ export function combineItems(
       ok: true,
       rows: [
         touch(target, { text }, clock),
+        ...dragged.map((item) => touch(item, { deletedAt: clock.now }, clock)),
+      ],
+    }
+  }
+
+  // A note pinned to a link: its text joins the link's note; on a link without one, a to-do keeps
+  // its checkbox and the note its colour.
+  if (target.kind === 'link' && kinds.size === 1 && kinds.has('note')) {
+    const text = [target.text, ...dragged.map((item) => item.text)]
+      .filter((t) => t.trim())
+      .join('\n')
+      .slice(0, NOTE_MAX_LENGTH)
+    const first = dragged[0]!
+    const looks = target.text.trim()
+      ? {}
+      : { todo: first.todo, done: first.done, color: first.color ?? target.color }
+    return {
+      ok: true,
+      pinned: true,
+      rows: [
+        touch(target, { text, ...looks }, clock),
         ...dragged.map((item) => touch(item, { deletedAt: clock.now }, clock)),
       ],
     }

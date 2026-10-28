@@ -97,9 +97,48 @@ describe('combineItems', () => {
       ok: false,
       error: 'note-with-link',
     })
-    expect(combineItems([n1], link!, { targetChildren: [], draggedChildren: [] }, later)).toEqual({
-      ok: false,
-      error: 'stack-with-note',
+    expect(
+      combineItems(
+        [n1, link!],
+        links('g1', 2)[1]!,
+        { targetChildren: [], draggedChildren: [] },
+        later,
+      ),
+    ).toEqual({ ok: false, error: 'stack-with-note' })
+  })
+
+  it('pins notes to a link as its note, keeping a to-do and its colour', () => {
+    const [link] = links('g1', 1)
+    const task = makeNote(
+      {
+        groupId: 'g1',
+        position: 'a1',
+        text: 'Task 1, due in December',
+        todo: true,
+        color: 'amber',
+      },
+      clock,
+    )
+    const pinned = combineItems([task], link!, { targetChildren: [], draggedChildren: [] }, later)
+    expect(pinned.ok && pinned.pinned).toBe(true)
+    if (!pinned.ok) return
+    expect(pinned.rows[0]).toMatchObject({
+      id: link!.id,
+      kind: 'link',
+      text: 'Task 1, due in December',
+      todo: true,
+      done: false,
+      color: 'amber',
+    })
+    expect(pinned.rows[1]).toMatchObject({ id: task.id, deletedAt: 2_000 })
+
+    // A link that has a note already keeps its own look and gets the text added.
+    const noted = { ...link!, text: 'Course page' }
+    const added = combineItems([task], noted, { targetChildren: [], draggedChildren: [] }, later)
+    expect(added.ok && added.rows[0]).toMatchObject({
+      text: 'Course page\nTask 1, due in December',
+      todo: false,
+      color: null,
     })
   })
 })

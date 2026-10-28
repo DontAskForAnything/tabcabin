@@ -1,6 +1,7 @@
-import { Bell, Pencil, Trash } from 'lucide-react'
+import { Bell, Pencil, StickyNote, Trash } from 'lucide-react'
 import { displayHost } from '@tabcabin/core'
 import { cn, Favicon, IconButton } from '@tabcabin/ui'
+import { useState } from 'react'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'
@@ -8,6 +9,7 @@ import type { ItemViewProps } from '../board/ItemView'
 import { ReminderChip } from '../reminders/ReminderChip'
 import { selectedRing, useSelectable } from '../board/items/selection'
 import { BrokenMark, useBroken } from '../board/items/BrokenMark'
+import { LinkNote } from '../board/items/LinkNote'
 
 /** Link shown as a tile in the Collections view. */
 export function LinkCard({ item, group, actions }: ItemViewProps) {
@@ -18,6 +20,7 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
   const url = item.url ?? ''
   const broken = useBroken(item.url)
+  const [noting, setNoting] = useState(false)
   return (
     <div
       className={cn(
@@ -56,18 +59,24 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
           <ReminderChip reminder={reminder} />
         </div>
       )}
-      {item.text && (
-        <div
-          className="mx-3 mb-3 -mt-1 line-clamp-3 rounded-[9px] px-2.5 py-1.5 text-[12.5px] leading-snug whitespace-pre-line"
-          style={{
-            background: `var(--note-${item.color ?? 'sky'}-bg)`,
-            color: `var(--note-${item.color ?? 'sky'}-ink)`,
-          }}
-        >
-          {item.text}
-        </div>
-      )}
-      <div className="absolute top-2 right-2 hidden gap-1 group-focus-within/card:flex group-hover/card:flex">
+      <LinkNote
+        item={item}
+        actions={actions}
+        editing={noting}
+        onEditingChange={setNoting}
+        className="mx-3 mb-3 -mt-1"
+      />
+      {/* The title fades out under the buttons instead of running into them. */}
+      <div className="pointer-events-none absolute top-0 right-0 hidden gap-1 rounded-tr-[14px] bg-linear-to-l from-card from-70% to-transparent py-2 pr-2 pl-7 group-focus-within/card:flex group-hover/card:flex [&>*]:pointer-events-auto">
+        {!item.text && !noting && (
+          <IconButton
+            label={t('link.addNote')}
+            icon={<StickyNote size={12} />}
+            variant="tile"
+            size="xs"
+            onClick={() => setNoting(true)}
+          />
+        )}
         <IconButton
           label={t('item.reminder')}
           icon={<Bell size={12} />}

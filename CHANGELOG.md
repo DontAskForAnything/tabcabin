@@ -23,9 +23,12 @@ All notable changes to this project are documented here. The format follows
   group, so the list keeps only what is left; open it to tick one back on or delete the done ones
 - Now and then (at most every two days) a card in the corner shows one thing TabCabin can do, with
   the keys of this computer and a button to try it; Settings → General turns the tips off
+- A note or to-do dropped on a link is pinned to it, and a link tile in the collections view has an
+  “Add a note” button to write one right on the tile; a pinned to-do keeps its checkbox
 
 ### Fixed
 
+- Collections view: a link's buttons no longer cover its title; the title fades out under them
 - Website: the page-not-found scene fills the whole screen, and on wide screens the signpost no
   longer covers the heading
 - Website: the arrow on the 404 page's Features sign matches the other signs

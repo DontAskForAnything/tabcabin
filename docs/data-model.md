@@ -46,7 +46,7 @@ versions without the Inbox leave it out. A backup of everything stores it as a w
 | `favIconUrl`   | link        | icon captured from the tab when saved (fallback after the browser's cache) |
 | `text`         | note, link  | note body, or a comment attached to a link (max 5 000 characters)          |
 | `color`        | note, link  | one of `rose amber lime peach pink lilac sky teal sand`                    |
-| `todo`, `done` | note        | a to-do and whether it is checked                                          |
+| `todo`, `done` | note, link  | a to-do and whether it is checked (on a link: its note is a to-do)         |
 | `imageUrl`     | image       | the image address                                                          |
 | `metaImageUrl` | link        | preview image                                                              |
 | `emoji`        | all         | optional icon                                                              |

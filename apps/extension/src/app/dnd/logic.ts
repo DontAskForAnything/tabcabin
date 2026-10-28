@@ -34,10 +34,14 @@ export function hoverOnItem(
   return { position: 'middle' }
 }
 
-/** Items can be combined onto links/stacks (when only links/stacks are dragged) or onto notes (only notes). */
+/**
+ * Items can be combined onto links/stacks (when only links/stacks are dragged), onto notes (only
+ * notes), and notes onto a link (they become its note).
+ */
 export function canCombine(sourceKinds: readonly string[], targetKind: string): boolean {
   if (sourceKinds.length === 0) return false
   if (targetKind === 'note') return sourceKinds.every((kind) => kind === 'note')
+  if (targetKind === 'link' && sourceKinds.every((kind) => kind === 'note')) return true
   if (targetKind === 'link' || targetKind === 'stack')
     return sourceKinds.every((kind) => kind === 'link' || kind === 'stack' || kind === 'tab')
   return false

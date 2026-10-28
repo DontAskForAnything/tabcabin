@@ -157,7 +157,7 @@ export function useBoardActions(active: ActiveContext) {
           toast({ title: t(key[result.error]), tone: 'error' })
           return false
         }
-        undoable(t('stack.created'))(result)
+        undoable(t(result.pinned ? 'link.notePinned' : 'stack.created'))(result)
         useUi.getState().clearSelection()
         return true
       },

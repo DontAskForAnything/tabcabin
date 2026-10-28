@@ -80,6 +80,26 @@ test('stacks two links by holding one over the other', async ({ context, extensi
   await expect(page.getByText('Links stacked')).toBeVisible()
 })
 
+test('pins a to-do to a link by holding it over the link', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const github = await center(page.getByRole('link', { name: /GitHub/ }))
+  await drag(
+    page,
+    page.getByRole('region', { name: 'To do' }).getByText('Try the Collections view'),
+    { x: github.x, y: github.y },
+    700,
+  )
+  await expect(page.getByText('Note pinned to the link')).toBeVisible()
+  const links = page.getByRole('region', { name: 'Quick links' })
+  await expect(links.getByText('Try the Collections view')).toBeVisible()
+  await links.getByRole('checkbox', { name: 'Mark as done' }).click()
+  await expect(links.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
+  await expect(
+    page.getByRole('region', { name: 'To do' }).getByText('Try the Collections view'),
+  ).toHaveCount(0)
+})
+
 test('reorders groups by dragging the header', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

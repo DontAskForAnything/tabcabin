@@ -116,6 +116,25 @@ test('edits a note inline with Enter+Enter and the toolbar', async ({ context, e
   await expect(group.getByText('• last line →')).toBeVisible()
 })
 
+test('writes a note on a link tile in the collections view', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('radio', { name: 'Collections' }).click()
+  const section = page.getByRole('region', { name: 'Quick links' })
+  await section.getByRole('link', { name: /GitHub/ }).hover()
+  await section.getByRole('button', { name: 'Add a note' }).click()
+  await section.getByRole('textbox', { name: 'Note' }).fill('Review the open pull requests /todo')
+  await section.getByRole('textbox', { name: 'Note' }).press('Enter')
+  await expect(section.getByText('Review the open pull requests')).toBeVisible()
+  await section.getByRole('checkbox', { name: 'Mark as done' }).click()
+  await expect(section.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
+  // The same note shows on the board.
+  await page.getByRole('radio', { name: 'Board' }).click()
+  await expect(
+    page.getByRole('region', { name: 'Quick links' }).getByText('Review the open pull requests'),
+  ).toBeVisible()
+})
+
 test('switches the category to the collections view and back', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

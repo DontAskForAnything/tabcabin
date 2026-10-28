@@ -153,7 +153,7 @@ export async function moveItemsTo(
 export async function combine(
   ids: readonly string[],
   targetId: string,
-): Promise<(Result & { ok: true }) | { ok: false; error: CombineError }> {
+): Promise<(Result & { ok: true; pinned?: true }) | { ok: false; error: CombineError }> {
   const dragged = (await db.items.bulkGet([...ids])).filter((item): item is Item => !!item)
   const target = await mustGet('item', targetId)
   const outcome = combineItems(
@@ -166,7 +166,7 @@ export async function combine(
     clock(),
   )
   if (!outcome.ok) return outcome
-  return { ok: true, ...(await commit(puts('item', outcome.rows))) }
+  return { ok: true, pinned: outcome.pinned, ...(await commit(puts('item', outcome.rows))) }
 }
 
 export async function unstackById(stackId: string) {

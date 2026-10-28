@@ -7,6 +7,7 @@ import { useUi } from '@/state/ui'
 import { ReminderChip } from '../../reminders/ReminderChip'
 import type { ItemViewProps } from '../ItemView'
 import { BrokenMark, useBroken } from './BrokenMark'
+import { LinkNote } from './LinkNote'
 import { selectedRing, useSelectable } from './selection'
 
 export function LinkRow({
@@ -93,17 +94,11 @@ export function LinkRow({
           <ReminderChip reminder={reminder} />
         </div>
       )}
-      {item.text && (
-        <div
-          className="mx-2 mb-2 ml-14 rounded-[10px] px-[11px] py-2 text-[13px] leading-[1.45] whitespace-pre-line"
-          style={{
-            background: `var(--note-${item.color ?? 'sky'}-bg)`,
-            color: `var(--note-${item.color ?? 'sky'}-ink)`,
-          }}
-        >
-          {item.text}
-        </div>
-      )}
+      <LinkNote
+        item={item}
+        actions={actions}
+        className="mx-2 mb-2 ml-14 rounded-[10px] px-[11px] py-2 text-[13px] leading-[1.45]"
+      />
     </div>
   )
 }

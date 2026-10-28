@@ -1,6 +1,6 @@
 import { SegmentedControl } from '@tabcabin/ui'
 import { type Locale, useT } from '@/i18n'
-import { DEFAULT_SETTINGS, updateSettings } from '@/settings/settings'
+import { DEFAULT_SETTINGS, type OpenGroupIn, updateSettings } from '@/settings/settings'
 import type { ActiveContext } from '../useActive'
 import { LinkChecksRow } from './LinkChecksRow'
 import { Row, SwitchRow } from './Row'
@@ -33,6 +33,17 @@ export function GeneralSettings({ active }: { active: ActiveContext }) {
         checked={settings.focusExistingTab}
         onChange={(focusExistingTab) => void updateSettings({ focusExistingTab })}
       />
+      <Row label={t('settings.openGroupIn')} hint={t('settings.openGroupInHint')}>
+        <SegmentedControl<OpenGroupIn>
+          label={t('settings.openGroupIn')}
+          value={settings.openGroupIn}
+          onValueChange={(openGroupIn) => void updateSettings({ openGroupIn })}
+          options={[
+            { value: 'window', label: t('settings.openGroupWindow') },
+            { value: 'here', label: t('settings.openGroupHere') },
+          ]}
+        />
+      </Row>
       <SwitchRow
         label={t('settings.closeTabOnSave')}
         hint={t('settings.closeTabOnSaveHint')}

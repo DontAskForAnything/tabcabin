@@ -1,4 +1,4 @@
-import { ChevronDown, Ellipsis, Layers } from 'lucide-react'
+import { AppWindow, ChevronDown, Ellipsis, Layers } from 'lucide-react'
 import { countItems } from '@tabcabin/core'
 import { Button, cn, EmojiPickerPopover, IconButton } from '@tabcabin/ui'
 import type { ReactNode } from 'react'
@@ -6,6 +6,7 @@ import type { BoardGroup } from '@/db/hooks'
 import { updateGroup } from '@/db/repo'
 import { useT } from '@/i18n'
 import { emojiBaseUrl } from '@/lib/browser'
+import { DEFAULT_SETTINGS } from '@/settings/settings'
 import type { BoardActions } from '../board/actions'
 import { AddItem } from '../board/AddItem'
 import { ItemList } from '../board/ItemList'
@@ -32,6 +33,7 @@ export function CollectionSection({
   children?: ReactNode
 }) {
   const t = useT()
+  const openHere = (active.settings?.openGroupIn ?? DEFAULT_SETTINGS.openGroupIn) === 'here'
   const counts = countItems(group.allItems)
   const meta = [
     counts.links ? t('count.links', { count: counts.links }) : null,
@@ -96,8 +98,8 @@ export function CollectionSection({
           size="sm"
           variant="soft"
           className="bg-accent-soft text-accent-ink hover:bg-accent-soft"
-          icon={<Layers size={14} />}
-          onClick={() => void actions.openGroup(group)}
+          icon={openHere ? <Layers size={14} /> : <AppWindow size={14} />}
+          onClick={() => void actions.openGroup(group, !openHere)}
         >
           {t('stack.open')}
         </Button>

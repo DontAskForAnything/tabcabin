@@ -6,6 +6,7 @@ import type { BoardGroup } from '@/db/hooks'
 import { updateGroup } from '@/db/repo'
 import { useT } from '@/i18n'
 import { emojiBaseUrl } from '@/lib/browser'
+import { DEFAULT_SETTINGS } from '@/settings/settings'
 import { useGroupDnd } from '../../dnd/hooks'
 import type { ActiveContext } from '../../useActive'
 import { AddItem } from '../AddItem'
@@ -101,7 +102,11 @@ export function GroupCard({
             {group.collapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
           </button>
         </div>
-        <RestoreButton group={group} actions={actions} />
+        <RestoreButton
+          group={group}
+          actions={actions}
+          openIn={active.settings?.openGroupIn ?? DEFAULT_SETTINGS.openGroupIn}
+        />
         <GroupMenu group={group} actions={actions} active={active} />
       </header>
 

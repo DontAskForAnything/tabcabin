@@ -348,6 +348,11 @@ export const en = {
   'settings.openLinksInNewTabHint': 'Otherwise they open in the current tab.',
   'settings.focusExistingTab': 'Switch to a tab that is already open',
   'settings.focusExistingTabHint': 'Instead of opening the same page twice.',
+  'settings.openGroupIn': 'Open a group in',
+  'settings.openGroupInHint':
+    'For the open button on each group. In this window, its links come together as a tab group.',
+  'settings.openGroupWindow': 'A new window',
+  'settings.openGroupHere': 'This window',
   'settings.closeTabOnSave': 'Close tabs when you save them',
   'settings.closeTabOnSaveHint': 'When you drag tabs into a group or save them from the panel.',
   'settings.warnDuplicates': 'Say when a link is already saved',

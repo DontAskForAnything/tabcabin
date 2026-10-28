@@ -17,6 +17,8 @@ All notable changes to this project are documented here. The format follows
 - Removing TabCabin opens a short goodbye page: where the boards are now and how to get them back,
   and one optional click on why
 - Website: a guide to changing the new tab page in Chrome (online on 3 November)
+- Settings → General → Open a group in: a group's open button puts its links in a new window or,
+  if you like, in a tab group in this window
 
 ### Fixed
 

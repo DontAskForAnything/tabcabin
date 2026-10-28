@@ -154,3 +154,28 @@ test('opens a saved group as a window in one click', async ({ context, extension
     )
     .toContainEqual(4)
 })
+
+test('opens a saved group as a tab group in this window when set', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  await page.getByRole('button', { name: 'More' }).click()
+  await page.getByRole('menuitem', { name: 'Settings' }).click()
+  await page.getByRole('radio', { name: 'This window' }).click()
+  await page.keyboard.press('Escape')
+  const group = page.getByRole('region', { name: 'Quick links' })
+  await group.hover()
+  await group.getByRole('button', { name: 'Open all as tab group' }).click()
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const [group] = await chrome.tabGroups.query({})
+        const windows = await chrome.windows.getAll()
+        const tabs = group ? await chrome.tabs.query({ groupId: group.id }) : []
+        return { windows: windows.length, title: group?.title, tabs: tabs.length }
+      }),
+    )
+    .toEqual({ windows: 1, title: 'Quick links', tabs: 4 })
+})

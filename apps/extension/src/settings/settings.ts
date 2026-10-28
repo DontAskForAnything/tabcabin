@@ -6,6 +6,8 @@ import type { Locale } from '@/i18n'
 export type ViewMode = 'board' | 'collections'
 export type SidebarMode = 'rail' | 'pinned'
 export type Density = 'comfortable' | 'compact'
+/** Where a group's open button puts its links: a new window, or a tab group in this window. */
+export type OpenGroupIn = 'window' | 'here'
 
 export interface Shortcuts {
   newGroup: string
@@ -24,6 +26,7 @@ export interface Settings {
   viewModes: Record<string, ViewMode>
   openLinksInNewTab: boolean
   focusExistingTab: boolean
+  openGroupIn: OpenGroupIn
   closeTabOnSave: boolean
   density: Density
   showUrls: boolean
@@ -56,6 +59,7 @@ export const DEFAULT_SETTINGS: Settings = {
   viewModes: {},
   openLinksInNewTab: false,
   focusExistingTab: true,
+  openGroupIn: 'window',
   closeTabOnSave: true,
   density: 'comfortable',
   showUrls: true,

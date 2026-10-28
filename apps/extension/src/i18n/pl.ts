@@ -432,6 +432,11 @@ export const pl: Record<MessageKey, Message> = {
   'settings.openLinksInNewTabHint': 'W przeciwnym razie otwierają się w bieżącej karcie.',
   'settings.focusExistingTab': 'Przełączaj na już otwartą kartę',
   'settings.focusExistingTabHint': 'Zamiast otwierać tę samą stronę drugi raz.',
+  'settings.openGroupIn': 'Otwieraj grupę w',
+  'settings.openGroupInHint':
+    'Dotyczy przycisku otwierania przy każdej grupie. W tym oknie jej linki trafiają do jednej grupy kart.',
+  'settings.openGroupWindow': 'Nowym oknie',
+  'settings.openGroupHere': 'Tym oknie',
   'settings.closeTabOnSave': 'Zamykaj karty po zapisaniu',
   'settings.closeTabOnSaveHint': 'Gdy przeciągasz karty do grupy albo zapisujesz je z panelu.',
   'settings.warnDuplicates': 'Informuj, gdy link jest już zapisany',

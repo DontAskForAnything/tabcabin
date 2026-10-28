@@ -230,6 +230,8 @@ export const pl: Record<MessageKey, Message> = {
   'note.copied': 'Skopiowano tekst',
   'note.markDone': 'Oznacz jako zrobione',
   'note.markUndone': 'Oznacz jako niezrobione',
+  'done.count': 'Zrobione: {count}',
+  'done.delete': 'Usuń zrobione',
   'stack.title': '{count} linki',
   'stack.open': 'Otwórz wszystkie',
   'stack.unstack': 'Rozdziel',

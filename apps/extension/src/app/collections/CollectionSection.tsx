@@ -11,6 +11,8 @@ import type { BoardActions } from '../board/actions'
 import { AddItem } from '../board/AddItem'
 import { ItemList } from '../board/ItemList'
 import { ItemView } from '../board/ItemView'
+import { DoneFold } from '../board/done/DoneFold'
+import { useDoneSplit } from '../board/done/useDoneSplit'
 import type { ActiveContext } from '../useActive'
 import { useGroupDnd } from '../dnd/hooks'
 import { LinkCard } from './LinkCard'
@@ -35,6 +37,7 @@ export function CollectionSection({
   const t = useT()
   const openHere = (active.settings?.openGroupIn ?? DEFAULT_SETTINGS.openGroupIn) === 'here'
   const counts = countItems(group.allItems)
+  const split = useDoneSplit(group.items)
   const meta = [
     counts.links ? t('count.links', { count: counts.links }) : null,
     counts.notes ? t('count.notes', { count: counts.notes }) : null,
@@ -109,7 +112,7 @@ export function CollectionSection({
         (children ?? (
           <ItemList
             groupId={group.id}
-            items={group.items}
+            items={split.open}
             layout="grid"
             renderItem={(item) =>
               item.kind === 'link' ? (
@@ -125,6 +128,15 @@ export function CollectionSection({
             }
           />
         ))}
+      {!group.collapsed && !children && (
+        <DoneFold
+          group={group}
+          done={split.done}
+          landing={split.landing}
+          actions={actions}
+          active={active}
+        />
+      )}
     </section>
   )
 }

@@ -13,6 +13,8 @@ import { AddItem } from '../AddItem'
 import { ItemList } from '../ItemList'
 import { ItemView } from '../ItemView'
 import type { BoardActions } from '../actions'
+import { DoneFold } from '../done/DoneFold'
+import { useDoneSplit } from '../done/useDoneSplit'
 import { GroupMenu } from './GroupMenu'
 import { GroupResizeHandle } from './GroupResizeHandle'
 import { RestoreButton } from './RestoreButton'
@@ -45,6 +47,7 @@ export function GroupCard({
   const [width, setWidth] = useState<number | null>(null)
   const effectiveWidth = compact ? undefined : (width ?? group.width ?? DEFAULT_GROUP_WIDTH)
   const counts = countItems(group.allItems)
+  const split = useDoneSplit(group.items)
   const meta = [
     counts.links ? t('count.links', { count: counts.links }) : null,
     counts.notes ? t('count.notes', { count: counts.notes }) : null,
@@ -115,13 +118,20 @@ export function GroupCard({
           {children ?? (
             <ItemList
               groupId={group.id}
-              items={group.items}
+              items={split.open}
               renderItem={(item) => (
                 <ItemView item={item} group={group} actions={actions} active={active} />
               )}
             />
           )}
           <AddItem groupId={group.id} actions={actions} />
+          <DoneFold
+            group={group}
+            done={split.done}
+            landing={split.landing}
+            actions={actions}
+            active={active}
+          />
         </>
       )}
 

@@ -19,6 +19,8 @@ All notable changes to this project are documented here. The format follows
 - Website: a guide to changing the new tab page in Chrome (online on 3 November)
 - Settings → General → Open a group in: a group's open button puts its links in a new window or,
   if you like, in a tab group in this window
+- Ticking off a to-do crosses it out with a small burst, then it flies into “N done” under its
+  group, so the list keeps only what is left; open it to tick one back on or delete the done ones
 
 ### Fixed
 

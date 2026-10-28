@@ -3,6 +3,7 @@ import {
   canCombine,
   gridIndexFromPointer,
   hoverOnItem,
+  indexAmongAll,
   indexAmongRemaining,
   indexFromPointer,
   resolveTarget,
@@ -136,5 +137,25 @@ describe('resolveTarget', () => {
       categoryId: 'c',
       index: 3,
     })
+  })
+})
+
+describe('indexAmongAll', () => {
+  // a, b, c are shown; x and y are folded away (finished to-dos).
+  const all = ['a', 'x', 'b', 'c', 'y']
+  const shown = ['a', 'b', 'c']
+
+  it('puts dropped items right before the shown item they land in front of', () => {
+    expect(indexAmongAll(shown, all, 0)).toBe(0)
+    expect(indexAmongAll(shown, all, 1)).toBe(2)
+    expect(indexAmongAll(shown, all, 2)).toBe(3)
+  })
+
+  it('puts them right after the last shown item at the end, before what is folded', () => {
+    expect(indexAmongAll(shown, all, 3)).toBe(4)
+  })
+
+  it('starts at the top when nothing is shown', () => {
+    expect(indexAmongAll([], ['x', 'y'], 0)).toBe(0)
   })
 })

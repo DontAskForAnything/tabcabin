@@ -76,7 +76,7 @@ test.describe('installed from a template page', () => {
       .click()
     const tips = board.getByRole('dialog', { name: 'Good to know' })
     await expect(tips).toBeVisible()
-    await tips.getByRole('button', { name: 'Done' }).click()
+    await tips.getByRole('button', { name: 'Done', exact: true }).click()
 
     // The template took the untouched starter workspace's place.
     await expect(board.getByRole('button', { name: 'Switch workspace' })).toContainText('Moving')

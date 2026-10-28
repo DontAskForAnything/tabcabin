@@ -180,6 +180,8 @@ export const en = {
   'note.copied': 'Text copied',
   'note.markDone': 'Mark as done',
   'note.markUndone': 'Mark as not done',
+  'done.count': { one: '{count} done', other: '{count} done' },
+  'done.delete': 'Delete done to-dos',
   'stack.title': '{count} links',
   'stack.open': 'Open all',
   'stack.unstack': 'Unstack',

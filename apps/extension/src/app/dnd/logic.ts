@@ -85,6 +85,23 @@ export function indexAmongRemaining(
   return result
 }
 
+/**
+ * Converts an index among the items a list shows into one among all of its items, for a list that
+ * hides some (finished to-dos fold away below it): the new items go right before the shown item
+ * they were dropped in front of, or right after the last shown one. Both lists leave out the items
+ * being moved.
+ */
+export function indexAmongAll(
+  shown: readonly string[],
+  all: readonly string[],
+  index: number,
+): number {
+  const next = shown[index]
+  if (next !== undefined && all.includes(next)) return all.indexOf(next)
+  const last = shown.findLast((id) => all.includes(id))
+  return last === undefined ? 0 : all.indexOf(last) + 1
+}
+
 /** Which drop zones make sense for a source. */
 export function acceptsZone(source: DragSource, zone: DropZone): boolean {
   switch (zone.zone) {

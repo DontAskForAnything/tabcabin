@@ -23,7 +23,7 @@ test('welcomes a first start and can start with an empty board', async ({
 
   const tips = page.getByRole('dialog', { name: 'Good to know' })
   await expect(tips).toContainText('Ctrl+K')
-  await tips.getByRole('button', { name: 'Done' }).click()
+  await tips.getByRole('button', { name: 'Done', exact: true }).click()
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await expect(page.getByRole('tab', { name: 'Main' })).toBeVisible()
   await expect(page.getByText('Nothing here yet')).toBeVisible()
@@ -44,7 +44,7 @@ test('starts with a template', async ({ context, extensionId }) => {
   await start.getByRole('button', { name: 'Continue' }).click()
   await page
     .getByRole('dialog', { name: 'Good to know' })
-    .getByRole('button', { name: 'Done' })
+    .getByRole('button', { name: 'Done', exact: true })
     .click()
   await expect(page.getByRole('button', { name: 'Switch workspace' })).toHaveText('💼Work')
   for (const title of ['Projects', 'Meetings', 'Read later'])
@@ -95,7 +95,7 @@ test('moves in from another tab manager instead of the starter board', async ({
 
   const tips = page.getByRole('dialog', { name: 'Good to know' })
   await expect(tips).toBeVisible()
-  await tips.getByRole('button', { name: 'Done' }).click()
+  await tips.getByRole('button', { name: 'Done', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Switch workspace' })).toContainText(
     'Imported from OneTab',
   )

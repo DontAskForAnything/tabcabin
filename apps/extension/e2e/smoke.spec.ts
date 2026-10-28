@@ -9,5 +9,5 @@ test('new tab page renders the app', async ({ context, extensionId }) => {
 test('side panel page renders the app', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await page.goto(`chrome-extension://${extensionId}/sidepanel.html`)
-  await expect(page.getByText('TabCabin').first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
 })

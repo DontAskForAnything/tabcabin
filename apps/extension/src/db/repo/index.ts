@@ -3,7 +3,7 @@
  * change set that undoes it (see `commit`).
  */
 export { type Result, revert } from './commit'
-export { getCategories, getGroups, getWorkspaces } from './reads'
+export { getCategories, getGroups, getTopLevelItems, getWorkspaces } from './reads'
 export { createWorkspace, deleteWorkspace, reorderWorkspace, updateWorkspace } from './workspaces'
 export { createCategory, deleteCategory, moveCategory, updateCategory } from './categories'
 export {

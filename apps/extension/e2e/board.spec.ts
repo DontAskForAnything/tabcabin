@@ -31,8 +31,32 @@ test('adds a note and turns it into a done task', async ({ context, extensionId 
   await group.getByRole('button', { name: 'Note or link' }).click()
   await group.getByPlaceholder('Write a note or paste a link…').fill('Buy milk /done')
   await group.getByPlaceholder('Write a note or paste a link…').press('Enter')
+  // A finished to-do folds away below the group.
+  await expect(group.getByText('Buy milk')).toBeHidden()
+  await group.getByRole('button', { name: '1 done' }).click()
   await expect(group.getByText('Buy milk')).toBeVisible()
   await expect(group.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
+})
+
+test('ticks off a to-do, folds it away and brings it back', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const group = page.getByRole('region', { name: 'To do' })
+  const task = group.getByText('Press Ctrl+K to search everything')
+  await group.getByRole('checkbox', { name: 'Mark as done' }).nth(1).click()
+  // Crossed out first, then it flies into the finished ones.
+  await expect(group.getByRole('button', { name: '2 done' })).toBeVisible()
+  await expect(task).toBeHidden()
+  await group.getByRole('button', { name: '2 done' }).click()
+  await expect(task).toBeVisible()
+  await group.getByRole('checkbox', { name: 'Mark as not done' }).last().click()
+  await expect(group.getByRole('button', { name: '1 done' })).toBeVisible()
+  await expect(group.getByRole('checkbox', { name: 'Mark as done' })).toHaveCount(3)
+
+  await group.getByRole('button', { name: 'Delete done to-dos' }).click()
+  await expect(group.getByRole('button', { name: '1 done' })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(group.getByRole('button', { name: '1 done' })).toBeVisible()
 })
 
 test('adds a link from pasted text', async ({ context, extensionId }) => {
@@ -87,7 +111,7 @@ test('edits a note inline with Enter+Enter and the toolbar', async ({ context, e
   await page.keyboard.type('Second note')
   await page.getByRole('button', { name: 'Color' }).click()
   await page.getByRole('button', { name: 'Green' }).click()
-  await page.getByRole('button', { name: 'Done' }).click()
+  await page.getByRole('button', { name: 'Done', exact: true }).click()
   await expect(group.getByText('Second note')).toBeVisible()
   await expect(group.getByText('• last line →')).toBeVisible()
 })

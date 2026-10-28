@@ -1,0 +1,75 @@
+/* Ticking off a to-do: the checkbox pops, specks fly out, a line crosses the text out. */
+
+.todo-strike {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 62%;
+  background-size: 100% 1.5px;
+}
+
+.todo-strike-draw {
+  animation: todo-strike 460ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes todo-strike {
+  from {
+    background-size: 0% 1.5px;
+  }
+  to {
+    background-size: 100% 1.5px;
+  }
+}
+
+.done-pop {
+  animation: done-pop 340ms cubic-bezier(0.3, 0.7, 0.4, 1.4);
+}
+
+@keyframes done-pop {
+  35% {
+    transform: scale(0.82);
+  }
+  70% {
+    transform: scale(1.16);
+  }
+}
+
+.done-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.done-burst i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: done-burst 560ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes done-burst {
+  from {
+    transform: rotate(var(--angle)) translateX(6px) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--angle)) translateX(21px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.done-bump {
+  animation: done-bump 420ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+}
+
+@keyframes done-bump {
+  40% {
+    transform: scale(1.18);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+}

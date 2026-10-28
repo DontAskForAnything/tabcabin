@@ -94,16 +94,17 @@ test('counts tabs closed in Chrome itself, and each finished to-do once', async 
   const panel = page.getByRole('navigation', { name: 'Open tabs' })
   await expect(panel.getByRole('button', { name: '2 tabs closed this week' })).toBeVisible()
 
-  // The starter board's finished to-do moves and goes to the bin: it was done before this week.
+  // The starter board's finished to-do goes to the bin: it was done before this week.
   const todo = page.getByRole('region', { name: 'To do' })
+  await todo.getByRole('button', { name: '1 done' }).click()
   await todo.getByText('Move into TabCabin').click({ button: 'right' })
   await page.getByRole('menuitem', { name: 'Delete' }).click()
-  const task = todo.getByRole('checkbox', { name: 'Mark as done' }).first()
-  await task.click()
-  await expect(todo.getByRole('checkbox', { name: 'Mark as not done' })).toHaveCount(1)
-  // Ticking off and back on again is still one to-do.
+  await todo.getByRole('checkbox', { name: 'Mark as done' }).first().click()
+  // Ticking off and back on again (from the folded finished ones) is still one to-do.
+  await todo.getByRole('button', { name: '1 done' }).click()
   await todo.getByRole('checkbox', { name: 'Mark as not done' }).click()
   await todo.getByRole('checkbox', { name: 'Mark as done' }).first().click()
+  await expect(todo.getByRole('button', { name: '1 done' })).toBeVisible()
 
   const dialog = await week(page)
   await expect(dialog.getByRole('definition')).toHaveText(['2', '0', '1'])

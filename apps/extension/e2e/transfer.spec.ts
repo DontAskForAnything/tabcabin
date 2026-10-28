@@ -70,6 +70,7 @@ test('imports a tabExtend export into a new workspace', async ({ context, extens
   const docs = page.getByRole('region', { name: 'Docs' })
   await expect(docs.getByRole('link', { name: /Example handbook/ })).toBeVisible()
   await expect(docs.getByText('Read chapter 2 first')).toBeVisible()
+  await docs.getByRole('button', { name: /^\d+ done$/ }).click()
   await expect(docs.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
 })
 

@@ -9,7 +9,7 @@ import { offerUndo } from '@/state/undo'
 import type { BoardActions } from '../board/actions'
 import { duplicateNote, findDuplicates } from '../shared/duplicates'
 import { randomEmoji } from '../board/actions'
-import { indexAmongRemaining } from './logic'
+import { indexAmongAll, indexAmongRemaining } from './logic'
 import type { DragSource, DropTarget } from './types'
 
 export interface ApplyContext {
@@ -33,6 +33,28 @@ export function listRects(groupId: string, parentId: string | null): DOMRect[] {
   if (!list) return []
   return [...list.querySelectorAll<HTMLElement>(':scope > [data-dnd-item]')].map((el) =>
     el.getBoundingClientRect(),
+  )
+}
+
+/**
+ * A group's list hides its finished to-dos (they fold away below it), so an index among the shown
+ * items is turned into one among all of them. Stacks hide nothing.
+ */
+async function withFolded(
+  groupId: string,
+  parentId: string | null,
+  shown: readonly string[],
+  moving: ReadonlySet<string>,
+  index: number,
+): Promise<number> {
+  if (parentId) return index
+  const all = (await repo.getTopLevelItems(groupId))
+    .map((item) => item.id)
+    .filter((id) => !moving.has(id))
+  return indexAmongAll(
+    shown.filter((id) => !moving.has(id)),
+    all,
+    index,
   )
 }
 
@@ -77,7 +99,7 @@ export async function applyDrop(source: DragSource, target: DropTarget, ctx: App
         if (unchanged) return
         const result = await repo.moveItemsTo(ids, {
           groupId: target.groupId,
-          index,
+          index: await withFolded(target.groupId, target.parentId, order, new Set(ids), index),
           parentId: target.parentId,
         })
         if (target.groupId !== source.groupId) moved(result, ids.length)
@@ -162,7 +184,13 @@ export async function applyDrop(source: DragSource, target: DropTarget, ctx: App
   if (target.kind === 'insert') {
     groupId = target.groupId
     const order = listOrder(target.groupId, target.parentId)
-    index = indexAmongRemaining(order, new Set(), target.index)
+    index = await withFolded(
+      target.groupId,
+      target.parentId,
+      order,
+      new Set(),
+      indexAmongRemaining(order, new Set(), target.index),
+    )
     if (target.parentId) {
       const { ids } = await repo.addLinks(groupId, links)
       await repo.moveItemsTo(ids, { groupId, index, parentId: target.parentId })

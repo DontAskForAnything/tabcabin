@@ -63,6 +63,12 @@ export function GeneralSettings({ active }: { active: ActiveContext }) {
         checked={settings.trashZone}
         onChange={(trashZone) => void updateSettings({ trashZone })}
       />
+      <SwitchRow
+        label={t('settings.showTips')}
+        hint={t('settings.showTipsHint')}
+        checked={settings.showTips}
+        onChange={(showTips) => void updateSettings({ showTips })}
+      />
     </>
   )
 }

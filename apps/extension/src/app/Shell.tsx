@@ -9,6 +9,7 @@ import { Modals } from './modals/Modals'
 import { Onboarding } from './onboarding/Onboarding'
 import type { Surface } from './mount'
 import { TabsPanel } from './panel/TabsPanel'
+import { TipCard } from './tips/TipCard'
 import { TopBar } from './topbar/TopBar'
 import { type ActiveContext } from './useActive'
 import { useGlobalShortcuts } from './useGlobalShortcuts'
@@ -34,6 +35,7 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
         <Modals active={active} />
         {!compact && <Onboarding active={active} />}
         {!compact && <FeedbackCard />}
+        {!compact && <TipCard active={active} />}
         <NoteToolbar />
         <SelectionBar active={active} />
         <TrashZone enabled={active.settings?.trashZone ?? true} />

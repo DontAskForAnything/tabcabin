@@ -34,6 +34,8 @@ export interface Settings {
   sidebarMode: SidebarMode
   sidebarWidth: number
   trashZone: boolean
+  /** Now and then a card in the corner about something TabCabin can do. */
+  showTips: boolean
   /** Say so when a saved link is also in another group. */
   warnDuplicates: boolean
   /** Look at saved pages now and then and mark the ones that no longer load. */
@@ -67,6 +69,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sidebarMode: 'pinned',
   sidebarWidth: 292,
   trashZone: true,
+  showTips: true,
   warnDuplicates: true,
   checkLinks: false,
   showWeek: true,

@@ -1,0 +1,51 @@
+name: Bug
+description: Something in TabCabin doesn't work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, and what you saw.
+      placeholder: I dragged three selected tabs onto a group, but only one was saved.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a new tab
+        2. …
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+  - type: input
+    id: version
+    attributes:
+      label: TabCabin version
+      description: It's at the bottom left of Settings.
+      placeholder: '1.4.2'
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and system
+      placeholder: Chrome 142 on Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: sync
+    attributes:
+      label: Signed in?
+      options:
+        - 'No'
+        - 'Yes'
+        - 'Yes, with my own sync server'
+  - type: textarea
+    id: more
+    attributes:
+      label: Screenshots or anything else
+      description: Drop images here. Leave out anything private from your boards.

@@ -182,6 +182,8 @@ pnpm typecheck && pnpm lint && pnpm format:check
 pnpm zip:ext        # store-ready zip in apps/extension/.output
 ```
 
+Bug reports, ideas and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 The screenshots in this README are generated from demo data with
 `pnpm --filter @tabcabin/extension screenshots`. Logos, colours, type and voice are described in the
 [brand guide](docs/brand.md).

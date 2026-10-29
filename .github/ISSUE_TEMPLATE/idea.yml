@@ -1,0 +1,23 @@
+name: Idea
+description: Suggest a feature or a change
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would it solve?
+      description: What you were trying to do, and what got in the way.
+      placeholder: I have a lot of tabs to move into one group, and I can only drag them one by one.
+    validations:
+      required: true
+  - type: textarea
+    id: picture
+    attributes:
+      label: How do you picture it?
+      description: Optional. A sketch, or an app that does it well, helps.
+  - type: checkboxes
+    id: build
+    attributes:
+      label: Want to build it?
+      options:
+        - label: I'd like to work on this myself

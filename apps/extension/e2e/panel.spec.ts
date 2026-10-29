@@ -60,6 +60,26 @@ test('saves selected tabs into a new group and closes them', async ({ context, e
   await expect.poll(() => first!.isClosed() && second!.isClosed()).toBe(true)
 })
 
+test('keeps the save menu of a tab next to its button', async ({ context, extensionId }) => {
+  await openPages(context, ['Alpha page'])
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const row = panel(page).getByRole('button', { name: 'Alpha page' })
+  await row.hover()
+  await row.getByRole('button', { name: 'Save' }).click()
+  // An open menu hides the rest of the page from roles, so find the button by its text.
+  const save = page.locator('[aria-label="Alpha page"] button', { hasText: 'Save' })
+  const item = page.getByRole('menuitem', { name: 'New group' })
+  await item.hover()
+  // The pointer left the row, yet the button and its menu stay where they were.
+  await expect(save).toBeVisible()
+  const button = (await save.boundingBox())!
+  const menu = (await page.getByRole('menu').boundingBox())!
+  expect(Math.abs(menu.y - (button.y + button.height))).toBeLessThan(40)
+  await item.click()
+  await expect(page.getByRole('link', { name: /Alpha page/ })).toBeVisible()
+})
+
 test('closes duplicate tabs', async ({ context, extensionId }) => {
   await openPages(context, ['Same page', 'Same page', 'Other page'])
   const page = await context.newPage()

@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The Save menu of an open tab in the side panel stays next to its button; it jumped to the top of
+  the panel once the pointer left the tab
+
 ## [1.4.1] — 2026-10-29
 
 Type /todo anywhere in a note. Everything from 1.4.0 is in here too; the sync server from 1.3.2 is

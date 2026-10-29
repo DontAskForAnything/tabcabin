@@ -21,8 +21,9 @@ export function TabHoverActions({
   const t = useT()
   const options = { t, settings: active.settings }
   return (
+    // Stays while its menu is open: the menu would lose its place if the button went away.
     <div
-      className="hidden shrink-0 items-center gap-1 group-focus-within/tab:flex group-hover/tab:flex"
+      className="hidden shrink-0 items-center gap-1 group-focus-within/tab:flex group-hover/tab:flex has-[[data-state=open]]:flex"
       onPointerDown={(event) => event.stopPropagation()}
     >
       <Menu>

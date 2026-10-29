@@ -12,6 +12,7 @@ import { loadRow } from '../../apply'
 import { db } from '../../db'
 import { clock, commit, mustGet } from '../commit'
 import { getCategories, getGroups, getTopLevelItems } from '../reads'
+import { deletedInside } from './inside'
 
 export interface RestoreTarget {
   workspaceId: string
@@ -86,7 +87,7 @@ export async function restoreFromBin(entity: EntityType, id: string, target: Res
   } else if (entity === 'item') {
     const item = await mustGet('item', id)
     const group = await loadRow('group', item.groupId)
-    const stack = item.parentId ? await loadRow('item', item.parentId) : undefined
+    const parent = item.parentId ? await loadRow('item', item.parentId) : undefined
     let groupId = item.groupId
     if (!group || group.deletedAt !== null) {
       const groups = await getGroups(target.categoryId)
@@ -105,7 +106,7 @@ export async function restoreFromBin(entity: EntityType, id: string, target: Res
       }
       groupId = restored.id
     }
-    const detached = groupId !== item.groupId || (stack !== undefined && stack.deletedAt !== null)
+    const detached = groupId !== item.groupId || (parent !== undefined && parent.deletedAt !== null)
     const siblings = await getTopLevelItems(groupId)
     changes.push(
       put(
@@ -116,11 +117,9 @@ export async function restoreFromBin(entity: EntityType, id: string, target: Res
         ),
       ),
     )
-    if (item.kind === 'stack') {
-      for (const child of await db.items.where('parentId').equals(item.id).toArray())
-        if (child.deletedAt === item.deletedAt)
-          changes.push(put('item', restoreRow(child, detached ? { groupId } : {})))
-    }
+    // What was deleted with it comes back too: a stack's links, the notes pinned to a link.
+    for (const child of await deletedInside(item.id, item.deletedAt))
+      changes.push(put('item', restoreRow(child, detached ? { groupId } : {})))
   }
   return commit(changes)
 }

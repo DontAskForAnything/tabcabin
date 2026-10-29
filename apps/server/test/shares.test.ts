@@ -44,6 +44,10 @@ function board() {
     { groupId: group.id, position: 'a2', text: 'Book <b>tickets</b>', todo: true, done: true },
     clock,
   )
+  const pinned = {
+    ...makeNote({ groupId: group.id, position: 'a0', text: 'Leaves from Martim Moniz' }, clock),
+    parentId: link.id,
+  }
   const put = (entity: string, row: object) => ({ type: 'put', entity, row })
   return {
     group,
@@ -55,6 +59,7 @@ function board() {
       put('item', link),
       put('item', script),
       put('item', todo),
+      put('item', pinned),
     ],
   }
 }
@@ -86,6 +91,8 @@ describe('shared groups', () => {
     expect(html).not.toContain('javascript:')
     expect(html).toContain('Book &lt;b&gt;tickets&lt;/b&gt;')
     expect(html).toContain('class="todo done"')
+    // A note pinned to the link shows under it.
+    expect(html).toMatch(/Tram 28.*<div class="pins"><p class="note"[^>]*>Leaves from Martim Moniz/)
     expect(html).toContain('Udostępnione z TabCabin')
   })
 

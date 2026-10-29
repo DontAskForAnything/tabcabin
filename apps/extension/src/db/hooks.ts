@@ -11,8 +11,8 @@ import { db } from './db'
 import { getCategories, getWorkspaces } from './repo'
 
 export interface BoardItem extends Item {
-  /** Links inside a stack (empty for other kinds). */
-  children: Item[]
+  /** Links inside a stack, notes pinned to a link (empty for other kinds). */
+  children: BoardItem[]
 }
 
 export interface BoardGroup extends Group {
@@ -50,19 +50,18 @@ export async function loadBoard(categoryId: string): Promise<BoardGroup[]> {
   }
   return groups.map((group) => {
     const all = byGroup.get(group.id) ?? []
-    const top = sortByPosition(all.filter((item) => item.parentId === null))
-    return {
-      ...group,
-      allItems: all,
-      reminders,
-      items: top.map((item) => ({
-        ...item,
-        children:
-          item.kind === 'stack'
-            ? sortByPosition(all.filter((child) => child.parentId === item.id))
-            : [],
-      })),
-    }
+    const ids = new Set(all.map((item) => item.id))
+    const inside = new Map<string, Item[]>()
+    for (const item of all)
+      if (item.parentId && ids.has(item.parentId))
+        inside.set(item.parentId, [...(inside.get(item.parentId) ?? []), item])
+    const withChildren = (item: Item): BoardItem => ({
+      ...item,
+      children: sortByPosition(inside.get(item.id) ?? []).map(withChildren),
+    })
+    // An item whose parent is gone (removed by an older version) shows at the top level.
+    const top = sortByPosition(all.filter((item) => !item.parentId || !ids.has(item.parentId)))
+    return { ...group, allItems: all, reminders, items: top.map(withChildren) }
   })
 }
 

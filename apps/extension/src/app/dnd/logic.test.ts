@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  acceptsZone,
   canCombine,
   gridIndexFromPointer,
   hoverOnItem,
@@ -78,6 +79,7 @@ describe('resolveTarget', () => {
       itemId: 'b',
       groupId: 'g2',
       parentId: null,
+      parentKind: null,
       itemKind: 'link',
       index: 2,
       layout: 'list' as const,
@@ -89,6 +91,7 @@ describe('resolveTarget', () => {
     ).toEqual({
       kind: 'combine',
       itemId: 'b',
+      itemKind: 'link',
     })
   })
 
@@ -98,6 +101,7 @@ describe('resolveTarget', () => {
       itemId: 'b',
       groupId: 'g2',
       parentId: null,
+      parentKind: null,
       itemKind: 'note',
       index: 2,
       layout: 'list' as const,
@@ -118,6 +122,7 @@ describe('resolveTarget', () => {
       itemId: 'a',
       groupId: 'g1',
       parentId: null,
+      parentKind: null,
       itemKind: 'link',
       index: 0,
       layout: 'list' as const,
@@ -127,6 +132,33 @@ describe('resolveTarget', () => {
     expect(
       resolveTarget({ ...base, source: tabs, zone: { zone: 'trash' }, zoneRect: rect }),
     ).toBeNull()
+  })
+
+  it('lets only notes into the notes pinned to a link, and only links into a stack', () => {
+    const pinned = {
+      zone: 'item' as const,
+      itemId: 'n',
+      groupId: 'g2',
+      parentId: 'link',
+      parentKind: 'link' as const,
+      itemKind: 'note',
+      index: 0,
+      layout: 'list' as const,
+    }
+    const at = { ...base, pointer: { x: 0, y: 148 }, source: items, zone: pinned, zoneRect: rect }
+    expect(resolveTarget({ ...at, sourceKinds: ['note'] })).toEqual({
+      kind: 'insert',
+      groupId: 'g2',
+      parentId: 'link',
+      index: 1,
+    })
+    expect(resolveTarget({ ...at, sourceKinds: ['link'] })).toBeNull()
+    expect(resolveTarget({ ...at, sourceKinds: ['note', 'link'] })).toBeNull()
+    const stack = { zone: 'list' as const, groupId: 'g2', parentId: 's', layout: 'list' as const }
+    expect(acceptsZone(items, { ...stack, parentKind: 'stack' }, ['link'])).toBe(true)
+    expect(acceptsZone(items, { ...stack, parentKind: 'stack' }, ['note'])).toBe(false)
+    expect(acceptsZone(items, { ...stack, parentKind: 'link' }, ['note'])).toBe(true)
+    expect(acceptsZone(items, { ...stack, parentKind: null }, ['note', 'link'])).toBe(true)
   })
 
   it('places groups before or after the hovered group', () => {

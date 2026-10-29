@@ -12,6 +12,7 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { type ReactNode, useMemo, useRef } from 'react'
+import * as repo from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { useBoardActions } from '../board/actions'
@@ -20,6 +21,7 @@ import { applyDrop, listOrder, listRects } from './apply'
 import { zoneCollision } from './collision'
 import { type Point, resolveTarget } from './logic'
 import { DragPreview } from './DragPreview'
+import { rememberTakeoff } from './glide'
 import { type OverlayInfo, useDrag } from './store'
 import type { DragSource, DropZone } from './types'
 
@@ -52,6 +54,8 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
   })
   const activeRef = useRef(active)
   activeRef.current = active
+  // A link's own note being turned into a pinned note for the drag (see onDragStart).
+  const detached = useRef<Promise<DragSource | null> | null>(null)
 
   const collision = useMemo(() => zoneCollision((point) => (pointer.current = point)), [])
 
@@ -60,13 +64,6 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
     if (category.current.timer) clearTimeout(category.current.timer)
     combine.current = { itemId: null, armed: false, timer: null }
     category.current = { id: null, timer: null }
-  }
-
-  const sourceKinds = (source: DragSource): string[] => {
-    if (source.kind === 'tabs') return source.tabs.map(() => 'tab')
-    if (source.kind === 'group') return ['group']
-    const kinds = useDrag.getState().overlay?.kind
-    return source.ids.map(() => kinds ?? 'link')
   }
 
   const update = () => {
@@ -79,7 +76,7 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
       zone,
       zoneRect: rect,
       pointer: pointer.current,
-      sourceKinds: sourceKinds(source),
+      sourceKinds: state.kinds,
       listRects: zone?.zone === 'list' ? listRects(zone.groupId, zone.parentId) : undefined,
       combineArmed:
         zone?.zone === 'item' && combine.current.armed && combine.current.itemId === zone.itemId,
@@ -139,9 +136,24 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
         source = { ...source, ids: ids.length ? ids : source.ids }
       }
     }
+    detached.current = null
+    if (source.kind === 'linkText') {
+      // The link's own note becomes a pinned note (it looks the same), and the drag carries it.
+      const { linkId, groupId } = source
+      const started = source
+      detached.current = repo.detachLinkText(linkId).then((id) => {
+        const items: DragSource | null = id
+          ? { kind: 'items', ids: [id], groupId, parentId: linkId }
+          : null
+        if (items && useDrag.getState().source === started)
+          useDrag.getState().set({ source: items })
+        return items
+      })
+    }
     useUi.getState().setEditingNote(null)
     useDrag.getState().set({
       source,
+      kinds: kindsOf(source, overlay),
       overlay: { ...overlay, count: source.kind === 'items' ? source.ids.length : overlay.count },
       target: null,
       pendingCombine: null,
@@ -150,26 +162,43 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
 
   const onDragMove = (event: DragMoveEvent | DragOverEvent) => {
     const over = event.over
+    const zone = (over?.data.current?.zone as DropZone | undefined) ?? null
     last.current = {
-      zone: (over?.data.current?.zone as DropZone | undefined) ?? null,
-      rect: over?.rect ?? null,
+      zone,
+      // A link with notes under it: only the link itself counts for before / onto / after.
+      rect: (zone?.zone === 'item' && headRect(zone.itemId)) || (over?.rect ?? null),
     }
     update()
   }
 
   const finish = (event?: DragEndEvent) => {
     const { source, target } = useDrag.getState()
+    const preview = document.querySelector('[data-drag-preview]')?.getBoundingClientRect()
+    const detaching = detached.current
     clearTimers()
     useDrag.getState().reset()
-    if (event && source && target && event.over !== null) {
-      const ctx = activeRef.current
-      void applyDrop(source, target, {
-        t,
-        actions,
-        settings: ctx.settings,
-        categoryId: ctx.category?.id,
-      }).then(() => useUi.getState().clearSelection())
-    }
+    if (!event || !source || !target || event.over === null) return
+    const ctx = activeRef.current
+    void (async () => {
+      const dropped = source.kind === 'linkText' ? await detaching : source
+      if (!dropped) return
+      if (dropped.kind === 'items') {
+        useDrag.getState().set({ settling: dropped.ids })
+        if (preview) rememberTakeoff(dropped.ids, preview, true)
+      }
+      try {
+        await applyDrop(dropped, target, {
+          t,
+          actions,
+          settings: ctx.settings,
+          categoryId: ctx.category?.id,
+        })
+      } finally {
+        // The board shows the saved change a moment later.
+        setTimeout(() => useDrag.getState().set({ settling: [] }), 150)
+      }
+      useUi.getState().clearSelection()
+    })()
   }
 
   const announcements = useMemo<Announcements>(
@@ -203,6 +232,25 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
         <DragPreview />
       </DragOverlay>
     </DndContext>
+  )
+}
+
+function headRect(itemId: string): DOMRect | null {
+  return (
+    document.querySelector(`[data-dnd-head="${CSS.escape(itemId)}"]`)?.getBoundingClientRect() ??
+    null
+  )
+}
+
+/** Kinds of what is dragged; a selection is read from the board, where each item marks its kind. */
+function kindsOf(source: DragSource, overlay: OverlayInfo): string[] {
+  if (source.kind === 'tabs') return source.tabs.map(() => 'tab')
+  if (source.kind === 'group') return ['group']
+  if (source.kind === 'linkText') return ['note']
+  return source.ids.map(
+    (id) =>
+      document.querySelector<HTMLElement>(`[data-dnd-item="${CSS.escape(id)}"]`)?.dataset.dndKind ??
+      overlay.kind,
   )
 }
 

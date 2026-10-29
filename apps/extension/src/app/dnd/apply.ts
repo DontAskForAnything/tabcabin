@@ -80,7 +80,8 @@ async function firstGroupOf(categoryId: string): Promise<string> {
 }
 
 export async function applyDrop(source: DragSource, target: DropTarget, ctx: ApplyContext) {
-  if (!target) return
+  // A link's own note is turned into a pinned note before it gets here.
+  if (!target || source.kind === 'linkText') return
   const { t, actions, settings } = ctx
   const moved = (result: repo.Result, count: number) =>
     offerUndo(result, { title: t('item.moved', { count }), undoLabel: t('common.undo') })

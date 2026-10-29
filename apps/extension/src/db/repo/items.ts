@@ -1,4 +1,5 @@
 import {
+  canNest,
   combineItems,
   type CombineError,
   type Item,
@@ -15,7 +16,7 @@ import {
 import { countActivity } from '../activity/count'
 import { db } from '../db'
 import { clock, commit, live, mustGet, type Result } from './commit'
-import { getGroupItems, getTopLevelItems } from './reads'
+import { descendantsOf, getGroupItems, getTopLevelItems } from './reads'
 
 export interface NewLink {
   url: string
@@ -115,31 +116,28 @@ export async function convertNote(id: string, kind: 'link' | 'image', url: strin
   return commit([put('item', touch(row, patch, clock()))])
 }
 
-async function childrenOf(stackIds: readonly string[]): Promise<Item[]> {
-  if (stackIds.length === 0) return []
-  return live(
-    await db.items
-      .where('parentId')
-      .anyOf([...stackIds])
-      .toArray(),
-  )
-}
-
-/** Moves items (in the given order) into a group or a stack at `index`. */
+/**
+ * Moves items (in the given order) into a group, a stack (links) or a link (notes) at `index`.
+ * Items that cannot live in that place stay where they are.
+ */
 export async function moveItemsTo(
   ids: readonly string[],
   target: { groupId: string; index: number; parentId?: string | null },
 ) {
-  const moving = (await db.items.bulkGet([...ids])).filter((item): item is Item => !!item)
   const parentId = target.parentId ?? null
+  const parent = parentId ? await mustGet('item', parentId) : null
+  const moving = (await db.items.bulkGet([...ids])).filter(
+    (item): item is Item => !!item && (!parent || canNest(parent.kind, item.kind)),
+  )
   const siblings = live(await db.items.where('groupId').equals(target.groupId).toArray()).filter(
     (item) => item.parentId === parentId,
   )
-  const stacks = moving.filter((item) => item.kind === 'stack').map((item) => item.id)
   const rows = moveItems(
     {
       moving,
-      children: await childrenOf(stacks),
+      children: (await descendantsOf(moving.map((item) => item.id))).filter(
+        (child) => !ids.includes(child.id),
+      ),
       toGroupId: target.groupId,
       toParentId: parentId,
       siblings,
@@ -156,24 +154,35 @@ export async function combine(
 ): Promise<(Result & { ok: true; pinned?: true }) | { ok: false; error: CombineError }> {
   const dragged = (await db.items.bulkGet([...ids])).filter((item): item is Item => !!item)
   const target = await mustGet('item', targetId)
+  const inside = await descendantsOf(dragged.map((item) => item.id))
+  const c = clock()
   const outcome = combineItems(
     dragged,
     target,
     {
-      targetChildren: target.kind === 'stack' ? await childrenOf([target.id]) : [],
-      draggedChildren: await childrenOf(dragged.filter((d) => d.kind === 'stack').map((d) => d.id)),
+      targetChildren: await descendantsOf([target.id], 1),
+      draggedChildren: inside.filter((child) => dragged.some((item) => item.id === child.parentId)),
     },
-    clock(),
+    c,
   )
   if (!outcome.ok) return outcome
-  return { ok: true, pinned: outcome.pinned, ...(await commit(puts('item', outcome.rows))) }
+  // Notes pinned to the dragged links come along from another group.
+  const changed = new Set(outcome.rows.map((row) => row.id))
+  const following = inside
+    .filter((child) => !changed.has(child.id) && child.groupId !== target.groupId)
+    .map((child) => touch(child, { groupId: target.groupId }, c))
+  return {
+    ok: true,
+    pinned: outcome.pinned,
+    ...(await commit(puts('item', [...outcome.rows, ...following]))),
+  }
 }
 
 export async function unstackById(stackId: string) {
   const stack = await mustGet('item', stackId)
   const rows = unstack(
     stack,
-    await childrenOf([stackId]),
+    await descendantsOf([stackId], 1),
     await getGroupItems(stack.groupId),
     clock(),
   )
@@ -183,7 +192,10 @@ export async function unstackById(stackId: string) {
 export async function deleteItems(ids: readonly string[]) {
   const c = clock()
   const rows = (await db.items.bulkGet([...ids])).filter((item): item is Item => !!item)
-  const children = await childrenOf(rows.filter((row) => row.kind === 'stack').map((row) => row.id))
+  // What is inside goes too: the links of a stack, the notes pinned to a link.
+  const children = (await descendantsOf(rows.map((row) => row.id))).filter(
+    (child) => !ids.includes(child.id),
+  )
   return commit(
     puts(
       'item',

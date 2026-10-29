@@ -80,24 +80,66 @@ test('stacks two links by holding one over the other', async ({ context, extensi
   await expect(page.getByText('Links stacked')).toBeVisible()
 })
 
-test('pins a to-do to a link by holding it over the link', async ({ context, extensionId }) => {
+test('pins several notes to a link and takes them off again', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)
-  const github = await center(page.getByRole('link', { name: /GitHub/ }))
-  await drag(
-    page,
-    page.getByRole('region', { name: 'To do' }).getByText('Try the Collections view'),
-    { x: github.x, y: github.y },
-    700,
-  )
-  await expect(page.getByText('Note pinned to the link')).toBeVisible()
+  const todo = page.getByRole('region', { name: 'To do' })
   const links = page.getByRole('region', { name: 'Quick links' })
+  const github = links
+    .locator('[data-dnd-item]')
+    .filter({ has: page.getByRole('link', { name: /GitHub/ }) })
+  for (const text of ['Try the Collections view', 'Press Ctrl+K to search everything']) {
+    const target = await center(page.getByRole('link', { name: /GitHub/ }))
+    await drag(page, todo.getByText(text), { x: target.x, y: target.y }, 700)
+    await expect(github.getByText(text)).toBeVisible()
+  }
+  await expect(page.getByText('Note pinned to the link').first()).toBeVisible()
+  await expect(todo.getByText('Try the Collections view')).toHaveCount(0)
+  // Each pinned to-do is ticked on its own.
+  await github.getByRole('checkbox', { name: 'Mark as done' }).last().click()
+  await expect(github.getByRole('checkbox', { name: 'Mark as not done' })).toHaveCount(1)
+  await expect(github.getByRole('checkbox', { name: 'Mark as done' })).toHaveCount(1)
+
+  // The pin in the corner takes one off: it goes right below the link.
+  await github.getByText('Try the Collections view').hover()
+  await github.getByRole('button', { name: 'Unpin from the link' }).first().click()
+  await expect(page.getByText('Note unpinned')).toBeVisible()
+  await expect(github.getByText('Try the Collections view')).toHaveCount(0)
   await expect(links.getByText('Try the Collections view')).toBeVisible()
-  await links.getByRole('checkbox', { name: 'Mark as done' }).click()
-  await expect(links.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
-  await expect(
-    page.getByRole('region', { name: 'To do' }).getByText('Try the Collections view'),
-  ).toHaveCount(0)
+
+  // The other one is dragged off into another group.
+  const welcome = page.getByRole('region', { name: 'Welcome' })
+  const last = await center(welcome.getByText('Groups hold links'))
+  await drag(page, github.getByText('Press Ctrl+K to search everything'), {
+    x: last.x,
+    y: last.box.y + last.box.height - 4,
+  })
+  // It was ticked off, so it folds away with the group's finished to-dos.
+  await expect(welcome.getByRole('button', { name: '1 done' })).toBeVisible()
+  await expect(github.getByText('Press Ctrl+K to search everything')).toHaveCount(0)
+})
+
+test('drags the note written on a link off it', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  await links.getByRole('link', { name: /GitHub/ }).click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Edit' }).click()
+  await page.getByPlaceholder('Add a note to this link').fill('Review the open pull requests')
+  await page.getByRole('button', { name: 'Save' }).click()
+  const github = links
+    .locator('[data-dnd-item]')
+    .filter({ has: page.getByRole('link', { name: /GitHub/ }) })
+  await expect(github.getByText('Review the open pull requests')).toBeVisible()
+
+  const todo = page.getByRole('region', { name: 'To do' })
+  const first = await center(todo.getByText('Try the Collections view'))
+  await drag(page, github.getByText('Review the open pull requests'), {
+    x: first.x,
+    y: first.box.y + 2,
+  })
+  await expect(todo.getByText('Review the open pull requests')).toBeVisible()
+  await expect(github.getByText('Review the open pull requests')).toHaveCount(0)
 })
 
 test('reorders groups by dragging the header', async ({ context, extensionId }) => {

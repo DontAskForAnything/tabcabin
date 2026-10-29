@@ -1,4 +1,4 @@
-import { Bell, ExternalLink, FolderInput, Pencil, Trash } from 'lucide-react'
+import { Bell, ExternalLink, FolderInput, Pencil, PinOff, StickyNote, Trash } from 'lucide-react'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -57,6 +57,22 @@ export function ItemContextMenu({
             onSelect={() => openModal({ type: 'linkEditor', itemId: item.id })}
           >
             {t('item.edit')}
+          </ContextMenuItem>
+        )}
+        {item.kind === 'link' && (
+          <ContextMenuItem
+            icon={<StickyNote size={14} />}
+            onSelect={() => void actions.addPinnedNote(item.id)}
+          >
+            {t('link.addNote')}
+          </ContextMenuItem>
+        )}
+        {item.kind === 'note' && item.parentId && (
+          <ContextMenuItem
+            icon={<PinOff size={14} />}
+            onSelect={() => void actions.unpinNotes([item.id])}
+          >
+            {t('link.unpin')}
           </ContextMenuItem>
         )}
         {item.kind !== 'stack' && (

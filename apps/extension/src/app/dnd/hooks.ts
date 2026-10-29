@@ -2,7 +2,7 @@ import { useDraggable, useDroppable } from '@dnd-kit/core'
 import type { Item } from '@tabcabin/core'
 import { useCallback } from 'react'
 import { type OverlayInfo, useDrag } from './store'
-import { type DragSource, dndId, type DropZone } from './types'
+import { type DragSource, dndId, type DropZone, type ParentKind } from './types'
 
 /**
  * Pointer listeners without dnd-kit's button role: our drag handles contain their own buttons,
@@ -43,6 +43,7 @@ export function useItemDnd(
   item: Item & { children?: Item[] },
   index: number,
   layout: 'list' | 'grid',
+  parentKind: ParentKind,
   disabled = false,
 ) {
   const source: DragSource = {
@@ -56,6 +57,7 @@ export function useItemDnd(
     itemId: item.id,
     groupId: item.groupId,
     parentId: item.parentId,
+    parentKind,
     itemKind: item.kind,
     index,
     layout,
@@ -74,7 +76,11 @@ export function useItemDnd(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [drag.setNodeRef, drop.setNodeRef],
   )
-  const dragging = useDrag((s) => s.source?.kind === 'items' && s.source.ids.includes(item.id))
+  const dragging = useDrag(
+    (s) =>
+      (s.source?.kind === 'items' && s.source.ids.includes(item.id)) ||
+      s.settling.includes(item.id),
+  )
   const combineTarget = useDrag((s) => s.target?.kind === 'combine' && s.target.itemId === item.id)
   const pending = useDrag((s) => s.pendingCombine === item.id)
   return {
@@ -86,11 +92,16 @@ export function useItemDnd(
   }
 }
 
-/** Drop zone for the empty space of a list (end of a group / stack). */
-export function useListDrop(groupId: string, parentId: string | null, layout: 'list' | 'grid') {
+/** Drop zone for the empty space of a list (end of a group, a stack or a link's notes). */
+export function useListDrop(
+  groupId: string,
+  parentId: string | null,
+  parentKind: ParentKind,
+  layout: 'list' | 'grid',
+) {
   const drop = useDroppable({
     id: dndId.list(groupId, parentId),
-    data: { zone: { zone: 'list', groupId, parentId, layout } satisfies DropZone },
+    data: { zone: { zone: 'list', groupId, parentId, parentKind, layout } satisfies DropZone },
   })
   const insertAt = useDrag((s) =>
     s.target?.kind === 'insert' && s.target.groupId === groupId && s.target.parentId === parentId
@@ -98,6 +109,20 @@ export function useListDrop(groupId: string, parentId: string | null, layout: 'l
       : null,
   )
   return { setNodeRef: drop.setNodeRef, insertAt, listId: `${groupId}:${parentId ?? ''}` }
+}
+
+/** Lets the note written on a link itself be dragged off it like a pinned note. */
+export function useLinkTextDrag(link: Item, disabled = false) {
+  const drag = useDraggable({
+    id: dndId.linkText(link.id),
+    data: {
+      source: { kind: 'linkText', linkId: link.id, groupId: link.groupId } satisfies DragSource,
+      overlay: overlayForItem({ ...link, kind: 'note', color: link.color ?? 'sky' }),
+    },
+    disabled,
+  })
+  const dragging = useDrag((s) => s.source?.kind === 'linkText' && s.source.linkId === link.id)
+  return { setNodeRef: drag.setNodeRef, handleProps: dragHandleProps(drag), dragging }
 }
 
 export function useGroupDnd(

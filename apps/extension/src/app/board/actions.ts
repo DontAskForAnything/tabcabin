@@ -18,6 +18,7 @@ import { type Translate, useLocale, useT } from '@/i18n'
 import { copyText, openAsTabGroup, openUrl } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
+import { rememberTakeoff } from '../dnd/glide'
 import { duplicateNote, findDuplicates } from '../shared/duplicates'
 import type { ActiveContext } from '../useActive'
 
@@ -27,13 +28,15 @@ import { randomEmoji } from '@/lib/emoji'
 /** Text representation of a group for the clipboard. */
 function groupAsText(group: BoardGroup, t: Translate): string {
   const lines = [`${group.emoji} ${group.title || t('group.untitled')}`, '']
-  const line = (item: Item, indent = '') => {
-    if (item.kind === 'note')
-      lines.push(`${indent}${item.todo ? (item.done ? '[x] ' : '[ ] ') : ''}${item.text}`)
+  const note = (item: Item, indent: string) =>
+    lines.push(`${indent}${item.todo ? (item.done ? '[x] ' : '[ ] ') : ''}${item.text}`)
+  const line = (item: BoardItem, indent = '') => {
+    if (item.kind === 'note') note(item, indent)
     else if (item.url) {
       lines.push(`${indent}${item.title || item.url}`)
       lines.push(`${indent}${item.url}`)
-      if (item.text) lines.push(`${indent}  ${item.text}`)
+      if (item.text) note(item, `${indent}  `)
+      for (const pinned of item.children) note(pinned, `${indent}  `)
     }
   }
   for (const item of group.items) {
@@ -54,6 +57,11 @@ export function useBoardActions(active: ActiveContext) {
   return useMemo(() => {
     const undoable = (title: string) => (result: repo.Result) =>
       offerUndo(result, { title, undoLabel: t('common.undo') })
+    /** Takes notes off their link into the group; `from` is where they glide from. */
+    const unpinNotes = async (ids: readonly string[], from?: DOMRect) => {
+      if (from) rememberTakeoff(ids, from)
+      undoable(t('link.noteUnpinned', { count: ids.length }))(await repo.unpinNotes(ids))
+    }
 
     return {
       async createGroup(index?: number) {
@@ -145,6 +153,20 @@ export function useBoardActions(active: ActiveContext) {
       async removeEmptyNote(id: string) {
         await repo.deleteItems([id])
       },
+      /** A new note pinned to a link, ready to type in. */
+      async addPinnedNote(linkId: string) {
+        const { id } = await repo.addPinnedNote(linkId)
+        useUi.getState().setEditingNote(id)
+      },
+      unpinNotes,
+      async unpinLinkText(linkId: string, from?: DOMRect) {
+        const id = await repo.detachLinkText(linkId)
+        if (id) await unpinNotes([id], from)
+      },
+      async editLinkText(linkId: string) {
+        const id = await repo.detachLinkText(linkId)
+        if (id) useUi.getState().setEditingNote(id)
+      },
       async combine(ids: readonly string[], targetId: string) {
         const result = await repo.combine(ids, targetId)
         if (!result.ok) {
@@ -157,7 +179,9 @@ export function useBoardActions(active: ActiveContext) {
           toast({ title: t(key[result.error]), tone: 'error' })
           return false
         }
-        undoable(t(result.pinned ? 'link.notePinned' : 'stack.created'))(result)
+        undoable(result.pinned ? t('link.notePinned', { count: ids.length }) : t('stack.created'))(
+          result,
+        )
         useUi.getState().clearSelection()
         return true
       },

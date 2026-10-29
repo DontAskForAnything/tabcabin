@@ -98,13 +98,23 @@ export const CSV_COLUMNS = [
   'Created',
 ] as const
 
-/** One row per link, note, to-do and image (stack children are listed as links). */
+/**
+ * One row per link, note, to-do and image (the links of a stack are listed one by one, notes
+ * pinned to a link right after it).
+ */
 export function toCsv(bundle: Bundle): string {
   const rows: (string | number | boolean)[][] = [[...CSV_COLUMNS]]
+  const inside = new Map<string, Item[]>()
+  for (const item of bundle.items)
+    if (item.parentId) inside.set(item.parentId, [...(inside.get(item.parentId) ?? []), item])
+  const listed = (item: Item): Item[] => [
+    ...(item.kind === 'stack' ? [] : [item]),
+    ...sortByPosition(inside.get(item.id) ?? []).flatMap(listed),
+  ]
   for (const { workspace, categories } of bundleTree(bundle))
     for (const { category, groups } of categories)
       for (const { group, items } of groups)
-        for (const item of items.flatMap((i) => (i.kind === 'stack' ? i.children : [i]))) {
+        for (const item of items.flatMap(listed)) {
           const type = item.kind === 'note' ? (item.todo ? 'todo' : 'note') : item.kind
           rows.push([
             workspace.name,

@@ -27,6 +27,7 @@ export {
   unstackById,
   updateItem,
 } from './items'
+export { addPinnedNote, detachLinkText, unpinNotes } from './pins'
 export { type BinEntry, listBin } from './bin/list'
 export { BIN_LIMIT, emptyBin, purgeFromBin, trimBin } from './bin/purge'
 export { restoreFromBin } from './bin/restore'

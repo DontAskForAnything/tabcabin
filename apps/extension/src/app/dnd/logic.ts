@@ -1,4 +1,4 @@
-import type { DragSource, DropTarget, DropZone } from './types'
+import type { DragSource, DropTarget, DropZone, ParentKind } from './types'
 
 export interface Rect {
   top: number
@@ -36,7 +36,7 @@ export function hoverOnItem(
 
 /**
  * Items can be combined onto links/stacks (when only links/stacks are dragged), onto notes (only
- * notes), and notes onto a link (they become its note).
+ * notes), and notes onto a link (they are pinned to it).
  */
 export function canCombine(sourceKinds: readonly string[], targetKind: string): boolean {
   if (sourceKinds.length === 0) return false
@@ -106,12 +106,22 @@ export function indexAmongAll(
   return last === undefined ? 0 : all.indexOf(last) + 1
 }
 
-/** Which drop zones make sense for a source. */
-export function acceptsZone(source: DragSource, zone: DropZone): boolean {
+/**
+ * Whether what is dragged (by kind, 'tab' for an open tab) can go into a list inside an item: a
+ * stack takes links, a link takes notes.
+ */
+function fitsInside(parentKind: ParentKind, kinds: readonly string[]): boolean {
+  if (parentKind === 'stack') return kinds.every((kind) => kind === 'link' || kind === 'tab')
+  if (parentKind === 'link') return kinds.length > 0 && kinds.every((kind) => kind === 'note')
+  return true
+}
+
+/** Which drop zones make sense for a source made of items of these kinds. */
+export function acceptsZone(source: DragSource, zone: DropZone, kinds: readonly string[]): boolean {
   switch (zone.zone) {
     case 'item':
     case 'list':
-      return source.kind !== 'group'
+      return source.kind !== 'group' && fitsInside(zone.parentKind, kinds)
     case 'group':
       return source.kind === 'group'
     case 'newGroup':
@@ -137,7 +147,7 @@ export function resolveTarget(input: {
   groupAxis: 'x' | 'y'
 }): DropTarget | { kind: 'combinePending'; itemId: string; fallback: DropTarget } {
   const { source, zone, zoneRect, pointer } = input
-  if (!zone || !zoneRect || !acceptsZone(source, zone)) return null
+  if (!zone || !zoneRect || !acceptsZone(source, zone, input.sourceKinds)) return null
   switch (zone.zone) {
     case 'item': {
       if (source.kind === 'items' && source.ids.includes(zone.itemId)) return null
@@ -145,7 +155,8 @@ export function resolveTarget(input: {
       const axis = zone.layout === 'grid' ? 'x' : 'y'
       const hover = hoverOnItem(zoneRect, pointer, allow, axis)
       if (hover.position === 'middle') {
-        if (input.combineArmed) return { kind: 'combine', itemId: zone.itemId }
+        if (input.combineArmed)
+          return { kind: 'combine', itemId: zone.itemId, itemKind: zone.itemKind }
         const half =
           axis === 'y'
             ? pointer.y < zoneRect.top + zoneRect.height / 2

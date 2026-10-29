@@ -2,6 +2,7 @@ import { type Change, type EntityType, purge } from '@tabcabin/core'
 import { loadRow } from '../../apply'
 import { db } from '../../db'
 import { commit } from '../commit'
+import { deletedInside } from './inside'
 import { listBin } from './list'
 
 /** Adds purges of the reminders attached to purged items. */
@@ -40,10 +41,7 @@ export async function purgeFromBin(entity: EntityType, id: string) {
     )
     for (const item of items) changes.push(purge('item', item.id))
   } else if (entity === 'item') {
-    const children = (await db.items.where('parentId').equals(id).toArray()).filter(
-      (i) => i.deletedAt === ts,
-    )
-    for (const child of children) changes.push(purge('item', child.id))
+    for (const child of await deletedInside(id, ts)) changes.push(purge('item', child.id))
   }
   return commit(await withReminderPurges(changes))
 }

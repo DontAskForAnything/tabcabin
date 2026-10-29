@@ -43,6 +43,10 @@ function sample(): Bundle {
     },
     clock,
   )
+  const pinned = makeItem(
+    { kind: 'note', groupId: group.id, parentId: link.id, position: 'a0', text: 'Pinned' },
+    clock,
+  )
   const gone = {
     ...makeItem({ kind: 'note', groupId: group.id, position: 'a3' }, clock),
     deletedAt: 1,
@@ -52,7 +56,7 @@ function sample(): Bundle {
     workspaces: [ws, other],
     categories: [cat],
     groups: [group],
-    items: [link, note, stack, child, gone],
+    items: [link, note, stack, child, pinned, gone],
     reminders: [reminder],
   }
 }
@@ -62,7 +66,7 @@ describe('backup', () => {
     const all = sample()
     const bundle = collectBundle(all, [all.workspaces[0]!.id])
     expect(bundle.workspaces).toHaveLength(1)
-    expect(bundle.items).toHaveLength(4)
+    expect(bundle.items).toHaveLength(5)
     expect(bundle.reminders).toHaveLength(1)
   })
 
@@ -76,8 +80,10 @@ describe('backup', () => {
     expect(remapped.workspaces[0]!.position).toBe('b0')
     expect(remapped.workspaces[0]!.id).not.toBe(bundle.workspaces[0]!.id)
     const stack = remapped.items.find((i) => i.kind === 'stack')!
-    const child = remapped.items.find((i) => i.parentId !== null)!
+    const child = remapped.items.find((i) => i.kind === 'link' && i.parentId !== null)!
     expect(child.parentId).toBe(stack.id)
+    const pinned = remapped.items.find((i) => i.text === 'Pinned')!
+    expect(pinned.parentId).toBe(remapped.items.find((i) => i.title === 'A <b>')!.id)
     expect(remapped.groups[0]!.categoryId).toBe(remapped.categories[0]!.id)
     expect(remapped.reminders[0]!.itemId).toBe(remapped.items.find((i) => i.title === 'A <b>')!.id)
   })
@@ -110,6 +116,7 @@ describe('exporters', () => {
     expect(html).toContain('>A &lt;b&gt;</A>')
     expect(html).toContain('<H3 ADD_DATE="1791374400">Stack</H3>')
     expect(html).not.toContain('line 1')
+    expect(html).not.toContain('Pinned')
   })
 
   it('writes CSV with quoted cells', () => {
@@ -117,8 +124,9 @@ describe('exporters', () => {
     const csv = toCsv(collectBundle(all, [all.workspaces[0]!.id])).split('\r\n')
     expect(csv[0]).toBe('Workspace,Category,Group,Type,Title,URL,Note,Done,Created')
     expect(csv[1]).toMatch(/^"Work, ""main""",Today,Links,link,A <b>,https:\/\/a\.example,,,/)
-    expect(csv[2]).toContain('todo,,,"line 1\nline ""2""",false')
-    expect(csv[3]).toContain('link,C,https://c.example')
+    expect(csv[2]).toContain('Links,note,,,Pinned,,')
+    expect(csv[3]).toContain('todo,,,"line 1\nline ""2""",false')
+    expect(csv[4]).toContain('link,C,https://c.example')
   })
 })
 

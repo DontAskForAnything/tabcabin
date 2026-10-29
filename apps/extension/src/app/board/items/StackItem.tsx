@@ -93,7 +93,8 @@ export function StackItem(props: ItemViewProps) {
         <ItemList
           groupId={group.id}
           parentId={item.id}
-          items={item.children.map((child) => ({ ...child, children: [] }))}
+          parentKind="stack"
+          items={item.children}
           className="min-h-[36px] gap-0.5 border-t border-dashed border-line px-1.5 py-1.5"
           renderItem={(child) => <LinkRow {...props} item={child} nested />}
         />

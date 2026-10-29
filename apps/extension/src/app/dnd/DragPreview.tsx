@@ -1,5 +1,7 @@
 import { displayHost } from '@tabcabin/core'
+import { Pin } from 'lucide-react'
 import { cn, Favicon } from '@tabcabin/ui'
+import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useDrag } from './store'
 
@@ -9,11 +11,19 @@ export function DragPreview() {
   const valid = useDrag((s) => s.target !== null)
   const trash = useDrag((s) => s.target?.kind === 'trash')
   const combining = useDrag((s) => s.target?.kind === 'combine')
+  const pinning = useDrag(
+    (s) =>
+      s.target?.kind === 'combine' && s.target.itemKind === 'link' && s.overlay?.kind === 'note',
+  )
+  const t = useT()
   if (!overlay) return null
 
   const border = trash ? 'border-danger' : valid ? 'border-success' : 'border-line'
   return (
-    <div className="pointer-events-none relative w-[290px] -rotate-[2.5deg] cursor-grabbing">
+    <div
+      data-drag-preview
+      className="pointer-events-none relative w-[290px] -rotate-[2.5deg] cursor-grabbing"
+    >
       <div
         className={cn(
           'flex items-center gap-3 rounded-[14px] border-2 bg-card px-3 py-2.5 shadow-lift transition-[border-color,transform] duration-150',
@@ -51,6 +61,12 @@ export function DragPreview() {
           )}
         </div>
       </div>
+      {pinning && (
+        <span className="absolute -bottom-3 left-4 flex items-center gap-1 rounded-full bg-success px-2.5 py-1 text-[12px] font-semibold text-on-accent shadow-tile">
+          <Pin size={12} strokeWidth={2.4} />
+          {t('link.pinHere')}
+        </span>
+      )}
       {overlay.count > 1 && (
         <span
           className={cn(

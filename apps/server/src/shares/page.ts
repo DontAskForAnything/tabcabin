@@ -83,16 +83,25 @@ function tile(seed: string): { letter: string; color: string } {
   }
 }
 
-function linkRow(item: SharedItem): string {
+/** A note under a link: the one written on it, or one pinned to it. */
+function noteUnder(item: SharedItem): string {
+  return item.todo
+    ? `<p class="todo${item.done ? ' done' : ''}"><span class="box" aria-hidden="true">${
+        item.done ? '✓' : ''
+      }</span><span>${escape(item.text)}</span></p>`
+    : `<p class="note" style="${noteStyle(item.color)}">${escape(item.text)}</p>`
+}
+
+function linkRow(item: SharedItem, pinned: SharedItem[]): string {
   const url = webUrl(item.url)
   const title = escape(item.title || (item.url ? host(item.url) : ''))
   const { letter, color } = tile(item.url ? host(item.url) : item.title)
   const body = `<span class="tile" style="background:${color}" aria-hidden="true">${escape(letter)}</span><span class="label"><b>${title}</b>${
     item.url ? `<small>${escape(host(item.url))}</small>` : ''
   }</span>`
-  const comment = item.text
-    ? `<p class="note" style="${noteStyle(item.color)}">${escape(item.text)}</p>`
-    : ''
+  const notes = [...(item.text ? [noteUnder({ ...item, color: item.color ?? 'sky' })] : [])]
+  notes.push(...pinned.filter((note) => note.kind === 'note').map(noteUnder))
+  const comment = notes.length ? `<div class="pins">${notes.join('')}</div>` : ''
   return `<li class="link">${
     url
       ? `<a href="${escape(url)}" rel="noopener noreferrer nofollow ugc" target="_blank">${body}</a>`
@@ -100,7 +109,7 @@ function linkRow(item: SharedItem): string {
   }${comment}</li>`
 }
 
-function itemRow(item: SharedItem, children: SharedItem[]): string {
+function itemRow(item: SharedItem, inside: (item: SharedItem) => SharedItem[]): string {
   if (item.kind === 'note' && item.todo)
     return `<li class="todo${item.done ? ' done' : ''}"><span class="box" aria-hidden="true">${
       item.done ? '✓' : ''
@@ -108,8 +117,10 @@ function itemRow(item: SharedItem, children: SharedItem[]): string {
   if (item.kind === 'note')
     return `<li class="note" style="${noteStyle(item.color)}">${escape(item.text)}</li>`
   if (item.kind === 'stack')
-    return `<li class="stack"><ul>${children.map(linkRow).join('')}</ul></li>`
-  return linkRow(item)
+    return `<li class="stack"><ul>${inside(item)
+      .map((link) => linkRow(link, inside(link)))
+      .join('')}</ul></li>`
+  return linkRow(item, inside(item))
 }
 
 const STYLE = `
@@ -132,7 +143,7 @@ ul{list-style:none;margin:0;padding:0}
 .label b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .label small{color:var(--ink-3);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .note{margin:0;padding:10px 12px;border-radius:12px;background:var(--bg);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
-.link .note{margin:0 8px 6px 56px;font-size:13.5px}
+.pins{display:flex;flex-direction:column;gap:4px;margin:0 8px 6px 56px;font-size:13.5px}
 .todo{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:12px;background:var(--subtle);white-space:pre-wrap;overflow-wrap:anywhere}
 .box{flex:none;display:flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:1px;border:1.5px solid var(--ink-3);border-radius:6px;font-size:13px;font-weight:700}
 .done{color:var(--ink-3);text-decoration:line-through}
@@ -150,14 +161,9 @@ function document(lang: Lang, title: string, body: string): string {
 export function sharedPage(group: SharedGroup, lang: Lang): string {
   const top = group.items.filter((item) => item.parentId === null)
   const links = group.items.filter((item) => item.kind === 'link').length
-  const rows = top
-    .map((item) =>
-      itemRow(
-        item,
-        group.items.filter((child) => child.parentId === item.id),
-      ),
-    )
-    .join('')
+  // Links inside a stack, notes pinned to a link.
+  const inside = (item: SharedItem) => group.items.filter((child) => child.parentId === item.id)
+  const rows = top.map((item) => itemRow(item, inside)).join('')
   const title = `${group.emoji} ${group.title}`.trim()
   return document(
     lang,

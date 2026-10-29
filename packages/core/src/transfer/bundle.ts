@@ -53,8 +53,8 @@ export function collectBundle(all: Bundle, workspaceIds: readonly string[]): Bun
   const groups = live(all.groups).filter((g) => catIds.has(g.categoryId))
   const groupIds = new Set(groups.map((g) => g.id))
   const inGroups = live(all.items).filter((i) => groupIds.has(i.groupId))
-  const stackIds = new Set(inGroups.filter((i) => i.kind === 'stack').map((i) => i.id))
-  const items = inGroups.filter((i) => i.parentId === null || stackIds.has(i.parentId))
+  const inGroupIds = new Set(inGroups.map((i) => i.id))
+  const items = inGroups.filter((i) => i.parentId === null || inGroupIds.has(i.parentId))
   const itemIds = new Set(items.map((i) => i.id))
   const reminders = live(all.reminders).filter((r) => itemIds.has(r.itemId))
   return { workspaces, categories, groups, items, reminders }

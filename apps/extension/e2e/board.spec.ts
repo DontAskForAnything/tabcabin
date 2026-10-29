@@ -153,6 +153,13 @@ test('writes a note on a link tile in the collections view', async ({ context, e
   await expect(section.getByText('Review the open pull requests')).toBeVisible()
   await section.getByRole('checkbox', { name: 'Mark as done' }).click()
   await expect(section.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
+  // A link holds as many notes as you like.
+  await section.getByRole('link', { name: /GitHub/ }).hover()
+  await section.getByRole('button', { name: 'Add a note' }).click()
+  await section.getByRole('textbox', { name: 'Note' }).fill('Ask for a second review')
+  await section.getByRole('textbox', { name: 'Note' }).press('Enter')
+  await expect(section.getByText('Ask for a second review')).toBeVisible()
+  await expect(section.getByText('Review the open pull requests')).toBeVisible()
   // The same note shows on the board.
   await page.getByRole('radio', { name: 'Board' }).click()
   await expect(

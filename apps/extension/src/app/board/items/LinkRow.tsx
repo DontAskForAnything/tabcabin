@@ -5,9 +5,9 @@ import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import { ReminderChip } from '../../reminders/ReminderChip'
+import { LinkNotes } from '../pinned/LinkNotes'
 import type { ItemViewProps } from '../ItemView'
 import { BrokenMark, useBroken } from './BrokenMark'
-import { LinkNote } from './LinkNote'
 import { selectedRing, useSelectable } from './selection'
 
 export function LinkRow({
@@ -36,6 +36,7 @@ export function LinkRow({
       <a
         href={url}
         draggable={false}
+        data-dnd-head={item.id}
         onClickCapture={onClickCapture}
         onClick={(event) => {
           event.preventDefault()
@@ -94,10 +95,12 @@ export function LinkRow({
           <ReminderChip reminder={reminder} />
         </div>
       )}
-      <LinkNote
-        item={item}
+      <LinkNotes
+        link={item}
+        group={group}
         actions={actions}
-        className="mx-2 mb-2 ml-14 rounded-[10px] px-[11px] py-2 text-[13px] leading-[1.45]"
+        size="row"
+        className={cn('mr-2 mb-2', nested ? 'ml-11' : 'ml-14')}
       />
     </div>
   )

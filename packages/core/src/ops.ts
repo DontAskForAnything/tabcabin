@@ -2,7 +2,8 @@ import { generateNKeysBetween } from 'fractional-indexing'
 import { type Clock, makeItem, touch } from './factories'
 import { newId } from './ids'
 import { sortByPosition } from './position'
-import { type Group, type Item, NOTE_MAX_LENGTH } from './schema'
+import { pinNotes } from './pins'
+import { type Group, type Item } from './schema'
 
 const live = <T extends { deletedAt: number | null }>(rows: readonly T[]) =>
   rows.filter((row) => row.deletedAt === null)
@@ -18,7 +19,7 @@ function keysAt(siblings: readonly { position: string }[], index: number, count:
 export interface MoveItemsInput {
   /** Items to move, in the order they should appear. */
   moving: readonly Item[]
-  /** Children of any moving stack (their groupId follows the stack). */
+  /** Items inside the moving ones (links of a stack, notes pinned to a link): they follow along. */
   children?: readonly Item[]
   toGroupId: string
   /** Set to a stack id to move links into that stack. */
@@ -58,7 +59,7 @@ export type CombineResult =
 /**
  * Drops `dragged` onto `target`:
  * links/stacks onto a link or stack → one stack; notes onto a note → merged note;
- * notes onto a link → the link's note.
+ * notes onto a link → pinned to it (`targetChildren` are the notes it has).
  */
 export function combineItems(
   dragged: readonly Item[],
@@ -83,26 +84,12 @@ export function combineItems(
     }
   }
 
-  // A note pinned to a link: its text joins the link's note; on a link without one, a to-do keeps
-  // its checkbox and the note its colour.
-  if (target.kind === 'link' && kinds.size === 1 && kinds.has('note')) {
-    const text = [target.text, ...dragged.map((item) => item.text)]
-      .filter((t) => t.trim())
-      .join('\n')
-      .slice(0, NOTE_MAX_LENGTH)
-    const first = dragged[0]!
-    const looks = target.text.trim()
-      ? {}
-      : { todo: first.todo, done: first.done, color: first.color ?? target.color }
+  if (target.kind === 'link' && kinds.size === 1 && kinds.has('note'))
     return {
       ok: true,
       pinned: true,
-      rows: [
-        touch(target, { text, ...looks }, clock),
-        ...dragged.map((item) => touch(item, { deletedAt: clock.now }, clock)),
-      ],
+      rows: pinNotes(dragged, target, context.targetChildren, clock),
     }
-  }
 
   if (target.kind !== 'link' && target.kind !== 'stack') return { ok: false, error: 'unsupported' }
   if (dragged.some((item) => item.kind === 'note')) return { ok: false, error: 'stack-with-note' }

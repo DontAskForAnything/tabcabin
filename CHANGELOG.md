@@ -6,6 +6,19 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Notes pinned to a link stay notes of their own: pin as many as you like, tick, edit and colour
+  each one, drag them within the link, onto another link or off it, or take one off with the pin in
+  its corner. They glide into place when dropped, and the dragged card says when it will pin
+- In the collections view "Add a note" adds another note to a link; on the board it is in the
+  link's right-click menu
+- Shared groups show the notes pinned to a link (after the sync server is updated)
+
+### Fixed
+
+- Notes no longer go into a stack, and links no longer go under a link's notes
+
 ## [1.4.2] — 2026-10-29
 
 A fix for the Save menu of open tabs in the side panel. The sync server from 1.3.2 is enough.

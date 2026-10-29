@@ -107,39 +107,34 @@ describe('combineItems', () => {
     ).toEqual({ ok: false, error: 'stack-with-note' })
   })
 
-  it('pins notes to a link as its note, keeping a to-do and its colour', () => {
+  it('pins notes to a link after the ones it has, each keeping its own look', () => {
     const [link] = links('g1', 1)
-    const task = makeNote(
-      {
-        groupId: 'g1',
-        position: 'a1',
-        text: 'Task 1, due in December',
-        todo: true,
-        color: 'amber',
-      },
-      clock,
-    )
-    const pinned = combineItems([task], link!, { targetChildren: [], draggedChildren: [] }, later)
-    expect(pinned.ok && pinned.pinned).toBe(true)
-    if (!pinned.ok) return
-    expect(pinned.rows[0]).toMatchObject({
-      id: link!.id,
-      kind: 'link',
+    const note = (text: string, extra = {}) =>
+      makeNote({ groupId: 'g2', position: 'a1', text, ...extra }, clock)
+    const task = note('Task 1, due in December', { todo: true, color: 'amber' })
+    const first = combineItems([task], link!, { targetChildren: [], draggedChildren: [] }, later)
+    expect(first.ok && first.pinned).toBe(true)
+    if (!first.ok) return
+    expect(first.rows).toHaveLength(1)
+    expect(first.rows[0]).toMatchObject({
+      id: task.id,
+      groupId: 'g1',
+      parentId: link!.id,
       text: 'Task 1, due in December',
       todo: true,
-      done: false,
       color: 'amber',
+      deletedAt: null,
     })
-    expect(pinned.rows[1]).toMatchObject({ id: task.id, deletedAt: 2_000 })
 
-    // A link that has a note already keeps its own look and gets the text added.
-    const noted = { ...link!, text: 'Course page' }
-    const added = combineItems([task], noted, { targetChildren: [], draggedChildren: [] }, later)
-    expect(added.ok && added.rows[0]).toMatchObject({
-      text: 'Course page\nTask 1, due in December',
-      todo: false,
-      color: null,
-    })
+    const plain = note('Slides')
+    const second = combineItems(
+      [plain],
+      link!,
+      { targetChildren: first.rows, draggedChildren: [] },
+      later,
+    )
+    if (!second.ok) return
+    expect(second.rows[0]!.position > first.rows[0]!.position).toBe(true)
   })
 })
 

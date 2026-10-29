@@ -23,9 +23,12 @@ export function zoneCollision(onPointer: (point: Point) => void): CollisionDetec
     // Read from our store: the dragged node may unmount (e.g. after switching category mid-drag).
     const source =
       useDrag.getState().source ?? (args.active.data.current?.source as DragSource | undefined)
+    const kinds = useDrag.getState().kinds
+    // A zone that does not take what is dragged lets the one around it answer (the link a note
+    // list belongs to, for a dragged link).
     const containers = args.droppableContainers.filter((container) => {
       const zone = container.data.current?.zone as DropZone | undefined
-      return zone && source && acceptsZone(source, zone)
+      return zone && source && acceptsZone(source, zone, kinds)
     })
     const hits = pointerWithin({ ...args, droppableContainers: containers })
     const area = (id: string | number) => {

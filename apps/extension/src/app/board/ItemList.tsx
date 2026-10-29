@@ -3,14 +3,16 @@ import { Fragment, type ReactNode } from 'react'
 import type { BoardItem } from '@/db/hooks'
 import { DropCell, DropLine } from '../dnd/DropMarkers'
 import { useListDrop } from '../dnd/hooks'
+import type { ParentKind } from '../dnd/types'
 import { useBoardContext } from './BoardContext'
 import { DraggableItem } from './DraggableItem'
 import { ItemContextMenu } from './ItemContextMenu'
 
-/** A drop-aware list (or grid) of items inside a group or a stack. */
+/** A drop-aware list (or grid) of items inside a group, a stack or a link (its pinned notes). */
 export function ItemList({
   groupId,
   parentId = null,
+  parentKind = null,
   items,
   layout = 'list',
   renderItem,
@@ -20,6 +22,7 @@ export function ItemList({
 }: {
   groupId: string
   parentId?: string | null
+  parentKind?: ParentKind
   items: BoardItem[]
   layout?: 'list' | 'grid'
   renderItem: (item: BoardItem) => ReactNode
@@ -28,7 +31,7 @@ export function ItemList({
   extra?: ReactNode
   className?: string
 }) {
-  const { setNodeRef, insertAt, listId } = useListDrop(groupId, parentId, layout)
+  const { setNodeRef, insertAt, listId } = useListDrop(groupId, parentId, parentKind, layout)
   const marker = layout === 'grid' ? <DropCell /> : <DropLine />
   const board = useBoardContext()
   const wrap =
@@ -57,7 +60,7 @@ export function ItemList({
           {insertAt === index && marker}
           {wrap(
             item,
-            <DraggableItem item={item} index={index} layout={layout}>
+            <DraggableItem item={item} index={index} layout={layout} parentKind={parentKind}>
               {renderItem(item)}
             </DraggableItem>,
           )}

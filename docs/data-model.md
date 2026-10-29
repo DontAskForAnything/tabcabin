@@ -2,7 +2,8 @@
 
 ```
 Workspace ─┬─ Category ─┬─ Group ─┬─ Item (link | note | image | stack)
-           │            │         │      └─ Item (links inside a stack, `parentId` = stack)
+           │            │         │      ├─ Item (links inside a stack, `parentId` = stack)
+           │            │         │      └─ Item (notes pinned to a link, `parentId` = link)
            │            │         └─ …
            │            └─ …
            └─ …
@@ -44,7 +45,7 @@ versions without the Inbox leave it out. A backup of everything stores it as a w
 | `title`        | all         | page title, stack title, or snippet title                                  |
 | `url`          | link, image | the page address (for images: the page it came from)                       |
 | `favIconUrl`   | link        | icon captured from the tab when saved (fallback after the browser's cache) |
-| `text`         | note, link  | note body, or a comment attached to a link (max 5 000 characters)          |
+| `text`         | note, link  | note body, or the note written on a link itself (max 5 000 characters)     |
 | `color`        | note, link  | one of `rose amber lime peach pink lilac sky teal sand`                    |
 | `todo`, `done` | note, link  | a to-do and whether it is checked (on a link: its note is a to-do)         |
 | `imageUrl`     | image       | the image address                                                          |
@@ -54,6 +55,13 @@ versions without the Inbox leave it out. A backup of everything stores it as a w
 
 A **stack** is an item of kind `stack` whose children are links with `parentId` set to the stack's id
 (in the same group).
+
+A link can hold **pinned notes**: notes (and to-dos) with `parentId` set to the link's id, in the same
+group, ordered by `position`. They move, get deleted and come back from the bin with their link, and
+a link inside a stack keeps them. The note written on the link itself (`text`, from the link editor,
+the save popover or an import) shows above them; editing, dragging or unpinning it first turns it
+into a pinned note. Older versions do not show pinned notes, and a note whose link is gone
+shows at the top level of its group.
 
 **Reminder** — `itemId`, `dueAt` (next time it is due), `repeat` (`none | weekly | monthly`),
 `weekdays` (0 = Monday … 6 = Sunday), `monthDay` (1–31; short months use their last day), `timeOfDay`

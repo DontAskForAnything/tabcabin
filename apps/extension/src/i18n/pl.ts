@@ -244,7 +244,7 @@ export const pl: Record<MessageKey, Message> = {
     'Kliknij link na dowolnej stronie prawym przyciskiem i wybierz „Zapisz link w TabCabin”.',
   'tips.saveSelection':
     'Zaznacz tekst na stronie, kliknij go prawym przyciskiem i wybierz „Zapisz zaznaczenie jako notatkę”.',
-  'tips.todo': 'Zacznij notatkę od /todo, a stanie się zadaniem do odhaczenia.',
+  'tips.todo': 'Wpisz /todo w dowolnym miejscu notatki, a stanie się zadaniem do odhaczenia.',
   'tips.newGroup': 'Naciśnij {keys} w dowolnym miejscu tablicy, żeby założyć nową grupę.',
   'tips.stack': 'Przytrzymaj link chwilę nad innym, a ułożą się obok siebie w stosie.',
   'tips.select':

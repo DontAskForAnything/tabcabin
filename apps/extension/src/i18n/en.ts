@@ -193,7 +193,7 @@ export const en = {
   'tips.saveLink': 'Right-click a link on any page and choose “Save link to TabCabin”.',
   'tips.saveSelection':
     'Select some text on a page, right-click it and choose “Save selection as a note”.',
-  'tips.todo': 'Start a note with /todo and it becomes a to-do you can tick off.',
+  'tips.todo': 'Type /todo anywhere in a note and it becomes a to-do you can tick off.',
   'tips.newGroup': 'Press {keys} anywhere on the board to start a new group.',
   'tips.stack': 'Hold a link over another one for a moment to stack them side by side.',
   'tips.select': 'Shift-click a few items to select them, then drag, open or stack them together.',

@@ -38,6 +38,31 @@ test('adds a note and turns it into a done task', async ({ context, extensionId 
   await expect(group.getByRole('checkbox', { name: 'Mark as not done' })).toBeChecked()
 })
 
+test('turns a note into a to-do with /todo anywhere in it', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const group = page.getByRole('region', { name: 'Welcome' })
+  const todos = group.getByRole('checkbox', { name: 'Mark as done' })
+  const before = await todos.count()
+  await group.getByRole('button', { name: 'Note or link' }).click()
+  const input = group.getByPlaceholder('Write a note or paste a link…')
+  await input.fill('/todo Call the bank')
+  await input.press('Enter')
+  await input.fill('Book /todo the dentist')
+  await input.press('Enter')
+  await expect(group.getByText('Call the bank', { exact: true })).toBeVisible()
+  await expect(group.getByText('Book the dentist', { exact: true })).toBeVisible()
+  await expect(todos).toHaveCount(before + 2)
+  // Typed in front of a note that is being edited.
+  await input.press('Escape')
+  await group.getByText('Groups hold links').click()
+  await page.keyboard.press('Control+Home')
+  await page.keyboard.type('/todo ')
+  await expect(todos).toHaveCount(before + 3)
+  // The "/todo" the note already mentions stays.
+  await expect(group.locator('textarea')).toHaveValue(/^Groups hold links.*\n.*\n• Type \/todo to/)
+})
+
 test('ticks off a to-do, folds it away and brings it back', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- `/todo` and the other note commands (`/done`, `/note`, `/undone`) work anywhere in a note: at
+  the start, in the middle or at the end
+
 ## [1.4.0] — 2026-10-28
 
 Done to-dos cross out and fold away under their group, a note can sit right on a link, a group can

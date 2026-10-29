@@ -1,4 +1,4 @@
-import { applyNoteShortcuts, type Item, NOTE_MAX_LENGTH } from '@tabcabin/core'
+import { applyTypedNoteShortcuts, type Item, NOTE_MAX_LENGTH } from '@tabcabin/core'
 import { Checkbox, cn } from '@tabcabin/ui'
 import { type CSSProperties, useRef, useState } from 'react'
 import { useT } from '@/i18n'
@@ -81,33 +81,49 @@ function LinkNoteEditor({
   const t = useT()
   const [draft, setDraft] = useState(item.text)
   const finished = useRef(false)
+  const ref = useRef<HTMLTextAreaElement | null>(null)
+  // "/todo" and the other note commands work here too; they apply on save.
+  const flags = useRef<{ todo?: boolean; done?: boolean }>({})
+
+  const change = (raw: string, caret: number) => {
+    const next = applyTypedNoteShortcuts(raw, caret)
+    if (next.todo !== undefined || next.done !== undefined) {
+      flags.current = {
+        ...flags.current,
+        ...(next.todo !== undefined && { todo: next.todo }),
+        ...(next.done !== undefined && { done: next.done }),
+      }
+      requestAnimationFrame(() => ref.current?.setSelectionRange(next.caret, next.caret))
+    }
+    setDraft(next.text)
+  }
 
   const save = () => {
     if (finished.current) return
     finished.current = true
-    // "/todo" and the other note commands work here too.
-    const parsed = applyNoteShortcuts(draft.trim().slice(0, NOTE_MAX_LENGTH))
-    const text = parsed.text.trim()
+    const { todo, done } = flags.current
+    const text = draft.trim().slice(0, NOTE_MAX_LENGTH).trim()
     const patch = text
       ? {
           text,
-          ...(parsed.todo !== undefined && { todo: parsed.todo }),
-          ...(parsed.done !== undefined && { done: parsed.done }),
+          ...(todo !== undefined && { todo }),
+          ...(done !== undefined && { done }),
         }
       : { text: '', todo: false, done: false }
-    if (text !== item.text || parsed.todo !== undefined || parsed.done !== undefined)
+    if (text !== item.text || todo !== undefined || done !== undefined)
       void actions.updateItem(item.id, patch)
     onDone()
   }
 
   return (
     <textarea
+      ref={ref}
       autoFocus
       rows={1}
       value={draft}
       aria-label={t('editor.comment')}
       placeholder={t('link.notePlaceholder')}
-      onChange={(event) => setDraft(event.target.value)}
+      onChange={(event) => change(event.target.value, event.target.selectionStart)}
       onBlur={save}
       // Typing and selecting text must not start dragging the link.
       onPointerDown={(event) => event.stopPropagation()}

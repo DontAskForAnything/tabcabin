@@ -1,5 +1,5 @@
 import {
-  applyNoteShortcuts,
+  applyTypedNoteShortcuts,
   displayHost,
   looksLikeImageUrl,
   looksLikeUrl,
@@ -59,7 +59,7 @@ export function NoteEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const change = (raw: string) => {
+  const change = (raw: string, caret: number) => {
     let next = raw
     if (next.length > NOTE_MAX_LENGTH) {
       next = next.slice(0, NOTE_MAX_LENGTH)
@@ -67,12 +67,16 @@ export function NoteEditor({
         toast({ title: t('note.tooLong', { max: NOTE_MAX_LENGTH }), tone: 'info' })
       warned.current = true
     }
-    const parsed = applyNoteShortcuts(next)
+    // "/todo" typed into an empty note leaves it empty: the space after it starts nothing.
+    if (!value) next = next.replace(/^[ \t]+/, '')
+    const parsed = applyTypedNoteShortcuts(next, Math.min(caret, next.length))
     if (parsed.todo !== undefined || parsed.done !== undefined) {
       void actions.updateItem(item.id, {
         ...(parsed.todo !== undefined ? { todo: parsed.todo } : {}),
         ...(parsed.done !== undefined ? { done: parsed.done } : {}),
       })
+      // The command may sit anywhere: keep the caret where it was typed.
+      requestAnimationFrame(() => ref.current?.setSelectionRange(parsed.caret, parsed.caret))
     }
     setValue(parsed.text)
     if (timer.current) clearTimeout(timer.current)
@@ -102,7 +106,7 @@ export function NoteEditor({
           ref={ref}
           value={value}
           placeholder={t('note.placeholder')}
-          onChange={(event) => change(event.target.value)}
+          onChange={(event) => change(event.target.value, event.target.selectionStart)}
           onBlur={finish}
           onKeyDown={(event) => {
             if (event.key === 'Enter' && !event.shiftKey && value.endsWith('\n')) {

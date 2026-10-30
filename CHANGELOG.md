@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.3] — 2026-10-30
+
+Pin as many notes to a link as you like, and take them off again. The sync server from 1.3.2 is
+enough; update it to see pinned notes on shared pages.
+
 ### Changed
 
 - Notes pinned to a link stay notes of their own: pin as many as you like, tick, edit and colour
@@ -319,7 +324,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.2...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...HEAD
+[1.4.3]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.3.2...v1.4.0

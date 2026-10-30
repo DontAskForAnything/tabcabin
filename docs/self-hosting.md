@@ -52,7 +52,7 @@ certificate for `DOMAIN` automatically. Check it from your computer:
 
 ```bash
 curl https://tabs.example.com/health
-# {"ok":true,"name":"tabcabin","version":"1.4.2"}
+# {"ok":true,"name":"tabcabin","version":"1.4.3"}
 ```
 
 After the first start, remove `ADMIN_PASSWORD` from `.env`.

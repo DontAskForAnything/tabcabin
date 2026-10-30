@@ -26,7 +26,7 @@ body:
     attributes:
       label: TabCabin version
       description: It's at the bottom left of Settings.
-      placeholder: '1.4.2'
+      placeholder: '1.4.3'
     validations:
       required: true
   - type: input

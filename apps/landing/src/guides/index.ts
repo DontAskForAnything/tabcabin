@@ -7,6 +7,8 @@
 export interface Guide {
   slug: string
   title: string
+  /** A shorter title for search results, when `title` is longer than ~50 characters. */
+  searchTitle?: string
   /** Meta description for search results (up to ~155 characters). */
   description: string
   /** One line for the list of guides. */
@@ -15,6 +17,8 @@ export interface Guide {
   crumb: string
   /** The day it goes live, as YYYY-MM-DD (UTC). */
   published: string
+  /** The day it was last changed in a way readers would notice, as YYYY-MM-DD. */
+  updated?: string
   minutes: number
 }
 
@@ -42,6 +46,7 @@ const all: Guide[] = [
   {
     slug: 'sync-tabs-without-google-account',
     title: 'How to sync tabs between computers without a Google account',
+    searchTitle: 'Sync tabs without a Google account: 3 ways',
     description:
       'Chrome syncs tabs only through a Google account. Three other ways to keep the same tabs on every computer: a file, a TabCabin account or your own server.',
     summary: 'A bookmarks file, an account with a username and password, or a server of your own.',

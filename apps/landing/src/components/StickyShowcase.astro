@@ -21,6 +21,7 @@ const steps = [
     kicker: 'Board',
     tab: NEW_TAB,
     title: 'Every tab gets a place to stay',
+    alt: 'A TabCabin board in a new tab: groups of links, notes and to-dos side by side',
     text: 'Categories across the top, groups as columns with big emoji headers. Links, notes, to-dos, images and stacks live side by side — and everything is drag and drop.',
   },
   {
@@ -28,6 +29,7 @@ const steps = [
     kicker: 'Collections',
     tab: NEW_TAB,
     title: 'Or see it all as cards',
+    alt: 'The collections view of TabCabin: each group as a wide panel of link tiles',
     text: 'Switch any category to wide panels of link tiles. Same data, calmer overview — open a whole group with one click.',
   },
   {
@@ -35,6 +37,7 @@ const steps = [
     kicker: 'Capture',
     tab: ARTICLE,
     title: 'Save without leaving the page',
+    alt: 'The TabCabin save popover on a web page, with a note, a group and a reminder',
     text: 'Ctrl+Shift+S opens a small popover: add a sticky note, pick the group, set a reminder, close the tab. The right-click menu saves links, images and selected text.',
   },
   {
@@ -42,6 +45,7 @@ const steps = [
     kicker: 'Search',
     tab: NEW_TAB,
     title: 'Find anything in a keystroke',
+    alt: 'TabCabin search showing saved links, open tabs and bookmarks for one query',
     text: 'Ctrl+K searches titles, addresses and notes across workspaces, open tabs and bookmarks, then jumps straight to the result on your board.',
   },
   {
@@ -49,6 +53,7 @@ const steps = [
     kicker: 'Reminders',
     tab: NEW_TAB,
     title: 'Come back to what matters',
+    alt: 'Reminders on saved links and to-dos in TabCabin, with their dates',
     text: 'One-time, weekly or monthly reminders on any link or to-do, with desktop notifications, snooze and a due count on the toolbar icon.',
   },
 ]
@@ -80,7 +85,7 @@ const steps = [
           >
             <Image
               src={step.image}
-              alt=""
+              alt={step.alt}
               widths={[720, 1080]}
               sizes="100vw"
               class="block w-full"
@@ -103,7 +108,7 @@ const steps = [
             >
               <Image
                 src={step.image}
-                alt={step.title}
+                alt={step.alt}
                 widths={[900, 1300]}
                 sizes="(min-width: 1180px) 700px, 60vw"
                 class="block h-full w-full object-cover object-left-top"

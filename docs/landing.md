@@ -127,7 +127,10 @@ gains a short "This website" section that says what is counted.
 
 Each guide under `/guides/` is a file in `apps/landing/src/guides/` plus an entry in its
 `index.ts` with a `published` day. The site builds only the guides whose day has come (`astro dev`
-shows them all), so a guide can be committed early and still go online on its day.
+shows them all), so a guide can be committed early and still go online on its day. After a change
+readers would notice, set its `updated` day: the sitemap gives search engines that day (or the
+`published` one). A title longer than about 50 characters gets a shorter `searchTitle` for search
+results.
 
 The site is static, so something has to rebuild it that morning: the **Guides** workflow
 ([`.github/workflows/guides.yml`](../.github/workflows/guides.yml)) runs every Tuesday at 07:00 UTC
@@ -145,7 +148,8 @@ Give new guides a Tuesday as their `published` day, or rebuild the site by hand 
   [chrome-web-store/README.md](chrome-web-store/README.md)).
 - Add the site to Google Search Console: a **Domain** property verified with a DNS TXT record
   covers `www` and every subdomain. Then submit `https://<your-site>/sitemap-index.xml` under
-  **Sitemaps**.
+  **Sitemaps**. Then add it to Bing Webmaster Tools (it can import the site from Search Console);
+  Bing also answers searches on DuckDuckGo and Yahoo.
 - Check the social preview with a link-preview tool; the image is `public/og.png`.
 - Set `EXTENSION_URL` to the store listing once it is live, and `REPO_URL` once the repository is
   public, then build the site again.

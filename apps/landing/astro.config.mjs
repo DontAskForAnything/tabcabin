@@ -4,6 +4,7 @@ import { thirdPartyLicenses } from '@tabcabin/ui/vite/licenses'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { createRequire } from 'node:module'
+import { guidePath, guides } from './src/guides/index.ts'
 
 // Set SITE_URL to the real address when deploying (used for canonical links, Open Graph and the sitemap).
 const site = process.env.SITE_URL || 'https://tabs.example.com'
@@ -13,7 +14,16 @@ export default defineConfig({
   // Pages live in folders (/privacy/), so every link and canonical address ends with a slash.
   trailingSlash: 'always',
   // The goodbye page opens only when the extension is removed.
-  integrations: [sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/bye/') })],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/404') && !page.includes('/bye/'),
+      // Guides tell search engines the day they last changed, so a new one is fetched soon.
+      serialize(item) {
+        const guide = guides.find((entry) => item.url.endsWith(guidePath(entry.slug)))
+        return guide ? { ...item, lastmod: guide.updated ?? guide.published } : item
+      },
+    }),
+  ],
   vite: {
     plugins: [
       tailwindcss(),

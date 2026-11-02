@@ -28,7 +28,10 @@ const article = {
   '@type': 'Article',
   headline: guide.title,
   description,
+  image: new URL('/og.png', Astro.site).toString(),
+  inLanguage: 'en',
   datePublished: guide.published,
+  dateModified: guide.updated ?? guide.published,
   author: { '@type': 'Person', name: 'Michał Jasiński' },
   publisher: { '@type': 'Organization', name: 'TabCabin' },
   mainEntityOfPage: new URL(path, Astro.site).toString(),
@@ -36,7 +39,7 @@ const article = {
 ---
 
 <Layout
-  title={`${guide.title} — TabCabin`}
+  title={`${guide.searchTitle ?? guide.title} — TabCabin`}
   description={description}
   path={path}
   schema={[article]}

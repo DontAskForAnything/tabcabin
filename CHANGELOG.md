@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows
 - In the open tabs panel Shift-click picks every tab from the last one you picked to this one, and
   Ctrl- or Cmd-click picks a single tab or puts it back, like in a file manager. A single dragged
   tab says that Shift-click picks more, until you have picked several once
+- Website: guides tell search engines the day they last changed and have shorter titles in search
+  results where needed, and the screenshots on the home page describe what they show
 
 ### Fixed
 

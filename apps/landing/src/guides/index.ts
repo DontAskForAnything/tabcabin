@@ -37,10 +37,11 @@ const all: Guide[] = [
     slug: 'export-onetab-tabs',
     title: 'How to export your tabs from OneTab',
     description:
-      'OneTab keeps your tabs in one browser only. Export every list to a text file in four steps, keep it as a backup and move it to a board with notes.',
+      'Without its paid sync, OneTab keeps your tabs in one browser. Export every list to a text file in four steps, keep it as a backup and move it to a board.',
     summary: 'Keep a backup of every OneTab list and move it to a board with notes and search.',
     crumb: 'Export from OneTab',
     published: '2026-10-20',
+    updated: '2026-11-02',
     minutes: 3,
   },
   {

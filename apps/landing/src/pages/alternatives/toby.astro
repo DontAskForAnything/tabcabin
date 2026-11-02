@@ -5,17 +5,22 @@ import ComparePage from '../../components/ComparePage.astro'
 <ComparePage
   name="Toby"
   slug="toby"
+  checked="November 2026"
   intro="Toby made collections of tabs on the new tab page popular. TabCabin offers the same calm collections view — plus kanban boards, notes, to-dos and reminders — and keeps your data in your browser, syncing only when you sign in, or through a server you run yourself."
-  about="Toby is a tab manager that replaces the new tab page with collections of saved tabs organized in spaces, with an online account for sync, sharing and paid plans."
+  about="Toby is a tab manager that replaces the new tab page with collections of saved tabs organized in spaces and workspaces. It needs an account, which syncs and shares them; the free plan saves up to 60 tabs per workspace."
   rows={[
     ['Collections of saved tabs', true, true],
     ['Kanban board view', false, true],
-    ['Notes, to-dos and reminders next to links', false, true],
+    ['Notes, to-dos and reminders next to links', 'Notes with checklists', true],
     ['Open tabs sidebar with drag and drop', true, true],
     ['Works without an account', false, true],
     ['Sync', 'Toby cloud account', 'Sign in, or your own server'],
     ['Browsers', 'Chrome, Edge, Firefox', 'Chrome, Edge, Brave'],
-    ['Price', 'Free plan with limits, paid plans', 'Free app, free self-hosting'],
+    [
+      'Price',
+      'Free up to 60 tabs per workspace, paid from $4.50/month',
+      'Free app, free self-hosting',
+    ],
     ['Open source', false, 'MIT'],
   ]}
   whySwitch={[
@@ -28,9 +33,10 @@ import ComparePage from '../../components/ComparePage.astro'
   betterFit={[
     'You rely on sharing collections with a team in a hosted product.',
     'You use Firefox — Toby has a Firefox add-on, TabCabin is Chromium-only for now.',
+    'You want phone apps to look through your saved tabs.',
   ]}
   moving={[
-    'In Toby, export your collections as <strong>JSON</strong> (a single space, or your whole organization).',
+    'In Toby, export your collections as <strong>JSON</strong> (one workspace at a time).',
     'In TabCabin open <strong>Settings → Data → Import from a file</strong> and choose that file.',
     'Spaces become categories and collections become groups; custom titles, descriptions and tags come along into a new workspace.',
   ]}

@@ -17,6 +17,8 @@ All notable changes to this project are documented here. The format follows
 ### Fixed
 
 - Shift-clicking open tabs no longer selects the page text between them
+- Website: the OneTab and Toby comparisons match OneTab 2 (notes, tasks, search and paid sync) and
+  Toby's free plan (an account and up to 60 tabs per workspace)
 
 ## [1.4.3] — 2026-10-30
 

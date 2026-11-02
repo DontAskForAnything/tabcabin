@@ -1,7 +1,8 @@
 # Landing page
 
 `apps/landing` is a static Astro site: the home page, `/self-hosted-tab-manager`, comparison pages under
-`/alternatives/`, board templates under `/templates/` (one page per template from
+`/alternatives/` (TabCabin against one tool, plus head-to-head pages of two others with TabCabin as
+the third option, texts in `src/versus.ts`), board templates under `/templates/` (one page per template from
 `@tabcabin/core`, texts in `src/templates.ts`), the promo film with its chapters (`/film/`, the
 only page with the film's structured data, so search engines see it as its watch page), a OneTab to
 bookmarks converter (`/onetab-to-bookmarks/`, runs the `@tabcabin/core` importers in the page), the privacy policy (`/privacy`, needed for the Chrome

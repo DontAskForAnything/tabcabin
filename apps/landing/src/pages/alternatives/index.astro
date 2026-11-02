@@ -3,6 +3,7 @@ import Footer from '../../components/Footer.astro'
 import Icon from '../../components/Icon.astro'
 import Nav from '../../components/Nav.astro'
 import Layout from '../../layouts/Layout.astro'
+import { versus, versusPath } from '../../versus'
 
 const tools = [
   [
@@ -62,6 +63,28 @@ const tools = [
         </a>
       ))}
     </div>
+
+    <h2 class="mt-20 text-[28px] font-semibold tracking-[-0.025em]" data-reveal>
+      Head to head
+    </h2>
+    <p class="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-2" data-reveal="0.05">
+      Choosing between two of them? Here is how they differ, and when a third option fits better.
+    </p>
+    <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+      {versus.map((pair, index) => (
+        <li data-reveal={index * 0.06}>
+          <a
+            href={versusPath(pair.slug)}
+            class="flex items-center justify-between gap-3 rounded-[16px] bg-card px-5 py-4 font-semibold shadow-card transition-transform hover:-translate-y-0.5"
+          >
+            {pair.crumb}
+            <span class="text-accent-ink">
+              <Icon name="ArrowRight" size={16} />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </main>
   <Footer />
 </Layout>

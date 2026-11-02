@@ -13,6 +13,8 @@ All notable changes to this project are documented here. The format follows
   tab says that Shift-click picks more, until you have picked several once
 - Website: guides tell search engines the day they last changed and have shorter titles in search
   results where needed, and the screenshots on the home page describe what they show
+- Website: head-to-head pages for Toby vs OneTab, OneTab vs Session Buddy and Toby vs Workona, each
+  with TabCabin as a third option, linked from the comparisons and the footer
 
 ### Fixed
 

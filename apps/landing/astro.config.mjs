@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { createRequire } from 'node:module'
 import { guidePath, guides } from './src/guides/index.ts'
+import { versus, versusPath } from './src/versus.ts'
 
 // Set SITE_URL to the real address when deploying (used for canonical links, Open Graph and the sitemap).
 const site = process.env.SITE_URL || 'https://tabs.example.com'
@@ -17,10 +18,13 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404') && !page.includes('/bye/'),
-      // Guides tell search engines the day they last changed, so a new one is fetched soon.
+      // Guides and head-to-head pages tell search engines the day they last changed, so a new
+      // one is fetched soon.
       serialize(item) {
-        const guide = guides.find((entry) => item.url.endsWith(guidePath(entry.slug)))
-        return guide ? { ...item, lastmod: guide.updated ?? guide.published } : item
+        const page =
+          guides.find((entry) => item.url.endsWith(guidePath(entry.slug))) ??
+          versus.find((entry) => item.url.endsWith(versusPath(entry.slug)))
+        return page ? { ...item, lastmod: page.updated ?? page.published } : item
       },
     }),
   ],

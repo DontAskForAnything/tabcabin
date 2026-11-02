@@ -1,6 +1,7 @@
 ---
 import { guidePath, guides } from '../guides'
 import { changelog, comparisons, repo, selfHostingGuide } from '../site'
+import { versus, versusPath } from '../versus'
 import Logo from './Logo.astro'
 import Etching from './scene/Etching.astro'
 
@@ -30,6 +31,7 @@ const columns: [string, [string, string][]][] = [
         `${name} alternative`,
         `/alternatives/${slug}/`,
       ]),
+      ...versus.map(({ crumb, slug }): [string, string] => [crumb, versusPath(slug)]),
       ['All comparisons', '/alternatives/'],
     ],
   ],

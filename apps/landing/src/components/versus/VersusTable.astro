@@ -1,0 +1,96 @@
+---
+/**
+ * Two tools and TabCabin side by side: a table on wider screens and one small card per feature on
+ * phones, where four columns do not fit.
+ */
+import Icon from '../Icon.astro'
+
+type Cell = true | false | string
+
+interface Props {
+  caption: string
+  /** The two tools compared; TabCabin is the third column. */
+  names: [string, string]
+  rows: [string, Cell, Cell, Cell][]
+}
+
+const { caption, names, rows } = Astro.props
+const columns = [...names, 'TabCabin']
+---
+
+<ul class="mt-10 flex flex-col gap-3 sm:hidden" data-reveal="0.1">
+  {rows.map(([feature, ...cells]) => (
+    <li class="rounded-[18px] bg-card p-5 shadow-card">
+      <p class="font-semibold text-ink">{feature}</p>
+      <dl class="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[14.5px] text-ink-2">
+        {cells.map((cell, index) => (
+          <>
+            <dt class:list={['text-ink-3', index === 2 && 'font-semibold text-accent-ink']}>
+              {columns[index]}
+            </dt>
+            <dd>
+              {cell === true ? (
+                <span class="inline-flex text-success">
+                  <Icon name="Check" size={17} /> <span class="sr-only">Yes</span>
+                </span>
+              ) : cell === false ? (
+                <span class="text-ink-3">
+                  — <span class="sr-only">No</span>
+                </span>
+              ) : (
+                cell
+              )}
+            </dd>
+          </>
+        ))}
+      </dl>
+    </li>
+  ))}
+</ul>
+<div
+  class="mt-12 hidden overflow-hidden rounded-[18px] bg-card shadow-card sm:block"
+  data-reveal="0.1"
+>
+  <table class="w-full text-left text-[15px]">
+    <caption class="sr-only">{caption}</caption>
+    <thead class="bg-subtle text-[13.5px] text-ink-2">
+      <tr>
+        <th class="px-5 py-3.5 font-semibold" scope="col">
+          Feature
+        </th>
+        {columns.map((column, index) => (
+          <th
+            class:list={['px-5 py-3.5 font-semibold', index === 2 && 'text-accent-ink']}
+            scope="col"
+          >
+            {column}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map(([feature, ...cells]) => (
+        <tr class="border-t border-line">
+          <th class="px-5 py-3.5 font-medium" scope="row">
+            {feature}
+          </th>
+          {cells.map((cell) => (
+            <td class="px-5 py-3.5 text-ink-2">
+              {cell === true ? (
+                <span class="inline-flex items-center gap-1.5 text-success">
+                  <Icon name="Check" size={18} /> <span class="sr-only">Yes</span>
+                </span>
+              ) : cell === false ? (
+                <span class="text-ink-3">
+                  — <span class="sr-only">No</span>
+                </span>
+              ) : (
+                cell
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

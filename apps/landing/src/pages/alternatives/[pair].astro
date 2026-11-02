@@ -1,0 +1,16 @@
+---
+import VersusPage from '../../components/versus/VersusPage.astro'
+import { type Versus, versus } from '../../versus'
+
+export function getStaticPaths() {
+  return versus.map((pair) => ({ params: { pair: pair.slug }, props: { pair } }))
+}
+
+interface Props {
+  pair: Versus
+}
+
+const { pair } = Astro.props
+---
+
+<VersusPage pair={pair} />

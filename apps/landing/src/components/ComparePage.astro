@@ -5,6 +5,7 @@ import Icon from './Icon.astro'
 import Nav from './Nav.astro'
 import Layout from '../layouts/Layout.astro'
 import { comparisons } from '../site'
+import { versus, versusPath } from '../versus'
 
 type Cell = true | false | string
 
@@ -33,6 +34,8 @@ const {
   moving,
   checked = 'September 2026',
 } = Astro.props
+// The head-to-head pages this tool is part of.
+const pairs = versus.filter((pair) => pair.slugs.includes(slug))
 const title = `${name} alternative: free and open source — TabCabin`
 const description = `Comparing ${name} and TabCabin: boards, notes, reminders, privacy and sync. TabCabin is a free, open-source ${name} alternative you can self-host.`
 ---
@@ -165,6 +168,14 @@ const description = `Comparing ${name} and TabCabin: boards, notes, reminders, p
 
     <p class="mt-12 text-[15px] text-ink-2">
       See also:{' '}
+      {pairs.map((pair) => (
+        <>
+          <a class="font-medium text-accent-ink hover:underline" href={versusPath(pair.slug)}>
+            {pair.crumb}
+          </a>{' '}
+          ·{' '}
+        </>
+      ))}
       {comparisons
         .filter((other) => other.slug !== slug)
         .map((other) => (

@@ -44,7 +44,9 @@ export function TabRow({
             'group/tab flex cursor-pointer items-center gap-[11px] rounded-[11px] py-1.5 pr-1.5 pl-2 transition-[background,box-shadow,opacity] duration-150 outline-none hover:bg-card hover:shadow-card focus-visible:shadow-[0_0_0_2px_var(--focus)]',
             nested && 'pl-5',
             tab.active && 'bg-card shadow-tile',
-            selected && 'bg-accent-soft shadow-[0_0_0_1.5px_var(--accent)] hover:bg-accent-soft',
+            // Drawn inside the row: picked neighbours do not run into each other.
+            selected &&
+              'bg-accent-soft shadow-[inset_0_0_0_1.5px_var(--accent)] hover:bg-accent-soft hover:shadow-[inset_0_0_0_1.5px_var(--accent)]',
             dragging && 'opacity-40',
             tab.discarded && 'opacity-70',
           )}

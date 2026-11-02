@@ -383,7 +383,7 @@ export const pl: Record<MessageKey, Message> = {
     many: 'Zaznaczono {count} kart',
     other: 'Zaznaczono {count} karty',
   },
-  'panel.pickMore': '+ klik, by zaznaczyć więcej kart',
+  'panel.pickRange': '+ klik zaznacza zakres',
   'panel.resize': 'Zmień szerokość panelu',
   'tab.pin': 'Przypnij kartę',
   'tab.unpin': 'Odepnij kartę',

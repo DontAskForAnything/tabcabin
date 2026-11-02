@@ -10,8 +10,6 @@ export interface OverlayInfo {
   noteColor?: string | null
   kind: 'link' | 'note' | 'image' | 'stack' | 'group' | 'tab'
   count: number
-  /** A single open tab: the card says that Shift-click picks more (until that was used once). */
-  pickHint?: boolean
 }
 
 interface DragState {

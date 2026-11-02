@@ -27,7 +27,6 @@ export function useOpenTab(tab: OpenTab, allTabs: OpenTab[], order: readonly num
         url: tab.url,
         favIconUrl: tab.favIconUrl,
         count: source.tabIds.length,
-        pickHint: source.tabIds.length === 1,
       },
     },
   })

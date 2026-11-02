@@ -3,7 +3,6 @@ import { Pin } from 'lucide-react'
 import { cn, Favicon } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
-import { usePickHint } from '../panel/pickHint'
 import { useDrag } from './store'
 
 /** The lifted card that follows the pointer. */
@@ -16,7 +15,6 @@ export function DragPreview() {
     (s) =>
       s.target?.kind === 'combine' && s.target.itemKind === 'link' && s.overlay?.kind === 'note',
   )
-  const pickHint = usePickHint()
   const t = useT()
   if (!overlay) return null
 
@@ -67,14 +65,6 @@ export function DragPreview() {
         <span className="absolute -bottom-3 left-4 flex items-center gap-1 rounded-full bg-success px-2.5 py-1 text-[12px] font-semibold text-on-accent shadow-tile">
           <Pin size={12} strokeWidth={2.4} />
           {t('link.pinHere')}
-        </span>
-      )}
-      {overlay.pickHint && pickHint && (
-        <span className="absolute -bottom-3 left-4 flex items-center gap-1.5 rounded-full border border-line bg-card py-1 pr-2.5 pl-1 text-[12px] font-medium text-ink-2 shadow-tile">
-          <kbd className="rounded-full bg-subtle px-1.5 font-sans text-[11px] font-semibold text-ink">
-            Shift
-          </kbd>
-          {t('panel.pickMore')}
         </span>
       )}
       {overlay.count > 1 && (

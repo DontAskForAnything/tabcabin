@@ -65,20 +65,16 @@ test('picks a range with Shift and single tabs with Ctrl', async ({ context, ext
   const page = await context.newPage()
   await openBoard(page, extensionId)
   const tab = (name: string) => panel(page).getByRole('button', { name })
-  const dragHint = page.getByText('+ click to pick more tabs')
+  const rangeHint = panel(page).getByText('+ click to pick a range')
 
-  // A single dragged tab says how to pick more.
-  const start = (await tab('Delta page').boundingBox())!
-  await page.mouse.move(start.x + 40, start.y + start.height / 2)
-  await page.mouse.down()
-  await page.mouse.move(start.x + 80, start.y + 60, { steps: 6 })
-  await expect(dragHint).toBeVisible()
-  await page.keyboard.press('Escape')
-  await page.mouse.up()
-
+  // With one tab picked, the panel says how to pick a whole run of them.
   await tab('Alpha page').click({ modifiers: ['ControlOrMeta'] })
+  await expect(panel(page).getByText('1 tab selected')).toBeVisible()
+  await expect(rangeHint).toBeVisible()
+
   await tab('Gamma page').click({ modifiers: ['Shift'] })
   await expect(panel(page).getByText('3 tabs selected')).toBeVisible()
+  await expect(rangeHint).toHaveCount(0)
   for (const name of ['Alpha page', 'Beta page', 'Gamma page'])
     await expect(tab(name)).toHaveAttribute('aria-pressed', 'true')
   await expect(tab('Delta page')).toHaveAttribute('aria-pressed', 'false')
@@ -89,14 +85,11 @@ test('picks a range with Shift and single tabs with Ctrl', async ({ context, ext
   await expect(panel(page).getByText('2 tabs selected')).toBeVisible()
   await expect(tab('Beta page')).toHaveAttribute('aria-pressed', 'false')
 
-  // Once several tabs were picked, the hint has done its job.
-  await page.mouse.move(start.x + 40, start.y + start.height / 2)
-  await page.mouse.down()
-  await page.mouse.move(start.x + 80, start.y + 60, { steps: 6 })
-  await expect(page.locator('[data-drag-preview]')).toBeVisible()
-  await expect(dragHint).toHaveCount(0)
-  await page.keyboard.press('Escape')
-  await page.mouse.up()
+  // Once several tabs have been picked, the hint stays away.
+  await panel(page).getByRole('button', { name: 'Clear selection' }).click()
+  await tab('Delta page').click({ modifiers: ['ControlOrMeta'] })
+  await expect(panel(page).getByText('1 tab selected')).toBeVisible()
+  await expect(rangeHint).toHaveCount(0)
 })
 
 test('keeps the save menu of a tab next to its button', async ({ context, extensionId }) => {

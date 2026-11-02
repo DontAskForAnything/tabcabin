@@ -10,6 +10,7 @@ import { filterTabs, tabBlocks } from './tabBlocks'
 import { TabFilter } from './TabFilter'
 import { TabList } from './TabList'
 import { usePanelData } from './usePanelData'
+import { usePickHint } from './pickHint'
 import { WindowSwitcher } from './WindowSwitcher'
 import { WeekLine } from '../stats/WeekLine'
 
@@ -25,6 +26,7 @@ export function PanelBody({
   const data = usePanelData()
   const selected = usePanel((s) => s.selected)
   const clearSelection = usePanel((s) => s.clear)
+  const pickHint = usePickHint()
   const [filter, setFilter] = useState('')
   const blocks = useMemo(
     () => tabBlocks(filterTabs(data.inWindow, filter), data.groups),
@@ -39,15 +41,26 @@ export function PanelBody({
       <TabList blocks={blocks} allTabs={data.inWindow} loaded={data.loaded} active={active} />
 
       {selected.length > 0 && (
-        <div className="flex items-center justify-between rounded-[11px] bg-accent-soft px-3 py-2 text-[12.5px] font-semibold text-accent-ink">
-          {t('panel.selected', { count: selected.length })}
-          <IconButton
-            label={t('selection.clear')}
-            icon={<X size={13} />}
-            size="xs"
-            tooltip={false}
-            onClick={clearSelection}
-          />
+        <div className="rounded-[11px] bg-accent-soft px-3 py-2 text-[12.5px] text-accent-ink">
+          <div className="flex items-center justify-between font-semibold">
+            {t('panel.selected', { count: selected.length })}
+            <IconButton
+              label={t('selection.clear')}
+              icon={<X size={13} />}
+              size="xs"
+              tooltip={false}
+              onClick={clearSelection}
+            />
+          </div>
+          {/* With one tab picked, say how to pick a whole run of them (until someone has). */}
+          {pickHint && selected.length === 1 && (
+            <p className="mt-1 flex items-center gap-1.5 text-[12px] text-ink-2">
+              <kbd className="rounded-[5px] bg-card px-1.5 font-sans text-[11px] leading-[18px] font-semibold text-ink-2 shadow-tile">
+                Shift
+              </kbd>
+              {t('panel.pickRange')}
+            </p>
+          )}
         </div>
       )}
 

@@ -9,8 +9,8 @@ All notable changes to this project are documented here. The format follows
 ### Changed
 
 - In the open tabs panel Shift-click picks every tab from the last one you picked to this one, and
-  Ctrl- or Cmd-click picks a single tab or puts it back, like in a file manager. A single dragged
-  tab says that Shift-click picks more, until you have picked several once
+  Ctrl- or Cmd-click picks a single tab or puts it back, like in a file manager. With one tab
+  picked, the panel says that Shift-click picks a range, until you have picked several once
 - Website: guides tell search engines the day they last changed and have shorter titles in search
   results where needed, and the screenshots on the home page describe what they show
 - Website: head-to-head pages for Toby vs OneTab, OneTab vs Session Buddy and Toby vs Workona, each
@@ -19,6 +19,8 @@ All notable changes to this project are documented here. The format follows
 ### Fixed
 
 - Shift-clicking open tabs no longer selects the page text between them
+- Picked tabs in the open tabs panel keep their whole outline, at the top of the list and next to
+  each other
 - Website: the OneTab and Toby comparisons match OneTab 2 (notes, tasks, search and paid sync) and
   Toby's free plan (an account and up to 60 tabs per workspace)
 

@@ -4,8 +4,20 @@ import { TabFavicon } from './TabFavicon'
 import { useOpenTab } from './useOpenTab'
 
 /** An open tab in the icon rail: just its icon, with the title as a tooltip. */
-export function TabTile({ tab, allTabs }: { tab: OpenTab; allTabs: OpenTab[] }) {
-  const { selected, dragging, setNodeRef, listeners, activate } = useOpenTab(tab, allTabs)
+export function TabTile({
+  tab,
+  allTabs,
+  order,
+}: {
+  tab: OpenTab
+  allTabs: OpenTab[]
+  order: readonly number[]
+}) {
+  const { selected, dragging, setNodeRef, listeners, activate, keepTextUnselected } = useOpenTab(
+    tab,
+    allTabs,
+    order,
+  )
   return (
     <Tooltip label={tab.title} side="right">
       <button
@@ -13,6 +25,7 @@ export function TabTile({ tab, allTabs }: { tab: OpenTab; allTabs: OpenTab[] }) 
         type="button"
         {...listeners}
         aria-label={tab.title}
+        onMouseDown={keepTextUnselected}
         onClick={activate}
         className={cn(
           'relative rounded-[11px] transition-opacity',

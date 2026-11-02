@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- In the open tabs panel Shift-click picks every tab from the last one you picked to this one, and
+  Ctrl- or Cmd-click picks a single tab or puts it back, like in a file manager. A single dragged
+  tab says that Shift-click picks more, until you have picked several once
+
+### Fixed
+
+- Shift-clicking open tabs no longer selects the page text between them
+
 ## [1.4.3] — 2026-10-30
 
 Pin as many notes to a link as you like, and take them off again. The sync server from 1.3.2 is

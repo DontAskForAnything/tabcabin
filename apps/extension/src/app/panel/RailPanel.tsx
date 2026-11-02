@@ -1,6 +1,6 @@
 import { cn } from '@tabcabin/ui'
 import { motion } from 'motion/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'
 import { useT } from '@/i18n'
 import { useDrag } from '../dnd/store'
@@ -13,6 +13,7 @@ import { usePanel } from './panelStore'
 export function RailPanel({ active }: { active: ActiveContext }) {
   const t = useT()
   const { inWindow } = usePanelData()
+  const order = useMemo(() => inWindow.map((tab) => tab.id), [inWindow])
   const peek = usePanel((s) => s.peek)
   const setPeek = usePanel((s) => s.setPeek)
   const dragging = useDrag((s) => s.source !== null)
@@ -68,7 +69,7 @@ export function RailPanel({ active }: { active: ActiveContext }) {
               </span>
               <div className="no-scrollbar flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto px-2 pt-1 pb-2">
                 {inWindow.map((tab) => (
-                  <TabTile key={tab.id} tab={tab} allTabs={inWindow} />
+                  <TabTile key={tab.id} tab={tab} allTabs={inWindow} order={order} />
                 ))}
               </div>
             </div>

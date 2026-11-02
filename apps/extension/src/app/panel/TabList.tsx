@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { useT } from '@/i18n'
 import type { ActiveContext } from '../useActive'
 import { ChromeGroupBlock } from './ChromeGroupBlock'
+import { usePanel } from './panelStore'
 import type { TabBlock } from './tabBlocks'
 import { TabRow } from './tab/TabRow'
 import type { OpenTab } from './useOpenTabs'
@@ -19,17 +21,37 @@ export function TabList({
   active: ActiveContext
 }) {
   const t = useT()
+  const collapsed = usePanel((s) => s.collapsedGroups)
+  // The tabs as shown (folded tab groups hide theirs), for Shift-click ranges.
+  const order = useMemo(
+    () =>
+      blocks.flatMap((block) =>
+        block.type === 'tab'
+          ? [block.tab.id]
+          : collapsed.includes(block.group.id)
+            ? []
+            : block.tabs.map((tab) => tab.id),
+      ),
+    [blocks, collapsed],
+  )
   return (
     <div className="-mx-1 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto px-1">
       {blocks.map((block) =>
         block.type === 'tab' ? (
-          <TabRow key={block.tab.id} tab={block.tab} allTabs={allTabs} active={active} />
+          <TabRow
+            key={block.tab.id}
+            tab={block.tab}
+            allTabs={allTabs}
+            order={order}
+            active={active}
+          />
         ) : (
           <ChromeGroupBlock
             key={`g${block.group.id}`}
             group={block.group}
             tabs={block.tabs}
             allTabs={allTabs}
+            order={order}
             active={active}
           />
         ),

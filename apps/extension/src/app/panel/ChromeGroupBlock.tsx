@@ -15,11 +15,13 @@ export function ChromeGroupBlock({
   group,
   tabs,
   allTabs,
+  order,
   active,
 }: {
   group: ChromeTabGroup
   tabs: OpenTab[]
   allTabs: OpenTab[]
+  order: readonly number[]
   active: ActiveContext
 }) {
   const t = useT()
@@ -113,7 +115,7 @@ export function ChromeGroupBlock({
       </div>
       {!collapsed &&
         tabs.map((tab) => (
-          <TabRow key={tab.id} tab={tab} allTabs={allTabs} active={active} nested />
+          <TabRow key={tab.id} tab={tab} allTabs={allTabs} order={order} active={active} nested />
         ))}
     </div>
   )

@@ -295,6 +295,7 @@ export const en = {
   },
   'panel.sessionTitle': 'Tabs from {date}',
   'panel.selected': { one: '{count} tab selected', other: '{count} tabs selected' },
+  'panel.pickMore': '+ click to pick more tabs',
   'panel.resize': 'Resize panel',
   'tab.pin': 'Pin tab',
   'tab.unpin': 'Unpin tab',

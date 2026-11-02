@@ -7,20 +7,24 @@ import { TabFavicon } from './TabFavicon'
 import { TabHoverActions } from './TabHoverActions'
 import { useOpenTab } from './useOpenTab'
 
-/** An open tab in the panel: click to switch, Shift/Ctrl-click to select, drag to save. */
+/** An open tab in the panel: click to switch, Shift/Ctrl/Cmd-click to select, drag to save. */
 export function TabRow({
   tab,
   allTabs,
+  order,
   active,
   nested = false,
 }: {
   tab: OpenTab
   allTabs: OpenTab[]
+  /** The tabs as the panel shows them, for Shift-click ranges. */
+  order: readonly number[]
   active: ActiveContext
   /** Inside a Chrome tab group (indented). */
   nested?: boolean
 }) {
-  const { selected, source, dragging, setNodeRef, listeners, activate } = useOpenTab(tab, allTabs)
+  const { selected, source, dragging, setNodeRef, listeners, activate, keepTextUnselected } =
+    useOpenTab(tab, allTabs, order)
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -31,6 +35,7 @@ export function TabRow({
           tabIndex={0}
           aria-label={tab.title}
           aria-pressed={selected}
+          onMouseDown={keepTextUnselected}
           onClick={activate}
           onKeyDown={(event) => {
             if (event.key === 'Enter') void browser.tabs.update(tab.id, { active: true })

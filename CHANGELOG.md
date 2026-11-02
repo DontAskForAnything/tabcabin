@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.4] — 2026-11-03
+
+Shift-click picks a range of open tabs, and picking them no longer selects page text. The sync
+server from 1.3.2 is enough.
+
 ### Changed
 
 - In the open tabs panel Shift-click picks every tab from the last one you picked to this one, and
@@ -342,7 +347,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...HEAD
+[1.4.4]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...v1.4.4
 [1.4.3]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.0...v1.4.1

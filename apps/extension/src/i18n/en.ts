@@ -214,6 +214,8 @@ export const en = {
   'tips.signIn': 'Sign in to have the same boards on your other computers.',
   'tips.share': 'A group can be shared as a read-only link from its ⋯ menu.',
   'stack.title': '{count} links',
+  'stack.rename': 'Rename',
+  'stack.namePlaceholder': 'Stack name',
   'stack.open': 'Open all',
   'stack.unstack': 'Unstack',
   'stack.expand': 'Show links',

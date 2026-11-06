@@ -268,6 +268,8 @@ export const pl: Record<MessageKey, Message> = {
   'tips.signIn': 'Zaloguj się, żeby mieć te same tablice na innych komputerach.',
   'tips.share': 'Grupę można udostępnić jako link tylko do odczytu z jej menu ⋯.',
   'stack.title': '{count} linki',
+  'stack.rename': 'Zmień nazwę',
+  'stack.namePlaceholder': 'Nazwa stosu',
   'stack.open': 'Otwórz wszystkie',
   'stack.unstack': 'Rozdziel',
   'stack.expand': 'Pokaż linki',

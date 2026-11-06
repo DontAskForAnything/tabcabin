@@ -24,6 +24,45 @@ test('creates a group with the keyboard and renames it', async ({ context, exten
   await expect(page.getByRole('heading', { name: 'Reading list' })).toBeVisible()
 })
 
+test('names a stack from its menus', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  await links.getByRole('link', { name: /GitHub/ }).click({ modifiers: ['Shift'] })
+  await links.getByRole('link', { name: /Gmail/ }).click({ modifiers: ['Shift'] })
+  await page.getByRole('button', { name: 'Stack', exact: true }).click()
+  const stack = links
+    .locator('[data-dnd-item]')
+    .filter({ has: page.getByRole('button', { name: 'Show links' }) })
+  await expect(stack.getByText('2 links', { exact: true })).toBeVisible()
+
+  // While it is renamed the stack has no button to find it by.
+  const name = links.getByRole('textbox', { name: 'Rename' })
+  await stack.getByRole('button', { name: 'More' }).click()
+  await page.getByRole('menuitem', { name: 'Rename' }).click()
+  await expect(name).toBeFocused()
+  await name.fill('Every morning')
+  await name.press('Enter')
+  // The name goes on top and the count moves next to the sites.
+  await expect(stack.getByText('Every morning', { exact: true })).toBeVisible()
+  await expect(stack.getByText(/^2 links · /)).toBeVisible()
+  await page.reload()
+  await expect(stack.getByText('Every morning', { exact: true })).toBeVisible()
+
+  // Escape keeps the name; an empty one brings the count back.
+  await stack.getByText('Every morning', { exact: true }).click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Rename' }).click()
+  await expect(name).toBeFocused()
+  await name.fill('Something else')
+  await name.press('Escape')
+  await expect(stack.getByText('Every morning', { exact: true })).toBeVisible()
+  await stack.getByRole('button', { name: 'More' }).click()
+  await page.getByRole('menuitem', { name: 'Rename' }).click()
+  await name.fill('')
+  await name.press('Enter')
+  await expect(stack.getByText('2 links', { exact: true })).toBeVisible()
+})
+
 test('adds a note and turns it into a done task', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

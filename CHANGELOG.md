@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- A stack of links can have a name: Rename in its menu or right-click menu turns the name into a
+  field. A named stack shows how many links it holds next to their sites
+
 ## [1.4.4] — 2026-11-03
 
 Shift-click picks a range of open tabs, and picking them no longer selects page text. The sync

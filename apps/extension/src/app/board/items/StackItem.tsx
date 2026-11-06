@@ -1,4 +1,4 @@
-import { ChevronDown, Ellipsis, Layers, Split, Trash } from 'lucide-react'
+import { ChevronDown, Ellipsis, Layers, Pencil, Split, Trash } from 'lucide-react'
 import { displayHost } from '@tabcabin/core'
 import {
   cn,
@@ -13,17 +13,41 @@ import {
 import { useState } from 'react'
 import { useT } from '@/i18n'
 import { faviconUrl, hostSeed } from '@/lib/browser'
+import { useUi } from '@/state/ui'
 import type { ItemViewProps } from '../ItemView'
 import { ItemList } from '../ItemList'
 import { LinkRow } from './LinkRow'
 import { selectedRing, useSelectable } from './selection'
+import { StackTitle } from './StackTitle'
 
 export function StackItem(props: ItemViewProps) {
   const { item, group, actions } = props
   const t = useT()
   const [open, setOpen] = useState(false)
   const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const renaming = useUi((s) => s.renameStackId === item.id)
+  const setRename = useUi((s) => s.setRenameStack)
   const hosts = [...new Set(item.children.map((child) => displayHost(child.url)))].slice(0, 3)
+  const head = (
+    <>
+      <span className="flex shrink-0 pl-2">
+        {item.children.slice(0, 4).map((child) => (
+          <Favicon
+            key={child.id}
+            src={[faviconUrl(child.url), child.favIconUrl]}
+            seed={hostSeed(child.url, child.title)}
+            size="sm"
+            className="-ml-2 ring-2 ring-card"
+          />
+        ))}
+      </span>
+      <StackTitle stack={item} hosts={hosts} renaming={renaming} />
+      <ChevronDown
+        size={16}
+        className={cn('shrink-0 text-ink-3 transition-transform', open && 'rotate-180')}
+      />
+    </>
+  )
 
   return (
     <div
@@ -33,35 +57,20 @@ export function StackItem(props: ItemViewProps) {
       )}
     >
       <div className="flex items-center gap-3 p-2.5" onClickCapture={onClickCapture}>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-label={open ? t('stack.collapse') : t('stack.expand')}
-          onClick={() => setOpen((value) => !value)}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
-        >
-          <span className="flex shrink-0 pl-2">
-            {item.children.slice(0, 4).map((child) => (
-              <Favicon
-                key={child.id}
-                src={[faviconUrl(child.url), child.favIconUrl]}
-                seed={hostSeed(child.url, child.title)}
-                size="sm"
-                className="-ml-2 ring-2 ring-card"
-              />
-            ))}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-[14px] font-semibold">
-              {item.title || t('stack.title', { count: item.children.length })}
-            </span>
-            <span className="block truncate text-[12px] text-ink-3">{hosts.join(' · ')}</span>
-          </span>
-          <ChevronDown
-            size={16}
-            className={cn('shrink-0 text-ink-3 transition-transform', open && 'rotate-180')}
-          />
-        </button>
+        {/* While it is renamed the name is a field, which a button cannot hold. */}
+        {renaming ? (
+          <div className="flex min-w-0 flex-1 items-center gap-3">{head}</div>
+        ) : (
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-label={open ? t('stack.collapse') : t('stack.expand')}
+            onClick={() => setOpen((value) => !value)}
+            className="flex min-w-0 flex-1 items-center gap-3 text-left"
+          >
+            {head}
+          </button>
+        )}
         <Menu>
           <MenuTrigger asChild>
             <IconButton
@@ -71,7 +80,16 @@ export function StackItem(props: ItemViewProps) {
               tooltip={false}
             />
           </MenuTrigger>
-          <MenuContent align="end">
+          <MenuContent
+            align="end"
+            // Renaming takes the focus to the name instead of back to this button.
+            onCloseAutoFocus={(event) => {
+              if (useUi.getState().renameStackId === item.id) event.preventDefault()
+            }}
+          >
+            <MenuItem icon={<Pencil size={15} />} onSelect={() => setRename(item.id)}>
+              {t('stack.rename')}
+            </MenuItem>
             <MenuItem icon={<Layers size={15} />} onSelect={() => void actions.openStack(item)}>
               {t('stack.open')}
             </MenuItem>

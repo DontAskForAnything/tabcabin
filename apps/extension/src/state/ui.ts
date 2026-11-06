@@ -37,6 +37,10 @@ interface UiState {
   focusGroupTitleId: string | null
   setFocusGroupTitle: (id: string | null) => void
 
+  /** Stack whose name is being edited (asked for from one of its menus). */
+  renameStackId: string | null
+  setRenameStack: (id: string | null) => void
+
   /** Item to scroll to and highlight briefly (e.g. after "show on board" in search). */
   flashItemId: string | null
   flashItem: (id: string | null) => void
@@ -61,6 +65,9 @@ export const useUi = create<UiState>()((set, get) => ({
 
   focusGroupTitleId: null,
   setFocusGroupTitle: (id) => set({ focusGroupTitleId: id }),
+
+  renameStackId: null,
+  setRenameStack: (id) => set({ renameStackId: id }),
 
   flashItemId: null,
   flashItem: (id) => set({ flashItemId: id }),

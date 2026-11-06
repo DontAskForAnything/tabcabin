@@ -38,11 +38,22 @@ export function ItemContextMenu({
   const t = useT()
   const openModal = useUi((s) => s.openModal)
   const editReminder = useUi((s) => s.editReminder)
+  const setRenameStack = useUi((s) => s.setRenameStack)
   const targets = groups.filter((group) => group.id !== item.groupId)
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-      <ContextMenuContent>
+      <ContextMenuContent
+        // Renaming a stack takes the focus to its name.
+        onCloseAutoFocus={(event) => {
+          if (useUi.getState().renameStackId === item.id) event.preventDefault()
+        }}
+      >
+        {item.kind === 'stack' && (
+          <ContextMenuItem icon={<Pencil size={14} />} onSelect={() => setRenameStack(item.id)}>
+            {t('stack.rename')}
+          </ContextMenuItem>
+        )}
         {(item.url || item.imageUrl) && (
           <ContextMenuItem
             icon={<ExternalLink size={14} />}

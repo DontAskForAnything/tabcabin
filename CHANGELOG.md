@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.5] — 2026-11-07
+
+Stacks of links can have a name, and anything on a board can be duplicated. The sync server from
+1.3.2 is enough.
+
 ### Added
 
 - A stack of links can have a name: Rename in its menu or right-click menu turns the name into a
@@ -354,7 +359,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...HEAD
+[1.4.5]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...v1.4.5
 [1.4.4]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...v1.4.4
 [1.4.3]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.1...v1.4.2

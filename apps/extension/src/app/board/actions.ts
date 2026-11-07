@@ -144,6 +144,13 @@ export function useBoardActions(active: ActiveContext) {
       async updateItem(id: string, patch: repo.ItemPatch) {
         return repo.updateItem(id, patch)
       },
+      /** Copies an item right after itself and points at the copy. */
+      async duplicateItem(item: Item) {
+        const result = await repo.duplicateItem(item.id)
+        useUi.getState().flashItem(result.itemId)
+        const kind = item.kind === 'note' && item.todo ? 'todo' : item.kind
+        undoable(t(`item.duplicated.${kind}`))(result)
+      },
       async deleteItems(ids: readonly string[]) {
         if (ids.length === 0) return
         const result = await repo.deleteItems(ids)

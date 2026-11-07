@@ -197,6 +197,12 @@ export const pl: Record<MessageKey, Message> = {
   'item.addPlaceholder': 'Napisz notatkę albo wklej link…',
   'item.add': 'Notatka lub link',
   'item.edit': 'Edytuj',
+  'item.duplicate': 'Duplikuj',
+  'item.duplicated.link': 'Zduplikowano link',
+  'item.duplicated.note': 'Zduplikowano notatkę',
+  'item.duplicated.todo': 'Zduplikowano zadanie',
+  'item.duplicated.stack': 'Zduplikowano stos',
+  'item.duplicated.image': 'Zduplikowano obrazek',
   'item.delete': 'Usuń',
   'item.deleted': {
     one: 'Usunięto element',

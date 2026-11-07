@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { makeGroup, makeItem, makeLink, makeNote } from './factories'
-import { combineItems, countItems, duplicateGroup, moveItems, sortItems, unstack } from './ops'
+import {
+  combineItems,
+  countItems,
+  duplicateGroup,
+  duplicateItem,
+  moveItems,
+  sortItems,
+  unstack,
+} from './ops'
 import { positionsAtEnd, sortByPosition } from './position'
 import type { Item } from './schema'
 
@@ -147,6 +155,65 @@ describe('unstack', () => {
     const top = sortByPosition([before!, after!, ...rows.filter((r) => r.kind === 'link')])
     expect(top.map((r) => r.id)).toEqual([before!.id, children[0]!.id, children[1]!.id, after!.id])
     expect(rows.find((r) => r.id === stack.id)?.deletedAt).toBe(2_000)
+  })
+})
+
+describe('duplicateItem', () => {
+  it('copies a link with its pinned notes right after it', () => {
+    const [first, second] = links('g1', 2)
+    const pinned = [
+      {
+        ...makeNote({ groupId: 'g1', position: 'a0', text: 'CV', todo: true, done: true }, clock),
+        parentId: first!.id,
+      },
+      {
+        ...makeNote({ groupId: 'g1', position: 'a1', text: 'Letter', todo: true }, clock),
+        parentId: first!.id,
+      },
+    ]
+    const gone = {
+      ...makeNote({ groupId: 'g1', position: 'a2', text: 'Old' }, clock),
+      parentId: first!.id,
+      deletedAt: 1,
+    }
+    const [copy, ...notes] = duplicateItem(first!, [first!, second!, ...pinned, gone], later)
+    expect(copy!.id).not.toBe(first!.id)
+    expect(copy).toMatchObject({
+      url: first!.url,
+      title: first!.title,
+      parentId: null,
+      createdAt: 2_000,
+    })
+    expect(sortByPosition([first!, second!, copy!]).map((item) => item.id)).toEqual([
+      first!.id,
+      copy!.id,
+      second!.id,
+    ])
+    // The notes come along as they are; the deleted one stays behind.
+    expect(notes.map((note) => [note.text, note.done, note.parentId])).toEqual([
+      ['CV', true, copy!.id],
+      ['Letter', false, copy!.id],
+    ])
+  })
+
+  it('copies a stack with its links, and the last item of a list goes after it', () => {
+    const stack = makeItem({ kind: 'stack', groupId: 'g1', position: 'a0', title: 'Daily' }, clock)
+    const children = links('g1', 2).map((link) => ({ ...link, parentId: stack.id }))
+    const [copy, ...copied] = duplicateItem(stack, [stack, ...children], later)
+    expect(copy).toMatchObject({ kind: 'stack', title: 'Daily' })
+    expect(copy!.position > stack.position).toBe(true)
+    expect(copied.map((link) => [link.url, link.parentId, link.position])).toEqual(
+      children.map((link) => [link.url, copy!.id, link.position]),
+    )
+    expect(new Set([stack, ...children, copy!, ...copied].map((item) => item.id)).size).toBe(6)
+  })
+
+  it('keeps a copied link inside its stack', () => {
+    const stack = makeItem({ kind: 'stack', groupId: 'g1', position: 'a0' }, clock)
+    const [a, b] = links('g1', 2).map((link) => ({ ...link, parentId: stack.id }))
+    const [copy] = duplicateItem(a!, [stack, a!, b!], later)
+    expect(copy!.parentId).toBe(stack.id)
+    expect(sortByPosition([a!, b!, copy!]).map((item) => item.id)).toEqual([a!.id, copy!.id, b!.id])
   })
 })
 

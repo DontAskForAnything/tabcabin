@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - A stack of links can have a name: Rename in its menu or right-click menu turns the name into a
   field. A named stack shows how many links it holds next to their sites
+- Duplicate in the right-click menu of a link, note, to-do or stack puts a copy right under it,
+  with the notes pinned to a link and the links in a stack; reminders stay with the original
 
 ## [1.4.4] — 2026-11-03
 

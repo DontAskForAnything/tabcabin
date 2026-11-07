@@ -1,7 +1,7 @@
 import { generateNKeysBetween } from 'fractional-indexing'
 import { type Clock, makeItem, touch } from './factories'
 import { newId } from './ids'
-import { sortByPosition } from './position'
+import { byPosition, positionBetween, sortByPosition } from './position'
 import { pinNotes } from './pins'
 import { type Group, type Item } from './schema'
 
@@ -188,6 +188,26 @@ export function duplicateGroup(
     updatedAt: clock.now,
   }))
   return { group: copy, items: copied }
+}
+
+/**
+ * Copies an item with everything inside it (a stack's links, a link's pinned notes), placed right
+ * after the item among its siblings. The copy comes first in the result; reminders are not copied.
+ */
+export function duplicateItem(item: Item, groupItems: readonly Item[], clock: Clock): Item[] {
+  const items = live(groupItems)
+  const next = sortByPosition(items.filter((other) => other.parentId === item.parentId)).find(
+    (other) => byPosition(other, item) > 0,
+  )
+  const copies: Item[] = []
+  const copy = (source: Item, parentId: string | null, position: string) => {
+    const id = newId()
+    copies.push({ ...source, id, parentId, position, createdAt: clock.now, updatedAt: clock.now })
+    for (const child of items.filter((other) => other.parentId === source.id))
+      copy(child, id, child.position)
+  }
+  copy(item, item.parentId, positionBetween(item.position, next?.position ?? null))
+  return copies
 }
 
 export type SortMode = 'title' | 'newest' | 'oldest'

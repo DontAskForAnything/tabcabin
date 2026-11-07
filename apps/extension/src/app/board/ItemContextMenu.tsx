@@ -1,4 +1,13 @@
-import { Bell, ExternalLink, FolderInput, Pencil, PinOff, StickyNote, Trash } from 'lucide-react'
+import {
+  Bell,
+  CopyPlus,
+  ExternalLink,
+  FolderInput,
+  Pencil,
+  PinOff,
+  StickyNote,
+  Trash,
+} from 'lucide-react'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -70,6 +79,12 @@ export function ItemContextMenu({
             {t('item.edit')}
           </ContextMenuItem>
         )}
+        <ContextMenuItem
+          icon={<CopyPlus size={14} />}
+          onSelect={() => void actions.duplicateItem(item)}
+        >
+          {t('item.duplicate')}
+        </ContextMenuItem>
         {item.kind === 'link' && (
           <ContextMenuItem
             icon={<StickyNote size={14} />}

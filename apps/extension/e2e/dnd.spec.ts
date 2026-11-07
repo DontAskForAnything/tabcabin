@@ -80,6 +80,35 @@ test('stacks two links by holding one over the other', async ({ context, extensi
   await expect(page.getByText('Links stacked')).toBeVisible()
 })
 
+test('duplicates a link with its pinned notes, and a to-do', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const todo = page.getByRole('region', { name: 'To do' })
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const github = links.getByRole('link', { name: /GitHub/ })
+  const target = await center(github)
+  await drag(page, todo.getByText('Try the Collections view'), { x: target.x, y: target.y }, 700)
+  await expect(links.getByText('Try the Collections view')).toBeVisible()
+
+  await github.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Duplicate' }).click()
+  const toast = page.locator('[data-toaster] > *').filter({ hasText: 'Link duplicated' })
+  await expect(toast).toBeVisible()
+  // The copy sits right under the original, with the note pinned to it.
+  await expect(github).toHaveCount(2)
+  await expect(links.getByRole('link').nth(1)).toHaveAccessibleName(/GitHub/)
+  await expect(links.getByText('Try the Collections view')).toHaveCount(2)
+  await toast.getByRole('button', { name: 'Undo' }).click()
+  await expect(github).toHaveCount(1)
+  await expect(links.getByText('Try the Collections view')).toHaveCount(1)
+
+  const task = todo.getByText('Press Ctrl+K to search everything')
+  await task.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Duplicate' }).click()
+  await expect(page.getByText('To-do duplicated')).toBeVisible()
+  await expect(task).toHaveCount(2)
+})
+
 test('pins several notes to a link and takes them off again', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

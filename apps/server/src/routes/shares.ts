@@ -32,6 +32,10 @@ export function shareRoutes(db: Db, config: Config, now: () => number) {
   const view = (share: { id: string; groupId: string }) => ({
     id: share.id,
     groupId: share.groupId,
+    // The address to hand out: on the website when there is one (older extensions build their
+    // own from the server's address, which leads there too). The id goes after the #, so it
+    // never reaches the website's logs or visit counts.
+    ...(config.siteUrl ? { url: `${config.siteUrl}/s/#${share.id}` } : {}),
   })
 
   routes.get('/shares', auth, (c) => {
@@ -60,7 +64,18 @@ export function shareRoutes(db: Db, config: Config, now: () => number) {
       : c.json({ error: 'not_found' }, 404),
   )
 
+  /** A shared group for the website's /s/ page: the same as the page below shows, as JSON. */
+  routes.get('/shared/:id', (c) => {
+    const group = loadShared(db, c.req.param('id'))
+    c.header('Cache-Control', 'no-store')
+    c.header('X-Robots-Tag', 'noindex, nofollow')
+    return group ? c.json({ group }) : c.json({ error: 'not_found' }, 404)
+  })
+
   routes.get('/s/:id', (c) => {
+    // With a website the group opens there, in the site's look; this page is for servers without.
+    if (config.siteUrl)
+      return c.redirect(`${config.siteUrl}/s/#${encodeURIComponent(c.req.param('id'))}`, 302)
     const lang = pageLanguage(c.req.header('accept-language'))
     const group = loadShared(db, c.req.param('id'))
     for (const [name, value] of Object.entries(PAGE_HEADERS)) c.header(name, value)

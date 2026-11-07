@@ -26,19 +26,20 @@ cp .env.example .env
 nano .env
 ```
 
-| Variable                           | Meaning                                                                          |
-| ---------------------------------- | -------------------------------------------------------------------------------- |
-| `DOMAIN`                           | Your domain, e.g. `tabs.example.com`                                             |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | First account, created on the first start (remove the password afterwards)       |
-| `ALLOW_SIGNUP`                     | `true` lets anyone create an account (password or Google). Default `false`       |
-| `SESSION_TTL_DAYS`                 | How long an unused device stays signed in. Default `30`                          |
-| `GOOGLE_CLIENT_ID`, `…_SECRET`     | Turn on "Continue with Google" (see [Sign in with Google](#sign-in-with-google)) |
-| `SIGNUP_EMAILS`                    | Google addresses that may join while signup is off: `ola@gmail.com,@family.org`  |
-| `MAX_USERS`                        | Most accounts the server accepts. Default `0` (no limit)                         |
-| `SIGNUPS_PER_IP_PER_DAY`           | New accounts one network may create per day. Default `5`                         |
-| `MAX_RECORDS_PER_USER`             | Synced boards, groups, links and notes per account. Default `100000`             |
-| `FEEDBACK_WEBHOOK_URL`             | Discord webhook for the feedback form (see [Feedback](#feedback)). Default off   |
-| `FEEDBACK_PER_IP_PER_DAY`          | Feedback messages one network may send per day. Default `5`                      |
+| Variable                           | Meaning                                                                                               |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `DOMAIN`                           | Your domain, e.g. `tabs.example.com`                                                                  |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | First account, created on the first start (remove the password afterwards)                            |
+| `ALLOW_SIGNUP`                     | `true` lets anyone create an account (password or Google). Default `false`                            |
+| `SESSION_TTL_DAYS`                 | How long an unused device stays signed in. Default `30`                                               |
+| `GOOGLE_CLIENT_ID`, `…_SECRET`     | Turn on "Continue with Google" (see [Sign in with Google](#sign-in-with-google))                      |
+| `SIGNUP_EMAILS`                    | Google addresses that may join while signup is off: `ola@gmail.com,@family.org`                       |
+| `MAX_USERS`                        | Most accounts the server accepts. Default `0` (no limit)                                              |
+| `SIGNUPS_PER_IP_PER_DAY`           | New accounts one network may create per day. Default `5`                                              |
+| `MAX_RECORDS_PER_USER`             | Synced boards, groups, links and notes per account. Default `100000`                                  |
+| `FEEDBACK_WEBHOOK_URL`             | Discord webhook for the feedback form (see [Feedback](#feedback)). Default off                        |
+| `FEEDBACK_PER_IP_PER_DAY`          | Feedback messages one network may send per day. Default `5`                                           |
+| `SITE_URL`                         | Your TabCabin website, if you run one: shared groups open there (see [Shared groups](#shared-groups)) |
 
 ## 3. Start
 
@@ -114,11 +115,19 @@ full, the extension says so and keeps new things locally until there is room aga
 
 ## Shared groups
 
-Signed-in users can share a group as a read-only page (group menu → **Share a read-only link**).
-The server shows it at `https://<DOMAIN>/s/<id>`: plain HTML with no scripts and no outside
-requests, always the group as it is now, marked `noindex` for search engines. The id is long and
-random; stopping the share (or deleting the group) ends the link. Each account can share up to 100
-groups.
+Signed-in users can share a group as a read-only link (group menu → **Share a read-only link**),
+always showing the group as it is now. The id is long and random; stopping the share (or deleting
+the group) ends the link. Each account can share up to 100 groups.
+
+- **With a website** (`SITE_URL` set, and the website built with this server as `SYNC_URL`, see
+  [landing.md](landing.md)): links point to `https://<website>/s/#<id>`. After the `#`, the id never
+  reaches the website's logs. That page reads the group from `https://<DOMAIN>/shared/<id>` and
+  shows it in the website's look. Old links to `https://<DOMAIN>/s/<id>` lead there too, and a
+  browser that opens any other address of the server lands on the website.
+- **Without**: the server shows the group itself at `https://<DOMAIN>/s/<id>`, as plain HTML with no
+  scripts and no outside requests.
+
+Both are marked `noindex` for search engines.
 
 ## Feedback
 

@@ -136,4 +136,61 @@ describe('shared groups', () => {
     ])
     expect((await ctx.app.request(`/s/${share.id}`)).status).toBe(404)
   })
+
+  it('gives the website the group as JSON, while it is shared', async () => {
+    const ctx = testApp({}, () => clock.now + 5000)
+    const me = await signedIn(ctx, 'michal')
+    const { group, changes } = board()
+    await me.push(changes)
+    const { share } = (await (await me.share(group.id)).json()) as { share: { id: string } }
+
+    const res = await ctx.app.request(`/shared/${share.id}`)
+    expect(res.status).toBe(200)
+    expect(res.headers.get('x-robots-tag')).toBe('noindex, nofollow')
+    const { group: shared } = (await res.json()) as {
+      group: { title: string; sharedAt: number; updatedAt: number; items: { title: string }[] }
+    }
+    expect(shared.title).toBe('Trip <Lisbon>')
+    expect(shared.sharedAt).toBe(clock.now + 5000)
+    expect(shared.updatedAt).toBe(clock.now)
+    expect(shared.items.map((item) => item.title)).toContain('Tram 28')
+
+    await me.call(`/shares/${share.id}`, { method: 'DELETE' })
+    expect((await ctx.app.request(`/shared/${share.id}`)).status).toBe(404)
+  })
+
+  it('sends browsers to the website when the server has one', async () => {
+    const site = 'https://tabcabin.example.com'
+    const ctx = testApp({ SITE_URL: `${site}/` })
+    const me = await signedIn(ctx, 'michal')
+    const { group, changes } = board()
+    await me.push(changes)
+    const { share } = (await (await me.share(group.id)).json()) as {
+      share: { id: string; url: string }
+    }
+    expect(share.url).toBe(`${site}/s/#${share.id}`)
+
+    // Links made before the website took over lead there too.
+    const old = await ctx.app.request(`/s/${share.id}`)
+    expect(old.status).toBe(302)
+    expect(old.headers.get('location')).toBe(`${site}/s/#${share.id}`)
+
+    // The website may read the group from the browser.
+    const read = await ctx.app.request(`/shared/${share.id}`, { headers: { Origin: site } })
+    expect(read.headers.get('access-control-allow-origin')).toBe(site)
+    const other = await ctx.app.request(`/shared/${share.id}`, {
+      headers: { Origin: 'https://elsewhere.example' },
+    })
+    expect(other.headers.get('access-control-allow-origin')).toBeNull()
+
+    const html = { Accept: 'text/html,application/xhtml+xml' }
+    expect((await ctx.app.request('/', { headers: html })).headers.get('location')).toBe(site)
+    const lost = await ctx.app.request('/s/', { headers: html })
+    expect(lost.status).toBe(302)
+    expect(lost.headers.get('location')).toBe(`${site}/s/`)
+    // Programs asking the API still get an answer they can read.
+    const api = await ctx.app.request('/nothing-here')
+    expect(api.status).toBe(404)
+    expect(await api.json()).toEqual({ error: 'not_found' })
+  })
 })

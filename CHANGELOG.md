@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Sync server: with `SITE_URL` set, shared groups open on the website (old links lead there too),
+  `/shared/<id>` gives the website the group, and a browser that opens the server's address lands
+  on the website instead of an error
+
 ## [1.4.5] — 2026-11-07
 
 Stacks of links can have a name, and anything on a board can be duplicated. The sync server from

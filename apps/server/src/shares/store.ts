@@ -58,6 +58,8 @@ export interface SharedItem {
   kind: string
   title: string
   url: string | null
+  /** The icon the tab had when it was saved. */
+  favIconUrl: string | null
   text: string
   color: string | null
   todo: boolean
@@ -69,6 +71,10 @@ export interface SharedItem {
 export interface SharedGroup {
   title: string
   emoji: string
+  /** When the link was made. */
+  sharedAt: number
+  /** The last change to the group or anything in it. */
+  updatedAt: number
   items: SharedItem[]
 }
 
@@ -89,6 +95,9 @@ export function loadShared(db: Db, id: string): SharedGroup | null {
       ),
     )
     .all()
+  const stamp = (data: Record<string, unknown> | null | undefined) =>
+    typeof data?.updatedAt === 'number' ? data.updatedAt : 0
+  const updatedAt = Math.max(stamp(group), ...rows.map((row) => stamp(row.data)))
   const items = rows
     .map((row) => row.data)
     .filter((data): data is Record<string, unknown> => !!data && data.deletedAt === null)
@@ -97,6 +106,7 @@ export function loadShared(db: Db, id: string): SharedGroup | null {
       kind: String(data.kind),
       title: String(data.title ?? ''),
       url: typeof data.url === 'string' ? data.url : null,
+      favIconUrl: typeof data.favIconUrl === 'string' ? data.favIconUrl : null,
       text: String(data.text ?? ''),
       color: typeof data.color === 'string' ? data.color : null,
       todo: data.todo === true,
@@ -105,5 +115,11 @@ export function loadShared(db: Db, id: string): SharedGroup | null {
       parentId: typeof data.parentId === 'string' ? data.parentId : null,
     }))
     .sort((a, b) => (a.position < b.position ? -1 : a.position > b.position ? 1 : 0))
-  return { title: String(group.title ?? ''), emoji: String(group.emoji ?? ''), items }
+  return {
+    title: String(group.title ?? ''),
+    emoji: String(group.emoji ?? ''),
+    sharedAt: share.createdAt,
+    updatedAt,
+    items,
+  }
 }

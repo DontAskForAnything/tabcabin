@@ -23,10 +23,14 @@ export interface AppDeps {
   fetch?: typeof fetch
 }
 
-/** Origins allowed to call the API: browser extensions and the server's own address. */
+/**
+ * Origins allowed to call the API: browser extensions, the server's own address and the website
+ * (which reads shared groups).
+ */
 function allowedOrigin(origin: string, config: Config): string | null {
   if (/^(chrome|moz)-extension:\/\/[a-z0-9-]+$/i.test(origin)) return origin
   if (config.publicUrl && origin === config.publicUrl) return origin
+  if (config.siteUrl && origin === new URL(config.siteUrl).origin) return origin
   return null
 }
 
@@ -69,7 +73,15 @@ export function createApp({
   app.route('/', shareRoutes(db, config, now))
   app.route('/', feedbackRoutes(config, now, fetcher))
 
-  app.notFound((c) => c.json({ error: 'not_found' }, 404))
+  // People who open the server in a browser land on the website: the server's own address goes to
+  // its home page, any other address to the same path there (its 404 page for most).
+  const site = config.siteUrl
+  if (site) app.get('/', (c) => c.redirect(site, 302))
+  app.notFound((c) =>
+    site && c.req.method === 'GET' && /text\/html/.test(c.req.header('accept') ?? '')
+      ? c.redirect(`${site}${c.req.path}`, 302)
+      : c.json({ error: 'not_found' }, 404),
+  )
   app.onError((error, c) => {
     console.error(error)
     return c.json({ error: 'internal' }, 500)

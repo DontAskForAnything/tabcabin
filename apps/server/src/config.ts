@@ -17,6 +17,7 @@ const envSchema = z.object({
   HOST: z.string().default('0.0.0.0'),
   DATA_DIR: z.string().default('./data'),
   PUBLIC_URL: z.url().optional(),
+  SITE_URL: z.url().optional(),
   SESSION_TTL_DAYS: z.coerce.number().int().min(1).max(3650).default(30),
   ALLOW_SIGNUP: flag.default(false),
   TRUST_PROXY: flag.default(false),
@@ -42,6 +43,11 @@ export interface Config {
   dataDir: string
   /** Address the server is reachable at (used for CORS and links). */
   publicUrl: string | null
+  /**
+   * TabCabin's website, which shows shared groups (its /s/ page reads them from this server).
+   * Browsers that open the server's own address, or an old link to a shared group, go there.
+   */
+  siteUrl: string | null
   sessionTtlMs: number
   allowSignup: boolean
   /** Take the client address from X-Forwarded-For (behind a reverse proxy such as Caddy). */
@@ -100,6 +106,7 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     host: e.HOST,
     dataDir: e.DATA_DIR,
     publicUrl: e.PUBLIC_URL?.replace(/\/+$/, '') ?? null,
+    siteUrl: e.SITE_URL?.replace(/\/+$/, '') ?? null,
     sessionTtlMs: e.SESSION_TTL_DAYS * 86_400_000,
     allowSignup: e.ALLOW_SIGNUP,
     trustProxy: e.TRUST_PROXY,

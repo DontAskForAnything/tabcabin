@@ -38,6 +38,9 @@ const messages = [
   },
 ]
 const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
+// The page fills one screen with the forest at its bottom edge (the menu is 4rem, the forest as tall
+// as in the footer); a long group scrolls inside its card instead of stretching the page.
+const screen = 'height: max(26rem, calc(100svh - 4rem - clamp(110px, 15.6vw, 200px)))'
 ---
 
 <Layout
@@ -48,7 +51,8 @@ const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
 >
   <Nav />
   <main
-    class="mx-auto min-h-[62vh] max-w-2xl px-5 pt-10 pb-20 sm:pt-14"
+    class="mx-auto flex max-w-2xl flex-col px-5 pt-10 pb-6 sm:pt-14"
+    style={screen}
     data-shared
     data-sync={syncUrl}
     data-extension={extensionId}
@@ -71,7 +75,7 @@ const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
       </div>
     </div>
 
-    <section data-state="group" hidden>
+    <section class="flex min-h-0 flex-1 flex-col" data-state="group" hidden>
       <div class="flex min-w-0 items-center gap-4">
         <span class="text-[46px] leading-none" aria-hidden="true" data-emoji></span>
         <div class="min-w-0">
@@ -98,8 +102,24 @@ const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
         </div>
         <p class="text-[14.5px] text-accent-ink" aria-live="polite" data-import-status></p>
       </div>
-      <ul class:list={[card, 'mt-7 flex flex-col gap-1.5']} data-items></ul>
-      <p class="mt-6 text-center text-[13.5px] text-ink-3">Shared from TabCabin · read only</p>
+      <div class="relative mt-7 flex min-h-0 flex-col overflow-hidden rounded-[22px] bg-card shadow-card">
+        <!-- While more rows wait below, the last one fades out and "More below" shows (data-more). -->
+        <ul
+          class="flex min-h-0 flex-col gap-1.5 overflow-y-auto overscroll-contain p-3.5 [scrollbar-color:var(--color-line)_transparent] [scrollbar-width:thin] data-[more]:[mask-image:linear-gradient(to_bottom,black_calc(100%-88px),transparent_calc(100%-8px))]"
+          data-items
+        ></ul>
+        <button
+          type="button"
+          class="absolute bottom-3.5 left-1/2 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full bg-card px-4 text-[13.5px] font-semibold text-ink-2 shadow-tile transition hover:text-ink"
+          data-more-below
+          hidden
+        >
+          More below <Icon name="ChevronDown" size={16} />
+        </button>
+      </div>
+      <p class="mt-5 shrink-0 text-center text-[13.5px] text-ink-3">
+        Shared from TabCabin · read only
+      </p>
     </section>
 
     {messages.map((message) => (
@@ -172,8 +192,22 @@ const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
       )
     document.title = `${`${group.emoji} ${group.title}`.trim()} · TabCabin`
     show('group')
+    showMore()
     offerImport(root, id)
   }
+
+  const list = slot('items')
+  const moreBelow = slot('more-below')
+  const showMore = () => {
+    const more = list.scrollTop + list.clientHeight < list.scrollHeight - 4
+    list.toggleAttribute('data-more', more)
+    moreBelow.hidden = !more
+  }
+  list.addEventListener('scroll', showMore, { passive: true })
+  addEventListener('resize', showMore)
+  moreBelow.addEventListener('click', () =>
+    list.scrollBy({ top: list.clientHeight * 0.75, behavior: 'smooth' }),
+  )
 
   root.querySelector('[data-retry]')?.addEventListener('click', () => void open())
   addEventListener('hashchange', () => void open())

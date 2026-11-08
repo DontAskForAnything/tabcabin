@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Website: a long shared group scrolls inside its card, so its page fits the screen with the forest
+  along the bottom; the last row fades and More below shows that there is more
+
 ## [1.4.6] — 2026-11-08
 
 Shared groups open on the website, and Import to your TabCabin copies one into your board. Importing

@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.6] — 2026-11-08
+
+Shared groups open on the website, and Import to your TabCabin copies one into your board. Importing
+needs the sync server from this version.
+
 ### Added
 
 - Import to your TabCabin on a shared group's page: with TabCabin installed, the group is copied
@@ -372,7 +377,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...HEAD
+[1.4.6]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...v1.4.6
 [1.4.5]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...v1.4.5
 [1.4.4]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...v1.4.4
 [1.4.3]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.2...v1.4.3

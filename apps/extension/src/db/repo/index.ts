@@ -10,6 +10,7 @@ export {
   createGroup,
   deleteGroup,
   duplicateGroup,
+  insertGroup,
   moveGroup,
   sortGroup,
   updateGroup,

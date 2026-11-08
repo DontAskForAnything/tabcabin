@@ -1,5 +1,6 @@
 import { type BrowserContext } from '@playwright/test'
 import { expect, launchExtension, test } from './fixtures'
+import { routeSite, sendFromSite, SITE } from './site'
 import {
   accountDialog,
   openBoard as openBoardAt,
@@ -79,7 +80,10 @@ test('rejects a wrong password and explains how to get an account', async ({ con
   await expect(page.getByRole('heading', { name: 'Quick links' })).toBeVisible()
 })
 
-test('shares a group as a read-only page and takes it down again', async ({ context }) => {
+test('shares a group as a read-only page and takes it down again', async ({
+  context,
+  extensionId,
+}) => {
   const page = await openBoard(context)
   await signIn(page)
   // The server may already hold boards from the other tests.
@@ -103,8 +107,37 @@ test('shares a group as a read-only page and takes it down again', async ({ cont
   const html = await shared.text()
   expect(html).toContain('Quick links')
   expect(html).toContain('github.com')
+  const shareId = url.split('/s/')[1]!
+  const data = (await (await fetch(`${SERVER}/shared/${shareId}`)).json()) as {
+    group: { title: string }
+  }
+  expect(data.group.title).toBe('Quick links')
 
+  // Someone with TabCabin imports it from the website's page: a copy goes on top of their board.
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+  const quickLinks = page.getByRole('region', { name: 'Quick links' })
+  const before = await quickLinks.count()
+  await routeSite(context, 'Quick links')
+  const site = await context.newPage()
+  await site.goto(`${SITE}/s/#${shareId}`)
+  const [board] = await Promise.all([
+    context.waitForEvent('page', (opened) => opened.url().endsWith('/newtab.html')),
+    expect(
+      sendFromSite(site, extensionId, { type: 'tabcabin:add-shared', id: shareId }),
+    ).resolves.toEqual({ ok: true, group: 'Quick links' }),
+  ])
+  await expect(board.getByRole('region', { name: 'Quick links' })).toHaveCount(before + 1)
+  await expect(quickLinks).toHaveCount(before + 1)
+  await board.close()
+
+  // The copy came in above the shared group.
+  await quickLinks.nth(1).getByRole('button', { name: 'Group options' }).click()
+  await page.getByRole('menuitem', { name: 'Share a read-only link' }).click()
   await dialog.getByRole('button', { name: 'Stop sharing' }).click()
   await expect(dialog.getByRole('button', { name: 'Create link' })).toBeVisible()
   expect((await fetch(url)).status).toBe(404)
+  expect(
+    await sendFromSite(site, extensionId, { type: 'tabcabin:add-shared', id: shareId }),
+  ).toEqual({ ok: false, error: 'gone' })
 })

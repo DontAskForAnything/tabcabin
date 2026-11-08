@@ -19,7 +19,8 @@ const BUILD_SYNC_SERVER = normalizeServerUrl(configured)
 /** End-to-end tests point the test build at the server they start (meta `test.syncServer`). */
 const TEST_KEY = 'test.syncServer'
 
-async function getSyncServer(): Promise<string | null> {
+/** The sync server this copy talks to (null when the build has none). */
+export async function getSyncServer(): Promise<string | null> {
   if (import.meta.env.MODE === 'e2e') {
     const row = await db.meta.get(TEST_KEY)
     if (typeof row?.value === 'string') return normalizeServerUrl(row.value)

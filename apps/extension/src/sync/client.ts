@@ -37,6 +37,8 @@ export interface FeedbackMessage {
 export interface Share {
   id: string
   groupId: string
+  /** The address to hand out, when the server has a website that shows shared groups. */
+  url?: string
 }
 
 export interface SignedIn {
@@ -144,7 +146,7 @@ export class SyncClient {
 
   /** Where anyone can see a shared group. */
   shareUrl(share: Share) {
-    return `${this.serverUrl}/s/${share.id}`
+    return share.url ?? `${this.serverUrl}/s/${share.id}`
   }
 
   push(changes: PushChange[]) {

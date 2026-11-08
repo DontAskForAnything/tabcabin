@@ -1,6 +1,7 @@
 import {
   duplicateGroup as duplicateGroupOp,
   type Group,
+  type Item,
   makeGroup,
   positionAtEnd,
   positionAtIndex,
@@ -22,6 +23,11 @@ export async function createGroup(
     input.index === undefined ? positionAtEnd(siblings) : positionAtIndex(siblings, input.index)
   const group = makeGroup({ categoryId, position, title: input.title, emoji: input.emoji }, clock())
   return { ...(await commit([put('group', group)])), groupId: group.id }
+}
+
+/** A whole group with its items, made elsewhere (a copy of a shared group). */
+export async function insertGroup(group: Group, items: readonly Item[]) {
+  return commit([put('group', group), ...puts('item', items)])
 }
 
 export async function updateGroup(

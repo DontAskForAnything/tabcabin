@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Import to your TabCabin on a shared group's page: with TabCabin installed, the group is copied
+  to the top of the board you had open, with its stacks, notes and to-dos, and opens in a new tab
+
 ### Changed
 
 - A shared group opens on the website, in its look: each site's icon, when it was shared and when it

@@ -17,7 +17,7 @@ export default defineConfig({
   // The goodbye page opens only when the extension is removed.
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/404') && !page.includes('/bye/'),
+      filter: (page) => !page.includes('/404') && !page.includes('/bye/') && !page.includes('/s/'),
       // Guides and head-to-head pages tell search engines the day they last changed, so a new
       // one is fetched soon.
       serialize(item) {

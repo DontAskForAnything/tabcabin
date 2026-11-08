@@ -5,7 +5,8 @@
 the third option, texts in `src/versus.ts`), board templates under `/templates/` (one page per template from
 `@tabcabin/core`, texts in `src/templates.ts`), the promo film with its chapters (`/film/`, the
 only page with the film's structured data, so search engines see it as its watch page), a OneTab to
-bookmarks converter (`/onetab-to-bookmarks/`, runs the `@tabcabin/core` importers in the page), the privacy policy (`/privacy`, needed for the Chrome
+bookmarks converter (`/onetab-to-bookmarks/`, runs the `@tabcabin/core` importers in the page), shared
+groups (`/s/#<id>`, read from the sync server in the browser, kept out of search), the privacy policy (`/privacy`, needed for the Chrome
 Web Store listing), a sitemap and `robots.txt`. It has no server-side code, so any static host works.
 
 ## Drawings
@@ -41,6 +42,11 @@ Two more addresses switch the site from "coming soon" to released, each on its o
 | --------------- | --------------------------------------------------------------------- | ------------------------------------------ |
 | `EXTENSION_URL` | "Get it for Chrome" buttons go there (the store listing or a release) | the buttons say "Coming soon to Chrome"    |
 | `REPO_URL`      | GitHub links in the menu, hero, footer, privacy page and the terminal | no GitHub links (for a private repository) |
+| `SYNC_URL`      | `/s/` shows groups shared through this sync server                    | `/s/` says shared groups don't open here   |
+
+Set the sync server's `SITE_URL` to this site too, so its share links point here (see
+[self-hosting.md](self-hosting.md#shared-groups)). The GitHub workflows take `SYNC_URL` from the
+`WXT_SYNC_SERVER` variable.
 
 When `EXTENSION_URL` is the Chrome Web Store listing, the template pages read the extension id from
 it: with TabCabin installed (a version built with this site's `WXT_SITE_URL`), "Add to TabCabin" adds
@@ -103,7 +109,7 @@ In Coolify, add the repository as a new application (a private one through the G
 
 - build pack **Dockerfile**, base directory `/`, Dockerfile location `/apps/landing/Dockerfile`
 - exposed port `80` and your domain
-- `SITE_URL` (the same address), `EXTENSION_URL`, `REPO_URL` and the Umami variables as
+- `SITE_URL` (the same address), `EXTENSION_URL`, `REPO_URL`, `SYNC_URL` and the Umami variables as
   environment variables available at build time
 - optionally watch paths `apps/landing/**`, `packages/core/**`, `packages/ui/**`,
   `docs/screenshots/**` and `docs/promo/**`, so only changes to the site start a new deployment

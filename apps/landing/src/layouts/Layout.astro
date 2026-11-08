@@ -75,7 +75,8 @@ const structuredData = {
     {schema.map((item) => (
       <script type="application/ld+json" set:html={JSON.stringify(item)} />
     ))}
-    <!-- Visit counts only on the real address, and none for browsers that ask not to be tracked. -->
+    <!-- Visit counts only on the real address, and none for browsers that ask not to be tracked.
+         Never the part after # (on /s/ it names a shared group). -->
     {analytics && (
       <script
         is:inline
@@ -84,6 +85,7 @@ const structuredData = {
         data-website-id={analytics.id}
         data-domains={Astro.site?.hostname}
         data-do-not-track="true"
+        data-exclude-hash="true"
       />
     )}
     {breadcrumbs && (

@@ -38,6 +38,7 @@ jobs:
           SITE_URL: ${{ inputs.site_url || vars.SITE_URL }}
           EXTENSION_URL: ${{ vars.EXTENSION_URL }}
           REPO_URL: ${{ vars.REPO_URL }}
+          SYNC_URL: ${{ vars.WXT_SYNC_SERVER }}
           UMAMI_SCRIPT_URL: ${{ vars.UMAMI_SCRIPT_URL }}
           UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
       - uses: actions/configure-pages@v6

@@ -1,0 +1,166 @@
+---
+/**
+ * A group someone shared from TabCabin. The link names it after the # (so the id never reaches
+ * this site's logs or visit counts); the page reads the group from the sync server (SYNC_URL),
+ * always as it is now.
+ */
+import Footer from '../../components/Footer.astro'
+import GetExtension from '../../components/GetExtension.astro'
+import Nav from '../../components/Nav.astro'
+import Layout from '../../layouts/Layout.astro'
+import { syncUrl } from '../../site'
+
+const messages = [
+  {
+    state: 'gone',
+    sign: '🍂',
+    title: 'This link no longer works',
+    text: 'Its owner stopped sharing the group, or deleted it.',
+  },
+  {
+    state: 'missing',
+    sign: '🧭',
+    title: 'Which group?',
+    text: 'This link is missing its end. Open the whole link you were sent.',
+  },
+  {
+    state: 'failed',
+    sign: '🌧️',
+    title: 'The group didn’t load',
+    text: 'Check your connection and try again in a moment.',
+  },
+  {
+    state: 'unavailable',
+    sign: '🧭',
+    title: 'Shared groups don’t open here',
+    text: 'This copy of the website isn’t connected to a sync server.',
+  },
+]
+const card = 'rounded-[22px] bg-card p-3.5 shadow-card'
+---
+
+<Layout
+  title="A shared group · TabCabin"
+  description="A group of links, notes and to-dos shared from TabCabin."
+  path="/s/"
+  noindex
+>
+  <Nav />
+  <main
+    class="mx-auto min-h-[62vh] max-w-2xl px-5 pt-10 pb-20 sm:pt-14"
+    data-shared
+    data-sync={syncUrl}
+  >
+    <div data-state="loading" aria-busy="true" aria-label="Loading the group">
+      <div class="flex items-center gap-4">
+        <span class="size-12 animate-pulse rounded-[14px] bg-subtle"></span>
+        <span class="flex flex-col gap-2.5">
+          <span class="h-6 w-56 animate-pulse rounded-lg bg-subtle"></span>
+          <span class="h-3.5 w-40 animate-pulse rounded-md bg-subtle"></span>
+        </span>
+      </div>
+      <div class:list={[card, 'mt-7 flex flex-col gap-1.5']}>
+        {[0, 1, 2, 3].map(() => (
+          <span class="flex items-center gap-3 p-2">
+            <span class="size-9 animate-pulse rounded-[10px] bg-subtle" />
+            <span class="h-4 flex-1 animate-pulse rounded-md bg-subtle" />
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <section data-state="group" hidden>
+      <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
+        <div class="flex min-w-0 items-center gap-4">
+          <span class="text-[46px] leading-none" aria-hidden="true" data-emoji></span>
+          <div class="min-w-0">
+            <h1
+              class="font-display text-[30px] leading-tight font-semibold tracking-[-0.03em] break-words sm:text-[36px]"
+              data-title
+            ></h1>
+            <p class="mt-1 text-[14.5px] text-ink-3" data-meta></p>
+          </div>
+        </div>
+        <div data-actions>
+          <GetExtension label="Get TabCabin" size="md" />
+        </div>
+      </div>
+      <ul class:list={[card, 'mt-7 flex flex-col gap-1.5']} data-items></ul>
+      <p class="mt-6 text-center text-[13.5px] text-ink-3">Shared from TabCabin · read only</p>
+    </section>
+
+    {messages.map((message) => (
+      <section data-state={message.state} hidden>
+        <div class="mx-auto max-w-md pt-[6vh] text-center">
+          <div class="text-[56px] leading-none" aria-hidden="true">
+            {message.sign}
+          </div>
+          <h1 class="mt-5 font-display text-[30px] leading-tight font-semibold tracking-[-0.03em]">
+            {message.title}
+          </h1>
+          <p class="mt-3 text-[16.5px] leading-relaxed text-ink-2">{message.text}</p>
+          <div class="mt-7 flex flex-wrap justify-center gap-3">
+            {message.state === 'failed' && (
+              <button
+                type="button"
+                class="inline-flex h-11 items-center rounded-xl bg-accent px-5 text-[15px] font-semibold text-on-accent shadow-tile transition hover:brightness-110"
+                data-retry
+              >
+                Try again
+              </button>
+            )}
+            <a
+              href="/"
+              class="inline-flex h-11 items-center rounded-xl bg-card px-5 text-[15px] font-semibold shadow-tile transition hover:bg-raised"
+            >
+              Go to TabCabin
+            </a>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  import { loadShared } from '../../components/shared/load'
+  import { groupMeta, groupRows } from '../../components/shared/render'
+
+  const root = document.querySelector<HTMLElement>('[data-shared]')!
+  const show = (state: string) => {
+    for (const part of root.querySelectorAll<HTMLElement>('[data-state]'))
+      part.hidden = part.dataset.state !== state
+  }
+  const slot = (name: string) => root.querySelector<HTMLElement>(`[data-${name}]`)!
+
+  async function open() {
+    const server = root.dataset.sync
+    const id = location.hash.slice(1).trim()
+    if (!server) return show('unavailable')
+    if (!/^[\w-]{8,64}$/.test(id)) return show('missing')
+    show('loading')
+    const loaded = await loadShared(server, id)
+    if (loaded.status !== 'ok') return show(loaded.status)
+    const { group } = loaded
+    slot('emoji').textContent = group.emoji
+    slot('title').textContent = group.title
+    slot('meta').textContent = groupMeta(group)
+    const rows = groupRows(group)
+    const items = slot('items')
+    if (rows.length) items.replaceChildren(...rows)
+    else
+      items.replaceChildren(
+        Object.assign(document.createElement('li'), {
+          className: 'p-6 text-center text-ink-3',
+          textContent: 'Nothing here yet.',
+        }),
+      )
+    document.title = `${`${group.emoji} ${group.title}`.trim()} · TabCabin`
+    show('group')
+  }
+
+  root.querySelector('[data-retry]')?.addEventListener('click', () => void open())
+  addEventListener('hashchange', () => void open())
+  void open()
+</script>

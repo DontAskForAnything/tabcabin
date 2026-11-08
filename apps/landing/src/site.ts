@@ -15,6 +15,12 @@ export const extensionUrl = address(import.meta.env.EXTENSION_URL)
  */
 export const extensionId = extensionUrl?.match(/\/([a-p]{32})(?:[/?#]|$)/)?.[1]
 
+/**
+ * The sync server whose shared groups the /s/ page shows (that server's SITE_URL points back here).
+ * Without it the page says shared groups don't open on this site.
+ */
+export const syncUrl = address(import.meta.env.SYNC_URL)
+
 /** The public GitHub repository. Until it is set, links to the code, guide and changelog stay out. */
 export const repo = address(import.meta.env.REPO_URL)
 export const selfHostingGuide = repo && `${repo}/blob/main/docs/self-hosting.md`

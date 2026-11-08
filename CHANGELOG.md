@@ -8,6 +8,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- A shared group opens on the website, in its look: each site's icon, when it was shared and when it
+  last changed, and a way to get TabCabin. Links that no longer work say so there too
 - Sync server: with `SITE_URL` set, shared groups open on the website (old links lead there too),
   `/shared/<id>` gives the website the group, and a browser that opens the server's address lands
   on the website instead of an error

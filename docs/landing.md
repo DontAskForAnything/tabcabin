@@ -113,6 +113,9 @@ In Coolify, add the repository as a new application (a private one through the G
   environment variables available at build time
 - optionally watch paths `apps/landing/**`, `packages/core/**`, `packages/ui/**`,
   `docs/screenshots/**` and `docs/promo/**`, so only changes to the site start a new deployment
+- **Enable Gzip Compression** (Advanced) turned off: the container already compresses text, while
+  the proxy's compression would pack the film too, and a packed film cannot jump to a chapter. If a
+  CDN cached the packed film, purge `/promo.mp4` there afterwards
 
 ## Visit counts
 

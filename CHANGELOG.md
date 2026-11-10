@@ -6,19 +6,24 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.7] — 2026-11-10
+
+You can change a page's title right in the save window, and a to-do written there stays pinned to
+its link. No sync server update needed.
+
 ### Added
 
 - The save window lets you change the page's title before saving it (Enter goes on to the note)
-
-### Fixed
-
-- A to-do written in the save window is pinned to the saved link, like a note, instead of landing
-  below it on its own
 
 ### Changed
 
 - Website: a long shared group scrolls inside its card, so its page fits the screen with the forest
   along the bottom; the last row fades and More below shows that there is more
+
+### Fixed
+
+- A to-do written in the save window is pinned to the saved link, like a note, instead of landing
+  below it on its own
 
 ## [1.4.6] — 2026-11-08
 
@@ -391,7 +396,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...HEAD
+[1.4.7]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...v1.4.7
 [1.4.6]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...v1.4.6
 [1.4.5]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...v1.4.5
 [1.4.4]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.3...v1.4.4

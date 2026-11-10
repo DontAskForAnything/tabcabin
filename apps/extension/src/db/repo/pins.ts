@@ -11,8 +11,11 @@ import { db } from '../db'
 import { clock, commit, mustGet } from './commit'
 import { descendantsOf, getGroupItems } from './reads'
 
-/** A new, empty note pinned to the end of a link's notes. */
-export async function addPinnedNote(linkId: string, input: Partial<Pick<Item, 'todo'>> = {}) {
+/** A new note (empty unless given text) pinned to the end of a link's notes. */
+export async function addPinnedNote(
+  linkId: string,
+  input: Partial<Pick<Item, 'text' | 'todo' | 'color'>> = {},
+) {
   const link = await mustGet('item', linkId)
   const note = {
     ...makeNote(

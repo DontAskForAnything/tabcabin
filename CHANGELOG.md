@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- A to-do written in the save window is pinned to the saved link, like a note, instead of landing
+  below it on its own
+
 ### Changed
 
 - Website: a long shared group scrolls inside its card, so its page fits the screen with the forest

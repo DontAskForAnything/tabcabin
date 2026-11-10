@@ -173,6 +173,27 @@ test('saves the page with a note from the popover', async ({ context, extensionI
   await expect(popover).toHaveCount(0, { timeout: 4000 })
 })
 
+test('pins a to-do from the popover to the saved link', async ({ context, extensionId }) => {
+  const board = await openBoard(context, extensionId)
+  const page = await serveArticle(context)
+  const sw = await worker(context)
+  const tab = await tabFor(sw, 'https://site.test/article')
+  await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = page.getByRole('dialog', { name: 'TabCabin' })
+  await popover.getByRole('textbox').fill('Read the cron section')
+  await popover.getByRole('button', { name: 'To-do' }).click()
+  await popover.getByRole('button', { name: /Quick links/ }).click()
+  await popover.getByRole('button', { name: /Welcome/ }).click()
+  await popover.getByRole('button', { name: 'Save' }).click()
+  await expect(popover.getByText(/Saved to/)).toBeVisible()
+  const link = board
+    .getByRole('region', { name: 'Welcome' })
+    .locator('[data-dnd-item]')
+    .filter({ has: board.getByRole('link', { name: /Backup SQLite nightly/ }) })
+  await expect(link.getByText('Read the cron section')).toBeVisible()
+  await expect(link.getByRole('checkbox', { name: 'Mark as done' })).toBeVisible()
+})
+
 test('keeps typing in the popover away from the page shortcuts', async ({ context }) => {
   // Like GitHub: "s" focuses the search box unless you are typing in a field.
   const shortcuts = `<!doctype html><title>Shortcuts page</title><input id="search">

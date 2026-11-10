@@ -65,15 +65,12 @@ export async function saveToGroup(
     const note = what.note
     if (note && note.text.trim() && added.ids[0]) {
       if (note.todo) {
-        const extra = await repo.addNote(
-          groupId,
-          {
-            text: note.text.slice(0, NOTE_MAX_LENGTH),
-            todo: true,
-            color: (note.color as never) ?? null,
-          },
-          { afterId: added.ids[0] },
-        )
+        // A to-do is a note of its own pinned to the link, so it moves with the link.
+        const extra = await repo.addPinnedNote(added.ids[0], {
+          text: note.text.slice(0, NOTE_MAX_LENGTH),
+          todo: true,
+          color: (note.color as never) ?? null,
+        })
         itemId = extra.id
         result = { undo: [...extra.undo, ...result.undo] }
       } else {

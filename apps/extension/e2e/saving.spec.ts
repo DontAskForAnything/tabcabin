@@ -152,7 +152,10 @@ test('closes the tab and saves it into a new group', async ({ context, extension
   ).toBeVisible()
 })
 
-test('saves the page with a note from the popover', async ({ context, extensionId }) => {
+test('saves the page with a new title and a note from the popover', async ({
+  context,
+  extensionId,
+}) => {
   const board = await openBoard(context, extensionId)
   const page = await serveArticle(context)
   const sw = await worker(context)
@@ -160,14 +163,20 @@ test('saves the page with a note from the popover', async ({ context, extensionI
   await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
   const popover = page.getByRole('dialog', { name: 'TabCabin' })
   await expect(popover).toBeVisible()
-  await popover.getByRole('textbox').fill('Read the cron section')
+  const title = popover.getByRole('textbox', { name: 'Title' })
+  await expect(title).toHaveValue('Backup SQLite nightly')
+  await title.fill('SQLite backups')
+  // Enter goes on to the note.
+  await title.press('Enter')
+  await expect(popover.getByRole('textbox', { name: 'Note' })).toBeFocused()
+  await popover.getByRole('textbox', { name: 'Note' }).fill('Read the cron section')
   await popover.getByRole('button', { name: /Quick links/ }).click()
   await popover.getByRole('button', { name: /Welcome/ }).click()
   await popover.getByRole('button', { name: 'Tomorrow' }).click()
   await popover.getByRole('button', { name: 'Save' }).click()
   await expect(popover.getByText(/Saved to/)).toBeVisible()
   const group = board.getByRole('region', { name: 'Welcome' })
-  await expect(group.getByRole('link', { name: /Backup SQLite nightly/ })).toBeVisible()
+  await expect(group.getByRole('link', { name: /SQLite backups/ })).toBeVisible()
   await expect(group.getByText('Read the cron section')).toBeVisible()
   await expect(group.getByRole('button', { name: /^Reminder: Tomorrow, 09:00/ })).toBeVisible()
   await expect(popover).toHaveCount(0, { timeout: 4000 })
@@ -180,7 +189,7 @@ test('pins a to-do from the popover to the saved link', async ({ context, extens
   const tab = await tabFor(sw, 'https://site.test/article')
   await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
   const popover = page.getByRole('dialog', { name: 'TabCabin' })
-  await popover.getByRole('textbox').fill('Read the cron section')
+  await popover.getByRole('textbox', { name: 'Note' }).fill('Read the cron section')
   await popover.getByRole('button', { name: 'To-do' }).click()
   await popover.getByRole('button', { name: /Quick links/ }).click()
   await popover.getByRole('button', { name: /Welcome/ }).click()
@@ -218,7 +227,7 @@ test('keeps typing in the popover away from the page shortcuts', async ({ contex
   const tab = await tabFor(sw, 'https://shortcuts.test/')
   await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
   const popover = page.getByRole('dialog', { name: 'TabCabin' })
-  const note = popover.getByRole('textbox')
+  const note = popover.getByRole('textbox', { name: 'Note' })
   await note.click()
   await page.keyboard.type('Ask Sam about specs')
   await expect(note).toHaveValue('Ask Sam about specs')

@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- The save window lets you change the page's title before saving it (Enter goes on to the note)
+
 ### Fixed
 
 - A to-do written in the save window is pinned to the saved link, like a note, instead of landing

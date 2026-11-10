@@ -19,6 +19,7 @@ import { usePopoverData } from './usePopoverData'
 export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => void }) {
   const { data, workspace, setWorkspaceId, target, setTarget } = usePopoverData(page)
   const draggable = useDraggable()
+  const [title, setTitle] = useState(page.title)
   const [note, setNote] = useState('')
   const [color, setColor] = useState<NoteColor | null>(null)
   const [todo, setTodo] = useState(false)
@@ -42,7 +43,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
     setStatus('saving')
     const request: PopoverSaveRequest = {
       type: 'tabcabin:popover-save',
-      page,
+      page: { ...page, title: title.trim() },
       target,
       note: note.trim() ? { text: note, color, todo } : null,
       remindAt: remind ? presetTime(remind, Date.now()) : null,
@@ -76,7 +77,14 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
         <PopoverHeader handle={draggable.handle} onClose={onClose} t={t} />
 
         <div className="flex flex-col gap-3.5 px-[18px] pt-1 pb-[18px]">
-          <PageSummary page={page} />
+          <PageSummary
+            page={page}
+            title={title}
+            onTitle={setTitle}
+            onDone={() => textarea.current?.focus()}
+            readOnly={status === 'saved'}
+            t={t}
+          />
           {data && data.savedIn.length > 0 && status === 'idle' && (
             <AlreadySaved savedIn={data.savedIn} />
           )}

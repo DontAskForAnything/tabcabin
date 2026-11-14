@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.8] — 2026-11-14
+
+The right-click menu works on every item you picked with Shift, and the Edit link window can turn a
+link's note into a to-do. No sync server update needed.
+
 ### Added
 
 - The Edit link window can turn the link's note into a to-do, as the save window does
@@ -405,7 +410,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.8...HEAD
+[1.4.8]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...v1.4.8
 [1.4.7]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...v1.4.7
 [1.4.6]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...v1.4.6
 [1.4.5]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.4...v1.4.5

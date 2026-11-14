@@ -193,6 +193,34 @@ test('drags the note written on a link off it', async ({ context, extensionId })
   await expect(github.getByText('Review the open pull requests')).toHaveCount(0)
 })
 
+test('turns the note on a link into a to-do in the editor', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const github = links
+    .locator('[data-dnd-item]')
+    .filter({ has: page.getByRole('link', { name: /GitHub/ }) })
+  const edit = async () => {
+    await github.getByRole('link', { name: /GitHub/ }).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Edit' }).click()
+  }
+  await edit()
+  await page.getByPlaceholder('Add a note to this link').fill('Review the open pull requests')
+  await page.getByRole('button', { name: 'To-do' }).click()
+  await page.getByRole('button', { name: 'Save' }).click()
+  await github.getByRole('checkbox', { name: 'Mark as done' }).click()
+  await expect(github.getByRole('checkbox', { name: 'Mark as not done' })).toBeVisible()
+
+  // The editor shows it is a to-do and turns it back into a plain note.
+  await edit()
+  const toggle = page.getByRole('button', { name: 'To-do' })
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true')
+  await toggle.click()
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(github.getByText('Review the open pull requests')).toBeVisible()
+  await expect(github.getByRole('checkbox')).toHaveCount(0)
+})
+
 test('reorders groups by dragging the header', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

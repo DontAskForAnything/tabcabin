@@ -1,4 +1,4 @@
-import { Trash } from 'lucide-react'
+import { ListTodo, Trash } from 'lucide-react'
 import { NOTE_COLORS, type NoteColor, withProtocol } from '@tabcabin/core'
 import { Button, cn, Field, Modal, Textarea, toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -16,6 +16,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
   const [url, setUrl] = useState('')
   const [text, setText] = useState('')
   const [color, setColor] = useState<NoteColor | null>(null)
+  const [todo, setTodo] = useState(false)
   const [image, setImage] = useState('')
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
     setUrl(item.url ?? '')
     setText(item.text)
     setColor(item.color)
+    setTodo(item.todo)
     setImage(item.metaImageUrl ?? '')
   }, [item])
 
@@ -34,6 +36,9 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
       url: url.trim() ? withProtocol(url) : item.url,
       text: text.trim(),
       color,
+      // Only a note can be a to-do; it stays ticked while it stays one.
+      todo: todo && !!text.trim(),
+      done: todo && !!text.trim() && item.done,
       metaImageUrl: image.trim() || null,
     })
     toast({ title: t('editor.saved'), tone: 'success' })
@@ -102,7 +107,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
               className="min-h-[44px] placeholder:text-current placeholder:opacity-50"
             />
           </div>
-          <div className="flex gap-1.5 pt-1">
+          <div className="flex items-center gap-1.5 pt-1">
             {NOTE_COLORS.map((c) => (
               <button
                 key={c}
@@ -117,6 +122,19 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
                 style={{ background: `var(--note-${c}-bg)` }}
               />
             ))}
+            <div className="flex-1" />
+            <button
+              type="button"
+              aria-pressed={todo}
+              onClick={() => setTodo(!todo)}
+              className={cn(
+                'flex h-7 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-semibold',
+                todo ? 'bg-accent-soft text-accent-ink' : 'bg-subtle text-ink-2',
+              )}
+            >
+              <ListTodo size={13} />
+              {t('note.todo')}
+            </button>
           </div>
         </div>
         <Field

@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- The Edit link window can turn the link's note into a to-do, as the save window does
+
 ### Fixed
 
 - Duplicate, Move to and Delete in an item's right-click menu work on every item picked with

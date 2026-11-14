@@ -97,8 +97,9 @@ Netlify, Cloudflare Pages and similar: build command
 ## Option D — a container (Coolify and other Docker hosts)
 
 [`apps/landing/Dockerfile`](../apps/landing/Dockerfile) builds the site and serves it with Caddy on
-port 80: compressed, fingerprinted assets cached for a year, and the 404 page. The proxy in front of
-it adds HTTPS. The addresses are build arguments:
+port 80: compressed, fingerprinted assets cached for a year, and the 404 page. `/health` answers `ok`
+for health checks (the image has a `HEALTHCHECK` that uses it). The proxy in front of it adds HTTPS.
+The addresses are build arguments:
 
 ```bash
 docker build -f apps/landing/Dockerfile --build-arg SITE_URL=https://tabcabin.example.com -t tabcabin-site .
@@ -109,6 +110,7 @@ In Coolify, add the repository as a new application (a private one through the G
 
 - build pack **Dockerfile**, base directory `/`, Dockerfile location `/apps/landing/Dockerfile`
 - exposed port `80` and your domain
+- health check (optional, the image already has one): path `/health`, port `80`
 - `SITE_URL` (the same address), `EXTENSION_URL`, `REPO_URL`, `SYNC_URL` and the Umami variables as
   environment variables available at build time
 - optionally watch paths `apps/landing/**`, `packages/core/**`, `packages/ui/**`,

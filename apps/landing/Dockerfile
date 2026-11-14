@@ -25,3 +25,6 @@ FROM caddy:2-alpine
 COPY apps/landing/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /repo/apps/landing/dist /srv
 EXPOSE 80
+# Busybox wget comes with the Alpine image.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s \
+  CMD wget -q -O /dev/null http://127.0.0.1/health || exit 1

@@ -2,6 +2,8 @@
 # HTTPS and the domain.
 :80 {
 	root * /srv
+	# For the container's health check and the host's (Coolify): no files involved.
+	respond /health "ok" 200
 	encode zstd gzip
 	file_server
 	# Fingerprinted assets never change.

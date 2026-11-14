@@ -210,6 +210,34 @@ export function duplicateItem(item: Item, groupItems: readonly Item[], clock: Cl
   return copies
 }
 
+/**
+ * Copies several items, each right after itself. An item inside another one that is copied too
+ * (a link in a selected stack, a note on a selected link) comes along only once, with its parent.
+ * Returns the rows to write and the ids of the copies, in the order of `sources`.
+ */
+export function duplicateItems(
+  sources: readonly Item[],
+  groupItems: readonly Item[],
+  clock: Clock,
+): { rows: Item[]; ids: string[] } {
+  const chosen = new Set(sources.map((item) => item.id))
+  const byId = new Map(groupItems.map((item) => [item.id, item]))
+  const insideChosen = (item: Item) => {
+    for (let parent = item.parentId; parent; parent = byId.get(parent)?.parentId ?? null)
+      if (chosen.has(parent)) return true
+    return false
+  }
+  const rows: Item[] = []
+  const ids: string[] = []
+  for (const source of sources) {
+    if (insideChosen(source)) continue
+    const copies = duplicateItem(source, groupItems, clock)
+    rows.push(...copies)
+    ids.push(copies[0]!.id)
+  }
+  return { rows, ids }
+}
+
 export type SortMode = 'title' | 'newest' | 'oldest'
 
 /** Re-orders the top-level items of a group. */

@@ -109,6 +109,28 @@ test('duplicates a link with its pinned notes, and a to-do', async ({ context, e
   await expect(task).toHaveCount(2)
 })
 
+test('duplicates every item picked with Shift', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const github = links.getByRole('link', { name: /GitHub/ })
+  const gmail = links.getByRole('link', { name: /Gmail/ })
+  await github.click({ modifiers: ['Shift'] })
+  await gmail.click({ modifiers: ['Shift'] })
+  await expect(page.getByText('2 selected')).toBeVisible()
+
+  await gmail.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Duplicate' }).click()
+  const toast = page.locator('[data-toaster] > *').filter({ hasText: '2 items duplicated' })
+  await expect(toast).toBeVisible()
+  await expect(github).toHaveCount(2)
+  await expect(gmail).toHaveCount(2)
+  await expect(page.getByText('2 selected')).toHaveCount(0)
+  await toast.getByRole('button', { name: 'Undo' }).click()
+  await expect(github).toHaveCount(1)
+  await expect(gmail).toHaveCount(1)
+})
+
 test('pins several notes to a link and takes them off again', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

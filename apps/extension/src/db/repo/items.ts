@@ -2,7 +2,7 @@ import {
   canNest,
   combineItems,
   type CombineError,
-  duplicateItem as duplicateItemOp,
+  duplicateItems as duplicateItemsOp,
   type Item,
   makeItem,
   makeLink,
@@ -109,10 +109,14 @@ export async function updateItem(id: string, patch: ItemPatch) {
 
 /** Turns a note into a link or image (keeps its place in the group). */
 /** Copies an item with what is inside it, right after it; `itemId` is the copy. */
-export async function duplicateItem(id: string): Promise<Result & { itemId: string }> {
-  const item = await mustGet('item', id)
-  const copies = duplicateItemOp(item, await getGroupItems(item.groupId), clock())
-  return { ...(await commit(puts('item', copies))), itemId: copies[0]!.id }
+/** Copies items (from one group), each right after itself; `itemIds` are the copies. */
+export async function duplicateItems(
+  ids: readonly string[],
+): Promise<Result & { itemIds: string[] }> {
+  const sources = await Promise.all(ids.map((id) => mustGet('item', id)))
+  if (sources.length === 0) return { undo: [], itemIds: [] }
+  const copied = duplicateItemsOp(sources, await getGroupItems(sources[0]!.groupId), clock())
+  return { ...(await commit(puts('item', copied.rows))), itemIds: copied.ids }
 }
 
 export async function convertNote(id: string, kind: 'link' | 'image', url: string, title: string) {

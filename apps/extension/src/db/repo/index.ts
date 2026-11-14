@@ -22,7 +22,7 @@ export {
   combine,
   convertNote,
   deleteItems,
-  duplicateItem,
+  duplicateItems,
   type ItemPatch,
   moveItemsTo,
   type NewLink,

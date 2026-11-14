@@ -203,6 +203,12 @@ export const pl: Record<MessageKey, Message> = {
   'item.duplicated.todo': 'Zduplikowano zadanie',
   'item.duplicated.stack': 'Zduplikowano stos',
   'item.duplicated.image': 'Zduplikowano obrazek',
+  'item.duplicated.many': {
+    one: 'Zduplikowano {count} element',
+    few: 'Zduplikowano {count} elementy',
+    many: 'Zduplikowano {count} elementów',
+    other: 'Zduplikowano {count} elementu',
+  },
   'item.delete': 'Usuń',
   'item.deleted': {
     one: 'Usunięto element',

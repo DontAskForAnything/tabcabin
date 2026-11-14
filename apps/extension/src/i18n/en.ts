@@ -163,6 +163,7 @@ export const en = {
   'item.duplicated.todo': 'To-do duplicated',
   'item.duplicated.stack': 'Stack duplicated',
   'item.duplicated.image': 'Image duplicated',
+  'item.duplicated.many': { one: '{count} item duplicated', other: '{count} items duplicated' },
   'item.delete': 'Delete',
   'item.deleted': { one: 'Item deleted', other: '{count} items deleted' },
   'item.open': 'Open',

@@ -18,7 +18,9 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@tabcabin/ui'
+import type { Item } from '@tabcabin/core'
 import type { ReactNode } from 'react'
+import { db } from '@/db/db'
 import type { BoardItem } from '@/db/hooks'
 import { moveItemsTo } from '@/db/repo'
 import { useT } from '@/i18n'
@@ -49,6 +51,16 @@ export function ItemContextMenu({
   const editReminder = useUi((s) => s.editReminder)
   const setRenameStack = useUi((s) => s.setRenameStack)
   const targets = groups.filter((group) => group.id !== item.groupId)
+  /** Duplicate, move and delete work on every selected item when this is one of them. */
+  const chosenIds = () => {
+    const { selection } = useUi.getState()
+    return selection.includes(item.id) ? selection : [item.id]
+  }
+  const chosenItems = async (): Promise<Item[]> => {
+    const ids = chosenIds()
+    if (ids.length === 1) return [item]
+    return (await db.items.bulkGet(ids)).filter((row): row is Item => !!row && !row.deletedAt)
+  }
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
@@ -81,7 +93,7 @@ export function ItemContextMenu({
         )}
         <ContextMenuItem
           icon={<CopyPlus size={14} />}
-          onSelect={() => void actions.duplicateItem(item)}
+          onSelect={async () => void actions.duplicateItems(await chosenItems())}
         >
           {t('item.duplicate')}
         </ContextMenuItem>
@@ -117,11 +129,13 @@ export function ItemContextMenu({
                   key={group.id}
                   icon={<span className="text-[14px] leading-none">{group.emoji}</span>}
                   onSelect={async () => {
-                    const result = await moveItemsTo([item.id], { groupId: group.id, index: 9999 })
+                    const ids = chosenIds()
+                    const result = await moveItemsTo(ids, { groupId: group.id, index: 9999 })
                     offerUndo(result, {
-                      title: t('item.moved', { count: 1 }),
+                      title: t('item.moved', { count: ids.length }),
                       undoLabel: t('common.undo'),
                     })
+                    useUi.getState().clearSelection()
                   }}
                 >
                   {group.title || t('group.untitled')}
@@ -134,7 +148,7 @@ export function ItemContextMenu({
         <ContextMenuItem
           icon={<Trash size={14} />}
           danger
-          onSelect={() => void actions.deleteItems([item.id])}
+          onSelect={() => void actions.deleteItems(chosenIds())}
         >
           {t('item.delete')}
         </ContextMenuItem>

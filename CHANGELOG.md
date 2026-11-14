@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Duplicate, Move to and Delete in an item's right-click menu work on every item picked with
+  Shift, not only the one clicked
+
 ## [1.4.7] — 2026-11-10
 
 You can change a page's title right in the save window, and a to-do written there stays pinned to

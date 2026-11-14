@@ -5,6 +5,7 @@ import {
   countItems,
   duplicateGroup,
   duplicateItem,
+  duplicateItems,
   moveItems,
   sortItems,
   unstack,
@@ -214,6 +215,34 @@ describe('duplicateItem', () => {
     const [copy] = duplicateItem(a!, [stack, a!, b!], later)
     expect(copy!.parentId).toBe(stack.id)
     expect(sortByPosition([a!, b!, copy!]).map((item) => item.id)).toEqual([a!.id, copy!.id, b!.id])
+  })
+})
+
+describe('duplicateItems', () => {
+  it('copies every item right after itself', () => {
+    const [a, b, c] = links('g1', 3)
+    const { rows, ids } = duplicateItems([a!, b!], [a!, b!, c!], later)
+    expect(rows).toHaveLength(2)
+    const [aCopy, bCopy] = ids.map((id) => rows.find((row) => row.id === id)!)
+    expect([aCopy!.url, bCopy!.url]).toEqual([a!.url, b!.url])
+    expect(sortByPosition([a!, b!, c!, ...rows]).map((item) => item.id)).toEqual([
+      a!.id,
+      aCopy!.id,
+      b!.id,
+      bCopy!.id,
+      c!.id,
+    ])
+  })
+
+  it('copies a link inside a chosen stack only once, with the stack', () => {
+    const stack = makeItem({ kind: 'stack', groupId: 'g1', position: 'a0' }, clock)
+    const [inside] = links('g1', 1).map((link) => ({ ...link, parentId: stack.id }))
+    const { rows, ids } = duplicateItems([inside!, stack], [stack, inside!], later)
+    expect(ids).toHaveLength(1)
+    expect(rows.map((row) => [row.kind, row.parentId])).toEqual([
+      ['stack', null],
+      ['link', ids[0]],
+    ])
   })
 })
 

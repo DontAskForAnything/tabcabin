@@ -131,7 +131,7 @@ test('duplicates every item picked with Shift', async ({ context, extensionId })
   await expect(gmail).toHaveCount(1)
 })
 
-test('picks a range with Shift, and a click elsewhere puts it back', async ({
+test('picks a range with Shift and stacks it from the right-click menu', async ({
   context,
   extensionId,
 }) => {
@@ -146,6 +146,16 @@ test('picks a range with Shift, and a click elsewhere puts it back', async ({
   await link(/Gmail/).click({ modifiers: ['Shift'] })
   await expect(page.getByText('3 selected')).toBeVisible()
   await page.mouse.click(1420, 880)
+  await expect(page.getByText(/\d selected/)).toHaveCount(0)
+
+  await link(/GitHub/).click({ modifiers: ['Shift'] })
+  await link(/Google Calendar/).click({ modifiers: ['Shift'] })
+  await expect(page.getByText('3 selected')).toBeVisible()
+  await link(/Google Calendar/).click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Stack 3 links' }).click()
+  await expect(page.getByText('Links stacked')).toBeVisible()
+  await expect(links.getByText('3 links')).toBeVisible()
+  await expect(link(/YouTube/)).toBeVisible()
   await expect(page.getByText(/\d selected/)).toHaveCount(0)
 })
 

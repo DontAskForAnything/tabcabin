@@ -248,6 +248,7 @@ export const en = {
   'editor.saved': 'Changes saved',
   'selection.count': { one: '{count} selected', other: '{count} selected' },
   'selection.stack': 'Stack',
+  'selection.stackCount': { one: 'Stack {count} link', other: 'Stack {count} links' },
   'selection.open': 'Open',
   'selection.clear': 'Clear selection',
   'menu.more': 'More',

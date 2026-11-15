@@ -322,6 +322,12 @@ export const pl: Record<MessageKey, Message> = {
     other: 'Zaznaczono {count}',
   },
   'selection.stack': 'Połącz',
+  'selection.stackCount': {
+    one: 'Połącz {count} link',
+    few: 'Połącz {count} linki',
+    many: 'Połącz {count} linków',
+    other: 'Połącz {count} linku',
+  },
   'selection.open': 'Otwórz',
   'selection.clear': 'Odznacz',
   'menu.more': 'Więcej',

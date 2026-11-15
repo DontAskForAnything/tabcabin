@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Picked links can be stacked from their right-click menu (Stack 3 links), not only by dragging
+
 ### Fixed
 
 - Shift-click on saved items picks every item between the last one picked and this one, and a

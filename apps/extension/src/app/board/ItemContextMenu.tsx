@@ -27,6 +27,7 @@ import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import type { BoardActions } from './actions'
+import { StackPickedItem } from './StackPickedItem'
 
 export interface GroupOption {
   id: string
@@ -91,6 +92,7 @@ export function ItemContextMenu({
             {t('item.edit')}
           </ContextMenuItem>
         )}
+        <StackPickedItem item={item} actions={actions} />
         <ContextMenuItem
           icon={<CopyPlus size={14} />}
           onSelect={async () => void actions.duplicateItems(await chosenItems())}

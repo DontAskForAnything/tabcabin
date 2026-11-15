@@ -123,7 +123,8 @@ export function acceptsZone(source: DragSource, zone: DropZone, kinds: readonly 
     case 'list':
       return source.kind !== 'group' && fitsInside(zone.parentKind, kinds)
     case 'group':
-      return source.kind === 'group'
+      // Anything can go into a group (the top of its list); groups are put next to it.
+      return true
     case 'newGroup':
       return source.kind !== 'group'
     case 'trash':
@@ -140,7 +141,7 @@ export function resolveTarget(input: {
   zoneRect: Rect | null
   pointer: Point
   sourceKinds: readonly string[]
-  /** Rects of the items in the hovered list (for list zones). */
+  /** Rects of the items in the hovered list (for list zones, and a group's own list). */
   listRects?: readonly Rect[]
   /** True once the pointer rested in the middle of `zone.itemId` long enough. */
   combineArmed: boolean
@@ -194,6 +195,17 @@ export function resolveTarget(input: {
             : indexFromPointer(input.listRects ?? [], pointer),
       }
     case 'group':
+      // Over the rest of a group (its title, the add button): into its list, by the pointer.
+      if (source.kind !== 'group')
+        return {
+          kind: 'insert',
+          groupId: zone.groupId,
+          parentId: null,
+          index:
+            zone.layout === 'grid'
+              ? gridIndexFromPointer(input.listRects ?? [], pointer)
+              : indexFromPointer(input.listRects ?? [], pointer),
+        }
       return {
         kind: 'groupInsert',
         categoryId: zone.categoryId,

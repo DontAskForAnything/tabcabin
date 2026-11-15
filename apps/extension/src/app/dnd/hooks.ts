@@ -130,6 +130,7 @@ export function useGroupDnd(
   categoryId: string,
   index: number,
   overlay: OverlayInfo,
+  layout: 'list' | 'grid' = 'list',
 ) {
   const drag = useDraggable({
     id: `${dndId.group(groupId)}:drag`,
@@ -137,7 +138,7 @@ export function useGroupDnd(
   })
   const drop = useDroppable({
     id: dndId.group(groupId),
-    data: { zone: { zone: 'group', groupId, categoryId, index } satisfies DropZone },
+    data: { zone: { zone: 'group', groupId, categoryId, index, layout } satisfies DropZone },
   })
   const setNodeRef = useCallback(
     (node: HTMLElement | null) => {

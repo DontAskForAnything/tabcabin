@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- A tab or item dropped anywhere on a group goes into it (on its title, at the top; on the add
+  button, at the end), instead of only right over its list
 - Shift-click on saved items picks every item between the last one picked and this one, and a
   click anywhere else puts the picked items back
 

@@ -298,6 +298,29 @@ test('saves an open tab by dragging it from the panel', async ({ context, extens
   await expect.poll(() => other.isClosed()).toBe(true)
 })
 
+test('takes a tab dropped anywhere on a group', async ({ context, extensionId }) => {
+  const other = await context.newPage()
+  await other.goto('data:text/html,<title>Loose aim page</title><h1>hi</h1>')
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const panel = page.getByRole('navigation', { name: 'Open tabs' })
+  // Right on the add button at the bottom: the tab goes to the end.
+  const todo = page.getByRole('region', { name: 'To do' })
+  const button = await center(todo.getByRole('button', { name: 'Note or link' }))
+  await drag(page, panel.getByText('Loose aim page'), { x: button.x, y: button.y })
+  await expect(todo.getByRole('link', { name: /Loose aim page/ })).toBeVisible()
+  await expect.poll(() => other.isClosed()).toBe(true)
+
+  // On the title of a group: the link goes to the top.
+  const third = await context.newPage()
+  await third.goto('data:text/html,<title>Title aim page</title><h1>hi</h1>')
+  await page.bringToFront()
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const title = await center(links.getByRole('heading', { name: 'Quick links' }))
+  await drag(page, panel.getByText('Title aim page'), { x: title.x, y: title.y })
+  await expect(links.getByRole('link').first()).toHaveAccessibleName(/Title aim page/)
+})
+
 test('creates a group by dropping on the new group column', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

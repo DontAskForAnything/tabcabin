@@ -43,13 +43,19 @@ export function CollectionSection({
     counts.notes ? t('count.notes', { count: counts.notes }) : null,
     counts.tasks ? t('count.tasks', { count: counts.tasks }) : null,
   ].filter(Boolean)
-  const dnd = useGroupDnd(group.id, group.categoryId, index, {
-    kind: 'group',
-    title: group.title || t('group.untitled'),
-    subtitle: meta.join(' · '),
-    emoji: group.emoji,
-    count: 1,
-  })
+  const dnd = useGroupDnd(
+    group.id,
+    group.categoryId,
+    index,
+    {
+      kind: 'group',
+      title: group.title || t('group.untitled'),
+      subtitle: meta.join(' · '),
+      emoji: group.emoji,
+      count: 1,
+    },
+    'grid',
+  )
 
   return (
     <section

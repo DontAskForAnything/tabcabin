@@ -77,7 +77,12 @@ export function DndProvider({ active, children }: { active: ActiveContext; child
       zoneRect: rect,
       pointer: pointer.current,
       sourceKinds: state.kinds,
-      listRects: zone?.zone === 'list' ? listRects(zone.groupId, zone.parentId) : undefined,
+      listRects:
+        zone?.zone === 'list'
+          ? listRects(zone.groupId, zone.parentId)
+          : zone?.zone === 'group'
+            ? listRects(zone.groupId, null)
+            : undefined,
       combineArmed:
         zone?.zone === 'item' && combine.current.armed && combine.current.itemId === zone.itemId,
       groupAxis: activeViewAxis(activeRef.current),

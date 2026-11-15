@@ -163,7 +163,13 @@ describe('resolveTarget', () => {
 
   it('places groups before or after the hovered group', () => {
     const group: DragSource = { kind: 'group', groupId: 'g1', categoryId: 'c' }
-    const zone = { zone: 'group' as const, groupId: 'g3', categoryId: 'c', index: 2 }
+    const zone = {
+      zone: 'group' as const,
+      groupId: 'g3',
+      categoryId: 'c',
+      index: 2,
+      layout: 'list' as const,
+    }
     expect(
       resolveTarget({ ...base, pointer: { x: 250, y: 0 }, source: group, zone, zoneRect: rect }),
     ).toEqual({
@@ -171,6 +177,33 @@ describe('resolveTarget', () => {
       categoryId: 'c',
       index: 3,
     })
+  })
+
+  it('drops items and tabs anywhere on a group into its list', () => {
+    const zone = {
+      zone: 'group' as const,
+      groupId: 'g3',
+      categoryId: 'c',
+      index: 2,
+      layout: 'list' as const,
+    }
+    const tabs: DragSource = {
+      kind: 'tabs',
+      tabIds: [1],
+      tabs: [{ id: 1, url: 'https://a.example', title: 'A', favIconUrl: null }],
+    }
+    expect(acceptsZone(tabs, zone, ['tab'])).toBe(true)
+    expect(acceptsZone(items, zone, ['note'])).toBe(true)
+    const listRects = [
+      { top: 100, left: 0, width: 300, height: 40 },
+      { top: 140, left: 0, width: 300, height: 40 },
+    ]
+    const drop = (y: number, source: DragSource = tabs) =>
+      resolveTarget({ ...base, source, zone, zoneRect: rect, pointer: { x: 50, y }, listRects })
+    // The title above the list, the add button below it.
+    expect(drop(60)).toEqual({ kind: 'insert', groupId: 'g3', parentId: null, index: 0 })
+    expect(drop(220)).toEqual({ kind: 'insert', groupId: 'g3', parentId: null, index: 2 })
+    expect(drop(220, items)).toEqual({ kind: 'insert', groupId: 'g3', parentId: null, index: 2 })
   })
 })
 

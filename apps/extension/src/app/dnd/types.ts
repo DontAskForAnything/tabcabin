@@ -35,7 +35,14 @@ export type DropZone =
       parentKind: ParentKind
       layout: 'list' | 'grid'
     }
-  | { zone: 'group'; groupId: string; categoryId: string; index: number }
+  | {
+      zone: 'group'
+      groupId: string
+      categoryId: string
+      index: number
+      /** How the group shows its items, for dropping items anywhere on it. */
+      layout: 'list' | 'grid'
+    }
   | { zone: 'newGroup' }
   | { zone: 'trash' }
   | { zone: 'category'; categoryId: string }

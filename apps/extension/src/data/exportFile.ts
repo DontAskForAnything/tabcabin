@@ -17,14 +17,15 @@ export type ExportFormat = 'json' | 'html' | 'csv'
 const BOM = '\uFEFF'
 
 async function loadAll(): Promise<Bundle> {
-  const [workspaces, categories, groups, items, reminders] = await Promise.all([
+  const [workspaces, categories, groups, items, reminders, tags] = await Promise.all([
     db.workspaces.toArray(),
     db.categories.toArray(),
     db.groups.toArray(),
     db.items.toArray(),
     db.reminders.toArray(),
+    db.tags.toArray(),
   ])
-  return { workspaces, categories, groups, items, reminders }
+  return { workspaces, categories, groups, items, reminders, tags }
 }
 
 const slug = (text: string) =>

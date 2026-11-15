@@ -8,6 +8,7 @@ Workspace ─┬─ Category ─┬─ Group ─┬─ Item (link | note | image
            │            └─ …
            └─ …
 Reminder ── Item (at most one live reminder per item)
+Tag ── Item (an item lists its tags in `tagIds`)
 Activity (one per browser, for the week view)
 ```
 
@@ -52,6 +53,7 @@ versions without the Inbox leave it out. A backup of everything stores it as a w
 | `metaImageUrl` | link        | preview image                                                              |
 | `emoji`        | all         | optional icon                                                              |
 | `sourceUrl`    | note        | page a text selection was clipped from                                     |
+| `tagIds`       | all         | ids of its tags (optional: rows from before tags have none)                |
 
 A **stack** is an item of kind `stack` whose children are links with `parentId` set to the stack's id
 (in the same group).
@@ -67,6 +69,14 @@ shows at the top level of its group.
 `weekdays` (0 = Monday … 6 = Sunday), `monthDay` (1–31; short months use their last day), `timeOfDay`
 (minutes after midnight, local time) and `firedAt` (when the notification for the current `dueAt` was
 shown). Marking a repeating reminder done moves `dueAt` to the next occurrence.
+
+**Tag** — `name`, `color` (one of the note colours) and `position`. Tags belong to the whole account,
+not to a workspace, and a name is used once (ignoring case). The limits (`TAG_LIMITS` in
+`packages/core/src/tags.ts`) are 25 tags, 5 tags per item and 24 letters per name. Deleting a tag only
+marks the tag row: items keep its id but show it nowhere, so undo brings it back everywhere, and the
+next change to an item's tags drops ids of deleted tags. Shared pages never show tags. Versions before
+tags skip tag rows and keep `tagIds` when they edit an item. The sync server must know the `tag`
+kind of row before a release with tags (older servers reject it).
 
 **Activity** — one row per browser; its `id` is made on the first count and kept in the `meta` row
 `activity.device`. `days` maps a local day (`2026-10-18`) to `{ closed, saved, done }`: tabs with a
@@ -103,14 +113,16 @@ Exports (`Settings → Data → Export → JSON`) look like this:
   "categories": [],
   "groups": [],
   "items": [],
-  "reminders": []
+  "reminders": [],
+  "tags": []
 }
 ```
 
 Backups made before the app was renamed say `"format": "tabhangar"` and import the same way.
 Only live rows are exported. On import the file is validated with the same Zod schemas, every id is
 replaced (so a file can be imported next to existing data, even twice) and the workspaces are added
-at the end of the list.
+at the end of the list. A backup carries the tags its items use; on import a tag whose name the account
+already has becomes that tag, and the others are added while the account has room.
 
 ## tabExtend import
 

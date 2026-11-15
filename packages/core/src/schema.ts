@@ -79,8 +79,19 @@ export const itemSchema = z.object({
   emoji: z.string().max(32).nullable(),
   /** Page a text snippet was clipped from. */
   sourceUrl: z.string().max(URL_MAX_LENGTH).nullable(),
+  /** Tags on the item (ids of `tag` rows); rows from before tags have none. */
+  tagIds: z.array(id).max(100).optional(),
 })
 export type Item = z.infer<typeof itemSchema>
+
+/** A tag people put on items to find them across the board; shared by the whole account. */
+export const tagSchema = z.object({
+  ...base,
+  name: z.string().min(1).max(64),
+  color: noteColorSchema,
+  position: z.string(),
+})
+export type Tag = z.infer<typeof tagSchema>
 
 export const REPEAT_MODES = ['none', 'weekly', 'monthly'] as const
 export const reminderSchema = z.object({
@@ -133,6 +144,7 @@ export const ENTITY_TYPES = [
   'item',
   'reminder',
   'activity',
+  'tag',
 ] as const
 export const entityTypeSchema = z.enum(ENTITY_TYPES)
 export type EntityType = z.infer<typeof entityTypeSchema>
@@ -144,6 +156,7 @@ export const entitySchemas = {
   item: itemSchema,
   reminder: reminderSchema,
   activity: activitySchema,
+  tag: tagSchema,
 } as const
 
 /** Whether a kind of row named by the server (or another version) is one this version knows. */
@@ -162,6 +175,7 @@ export const syncSchemas = {
   item: itemSchema.loose(),
   reminder: reminderSchema.loose(),
   activity: activitySchema.loose(),
+  tag: tagSchema.loose(),
 } as const
 
 export interface EntityMap {
@@ -171,6 +185,7 @@ export interface EntityMap {
   item: Item
   reminder: Reminder
   activity: Activity
+  tag: Tag
 }
 
 export type AnyEntity = EntityMap[EntityType]

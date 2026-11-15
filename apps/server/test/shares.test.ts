@@ -32,10 +32,14 @@ function board() {
     { categoryId: cat.id, position: 'a0', title: 'Trip <Lisbon>', emoji: '✈️' },
     clock,
   )
-  const link = makeLink(
-    { groupId: group.id, position: 'a0', url: 'https://tram28.example/route', title: 'Tram 28' },
-    clock,
-  )
+  // Tags are the owner's own way to sort things: they never show on a shared page.
+  const link = {
+    ...makeLink(
+      { groupId: group.id, position: 'a0', url: 'https://tram28.example/route', title: 'Tram 28' },
+      clock,
+    ),
+    tagIds: ['t-private'],
+  }
   const script = makeLink(
     { groupId: group.id, position: 'a1', url: 'javascript:alert(1)', title: 'Not a link' },
     clock,
@@ -154,6 +158,7 @@ describe('shared groups', () => {
     expect(shared.sharedAt).toBe(clock.now + 5000)
     expect(shared.updatedAt).toBe(clock.now)
     expect(shared.items.map((item) => item.title)).toContain('Tram 28')
+    expect(JSON.stringify(shared)).not.toContain('t-private')
 
     await me.call(`/shares/${share.id}`, { method: 'DELETE' })
     expect((await ctx.app.request(`/shared/${share.id}`)).status).toBe(404)

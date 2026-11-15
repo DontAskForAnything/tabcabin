@@ -5,6 +5,7 @@ import {
   type Group,
   type Item,
   type Reminder,
+  type Tag,
   URL_MAX_LENGTH,
   type Workspace,
 } from './schema'
@@ -79,6 +80,7 @@ export function makeItem(input: ItemInput, { now }: Clock): Item {
     metaImageUrl: input.metaImageUrl ?? null,
     emoji: input.emoji ?? null,
     sourceUrl: input.sourceUrl ?? null,
+    ...(input.tagIds ? { tagIds: input.tagIds } : {}),
     createdAt: input.createdAt ?? now,
     updatedAt: now,
     deletedAt: null,
@@ -143,4 +145,14 @@ export function touch<T extends { updatedAt: number }>(
   { now }: Clock,
 ): T {
   return { ...row, ...patch, updatedAt: now }
+}
+
+export function makeTag(input: Pick<Tag, 'name' | 'color' | 'position'>, { now }: Clock): Tag {
+  return {
+    id: newId(),
+    name: input.name,
+    color: input.color,
+    position: input.position,
+    ...stamps(now),
+  }
 }

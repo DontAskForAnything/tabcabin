@@ -1,5 +1,7 @@
 import { z } from 'zod'
+import type { Clock } from '../factories'
 import { newId } from '../ids'
+import { mergeTags, TAG_LIMITS } from '../tags'
 import {
   type Category,
   categorySchema,
@@ -9,6 +11,8 @@ import {
   itemSchema,
   type Reminder,
   reminderSchema,
+  type Tag,
+  tagSchema,
   type Workspace,
   workspaceSchema,
 } from '../schema'
@@ -20,6 +24,8 @@ export interface Bundle {
   groups: Group[]
   items: Item[]
   reminders: Reminder[]
+  /** Tags on the items (backups made before tags have none). */
+  tags?: Tag[]
 }
 
 export const BACKUP_FORMAT = 'tabcabin'
@@ -38,6 +44,7 @@ export const backupSchema = z.object({
   groups: z.array(groupSchema),
   items: z.array(itemSchema),
   reminders: z.array(reminderSchema).default([]),
+  tags: z.array(tagSchema).default([]),
 })
 export type Backup = z.infer<typeof backupSchema>
 
@@ -57,7 +64,9 @@ export function collectBundle(all: Bundle, workspaceIds: readonly string[]): Bun
   const items = inGroups.filter((i) => i.parentId === null || inGroupIds.has(i.parentId))
   const itemIds = new Set(items.map((i) => i.id))
   const reminders = live(all.reminders).filter((r) => itemIds.has(r.itemId))
-  return { workspaces, categories, groups, items, reminders }
+  const tagged = new Set(items.flatMap((item) => item.tagIds ?? []))
+  const tags = live(all.tags ?? []).filter((tag) => tagged.has(tag.id))
+  return { workspaces, categories, groups, items, reminders, tags }
 }
 
 export function createBackup(bundle: Bundle, exportedAt: Date): Backup {
@@ -66,6 +75,7 @@ export function createBackup(bundle: Bundle, exportedAt: Date): Backup {
     version: BACKUP_VERSION,
     exportedAt: exportedAt.toISOString(),
     ...bundle,
+    tags: bundle.tags ?? [],
   }
 }
 
@@ -86,8 +96,8 @@ export function parseBackup(value: unknown): Bundle {
       `Invalid backup: ${issue?.path.join('.') || 'file'} ${issue?.message ?? ''}`.trim(),
     )
   }
-  const { workspaces, categories, groups, items, reminders } = result.data
-  return { workspaces, categories, groups, items, reminders }
+  const { workspaces, categories, groups, items, reminders, tags } = result.data
+  return { workspaces, categories, groups, items, reminders, tags }
 }
 
 /**
@@ -143,6 +153,26 @@ export function remapBundle(
       id: id(r.id),
       itemId: id(r.itemId),
     })),
+    // Tags keep their ids: `withAccountTags` gives them a place in the account.
+    tags: bundle.tags,
+  }
+}
+
+/**
+ * Puts a bundle's tags into an account that already has `existing` ones: a tag with a name the
+ * account has becomes that tag, the others are added while there is room (see `mergeTags`), and
+ * items lose only the tags that found no place.
+ */
+export function withAccountTags(bundle: Bundle, existing: readonly Tag[], clock: Clock): Bundle {
+  const { added, ids } = mergeTags(bundle.tags ?? [], existing, clock)
+  return {
+    ...bundle,
+    tags: added,
+    items: bundle.items.map((item) => {
+      if (!item.tagIds) return item
+      const tagIds = [...new Set(item.tagIds.flatMap((id) => ids.get(id) ?? []))]
+      return { ...item, tagIds: tagIds.slice(0, TAG_LIMITS.perItem) }
+    }),
   }
 }
 

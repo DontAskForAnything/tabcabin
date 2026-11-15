@@ -5,6 +5,7 @@ import type {
   Group,
   Item,
   Reminder,
+  Tag,
   Workspace,
 } from '@tabcabin/core'
 import { Dexie, type EntityTable, type Table } from 'dexie'
@@ -51,6 +52,7 @@ export class TabCabinDB extends Dexie {
   meta!: EntityTable<MetaRow, 'key'>
   outbox!: Table<OutboxEntry, [EntityType, string]>
   linkChecks!: EntityTable<LinkCheck, 'url'>
+  tags!: EntityTable<Tag, 'id'>
 
   constructor(name = 'tabcabin') {
     super(name)
@@ -66,6 +68,7 @@ export class TabCabinDB extends Dexie {
     })
     this.version(2).stores({ linkChecks: 'url, checkedAt' })
     this.version(3).stores({ activity: 'id' }).upgrade(moveClosedTabs)
+    this.version(4).stores({ tags: 'id, deletedAt' })
     // Data saved under the old app name moves over before the first query runs.
     this.on('ready', (vip) =>
       moveLegacyDatabase(vip).then(
@@ -85,4 +88,5 @@ export const tables = {
   item: () => db.items,
   reminder: () => db.reminders,
   activity: () => db.activity,
+  tag: () => db.tags,
 } satisfies Record<EntityType, () => Table>

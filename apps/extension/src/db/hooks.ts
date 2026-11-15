@@ -4,11 +4,12 @@ import {
   type Item,
   type Reminder,
   sortByPosition,
+  type Tag,
   type Workspace,
 } from '@tabcabin/core'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from './db'
-import { getCategories, getWorkspaces } from './repo'
+import { getCategories, getTags, getWorkspaces } from './repo'
 
 export interface BoardItem extends Item {
   /** Links inside a stack, notes pinned to a link (empty for other kinds). */
@@ -81,4 +82,9 @@ export function useBoard(categoryId: string | null | undefined): BoardGroup[] | 
     () => (categoryId ? loadBoard(categoryId) : Promise.resolve([] as BoardGroup[])),
     [categoryId],
   )
+}
+
+/** The account's tags in their order. */
+export function useTags(): Tag[] | undefined {
+  return useLiveQuery(getTags, [])
 }

@@ -1,6 +1,6 @@
-import { type Bundle, bundleStats, importTabExtend, isBackup, isBookmarksHtml, isOneTabExport, isTabExtendExport, isTobyExport, isUrlList, type Outline, outlineLinkCount, outlineToBundle, parseBackup, parseBookmarksHtml, parseToby, parseUrlList, positionsAtEnd, puts, remapBundle } from '@tabcabin/core'
+import { type Bundle, bundleStats, importTabExtend, isBackup, isBookmarksHtml, isOneTabExport, isTabExtendExport, isTobyExport, isUrlList, type Outline, outlineLinkCount, outlineToBundle, parseBackup, parseBookmarksHtml, parseToby, parseUrlList, positionsAtEnd, puts, remapBundle, withAccountTags } from '@tabcabin/core'
 import { applyChanges } from '@/db/apply'
-import { getWorkspaces } from '@/db/repo'
+import { getTags, getWorkspaces } from '@/db/repo'
 
 export class ImportError extends Error {}
 
@@ -61,7 +61,8 @@ export async function importFile(
         throw new ImportError((error as Error).message)
       }
       const positions = positionsAtEnd(await getWorkspaces(), parsed.workspaces.length)
-      bundle = remapBundle(parsed, { now, workspacePositions: positions })
+      const remapped = remapBundle(parsed, { now, workspacePositions: positions })
+      bundle = withAccountTags(remapped, await getTags(), { now })
     } else if (isTabExtendExport(value)) {
       bundle = importTabExtend(value, {
         now,
@@ -89,6 +90,7 @@ export async function importFile(
     ...puts('group', bundle.groups),
     ...puts('item', bundle.items),
     ...puts('reminder', bundle.reminders),
+    ...puts('tag', bundle.tags ?? []),
   ])
   const stats = bundleStats(bundle)
   return {

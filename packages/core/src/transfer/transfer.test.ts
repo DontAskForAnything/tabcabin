@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { makeCategory, makeGroup, makeItem, makeReminder, makeWorkspace } from '../factories'
+import {
+  makeCategory,
+  makeGroup,
+  makeItem,
+  makeReminder,
+  makeTag,
+  makeWorkspace,
+} from '../factories'
 import { sortByPosition } from '../position'
 import {
   type Bundle,
@@ -8,6 +15,7 @@ import {
   isBackup,
   parseBackup,
   remapBundle,
+  withAccountTags,
 } from './bundle'
 import { toBookmarksHtml, toCsv } from './exporters'
 import fixture from './fixtures/tabextend-export.json'
@@ -86,6 +94,42 @@ describe('backup', () => {
     expect(pinned.parentId).toBe(remapped.items.find((i) => i.title === 'A <b>')!.id)
     expect(remapped.groups[0]!.categoryId).toBe(remapped.categories[0]!.id)
     expect(remapped.reminders[0]!.itemId).toBe(remapped.items.find((i) => i.title === 'A <b>')!.id)
+  })
+
+  it('takes the tags of the items along and gives them a place in the account', () => {
+    const all = sample()
+    const work = makeTag({ name: 'Work', color: 'sky', position: 'a0' }, clock)
+    const unused = makeTag({ name: 'unused', color: 'rose', position: 'a1' }, clock)
+    const link = all.items.find((i) => i.title === 'A <b>')!
+    const tagged = {
+      ...all,
+      tags: [work, unused],
+      items: all.items.map((i) => (i === link ? { ...i, tagIds: [work.id] } : i)),
+    }
+    const backup = createBackup(collectBundle(tagged, [all.workspaces[0]!.id]), new Date(clock.now))
+    expect(backup.tags.map((t) => t.name)).toEqual(['Work'])
+    const parsed = parseBackup(JSON.parse(JSON.stringify(backup)))
+    const remapped = remapBundle(parsed, { now: clock.now, workspacePositions: ['b0'] })
+
+    // An account with "work" already: the item gets that tag, nothing new is made.
+    const mine = makeTag({ name: 'work', color: 'lime', position: 'a0' }, clock)
+    const merged = withAccountTags(remapped, [mine], clock)
+    expect(merged.tags).toEqual([])
+    expect(merged.items.find((i) => i.title === 'A <b>')!.tagIds).toEqual([mine.id])
+
+    // An account without it: the tag is added with its colour.
+    const fresh = withAccountTags(remapped, [], clock)
+    expect(fresh.tags!.map((t) => [t.name, t.color])).toEqual([['Work', 'sky']])
+    expect(fresh.items.find((i) => i.title === 'A <b>')!.tagIds).toEqual([fresh.tags![0]!.id])
+  })
+
+  it('reads backups made before tags', () => {
+    const backup = createBackup(
+      collectBundle(sample(), [sample().workspaces[0]!.id]),
+      new Date(clock.now),
+    )
+    const { tags: _, ...old } = backup
+    expect(parseBackup(old).tags).toEqual([])
   })
 
   it('writes the TabCabin format and still reads backups made under the old name', () => {

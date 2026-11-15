@@ -1,4 +1,11 @@
-import { makeCategory, makeGroup, makeLink, makeWorkspace, type Workspace } from '@tabcabin/core'
+import {
+  makeCategory,
+  makeGroup,
+  makeLink,
+  makeTag,
+  makeWorkspace,
+  type Workspace,
+} from '@tabcabin/core'
 import { describe, expect, it } from 'vitest'
 import { createUser } from '../src/users'
 import { testApp } from './helpers'
@@ -111,20 +118,35 @@ describe('sync', () => {
     const { push, pull } = await signedIn()
     const ws = makeWorkspace({ name: 'Work', position: 'a0' }, clock)
     const res = await push([
-      put('tag', { id: 't1', name: 'Later' }),
-      { type: 'purge', entity: 'tag', id: 't1' },
+      put('folder', { id: 'f1', name: 'Later' }),
+      { type: 'purge', entity: 'folder', id: 'f1' },
       put('workspace', { ...ws, notes: 'x'.repeat(70_000) }),
       put('workspace', ws),
     ])
     expect(await res.json()).toMatchObject({
       accepted: 1,
       rejected: [
-        { index: 0, entity: 'tag', message: 'unknown kind of row' },
-        { index: 1, entity: 'tag', message: 'unknown kind of row' },
+        { index: 0, entity: 'folder', message: 'unknown kind of row' },
+        { index: 1, entity: 'folder', message: 'unknown kind of row' },
         { index: 2, entity: 'workspace', message: 'row too large' },
       ],
     })
     expect((await pull()).changes.map((c) => c.id)).toEqual([ws.id])
+  })
+
+  it('keeps tags and the tags on items', async () => {
+    const { push, pull } = await signedIn()
+    const tag = makeTag({ name: 'Work', color: 'sky', position: 'a0' }, clock)
+    const link = {
+      ...makeLink({ groupId: 'g1', position: 'a0', url: 'https://a.example' }, clock),
+      tagIds: [tag.id],
+    }
+    const res = await push([put('tag', tag), put('item', link)])
+    expect(await res.json()).toMatchObject({ accepted: 2, rejected: [] })
+    const rows = (await pull()).changes.map((c) => c.row)
+    expect(rows).toEqual([tag, link])
+    const bad = await push([put('tag', { ...tag, color: 'neon' })])
+    expect(await bad.json()).toMatchObject({ accepted: 0, rejected: [{ entity: 'tag' }] })
   })
 
   it('keeps one activity row per computer, so the week adds up across them', async () => {

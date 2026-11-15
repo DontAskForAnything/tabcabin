@@ -7,7 +7,7 @@ import { type EntityType, entitySchemas, syncSchemas } from './schema'
  * have to be optional, and fields or values must not be renamed or removed.
  */
 const at = Date.UTC(2026, 9, 1)
-const rowsFrom1_2: Record<Exclude<EntityType, 'activity'>, Record<string, unknown>> = {
+const rowsFrom1_2: Record<Exclude<EntityType, 'activity' | 'tag'>, Record<string, unknown>> = {
   workspace: {
     id: 'w1',
     createdAt: at,
@@ -92,6 +92,12 @@ describe('rows from older versions', () => {
   it('keeps fields from newer versions when syncing', () => {
     const row = { ...rowsFrom1_2.item, pinned: true }
     expect(syncSchemas.item.parse(row)).toEqual(row)
+  })
+
+  it('takes items with tags and still takes items without them', () => {
+    const tagged = { ...rowsFrom1_2.item, tagIds: ['t1', 't2'] }
+    expect(entitySchemas.item.parse(tagged)).toEqual(tagged)
+    expect(entitySchemas.item.parse(rowsFrom1_2.item)).not.toHaveProperty('tagIds')
   })
 
   it('accepts the first activity rows and keeps counts added later', () => {

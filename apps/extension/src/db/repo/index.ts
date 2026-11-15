@@ -44,3 +44,4 @@ export {
 } from './reminders'
 export { clearAllData } from './clear'
 export { ensureInbox } from './inbox'
+export { deleteTag, getTags, setItemsTag, type TagError, tagItemsByName, updateTag } from './tags'

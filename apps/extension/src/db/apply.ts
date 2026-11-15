@@ -12,6 +12,7 @@ export const entityTables = () => [
   db.items,
   db.reminders,
   db.activity,
+  db.tags,
   db.outbox,
 ]
 

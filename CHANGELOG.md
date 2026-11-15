@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Shift-click on saved items picks every item between the last one picked and this one, and a
+  click anywhere else puts the picked items back
+
 ## [1.4.8] — 2026-11-14
 
 The right-click menu works on every item you picked with Shift, and the Edit link window can turn a

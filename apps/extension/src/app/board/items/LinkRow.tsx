@@ -21,7 +21,7 @@ export function LinkRow({
   const openModal = useUi((s) => s.openModal)
   const editReminder = useUi((s) => s.editReminder)
   const reminder = group.reminders[item.id]
-  const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const { selected, onClickCapture } = useSelectable(item, group.id)
   const showUrl = active.settings?.showUrls !== false
   const url = item.url ?? ''
   const broken = useBroken(item.url)

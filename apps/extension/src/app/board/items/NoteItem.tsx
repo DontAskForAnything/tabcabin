@@ -15,7 +15,7 @@ export function NoteItem({ item, group, actions }: ItemViewProps) {
   const t = useT()
   const editing = useUi((s) => s.editingNoteId === item.id)
   const setEditing = useUi((s) => s.setEditingNote)
-  const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const { selected, onClickCapture } = useSelectable(item, group.id)
   const reminder = group.reminders[item.id]
   const phase = useJustDone((s) => s.phases[item.id])
   // Shows as done from the click on, before the change is saved.

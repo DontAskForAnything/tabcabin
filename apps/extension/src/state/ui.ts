@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { pickItems } from './pickItems'
 
 export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data' | 'account'
 
@@ -45,10 +46,13 @@ interface UiState {
   flashItemId: string | null
   flashItem: (id: string | null) => void
 
-  /** Item ids selected with Shift/Cmd/Ctrl+click (all within one group). */
+  /** Item ids picked with Shift-click (all within one group). */
   selection: string[]
   selectionGroupId: string | null
-  toggleSelected: (id: string, groupId: string) => void
+  /** The item last Shift-clicked: the next Shift-click picks the range from it. */
+  selectionAnchor: string | null
+  /** Shift-click on an item; `order` is its list as shown (see `pickItems`). */
+  pickItem: (id: string, groupId: string, order: readonly string[]) => void
   clearSelection: () => void
 }
 
@@ -74,14 +78,17 @@ export const useUi = create<UiState>()((set, get) => ({
 
   selection: [],
   selectionGroupId: null,
-  toggleSelected: (id, groupId) => {
-    const { selection, selectionGroupId } = get()
-    if (selectionGroupId !== groupId) {
-      set({ selection: [id], selectionGroupId: groupId })
-      return
-    }
-    const next = selection.includes(id) ? selection.filter((s) => s !== id) : [...selection, id]
-    set({ selection: next, selectionGroupId: next.length ? groupId : null })
+  selectionAnchor: null,
+  pickItem: (id, groupId, order) => {
+    const { selection, selectionGroupId, selectionAnchor } = get()
+    // Picking in another group starts over.
+    const next =
+      selectionGroupId === groupId ? pickItems(selection, selectionAnchor, id, order) : [id]
+    set({
+      selection: next,
+      selectionGroupId: next.length ? groupId : null,
+      selectionAnchor: next.length ? id : null,
+    })
   },
-  clearSelection: () => set({ selection: [], selectionGroupId: null }),
+  clearSelection: () => set({ selection: [], selectionGroupId: null, selectionAnchor: null }),
 }))

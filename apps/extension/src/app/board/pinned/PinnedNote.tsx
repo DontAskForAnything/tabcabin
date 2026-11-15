@@ -22,7 +22,7 @@ export function PinnedNote({
 }) {
   const editing = useUi((s) => s.editingNoteId === item.id)
   const setEditing = useUi((s) => s.setEditingNote)
-  const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const { selected, onClickCapture } = useSelectable(item, group.id)
   const reminder = group.reminders[item.id]
   if (editing) return <PinnedNoteEditor item={item} actions={actions} size={size} />
   return (

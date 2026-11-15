@@ -1,15 +1,16 @@
 import type { MouseEvent } from 'react'
 import { useUi } from '@/state/ui'
+import { listOrder } from '../../dnd/apply'
 
-/** Shift+click toggles selection. Returns true when the click was consumed. */
-export function useSelectable(id: string, groupId: string) {
-  const selected = useUi((s) => s.selection.includes(id))
-  const toggle = useUi((s) => s.toggleSelected)
+/** Shift-click picks items (see `pickItems` in the UI state). The click handler returns true when it took the click. */
+export function useSelectable(item: { id: string; parentId: string | null }, groupId: string) {
+  const selected = useUi((s) => s.selection.includes(item.id))
+  const pick = useUi((s) => s.pickItem)
   const onClickCapture = (event: MouseEvent) => {
     if (!event.shiftKey) return false
     event.preventDefault()
     event.stopPropagation()
-    toggle(id, groupId)
+    pick(item.id, groupId, listOrder(groupId, item.parentId))
     return true
   }
   return { selected, onClickCapture }

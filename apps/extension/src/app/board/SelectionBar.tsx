@@ -7,12 +7,14 @@ import { openAsTabGroup } from '@/lib/browser'
 import { useUi } from '@/state/ui'
 import type { ActiveContext } from '../useActive'
 import { useBoardActions } from './actions'
+import { useSelectionClicks } from './useSelectionClicks'
 
 export function SelectionBar({ active }: { active: ActiveContext }) {
   const t = useT()
   const selection = useUi((s) => s.selection)
   const clear = useUi((s) => s.clearSelection)
   const actions = useBoardActions(active)
+  useSelectionClicks()
 
   const stack = async () => {
     const [target, ...rest] = selection
@@ -30,6 +32,7 @@ export function SelectionBar({ active }: { active: ActiveContext }) {
           initial={{ opacity: 0, y: 16, x: '-50%' }}
           animate={{ opacity: 1, y: 0, x: '-50%' }}
           exit={{ opacity: 0, y: 12, x: '-50%' }}
+          data-selection-bar
           className="fixed bottom-6 left-1/2 z-40 flex items-center gap-1.5 rounded-2xl bg-card p-1.5 pl-4 shadow-pop"
         >
           <span className="mr-2 text-[13px] font-semibold">

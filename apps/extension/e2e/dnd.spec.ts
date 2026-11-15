@@ -131,6 +131,24 @@ test('duplicates every item picked with Shift', async ({ context, extensionId })
   await expect(gmail).toHaveCount(1)
 })
 
+test('picks a range with Shift, and a click elsewhere puts it back', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const link = (name: RegExp) => links.getByRole('link', { name })
+  await link(/GitHub/).click({ modifiers: ['Shift'] })
+  await link(/YouTube/).click({ modifiers: ['Shift'] })
+  await expect(page.getByText('4 selected')).toBeVisible()
+  // Shift-click on a picked link puts it back; a click elsewhere puts them all back.
+  await link(/Gmail/).click({ modifiers: ['Shift'] })
+  await expect(page.getByText('3 selected')).toBeVisible()
+  await page.mouse.click(1420, 880)
+  await expect(page.getByText(/\d selected/)).toHaveCount(0)
+})
+
 test('pins several notes to a link and takes them off again', async ({ context, extensionId }) => {
   const page = await context.newPage()
   await openBoard(page, extensionId)

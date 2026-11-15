@@ -9,7 +9,7 @@ import { selectedRing, useSelectable } from './selection'
 export function ImageItem({ item, group, actions }: ItemViewProps) {
   const t = useT()
   const [failed, setFailed] = useState(false)
-  const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const { selected, onClickCapture } = useSelectable(item, group.id)
   return (
     <div
       onClickCapture={onClickCapture}

@@ -24,7 +24,7 @@ export function StackItem(props: ItemViewProps) {
   const { item, group, actions } = props
   const t = useT()
   const [open, setOpen] = useState(false)
-  const { selected, onClickCapture } = useSelectable(item.id, group.id)
+  const { selected, onClickCapture } = useSelectable(item, group.id)
   const renaming = useUi((s) => s.renameStackId === item.id)
   const setRename = useUi((s) => s.setRenameStack)
   const hosts = [...new Set(item.children.map((child) => displayHost(child.url)))].slice(0, 3)

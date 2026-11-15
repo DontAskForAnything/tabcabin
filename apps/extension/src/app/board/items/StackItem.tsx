@@ -19,6 +19,7 @@ import { ItemList } from '../ItemList'
 import { LinkRow } from './LinkRow'
 import { selectedRing, useSelectable } from './selection'
 import { StackTitle } from './StackTitle'
+import { ItemTags } from '../../tags/ItemTags'
 
 export function StackItem(props: ItemViewProps) {
   const { item, group, actions } = props
@@ -42,6 +43,7 @@ export function StackItem(props: ItemViewProps) {
         ))}
       </span>
       <StackTitle stack={item} hosts={hosts} renaming={renaming} />
+      <ItemTags tagIds={item.tagIds} />
       <ChevronDown
         size={16}
         className={cn('shrink-0 text-ink-3 transition-transform', open && 'rotate-180')}

@@ -9,6 +9,7 @@ import { LinkNotes } from '../pinned/LinkNotes'
 import type { ItemViewProps } from '../ItemView'
 import { BrokenMark, useBroken } from './BrokenMark'
 import { selectedRing, useSelectable } from './selection'
+import { ItemTags } from '../../tags/ItemTags'
 
 export function LinkRow({
   item,
@@ -58,11 +59,13 @@ export function LinkRow({
               {item.title || displayUrl(url)}
             </span>
             {broken && !showUrl && <BrokenMark />}
+            {!showUrl && <ItemTags tagIds={item.tagIds} />}
           </span>
           {showUrl && (
             <span className="flex items-center gap-1.5 text-[12.5px] text-ink-3">
               {broken && <BrokenMark />}
               <span className="truncate">{displayUrl(url)}</span>
+              <ItemTags tagIds={item.tagIds} />
             </span>
           )}
         </span>

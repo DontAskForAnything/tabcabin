@@ -10,6 +10,7 @@ import type { ItemViewProps } from '../ItemView'
 import { selectedRing, useSelectable } from './selection'
 import { NoteEditor } from './NoteEditor'
 import { noteColors } from './noteColors'
+import { ItemTags } from '../../tags/ItemTags'
 
 export function NoteItem({ item, group, actions }: ItemViewProps) {
   const t = useT()
@@ -74,6 +75,7 @@ export function NoteItem({ item, group, actions }: ItemViewProps) {
             <span className={cn(done && 'todo-strike', phase === 'striking' && 'todo-strike-draw')}>
               {item.text || t('note.placeholder')}
             </span>
+            <ItemTags tagIds={item.tagIds} className="mt-1 whitespace-normal" />
           </div>
         )}
       </div>

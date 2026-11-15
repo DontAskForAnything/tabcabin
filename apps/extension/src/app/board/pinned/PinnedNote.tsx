@@ -7,6 +7,7 @@ import { noteColors } from '../items/noteColors'
 import { selectedRing, useSelectable } from '../items/selection'
 import { PinnedBody, type PinnedSize } from './PinnedBody'
 import { PinnedNoteEditor } from './PinnedNoteEditor'
+import { ItemTags } from '../../tags/ItemTags'
 
 /** A note pinned to a link: a note of its own that can be ticked, edited, moved or taken off. */
 export function PinnedNote({
@@ -40,6 +41,7 @@ export function PinnedNote({
         onEdit={() => setEditing(item.id)}
         onUnpin={(from) => void actions.unpinNotes([item.id], from)}
       />
+      <ItemTags tagIds={item.tagIds} className="self-start" />
       {reminder && <ReminderChip reminder={reminder} className="self-start" />}
     </div>
   )

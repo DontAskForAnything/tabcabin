@@ -28,6 +28,7 @@ import { useUi } from '@/state/ui'
 import { offerUndo } from '@/state/undo'
 import type { BoardActions } from './actions'
 import { StackPickedItem } from './StackPickedItem'
+import { TagsSubmenu } from '../tags/TagsSubmenu'
 
 export interface GroupOption {
   id: string
@@ -120,6 +121,7 @@ export function ItemContextMenu({
             {t('item.reminder')}
           </ContextMenuItem>
         )}
+        <TagsSubmenu ids={chosenIds} />
         {targets.length > 0 && (
           <ContextMenuSub>
             <ContextMenuSubTrigger icon={<FolderInput size={14} />}>

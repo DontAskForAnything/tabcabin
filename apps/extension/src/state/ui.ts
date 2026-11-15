@@ -5,6 +5,7 @@ export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data' | 'acc
 
 type ModalState =
   | { type: 'linkEditor'; itemId: string }
+  | { type: 'tags'; itemIds: string[] }
   | { type: 'categories' }
   | { type: 'search' }
   | { type: 'workspaces' }

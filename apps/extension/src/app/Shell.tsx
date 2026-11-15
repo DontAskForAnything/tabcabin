@@ -15,32 +15,35 @@ import { type ActiveContext } from './useActive'
 import { useGlobalShortcuts } from './useGlobalShortcuts'
 import { NoteToolbar } from './board/noteToolbar/NoteToolbar'
 import { SelectionBar } from './board/SelectionBar'
+import { TagsProvider } from './tags/TagsContext'
 
 export function Shell({ surface, active }: { surface: Surface; active: ActiveContext }) {
   useGlobalShortcuts(active)
   useHashViews()
   const compact = surface === 'sidepanel'
   return (
-    <DndProvider active={active}>
-      <div className="flex min-h-screen bg-canvas text-[14px] text-ink">
-        {!compact && <TabsPanel active={active} />}
-        <main className="relative flex min-w-0 flex-1 flex-col">
-          <TopBar active={active} compact={compact} />
-          {active.ready && active.category && active.workspace ? (
-            <BoardView key={active.category.id} active={active} compact={compact} />
-          ) : (
-            <BoardSkeleton />
-          )}
-        </main>
-        <Modals active={active} />
-        {!compact && <Onboarding active={active} />}
-        {!compact && <FeedbackCard />}
-        {!compact && <TipCard active={active} />}
-        <NoteToolbar />
-        <SelectionBar active={active} />
-        <TrashZone enabled={active.settings?.trashZone ?? true} />
-      </div>
-    </DndProvider>
+    <TagsProvider>
+      <DndProvider active={active}>
+        <div className="flex min-h-screen bg-canvas text-[14px] text-ink">
+          {!compact && <TabsPanel active={active} />}
+          <main className="relative flex min-w-0 flex-1 flex-col">
+            <TopBar active={active} compact={compact} />
+            {active.ready && active.category && active.workspace ? (
+              <BoardView key={active.category.id} active={active} compact={compact} />
+            ) : (
+              <BoardSkeleton />
+            )}
+          </main>
+          <Modals active={active} />
+          {!compact && <Onboarding active={active} />}
+          {!compact && <FeedbackCard />}
+          {!compact && <TipCard active={active} />}
+          <NoteToolbar />
+          <SelectionBar active={active} />
+          <TrashZone enabled={active.settings?.trashZone ?? true} />
+        </div>
+      </DndProvider>
+    </TagsProvider>
   )
 }
 

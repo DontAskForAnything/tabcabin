@@ -9,6 +9,7 @@ import { ReminderChip } from '../reminders/ReminderChip'
 import { selectedRing, useSelectable } from '../board/items/selection'
 import { BrokenMark, useBroken } from '../board/items/BrokenMark'
 import { LinkNotes } from '../board/pinned/LinkNotes'
+import { ItemTags } from '../tags/ItemTags'
 
 /** Link shown as a tile in the Collections view. */
 export function LinkCard({ item, group, actions }: ItemViewProps) {
@@ -50,6 +51,7 @@ export function LinkCard({ item, group, actions }: ItemViewProps) {
           <span className="mt-0.5 flex items-center gap-1.5 text-[12px] text-ink-3">
             {broken && <BrokenMark />}
             <span className="truncate">{displayHost(url)}</span>
+            <ItemTags tagIds={item.tagIds} />
           </span>
         </span>
       </a>

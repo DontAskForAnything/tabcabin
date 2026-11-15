@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useT } from '@/i18n'
 import type { ItemViewProps } from '../ItemView'
 import { selectedRing, useSelectable } from './selection'
+import { ItemTags } from '../../tags/ItemTags'
 
 export function ImageItem({ item, group, actions }: ItemViewProps) {
   const t = useT()
@@ -39,8 +40,11 @@ export function ImageItem({ item, group, actions }: ItemViewProps) {
         )}
       </button>
       {(item.title || item.imageUrl) && (
-        <div className="truncate px-3 py-2 text-[12.5px] font-medium text-ink-2">
-          {item.title || displayHost(item.imageUrl)}
+        <div className="flex items-center gap-2 px-3 py-2 text-[12.5px] font-medium text-ink-2">
+          <span className="min-w-0 flex-1 truncate">
+            {item.title || displayHost(item.imageUrl)}
+          </span>
+          <ItemTags tagIds={item.tagIds} />
         </div>
       )}
       <IconButton

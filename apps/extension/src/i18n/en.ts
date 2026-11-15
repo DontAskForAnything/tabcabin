@@ -733,6 +733,21 @@ export const en = {
   'feedback.limit': 'That’s enough messages for today. Try again tomorrow.',
   'feedback.failed': 'Couldn’t send it. Try again in a moment.',
   'feedback.off': 'This sync server doesn’t take feedback.',
+  'tags.menu': 'Tags',
+  'tags.new': 'New tag…',
+  'tags.title': 'Tags',
+  'tags.titleMany': { one: 'Tags of {count} item', other: 'Tags of {count} items' },
+  'tags.placeholder': 'Add a tag…',
+  'tags.create': 'Add “{name}”',
+  'tags.remove': 'Remove {name}',
+  'tags.more': { one: '{count} more tag', other: '{count} more tags' },
+  'tags.left': '{count} of {max} tags used',
+  'tags.full': 'You have {max} tags, the most there can be. Remove one in Settings first.',
+  'tags.itemFull': {
+    one: 'An item can have up to {max} tags; {count} item was left as it was.',
+    other: 'An item can have up to {max} tags; {count} items were left as they were.',
+  },
+  'tags.none': 'No tags yet. Type a name to add the first one.',
 } satisfies Record<string, Message>
 
 export type MessageKey = keyof typeof en

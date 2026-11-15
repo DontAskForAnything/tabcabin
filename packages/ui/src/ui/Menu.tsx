@@ -175,6 +175,23 @@ export function ContextMenuItem({
   )
 }
 
+export function ContextMenuCheckboxItem({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof RadixContextMenu.CheckboxItem>) {
+  return (
+    <RadixContextMenu.CheckboxItem className={cn(itemClass, className)} {...props}>
+      <span className="flex w-4 justify-center text-accent-ink">
+        <RadixContextMenu.ItemIndicator>
+          <Check size={15} strokeWidth={2.6} />
+        </RadixContextMenu.ItemIndicator>
+      </span>
+      <span className="flex min-w-0 flex-1 items-center">{children}</span>
+    </RadixContextMenu.CheckboxItem>
+  )
+}
+
 export function ContextMenuSeparator({ className }: { className?: string }) {
   return <RadixContextMenu.Separator className={cn('mx-1.5 my-1.5 h-px bg-line', className)} />
 }

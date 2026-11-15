@@ -15,6 +15,7 @@ import { ShortcutsOverlay } from './ShortcutsOverlay'
 import { WeekDialog } from '../stats/WeekDialog'
 import { FeedbackDialog } from '../feedback/FeedbackDialog'
 import { ShareDialog } from './share/ShareDialog'
+import { TagsDialog } from '../tags/TagsDialog'
 
 export function Modals({ active }: { active: ActiveContext }) {
   const modal = useUi((s) => s.modal)
@@ -37,6 +38,7 @@ export function Modals({ active }: { active: ActiveContext }) {
         fromCard={modal?.type === 'feedback' && !!modal.fromCard}
       />
       <ShareDialog />
+      <TagsDialog />
       <ReminderEditor itemId={reminderItemId} settings={active.settings} />
       <ConfirmHost />
     </>

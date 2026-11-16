@@ -473,6 +473,7 @@ export const pl: Record<MessageKey, Message> = {
   'search.hintOpen': 'otwórz',
   'search.hintGoTo': 'pokaż na tablicy',
   'search.hintScope': 'zmień zakres',
+  'search.hintTag': 'po tagu',
   'search.actionOpen': 'Otwórz',
   'search.actionSwitch': 'Przełącz',
   'search.actionGoTo': 'Pokaż',

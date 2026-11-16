@@ -27,6 +27,19 @@ describe('search engine', () => {
     expect(search(docs, '   ')).toEqual([])
   })
 
+  it('finds items by tag with #, then by the words after it', () => {
+    const tagged = [
+      doc('w1', 'Sprint board', { tags: ['Work'], createdAt: 1 }),
+      doc('w2', 'Docker notes', { tags: ['work', 'later'], createdAt: 2 }),
+      doc('u', 'Docker lecture', { tags: ['uni'] }),
+      doc('n', 'Untagged docker'),
+    ]
+    expect(search(tagged, '#work').map((h) => h.doc.key)).toEqual(['w2', 'w1'])
+    expect(search(tagged, '#wo').map((h) => h.doc.key)).toEqual(['w2', 'w1'])
+    expect(search(tagged, '#work docker').map((h) => h.doc.key)).toEqual(['w2'])
+    expect(search(tagged, '#nothing')).toEqual([])
+  })
+
   it('returns title ranges for highlighting', () => {
     const [hit] = search(docs, 'compose')
     expect(

@@ -13,6 +13,7 @@ All notable changes to this project are documented here. The format follows
   right when a page is saved; up to 25 tags, 5 on an item
 - Filter by tag: a button next to Search shows only the items with the ticked tags; groups without
   any stay in place, and Escape or Clear filter shows everything again
+- Search finds tagged items with #: `#work` lists them, `#work docker` searches among them
 - Picked links can be stacked from their right-click menu (Stack 3 links), not only by dragging
 
 ### Fixed

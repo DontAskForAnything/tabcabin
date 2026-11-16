@@ -365,6 +365,7 @@ export const en = {
   'search.hintOpen': 'open',
   'search.hintGoTo': 'show on board',
   'search.hintScope': 'change scope',
+  'search.hintTag': 'by tag',
   'search.actionOpen': 'Open',
   'search.actionSwitch': 'Switch',
   'search.actionGoTo': 'Show',

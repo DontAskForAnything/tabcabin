@@ -25,6 +25,8 @@ export interface SearchDoc {
   tabId?: number
   windowId?: number
   favIconUrl?: string | null
+  /** Names of the item's tags (a link in a stack also has the stack's), for #tag searches. */
+  tags?: string[]
 }
 
 const live = <T extends { deletedAt: number | null }>(rows: readonly T[]) =>
@@ -38,12 +40,21 @@ function kindOf(item: Item): SearchKind {
 
 /** Every saved item (stacks flattened to their links), optionally limited to one workspace. */
 export async function loadItemDocs(workspaceId?: string): Promise<SearchDoc[]> {
-  const [workspaces, categories, groups, items] = await Promise.all([
+  const [workspaces, categories, groups, items, tags] = await Promise.all([
     db.workspaces.toArray(),
     db.categories.toArray(),
     db.groups.toArray(),
     db.items.toArray(),
+    db.tags.toArray(),
   ])
+  const tagNames = new Map(live(tags).map((tag) => [tag.id, tag.name]))
+  const byId = new Map(items.map((item) => [item.id, item]))
+  const namesOf = (item: Item) => {
+    const parent = item.parentId ? byId.get(item.parentId) : undefined
+    const ids = [...(item.tagIds ?? []), ...(parent?.kind === 'stack' ? (parent.tagIds ?? []) : [])]
+    const names = [...new Set(ids.flatMap((id) => tagNames.get(id) ?? []))]
+    return names.length ? { tags: names } : {}
+  }
   const wsMap = new Map(live(workspaces).map((ws) => [ws.id, ws]))
   const catMap = new Map(
     live(categories)
@@ -63,7 +74,7 @@ export async function loadItemDocs(workspaceId?: string): Promise<SearchDoc[]> {
     const groupName = `${group.emoji} ${group.title}`.trim()
     // The Inbox shows on every board, so its items belong to every workspace.
     if (group.id === INBOX_ID) {
-      docs.push({ ...itemDoc(item), groupId: group.id, path: groupName })
+      docs.push({ ...itemDoc(item), ...namesOf(item), groupId: group.id, path: groupName })
       continue
     }
     const category = catMap.get(group.categoryId)!
@@ -72,6 +83,7 @@ export async function loadItemDocs(workspaceId?: string): Promise<SearchDoc[]> {
     const path = [workspace.name, category.name, groupName]
     docs.push({
       ...itemDoc(item),
+      ...namesOf(item),
       groupId: group.id,
       categoryId: category.id,
       workspaceId: workspace.id,

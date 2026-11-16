@@ -114,6 +114,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                   t={t}
                   chosen={tags}
                   showCount={false}
+                  look="soft"
                   onAdd={(name) => {
                     const result = addDraftTag(tags, data?.tags ?? [], name)
                     if (result.ok) setTags(result.draft)

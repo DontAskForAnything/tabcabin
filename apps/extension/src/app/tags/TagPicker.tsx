@@ -19,6 +19,7 @@ export function TagPicker({
   autoFocus,
   id,
   showCount = true,
+  look = 'field',
 }: {
   /** Every tag of the account. */
   tags: readonly Tag[]
@@ -31,6 +32,8 @@ export function TagPicker({
   id?: string
   /** Says how many of the account's tags are used (only a problem is said without it). */
   showCount?: boolean
+  /** `field` matches the other fields of a form; `soft` the save window's grey boxes. */
+  look?: 'field' | 'soft'
 }) {
   const [text, setText] = useState('')
   const name = tagName(text)
@@ -53,7 +56,10 @@ export function TagPicker({
     <div className="flex flex-col gap-2.5">
       <label
         className={cn(
-          'flex min-h-10 flex-wrap items-center gap-1.5 rounded-[11px] bg-subtle-2 px-2.5 py-1.5 transition-shadow focus-within:shadow-[0_0_0_2px_var(--focus)]',
+          'flex flex-wrap items-center gap-1.5 transition-shadow',
+          look === 'field'
+            ? 'min-h-11 rounded-xl border border-line bg-card px-3 py-2 shadow-tile focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-[var(--focus)]'
+            : 'min-h-10 rounded-[11px] bg-subtle px-2.5 py-1.5 focus-within:shadow-[0_0_0_2px_var(--focus)]',
         )}
       >
         {chosen.map((tag) => (

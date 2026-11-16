@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-11-16
+
+Tags: give links, notes and to-dos coloured tags and filter the board by them. Shift-click picks a
+whole range of saved items, and picked links can be stacked from the right-click menu. Tags sync
+only with the sync server from this version, so update the server first.
+
 ### Added
 
 - Tags: coloured pills on links, notes, to-dos, stacks and pictures, set from the right-click
@@ -429,7 +435,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.8...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.8...v1.5.0
 [1.4.8]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...v1.4.8
 [1.4.7]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...v1.4.7
 [1.4.6]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.5...v1.4.6

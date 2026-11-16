@@ -15,11 +15,20 @@ import { GroupCard } from './group/GroupCard'
 import { InboxColumn } from './inbox/InboxColumn'
 import { useInbox } from './inbox/useInbox'
 import { NewGroupColumn } from './group/NewGroupColumn'
+import { filterByTags } from '../tags/filterBoard'
+import { useTagFilter } from '../tags/useTagFilter'
 
 export function BoardView({ active, compact }: { active: ActiveContext; compact: boolean }) {
   const t = useT()
-  const groups = useBoard(active.category?.id)
-  const inbox = useInbox()
+  const tagFilter = useTagFilter()
+  const board = useBoard(active.category?.id)
+  const groups = useMemo(() => board && filterByTags(board, tagFilter), [board, tagFilter])
+  const allInbox = useInbox()
+  // The Inbox only shows while something in it fits the filter.
+  const inbox = useMemo(() => {
+    const shown = allInbox && filterByTags([allInbox], tagFilter)[0]
+    return shown?.items.length ? shown : undefined
+  }, [allInbox, tagFilter])
   const broken = useBrokenLinks(active.settings?.checkLinks === true)
   const actions = useBoardActions(active)
   const insertAt = useGroupInsertIndex(active.category?.id ?? '')

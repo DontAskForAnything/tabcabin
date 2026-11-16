@@ -16,6 +16,7 @@ import { useGlobalShortcuts } from './useGlobalShortcuts'
 import { NoteToolbar } from './board/noteToolbar/NoteToolbar'
 import { SelectionBar } from './board/SelectionBar'
 import { TagsProvider } from './tags/TagsContext'
+import { TagFilterBar } from './tags/TagFilterBar'
 
 export function Shell({ surface, active }: { surface: Surface; active: ActiveContext }) {
   useGlobalShortcuts(active)
@@ -28,6 +29,7 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
           {!compact && <TabsPanel active={active} />}
           <main className="relative flex min-w-0 flex-1 flex-col">
             <TopBar active={active} compact={compact} />
+            <TagFilterBar compact={compact} />
             {active.ready && active.category && active.workspace ? (
               <BoardView key={active.category.id} active={active} compact={compact} />
             ) : (

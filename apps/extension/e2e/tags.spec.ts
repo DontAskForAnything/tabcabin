@@ -78,3 +78,50 @@ test('changes the tags of a link in its editor, saved only with Save', async ({
   await dialog.getByRole('button', { name: 'Save' }).click()
   await expect(github.getByText('code')).toHaveCount(0)
 })
+
+test('filters the board by tags from the button next to Search', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  // No tags yet: no filter button.
+  await expect(page.getByRole('button', { name: 'Filter by tag' })).toHaveCount(0)
+  const links = page.getByRole('region', { name: 'Quick links' })
+  const tag = async (name: RegExp, tagName: string) => {
+    await links.getByRole('link', { name }).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Tags' }).click()
+    await page.getByRole('menuitem', { name: 'New tag…' }).click()
+    await page.getByRole('textbox', { name: 'Add a tag…' }).fill(tagName)
+    await page.getByRole('textbox', { name: 'Add a tag…' }).press('Enter')
+    await page.getByRole('button', { name: 'Done' }).click()
+  }
+  await tag(/GitHub/, 'work')
+  await tag(/YouTube/, 'later')
+
+  await page.getByRole('button', { name: 'Filter by tag' }).click()
+  await page.getByRole('checkbox', { name: 'work' }).click()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Filter by tag, 1 on' })).toBeVisible()
+  await expect(links.getByRole('link', { name: /GitHub/ })).toBeVisible()
+  await expect(links.getByRole('link', { name: /Gmail/ })).toHaveCount(0)
+  await expect(links.getByRole('link', { name: /YouTube/ })).toHaveCount(0)
+  await expect(
+    page.getByRole('region', { name: 'To do' }).getByText('Nothing tagged here'),
+  ).toBeVisible()
+  // The filter stays when another category opens and back.
+  await page.getByRole('tab', { name: 'Read later' }).click()
+  await page.getByRole('tab', { name: 'Today' }).click()
+  await expect(links.getByRole('link', { name: /Gmail/ })).toHaveCount(0)
+
+  // A second tag shows its items too; × on the bar takes one off, Escape the rest.
+  await page.getByRole('button', { name: 'Filter by tag, 1 on' }).click()
+  await page.getByRole('checkbox', { name: 'later' }).click()
+  await page.keyboard.press('Escape')
+  await expect(links.getByRole('link', { name: /YouTube/ })).toBeVisible()
+  await page.getByRole('button', { name: 'Remove work' }).click()
+  await expect(links.getByRole('link', { name: /GitHub/ })).toHaveCount(0)
+  await page.keyboard.press('Escape')
+  await expect(links.getByRole('link', { name: /Gmail/ })).toBeVisible()
+  await expect(page.getByText('Showing')).toHaveCount(0)
+})

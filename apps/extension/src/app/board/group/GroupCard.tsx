@@ -71,6 +71,7 @@ export function GroupCard({
         'group/card relative flex shrink-0 flex-col rounded-card bg-card px-[18px] pt-5 pb-4 shadow-card transition-[box-shadow,background] duration-150 dense:px-3.5 dense:pt-3.5 dense:pb-3',
         compact && 'w-full',
         dnd.dragging && 'opacity-40',
+        group.filtered && group.items.length === 0 && 'opacity-60',
         dnd.receiving && 'bg-success-soft shadow-[0_0_0_2px_var(--success),var(--shadow-card)]',
         className,
       )}
@@ -115,6 +116,9 @@ export function GroupCard({
 
       {!group.collapsed && (
         <>
+          {group.filtered && group.items.length === 0 && (
+            <p className="px-2 pb-2 text-[12.5px] text-ink-3">{t('tags.nothingHere')}</p>
+          )}
           {children ?? (
             <ItemList
               groupId={group.id}

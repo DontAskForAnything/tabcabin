@@ -916,5 +916,16 @@ export const pl: Record<MessageKey, Message> = {
     many: 'Element może mieć najwyżej {max} tagów; {count} elementów zostało bez zmian.',
     other: 'Element może mieć najwyżej {max} tagów; {count} elementu zostało bez zmian.',
   },
+  'tags.nothingHere': 'Nic tu nie ma tych tagów',
+  'tags.filter': 'Filtruj po tagach',
+  'tags.filterCount': {
+    one: 'Filtruj po tagach, włączony {count}',
+    few: 'Filtruj po tagach, włączone {count}',
+    many: 'Filtruj po tagach, włączonych {count}',
+    other: 'Filtruj po tagach, włączone {count}',
+  },
+  'tags.showing': 'Widać',
+  'tags.clearFilter': 'Wyczyść filtr',
+  'tags.manage': 'Zarządzaj tagami…',
   'tags.none': 'Nie masz jeszcze tagów. Wpisz nazwę, żeby dodać pierwszy.',
 }

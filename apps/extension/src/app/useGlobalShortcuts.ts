@@ -15,6 +15,14 @@ export function useGlobalShortcuts(active: ActiveContext) {
         ui.clearSelection()
         return
       }
+      // Escape in a popup only closes it.
+      const inPopup =
+        event.target instanceof Element &&
+        !!event.target.closest('[data-radix-popper-content-wrapper], [role="dialog"]')
+      if (event.key === 'Escape' && ui.tagFilter.length && !ui.modal && !inPopup) {
+        ui.clearTagFilter()
+        return
+      }
       if (!settings) return
       const shortcuts = settings.shortcuts
       if (matchesShortcut(event, shortcuts.search)) {

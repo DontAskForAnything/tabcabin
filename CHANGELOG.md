@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows
 - Tags: coloured pills on links, notes, to-dos, stacks and pictures, set from the right-click
   menu (on one item or on every picked one), in a small tags window, in the Edit link window or
   right when a page is saved; up to 25 tags, 5 on an item
+- Filter by tag: a button next to Search shows only the items with the ticked tags; groups without
+  any stay in place, and Escape or Clear filter shows everything again
 - Picked links can be stacked from their right-click menu (Stack 3 links), not only by dragging
 
 ### Fixed

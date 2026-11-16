@@ -22,6 +22,8 @@ export interface BoardGroup extends Group {
   allItems: Item[]
   /** Live reminders by item id. */
   reminders: Record<string, Reminder>
+  /** Set while the board is filtered by tags: `items` are only the ones that fit. */
+  filtered?: true
 }
 
 const live = <T extends { deletedAt: number | null }>(rows: readonly T[]) =>

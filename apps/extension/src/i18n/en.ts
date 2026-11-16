@@ -747,6 +747,12 @@ export const en = {
     one: 'An item can have up to {max} tags; {count} item was left as it was.',
     other: 'An item can have up to {max} tags; {count} items were left as they were.',
   },
+  'tags.nothingHere': 'Nothing tagged here',
+  'tags.filter': 'Filter by tag',
+  'tags.filterCount': { one: 'Filter by tag, {count} on', other: 'Filter by tag, {count} on' },
+  'tags.showing': 'Showing',
+  'tags.clearFilter': 'Clear filter',
+  'tags.manage': 'Manage tags…',
   'tags.none': 'No tags yet. Type a name to add the first one.',
 } satisfies Record<string, Message>
 

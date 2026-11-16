@@ -10,6 +10,7 @@ import { CategoryTabs } from './CategoryTabs'
 import { MoreMenu } from './MoreMenu'
 import { SignInButton } from './SignInButton'
 import { WorkspaceMenu } from './WorkspaceMenu'
+import { TagFilterButton } from '../tags/TagFilterButton'
 
 /** Text labels give way to icons on narrower screens so the bar stays on one line. */
 const NARROW_HIDDEN = 'max-[1440px]:sr-only'
@@ -71,6 +72,7 @@ export function TopBar({ active, compact }: { active: ActiveContext; compact: bo
           )}
         </button>
       </Tooltip>
+      <TagFilterButton />
       <SignInButton compact={compact} hideLabel={NARROW_HIDDEN} />
       <IconButton
         label={t('reminders.button')}

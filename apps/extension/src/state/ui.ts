@@ -55,6 +55,11 @@ interface UiState {
   /** Shift-click on an item; `order` is its list as shown (see `pickItems`). */
   pickItem: (id: string, groupId: string, order: readonly string[]) => void
   clearSelection: () => void
+
+  /** Tags the board is filtered by: it shows only items with one of them. */
+  tagFilter: string[]
+  toggleTagFilter: (tagId: string) => void
+  clearTagFilter: () => void
 }
 
 export const useUi = create<UiState>()((set, get) => ({
@@ -92,4 +97,15 @@ export const useUi = create<UiState>()((set, get) => ({
     })
   },
   clearSelection: () => set({ selection: [], selectionGroupId: null, selectionAnchor: null }),
+
+  tagFilter: [],
+  toggleTagFilter: (tagId) => {
+    const { tagFilter } = get()
+    set({
+      tagFilter: tagFilter.includes(tagId)
+        ? tagFilter.filter((id) => id !== tagId)
+        : [...tagFilter, tagId],
+    })
+  },
+  clearTagFilter: () => set({ tagFilter: [] }),
 }))

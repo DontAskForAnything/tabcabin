@@ -95,6 +95,7 @@ export type ItemPatch = Partial<
     | 'metaImageUrl'
     | 'favIconUrl'
     | 'imageUrl'
+    | 'tagIds'
   >
 >
 

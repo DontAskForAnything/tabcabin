@@ -82,3 +82,19 @@ export async function deleteTag(id: string): Promise<Result> {
   const tag = await mustGet('tag', id)
   return commit([put('tag', touch(tag, { deletedAt: c.now }, c))])
 }
+
+/**
+ * The ids of tags named in a form, making the ones the account does not have yet (while it has
+ * room); names that found no place are left out.
+ */
+export async function tagIdsFor(names: readonly string[]): Promise<Result & { ids: string[] }> {
+  const ids: string[] = []
+  const undo: Result['undo'] = []
+  for (const name of names) {
+    const found = tagNamed(await getTags(), name, clock())
+    if (!found.ok) continue
+    if (found.created) undo.unshift(...(await commit([put('tag', found.tag)])).undo)
+    if (!ids.includes(found.tag.id)) ids.push(found.tag.id)
+  }
+  return { undo, ids }
+}

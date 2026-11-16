@@ -45,3 +45,36 @@ test('tags a link from its right-click menu and several picked ones at once', as
   await page.getByRole('button', { name: 'Done' }).click()
   await expect(gmail.getByText('Work')).toHaveCount(0)
 })
+
+test('changes the tags of a link in its editor, saved only with Save', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const github = page
+    .getByRole('region', { name: 'Quick links' })
+    .getByRole('link', { name: /GitHub/ })
+  const edit = async () => {
+    await github.click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Edit' }).click()
+    return page.getByRole('dialog', { name: 'Edit link' })
+  }
+  let dialog = await edit()
+  const field = dialog.getByRole('textbox', { name: 'Add a tag…' })
+  await field.fill('code')
+  await field.press('Enter')
+  await dialog.getByRole('button', { name: 'Cancel' }).click()
+  await expect(github.getByText('code')).toHaveCount(0)
+
+  dialog = await edit()
+  await dialog.getByRole('textbox', { name: 'Add a tag…' }).fill('code')
+  await dialog.getByRole('textbox', { name: 'Add a tag…' }).press('Enter')
+  await dialog.getByRole('button', { name: 'Save' }).click()
+  await expect(github.getByText('code')).toBeVisible()
+
+  dialog = await edit()
+  await dialog.getByRole('button', { name: 'Remove code' }).click()
+  await dialog.getByRole('button', { name: 'Save' }).click()
+  await expect(github.getByText('code')).toHaveCount(0)
+})

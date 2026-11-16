@@ -1,12 +1,15 @@
 import { ListTodo, Trash } from 'lucide-react'
-import { NOTE_COLORS, type NoteColor, withProtocol } from '@tabcabin/core'
+import { NOTE_COLORS, type NoteColor, TAG_LIMITS, withProtocol } from '@tabcabin/core'
 import { Button, cn, Field, Modal, Textarea, toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { db } from '@/db/db'
-import { deleteItems, updateItem } from '@/db/repo'
+import { deleteItems, tagIdsFor, updateItem } from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
+import { addDraftTag, type DraftTag, draftFrom } from '../tags/draftTags'
+import { TagPicker } from '../tags/TagPicker'
+import { useTagList } from '../tags/TagsContext'
 
 export function LinkEditor({ itemId }: { itemId: string | null }) {
   const t = useT()
@@ -18,6 +21,8 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
   const [color, setColor] = useState<NoteColor | null>(null)
   const [todo, setTodo] = useState(false)
   const [image, setImage] = useState('')
+  const { tags, byId } = useTagList()
+  const [draft, setDraft] = useState<DraftTag[]>([])
 
   useEffect(() => {
     if (!item) return
@@ -27,10 +32,21 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
     setColor(item.color)
     setTodo(item.todo)
     setImage(item.metaImageUrl ?? '')
+    setDraft(draftFrom((item.tagIds ?? []).flatMap((id) => byId.get(id) ?? [])))
+    // Only when another item opens (or this one changes), not when the tags list does.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item])
+
+  const addTag = (name: string) => {
+    const result = addDraftTag(draft, tags, name)
+    if (result.ok) setDraft(result.draft)
+    else if (result.error === 'account')
+      toast({ title: t('tags.full', { max: TAG_LIMITS.perAccount }), tone: 'error' })
+  }
 
   const save = async () => {
     if (!item) return
+    const { ids: tagIds } = await tagIdsFor(draft.map((tag) => tag.name))
     await updateItem(item.id, {
       title: title.trim(),
       url: url.trim() ? withProtocol(url) : item.url,
@@ -40,6 +56,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
       todo: todo && !!text.trim(),
       done: todo && !!text.trim() && item.done,
       metaImageUrl: image.trim() || null,
+      tagIds,
     })
     toast({ title: t('editor.saved'), tone: 'success' })
     close()
@@ -136,6 +153,16 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
               {t('note.todo')}
             </button>
           </div>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[13px] font-semibold text-ink-2">{t('tags.title')}</span>
+          <TagPicker
+            tags={tags}
+            t={t}
+            chosen={draft}
+            onAdd={addTag}
+            onRemove={(tag) => setDraft(draft.filter((other) => other.id !== tag.id))}
+          />
         </div>
         <Field
           label={t('editor.image')}

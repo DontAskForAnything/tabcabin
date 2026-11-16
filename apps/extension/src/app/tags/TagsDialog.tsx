@@ -37,7 +37,7 @@ export function TagsDialog() {
     }
     tellFull(result.full)
   }
-  const remove = async (tag: Tag) => {
+  const remove = async (tag: Pick<Tag, 'id'>) => {
     if (!ids) return
     await setItemsTag(ids, tag.id, false)
   }
@@ -56,6 +56,8 @@ export function TagsDialog() {
     >
       {ids && (
         <TagPicker
+          tags={tags}
+          t={t}
           chosen={chosen}
           onAdd={(name) => void add(name)}
           onRemove={(tag) => void remove(tag)}

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import type { MessageKey } from '@/i18n'
 import { translate } from '@/i18n/translate'
 import type { PopoverSaveRequest } from '@/messages'
+import { addDraftTag, type DraftTag } from '@/app/tags/draftTags'
+import { TagPicker } from '@/app/tags/TagPicker'
 import { AlreadySaved } from './AlreadySaved'
 import { NoteFields } from './NoteFields'
 import { PageSummary } from './PageSummary'
@@ -25,6 +27,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
   const [todo, setTodo] = useState(false)
   const [remind, setRemind] = useState<TimePreset | null>(null)
   const [closeTab, setCloseTab] = useState(false)
+  const [tags, setTags] = useState<DraftTag[]>([])
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [savedTo, setSavedTo] = useState('')
   const textarea = useRef<HTMLTextAreaElement>(null)
@@ -48,6 +51,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
       note: note.trim() ? { text: note, color, todo } : null,
       remindAt: remind ? presetTime(remind, Date.now()) : null,
       closeTab,
+      tags: tags.map((tag) => tag.name),
     }
     const response = (await browser.runtime.sendMessage(request)) as {
       ok: boolean
@@ -103,6 +107,20 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                 textarea={textarea}
                 t={t}
               />
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[12px] font-semibold text-ink-3">{t('tags.title')}</span>
+                <TagPicker
+                  tags={data?.tags ?? []}
+                  t={t}
+                  chosen={tags}
+                  showCount={false}
+                  onAdd={(name) => {
+                    const result = addDraftTag(tags, data?.tags ?? [], name)
+                    if (result.ok) setTags(result.draft)
+                  }}
+                  onRemove={(tag) => setTags(tags.filter((other) => other.id !== tag.id))}
+                />
+              </div>
               <TargetPicker
                 data={data}
                 page={page}

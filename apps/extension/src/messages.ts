@@ -41,6 +41,8 @@ export interface PopoverSaveRequest {
   /** One-time reminder for the saved link (or its to-do). */
   remindAt: number | null
   closeTab: boolean
+  /** Names of tags for the saved link (made when the account does not have them yet). */
+  tags?: string[]
 }
 
 /** Ask the background to synchronize now (e.g. when a board page opens). */

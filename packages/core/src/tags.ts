@@ -30,7 +30,7 @@ export function findTag(tags: readonly Tag[], name: string): Tag | undefined {
 }
 
 /** The first colour no tag has yet, then round again. */
-export function nextTagColor(tags: readonly Tag[]): NoteColor {
+export function nextTagColor(tags: readonly Pick<Tag, 'color'>[]): NoteColor {
   const used = new Set(tags.map((tag) => tag.color))
   return NOTE_COLORS.find((color) => !used.has(color)) ?? NOTE_COLORS[tags.length % 9]!
 }

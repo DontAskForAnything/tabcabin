@@ -2,30 +2,36 @@ import { findTag, type Tag, TAG_LIMITS, tagName } from '@tabcabin/core'
 import { cn } from '@tabcabin/ui'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { useT } from '@/i18n'
+import type { Translate } from '@/i18n'
 import { TagChip } from './TagChip'
-import { useTagList } from './TagsContext'
 
 /**
  * Picks tags: the chosen ones as pills with ×, a field that adds a tag by name (an existing one or
- * a new one), and the other tags to click.
+ * a new one), and the other tags to click. It reads nothing itself, so the save popover on web
+ * pages can use it too.
  */
 export function TagPicker({
+  tags,
+  t,
   chosen,
   onAdd,
   onRemove,
   autoFocus,
   id,
+  showCount = true,
 }: {
-  chosen: readonly Tag[]
+  /** Every tag of the account. */
+  tags: readonly Tag[]
+  t: Translate
+  chosen: readonly Pick<Tag, 'id' | 'name' | 'color'>[]
   /** A name typed in the field, or an existing tag clicked. */
   onAdd: (name: string) => void
-  onRemove: (tag: Tag) => void
+  onRemove: (tag: Pick<Tag, 'id' | 'name' | 'color'>) => void
   autoFocus?: boolean
   id?: string
+  /** Says how many of the account's tags are used (only a problem is said without it). */
+  showCount?: boolean
 }) {
-  const t = useT()
-  const { tags } = useTagList()
   const [text, setText] = useState('')
   const name = tagName(text)
   const chosenIds = new Set(chosen.map((tag) => tag.id))
@@ -102,13 +108,15 @@ export function TagPicker({
           ))}
         </div>
       )}
-      <p className="text-[12px] text-ink-3">
-        {isNew && accountFull
-          ? t('tags.full', { max: TAG_LIMITS.perAccount })
-          : tags.length === 0
-            ? t('tags.none')
-            : t('tags.left', { count: tags.length, max: TAG_LIMITS.perAccount })}
-      </p>
+      {(showCount || (isNew && accountFull)) && (
+        <p className="text-[12px] text-ink-3">
+          {isNew && accountFull
+            ? t('tags.full', { max: TAG_LIMITS.perAccount })
+            : tags.length === 0
+              ? t('tags.none')
+              : t('tags.left', { count: tags.length, max: TAG_LIMITS.perAccount })}
+        </p>
+      )}
     </div>
   )
 }

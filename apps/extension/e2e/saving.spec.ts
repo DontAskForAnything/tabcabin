@@ -203,6 +203,33 @@ test('pins a to-do from the popover to the saved link', async ({ context, extens
   await expect(link.getByRole('checkbox', { name: 'Mark as done' })).toBeVisible()
 })
 
+test('tags the page in the popover', async ({ context, extensionId }) => {
+  const board = await openBoard(context, extensionId)
+  const page = await serveArticle(context)
+  const sw = await worker(context)
+  const tab = await tabFor(sw, 'https://site.test/article')
+  await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = page.getByRole('dialog', { name: 'TabCabin' })
+  const field = popover.getByRole('textbox', { name: 'Add a tag…' })
+  await field.fill('backups')
+  await field.press('Enter')
+  await field.fill('#Ops')
+  await field.press('Enter')
+  await popover.getByRole('button', { name: 'Remove backups' }).click()
+  await field.fill('sqlite')
+  await field.press('Enter')
+  await popover.getByRole('button', { name: /Quick links/ }).click()
+  await popover.getByRole('button', { name: /Welcome/ }).click()
+  await popover.getByRole('button', { name: 'Save' }).click()
+  await expect(popover.getByText(/Saved to/)).toBeVisible()
+  const link = board
+    .getByRole('region', { name: 'Welcome' })
+    .getByRole('link', { name: /Backup SQLite nightly/ })
+  await expect(link.getByText('Ops')).toBeVisible()
+  await expect(link.getByText('sqlite', { exact: true })).toBeVisible()
+  await expect(link.getByText('backups', { exact: true })).toHaveCount(0)
+})
+
 test('keeps typing in the popover away from the page shortcuts', async ({ context }) => {
   // Like GitHub: "s" focuses the search box unless you are typing in a field.
   const shortcuts = `<!doctype html><title>Shortcuts page</title><input id="search">

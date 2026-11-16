@@ -5,10 +5,11 @@ import {
   minutesOfDay,
   normalizeUrl,
   sortByPosition,
+  type Tag,
 } from '@tabcabin/core'
 import { db } from '@/db/db'
 import { loadOverview } from '@/db/overview'
-import { setReminder } from '@/db/repo'
+import { getTags, setReminder, tagIdsFor, updateItem } from '@/db/repo'
 import { translate } from '@/i18n/translate'
 import { getSettings } from '@/settings/settings'
 import type { RuntimeMessage } from '@/messages'
@@ -31,14 +32,17 @@ export interface PopoverData {
     }[]
   }[]
   savedIn: { itemId: string; path: string; text: string; color: string | null }[]
+  /** The account's tags, to pick from. */
+  tags: Tag[]
 }
 
 async function popoverData(url: string): Promise<PopoverData> {
-  const [settings, overview, groups, items] = await Promise.all([
+  const [settings, overview, groups, items, tags] = await Promise.all([
     getSettings(),
     loadOverview(),
     db.groups.toArray(),
     db.items.toArray(),
+    getTags(),
   ])
   const liveGroups = sortByPosition(groups.filter((g) => g.deletedAt === null))
   const key = normalizeUrl(url)
@@ -86,6 +90,7 @@ async function popoverData(url: string): Promise<PopoverData> {
       })),
     })),
     savedIn,
+    tags,
   }
 }
 
@@ -137,6 +142,10 @@ export function handlePopoverMessage(
         favIconUrl: message.page.favIconUrl,
         note: message.note,
       })
+      if (message.tags?.length && saved.itemId) {
+        const { ids } = await tagIdsFor(message.tags)
+        await updateItem(saved.itemId, { tagIds: ids })
+      }
       if (message.remindAt !== null && saved.itemId)
         await setReminder(saved.itemId, {
           dueAt: message.remindAt,

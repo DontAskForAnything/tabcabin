@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows
 - Filter by tag: a button next to Search shows only the items with the ticked tags; groups without
   any stay in place, and Escape or Clear filter shows everything again
 - Search finds tagged items with #: `#work` lists them, `#work docker` searches among them
+- Settings → Tags (also Manage tags… in the filter) renames tags, changes their colour, shows how
+  many items have each and removes them, with undo
 - Picked links can be stacked from their right-click menu (Stack 3 links), not only by dragging
 
 ### Fixed

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { pickItems } from './pickItems'
 
-export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'data' | 'account'
+export type SettingsTab = 'general' | 'appearance' | 'shortcuts' | 'tags' | 'data' | 'account'
 
 type ModalState =
   | { type: 'linkEditor'; itemId: string }

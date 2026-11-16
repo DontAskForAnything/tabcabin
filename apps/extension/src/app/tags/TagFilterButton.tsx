@@ -1,10 +1,13 @@
 import { Check, ListFilter } from 'lucide-react'
-import { cn, Popover, PopoverContent, PopoverTrigger } from '@tabcabin/ui'
+import { cn, Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@tabcabin/ui'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
 import { TagChip } from './TagChip'
 import { useTagList } from './TagsContext'
 import { useTagFilter } from './useTagFilter'
+
+const FOOT =
+  'flex h-9 w-full items-center rounded-[10px] px-2 text-[13px] text-ink-2 hover:bg-subtle hover:text-ink'
 
 /**
  * The tag filter next to Search: a round button (filled while a filter is on, with how many tags)
@@ -16,6 +19,7 @@ export function TagFilterButton() {
   const filter = useTagFilter()
   const toggle = useUi((s) => s.toggleTagFilter)
   const clear = useUi((s) => s.clearTagFilter)
+  const openModal = useUi((s) => s.openModal)
   if (tags.length === 0) return null
   const on = filter.size > 0
   const label = on ? t('tags.filterCount', { count: filter.size }) : t('tags.filter')
@@ -66,18 +70,21 @@ export function TagFilterButton() {
             )
           })}
         </div>
+        <div className="mx-1.5 my-1.5 h-px bg-line" />
         {on && (
-          <>
-            <div className="mx-1.5 my-1.5 h-px bg-line" />
-            <button
-              type="button"
-              onClick={clear}
-              className="flex h-9 w-full items-center rounded-[10px] px-2 text-[13px] text-ink-2 hover:bg-subtle hover:text-ink"
-            >
-              {t('tags.clearFilter')}
-            </button>
-          </>
+          <button type="button" onClick={clear} className={FOOT}>
+            {t('tags.clearFilter')}
+          </button>
         )}
+        <PopoverClose asChild>
+          <button
+            type="button"
+            onClick={() => openModal({ type: 'settings', tab: 'tags' })}
+            className={FOOT}
+          >
+            {t('tags.manage')}
+          </button>
+        </PopoverClose>
       </PopoverContent>
     </Popover>
   )

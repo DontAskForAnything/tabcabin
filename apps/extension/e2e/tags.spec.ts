@@ -146,3 +146,47 @@ test('finds tagged items with # in search', async ({ context, extensionId }) => 
   await page.keyboard.type(' gmail')
   await expect(dialog.getByRole('button', { name: /YouTube/ })).toHaveCount(0)
 })
+
+test('renames, recolours and removes tags in Settings', async ({ context, extensionId }) => {
+  const page = await context.newPage()
+  await openBoard(page, extensionId)
+  const github = page
+    .getByRole('region', { name: 'Quick links' })
+    .getByRole('link', { name: /GitHub/ })
+  await github.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Tags' }).click()
+  await page.getByRole('menuitem', { name: 'New tag…' }).click()
+  await page.getByRole('textbox', { name: 'Add a tag…' }).fill('work')
+  await page.getByRole('textbox', { name: 'Add a tag…' }).press('Enter')
+  await page.getByRole('button', { name: 'Done' }).click()
+
+  await page.getByRole('button', { name: 'Filter by tag' }).click()
+  await page.getByRole('button', { name: 'Manage tags…' }).click()
+  const settings = page.getByRole('dialog', { name: 'Settings' })
+  await expect(settings.getByRole('heading', { name: 'Tags' })).toBeVisible()
+  await expect(settings.getByText('1 item')).toBeVisible()
+
+  await settings.getByRole('textbox', { name: 'Add a tag…' }).fill('uni')
+  await settings.getByRole('button', { name: 'Add tag' }).click()
+  await expect(settings.getByRole('textbox', { name: 'Name of uni' })).toBeVisible()
+  // A name in use stays with its tag.
+  const work = settings.getByRole('textbox', { name: 'Name of work' })
+  await work.fill('UNI')
+  await work.press('Enter')
+  await expect(page.getByText('There is a tag with this name already.')).toBeVisible()
+  await expect(work).toHaveValue('work')
+  await work.fill('Job')
+  await work.press('Enter')
+  // The board sits behind the dialog (hidden from the accessibility tree), so look at the pill.
+  const chip = page.locator('[data-dnd-item]', { hasText: 'GitHub' }).locator('[data-tag-chip]')
+  await expect(chip).toHaveText('Job')
+
+  await settings.getByRole('button', { name: 'Colour of Job' }).click()
+  await page.getByRole('button', { name: 'Green' }).click()
+  await expect(chip).toHaveAttribute('style', /lime/)
+
+  await settings.getByRole('button', { name: 'Remove the tag Job' }).click()
+  await expect(chip).toHaveCount(0)
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(chip).toHaveText('Job')
+})

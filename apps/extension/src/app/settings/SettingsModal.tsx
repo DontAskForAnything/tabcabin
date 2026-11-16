@@ -1,4 +1,4 @@
-import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, X } from 'lucide-react'
+import { Cloud, Database, Keyboard, Palette, SlidersHorizontal, Tag, X } from 'lucide-react'
 import { cn, IconButton, Modal, Tabs } from '@tabcabin/ui'
 import { useRef, useState, type ReactNode } from 'react'
 import { CabinMark } from '@/app/shared/CabinMark'
@@ -12,6 +12,7 @@ import { AppearanceSettings } from './AppearanceSettings'
 import { DataSettings } from './data/DataSettings'
 import { GeneralSettings } from './GeneralSettings'
 import { ShortcutSettings } from './ShortcutSettings'
+import { TagSettings } from './tags/TagSettings'
 
 const FOOTER_LINK =
   'w-fit rounded-sm underline-offset-2 outline-none hover:text-ink-2 hover:underline focus-visible:shadow-[0_0_0_2px_var(--focus)]'
@@ -20,6 +21,7 @@ const TABS: { value: SettingsTab; icon: ReactNode }[] = [
   { value: 'general', icon: <SlidersHorizontal size={16} /> },
   { value: 'appearance', icon: <Palette size={16} /> },
   { value: 'shortcuts', icon: <Keyboard size={16} /> },
+  { value: 'tags', icon: <Tag size={16} /> },
   { value: 'data', icon: <Database size={16} /> },
   { value: 'account', icon: <Cloud size={16} /> },
 ]
@@ -118,6 +120,9 @@ export function SettingsModal({ active }: { active: ActiveContext }) {
           </Tabs.Content>
           <Tabs.Content value="shortcuts" className="outline-none">
             <ShortcutSettings active={active} recording={recording} />
+          </Tabs.Content>
+          <Tabs.Content value="tags" className="outline-none">
+            <TagSettings />
           </Tabs.Content>
           <Tabs.Content value="data" className="outline-none">
             <DataSettings active={active} />

@@ -10,6 +10,7 @@ import { Onboarding } from './onboarding/Onboarding'
 import type { Surface } from './mount'
 import { TabsPanel } from './panel/TabsPanel'
 import { TipCard } from './tips/TipCard'
+import { StickyTop } from './topbar/StickyTop'
 import { TopBar } from './topbar/TopBar'
 import { type ActiveContext } from './useActive'
 import { useGlobalShortcuts } from './useGlobalShortcuts'
@@ -28,8 +29,10 @@ export function Shell({ surface, active }: { surface: Surface; active: ActiveCon
         <div className="flex min-h-screen bg-canvas text-[14px] text-ink">
           {!compact && <TabsPanel active={active} />}
           <main className="relative flex min-w-0 flex-1 flex-col">
-            <TopBar active={active} compact={compact} />
-            <TagFilterBar compact={compact} />
+            <StickyTop>
+              <TopBar active={active} compact={compact} />
+              <TagFilterBar compact={compact} />
+            </StickyTop>
             {active.ready && active.category && active.workspace ? (
               <BoardView key={active.category.id} active={active} compact={compact} />
             ) : (

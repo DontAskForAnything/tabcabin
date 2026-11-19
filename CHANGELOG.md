@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The top bar stays in view while a long board or collections page scrolls
+
 ## [1.5.0] — 2026-11-16
 
 Tags: give links, notes and to-dos coloured tags and filter the board by them. Shift-click picks a

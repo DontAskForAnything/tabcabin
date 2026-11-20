@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.5.1] — 2026-11-20
+
 ### Fixed
 
 - The top bar stays in view while a long board or collections page scrolls
@@ -439,7 +441,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.8...v1.5.0
 [1.4.8]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...v1.4.8
 [1.4.7]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.6...v1.4.7

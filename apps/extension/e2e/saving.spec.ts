@@ -334,3 +334,50 @@ test('shows the page favicon for a saved page', async ({ context, extensionId })
   await expect(link).toBeVisible()
   await expect(link.locator('img')).toHaveCount(1)
 })
+
+test('starts a new note with the colour used last, in Edit link and in the popover', async ({
+  context,
+  extensionId,
+}) => {
+  const board = await openBoard(context, extensionId)
+  const quickLinks = board.getByRole('region', { name: 'Quick links' })
+  const edit = async (name: RegExp) => {
+    await quickLinks.getByRole('link', { name }).click({ button: 'right' })
+    await board.getByRole('menuitem', { name: 'Edit' }).click()
+    return board.getByRole('dialog', { name: 'Edit link' })
+  }
+
+  let dialog = await edit(/GitHub/)
+  await expect(dialog.getByRole('button', { name: 'Blue' })).toHaveAttribute('aria-pressed', 'true')
+  await dialog.getByRole('textbox', { name: 'Note' }).fill('Review pull requests')
+  await dialog.getByRole('button', { name: 'Lilac' }).click()
+  await dialog.getByRole('button', { name: 'Save' }).click()
+  await expect(dialog).toHaveCount(0)
+
+  dialog = await edit(/Gmail/)
+  await expect(dialog.getByRole('button', { name: 'Lilac' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  await dialog.getByRole('button', { name: 'Cancel' }).click()
+
+  const page = await serveArticle(context)
+  const sw = await worker(context)
+  const tab = await tabFor(sw, 'https://site.test/article')
+  await sw.evaluate((tab) => tabcabin.togglePopover(tab), tab)
+  const popover = page.getByRole('dialog', { name: 'TabCabin' })
+  await expect(popover.getByRole('button', { name: 'Lilac' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  await popover.getByRole('textbox', { name: 'Note' }).fill('Read the cron section')
+  await popover.getByRole('button', { name: 'Teal' }).click()
+  await popover.getByRole('button', { name: /Quick links/ }).click()
+  await popover.getByRole('button', { name: /Welcome/ }).click()
+  await popover.getByRole('button', { name: 'Save' }).click()
+  await expect(popover.getByText(/Saved to/)).toBeVisible()
+
+  await board.bringToFront()
+  dialog = await edit(/Gmail/)
+  await expect(dialog.getByRole('button', { name: 'Teal' })).toHaveAttribute('aria-pressed', 'true')
+})

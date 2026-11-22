@@ -4,6 +4,7 @@ import { Button, cn, Field, Modal, Textarea, toast } from '@tabcabin/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect, useState } from 'react'
 import { db } from '@/db/db'
+import { getLastNoteColor, rememberNoteColor } from '@/db/lastNoteColor'
 import { deleteItems, tagIdsFor, updateItem } from '@/db/repo'
 import { useT } from '@/i18n'
 import { useUi } from '@/state/ui'
@@ -23,19 +24,22 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
   const [image, setImage] = useState('')
   const { tags, byId } = useTagList()
   const [draft, setDraft] = useState<DraftTag[]>([])
+  // undefined while it loads, so the form fills once it is known.
+  const lastColor = useLiveQuery(getLastNoteColor, [])
 
   useEffect(() => {
-    if (!item) return
+    if (!item || lastColor === undefined) return
     setTitle(item.title)
     setUrl(item.url ?? '')
     setText(item.text)
-    setColor(item.color)
+    // A link without a note yet starts with the colour used last.
+    setColor(item.color ?? (item.text.trim() ? null : lastColor))
     setTodo(item.todo)
     setImage(item.metaImageUrl ?? '')
     setDraft(draftFrom((item.tagIds ?? []).flatMap((id) => byId.get(id) ?? [])))
     // Only when another item opens (or this one changes), not when the tags list does.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item])
+  }, [item, lastColor === undefined])
 
   const addTag = (name: string) => {
     const result = addDraftTag(draft, tags, name)
@@ -58,6 +62,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
       metaImageUrl: image.trim() || null,
       tagIds,
     })
+    if (text.trim() && color) await rememberNoteColor(color)
     toast({ title: t('editor.saved'), tone: 'success' })
     close()
   }
@@ -130,6 +135,7 @@ export function LinkEditor({ itemId }: { itemId: string | null }) {
                 key={c}
                 type="button"
                 aria-label={t(`color.${c}`)}
+                aria-pressed={(color ?? 'sky') === c}
                 onClick={() => setColor(c)}
                 className={cn(
                   'size-6 rounded-[8px] shadow-[inset_0_0_0_1px_rgb(20_24_40/0.1)]',

@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- A new note in Edit link or the save window starts with the colour used last in this browser
+
 ## [1.5.1] — 2026-11-20
 
 ### Fixed

@@ -50,6 +50,7 @@ export function NoteFields({
         <button
           type="button"
           aria-label={t('note.noColor')}
+          aria-pressed={!color}
           onClick={() => onColor(null)}
           className={cn(
             'size-[22px] rounded-[7px] bg-subtle shadow-[inset_0_0_0_1px_rgb(20_24_40/0.1)]',
@@ -61,6 +62,7 @@ export function NoteFields({
             key={c}
             type="button"
             aria-label={t(`color.${c}`)}
+            aria-pressed={color === c}
             onClick={() => onColor(c)}
             style={{ background: `var(--note-${c}-bg)` }}
             className={cn('size-[22px] rounded-[7px]', color === c && SELECTED)}

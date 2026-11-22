@@ -24,6 +24,7 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
   const [title, setTitle] = useState(page.title)
   const [note, setNote] = useState('')
   const [color, setColor] = useState<NoteColor | null>(null)
+  const pickedColor = useRef(false)
   const [todo, setTodo] = useState(false)
   const [remind, setRemind] = useState<TimePreset | null>(null)
   const [closeTab, setCloseTab] = useState(false)
@@ -33,6 +34,12 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
   const textarea = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => textarea.current?.focus(), [])
+
+  // The note starts with the colour used last, unless one was picked before the data came.
+  const lastColor = data?.lastNoteColor
+  useEffect(() => {
+    if (lastColor && !pickedColor.current) setColor(lastColor)
+  }, [lastColor])
 
   // The page's own language and theme don't matter: the popover follows TabCabin's.
   const t = (key: MessageKey, params?: Record<string, string | number>) =>
@@ -102,7 +109,10 @@ export function PagePopover({ page, onClose }: { page: PageInfo; onClose: () => 
                 color={color}
                 todo={todo}
                 onNote={setNote}
-                onColor={setColor}
+                onColor={(next) => {
+                  pickedColor.current = true
+                  setColor(next)
+                }}
                 onTodo={setTodo}
                 textarea={textarea}
                 t={t}

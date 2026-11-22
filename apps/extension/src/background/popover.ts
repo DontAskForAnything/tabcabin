@@ -4,10 +4,12 @@ import {
   isSavableUrl,
   minutesOfDay,
   normalizeUrl,
+  type NoteColor,
   sortByPosition,
   type Tag,
 } from '@tabcabin/core'
 import { db } from '@/db/db'
+import { getLastNoteColor, rememberNoteColor } from '@/db/lastNoteColor'
 import { loadOverview } from '@/db/overview'
 import { getTags, setReminder, tagIdsFor, updateItem } from '@/db/repo'
 import { translate } from '@/i18n/translate'
@@ -34,15 +36,18 @@ export interface PopoverData {
   savedIn: { itemId: string; path: string; text: string; color: string | null }[]
   /** The account's tags, to pick from. */
   tags: Tag[]
+  /** The colour the note starts with: the one used last in this browser. */
+  lastNoteColor: NoteColor | null
 }
 
 async function popoverData(url: string): Promise<PopoverData> {
-  const [settings, overview, groups, items, tags] = await Promise.all([
+  const [settings, overview, groups, items, tags, lastNoteColor] = await Promise.all([
     getSettings(),
     loadOverview(),
     db.groups.toArray(),
     db.items.toArray(),
     getTags(),
+    getLastNoteColor(),
   ])
   const liveGroups = sortByPosition(groups.filter((g) => g.deletedAt === null))
   const key = normalizeUrl(url)
@@ -91,6 +96,7 @@ async function popoverData(url: string): Promise<PopoverData> {
     })),
     savedIn,
     tags,
+    lastNoteColor,
   }
 }
 
@@ -142,6 +148,7 @@ export function handlePopoverMessage(
         favIconUrl: message.page.favIconUrl,
         note: message.note,
       })
+      if (message.note?.text.trim()) await rememberNoteColor(message.note.color as NoteColor | null)
       if (message.tags?.length && saved.itemId) {
         const { ids } = await tagIdsFor(message.tags)
         await updateItem(saved.itemId, { tagIds: ids })

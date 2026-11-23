@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.5.2] — 2026-11-23
+
 ### Changed
 
 - A new note in Edit link or the save window starts with the colour used last in this browser
@@ -445,7 +447,8 @@ First release: a local-first Chrome extension.
   bookmark folders and most visited sites
 - Keyboard shortcut sheet (`?`), accessibility audit in the test suite, reduced-motion support
 
-[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/DontAskForAnything/tabcabin/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.8...v1.5.0
 [1.4.8]: https://github.com/DontAskForAnything/tabcabin/compare/v1.4.7...v1.4.8
